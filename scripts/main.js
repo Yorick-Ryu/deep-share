@@ -1,15 +1,47 @@
 let messages = [];
 
-const handleShareClick = () => {
+const handleShareClick = async () => {
     messages = getMessages();
     const modal = document.querySelector('.deepseek-share-modal');
     if (!modal) {
         injectShare(handleShareClick);
         return;
     }
-    const contentArea = modal.querySelector('#conversation-content');
-    contentArea.textContent = JSON.stringify(messages, null, 2);
+
+    // 默认显示图片模式
     modal.style.display = 'block';
+    
+    // 确保切换到图片面板
+    const imageTab = modal.querySelector('.tab-btn[data-tab="image"]');
+    const imagePanel = modal.querySelector('#image-panel');
+    
+    modal.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+    modal.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    
+    imageTab.classList.add('active');
+    imagePanel.classList.add('active');
+
+    // 立即开始生成截图
+    const img = modal.querySelector('#conversation-image');
+    const loadingEl = modal.querySelector('.image-loading');
+    img.style.display = 'none';
+    loadingEl.style.display = 'block';
+
+    try {
+        const imageUrl = await window.captureMessages();
+        if (imageUrl) {
+            img.onload = () => {
+                img.style.display = 'block';
+                loadingEl.style.display = 'none';
+            };
+            img.src = imageUrl;
+        } else {
+            throw new Error('Failed to generate image');
+        }
+    } catch (error) {
+        console.error('Screenshot failed:', error);
+        loadingEl.textContent = '截图生成失败，请重试';
+    }
 };
 
 // URL 变化监听

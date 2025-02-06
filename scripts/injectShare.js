@@ -10,20 +10,36 @@ function injectShare(onClickHandler) {
         existingBtn.remove();
     }
 
-    // Inject modal first
+    // 更新modal内容
     const modal = document.createElement('div');
     modal.className = 'deepseek-share-modal';
     modal.innerHTML = `
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3>分享对话</h3>
-          <button class="close-btn">&times;</button>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>分享对话</h3>
+                <button class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="tab-container">
+                    <button class="tab-btn active" data-tab="image">截图</button>
+                    <button class="tab-btn" data-tab="text">文本</button>
+                </div>
+                <div class="tab-panels">
+                    <div class="tab-panel active" id="image-panel">
+                        <div class="image-container">
+                            <div class="image-loading">正在生成截图...</div>
+                            <img id="conversation-image" style="display: none" alt="对话截图">
+                        </div>
+                        <button class="download-btn">下载图片</button>
+                    </div>
+                    <div class="tab-panel" id="text-panel">
+                        <pre id="conversation-content"></pre>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="modal-body">
-          <pre id="conversation-content"></pre>
-        </div>
-      </div>
     `;
+
     document.body.appendChild(modal);
 
     // Close button handler
@@ -36,6 +52,61 @@ function injectShare(onClickHandler) {
         if (e.target === modal) {
             modal.style.display = 'none';
         }
+    });
+
+    // 绑定标签切换事件
+    const tabs = modal.querySelectorAll('.tab-btn');
+    tabs.forEach(tab => {
+        tab.addEventListener('click', async () => {
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            
+            const panels = modal.querySelectorAll('.tab-panel');
+            panels.forEach(p => p.classList.remove('active'));
+            
+            const targetPanel = modal.querySelector(`#${tab.dataset.tab}-panel`);
+            targetPanel.classList.add('active');
+
+            if (tab.dataset.tab === 'text') {
+                // 切换到文本标签时渲染文本内容
+                const contentArea = modal.querySelector('#conversation-content');
+                contentArea.textContent = formatAsText(messages);
+            } else if (tab.dataset.tab === 'image') {
+                const img = modal.querySelector('#conversation-image');
+                const loadingEl = modal.querySelector('.image-loading');
+                img.style.display = 'none';
+                loadingEl.style.display = 'block';
+                
+                try {
+                    if (typeof window.captureMessages !== 'function') {
+                        throw new Error('Screenshot function not available');
+                    }
+                    
+                    const imageUrl = await window.captureMessages();
+                    if (imageUrl) {
+                        img.onload = () => {
+                            img.style.display = 'block';
+                            loadingEl.style.display = 'none';
+                        };
+                        img.src = imageUrl;
+                    } else {
+                        throw new Error('Failed to generate image');
+                    }
+                } catch (error) {
+                    console.error('Screenshot failed:', error);
+                    loadingEl.textContent = '截图生成失败，请重试';
+                }
+            }
+        });
+    });
+
+    // 下载图片按钮事件
+    modal.querySelector('.download-btn').addEventListener('click', () => {
+        const img = modal.querySelector('#conversation-image');
+        const link = document.createElement('a');
+        link.download = 'deepseek-chat.png';
+        link.href = img.src;
+        link.click();
     });
 
     const buttonContainer = document.createElement('div');

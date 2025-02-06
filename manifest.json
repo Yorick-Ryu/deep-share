@@ -14,7 +14,8 @@
     },
     "permissions": [
         "activeTab",
-        "clipboard-write"
+        "clipboard-write",
+        "desktopCapture"
     ],
     "host_permissions": [
         "https://chat.deepseek.com/*"
@@ -28,10 +29,16 @@
                 "scripts/style.css"
             ],
             "js": [
+                "lib/html2canvas.min.js",
+                "scripts/captureMessages.js",
                 "scripts/getMessages.js",
                 "scripts/injectShare.js",
                 "scripts/main.js"
             ]
         }
-    ]
+    ],
+    "web_accessible_resources": [{
+        "resources": ["lib/html2canvas.min.js"],
+        "matches": ["https://chat.deepseek.com/*"]
+    }]
 }
