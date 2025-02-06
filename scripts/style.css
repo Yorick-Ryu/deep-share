@@ -76,8 +76,8 @@
   color: var(--modal-text);
   width: 90%;
   max-width: 600px;
-  margin: 50px auto;
-  border-radius: 8px;
+  margin: 30px auto;  /* 减小顶部边距 */
+  border-radius: 12px;  /* 增加圆角 */
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -103,7 +103,7 @@
 
 .modal-body {
   padding: 20px;
-  max-height: 70vh;
+  max-height: 80vh;  /* 增加最大高度 */
   overflow-y: auto;
 }
 
@@ -173,11 +173,11 @@
 /* 图片容器样式 */
 .image-container {
     min-height: 200px;
-    max-height: 60vh;
+    max-height: 70vh;  /* 增加图片容器最大高度 */
     overflow-y: auto;
     margin-bottom: 0;  /* 移除底部间距 */
     border: 1px solid var(--modal-border);
-    border-radius: 4px;
+    border-radius: 8px;  /* 增加图片容器圆角 */
     background: var(--modal-bg);
     position: relative;
 }
