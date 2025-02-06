@@ -1,28 +1,36 @@
 {
-  "manifest_version": 2,
-  "name": "DeepSeek Share",
-  "version": "1.0",
-  "description": "分享DeepSeek对话的浏览器插件",
-  "icons": {
-    "48": "icons/icon48.png",
-    "128": "icons/icon128.png"
-  },
-  "browser_action": {
-    "default_popup": "popup.html",
-    "default_icon": "icons/icon48.png"
-  },
-  "permissions": [
-    "activeTab",
-    "https://chat.deepseek.com/*"
-  ],
-  "background": {
-    "scripts": ["background.js"],
-    "persistent": false
-  },
-  "content_scripts": [{
-    "matches": ["https://chat.deepseek.com/*"],
-    "css": ["content.css"],
-    "js": ["content.js"],
-    "type": "module"
-  }]
+    "manifest_version": 3,
+    "name": "DeepShare",
+    "version": "1.0",
+    "description": "分享 DeepSeek AI 对话的浏览器插件",
+    "icons": {
+        "48": "icons/icon48.png",
+        "128": "icons/icon128.png"
+    },
+    "action": {
+        "default_icon": "icons/icon48.png",
+        "default_title": "DeepShare",
+        "default_popup": "popup/popup.html"
+    },
+    "permissions": [
+        "activeTab"
+    ],
+    "host_permissions": [
+        "https://chat.deepseek.com/*"
+    ],
+    "content_scripts": [
+        {
+            "matches": [
+                "https://chat.deepseek.com/*"
+            ],
+            "css": [
+                "scripts/style.css"
+            ],
+            "js": [
+                "scripts/getMessages.js",
+                "scripts/injectShareButton.js",
+                "scripts/main.js"
+            ]
+        }
+    ]
 }

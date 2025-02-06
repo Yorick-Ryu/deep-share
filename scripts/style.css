@@ -1,0 +1,39 @@
+/* 分享按钮样式 */
+.deepseek-share-btn {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 13;
+}
+
+.deepseek-share-btn .share-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  color: rgb(139, 139, 139);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  transition: all 0.2s ease;
+}
+
+.deepseek-share-btn .share-button:hover {
+  background: rgba(77, 107, 254, 0.1);
+  color: rgb(77, 107, 254);
+  transform: scale(1.05);
+}
+
+.deepseek-share-btn .share-button:active {
+  transform: scale(0.95);
+}
+
+.f8d1e4c0 {
+  position: relative;
+}
