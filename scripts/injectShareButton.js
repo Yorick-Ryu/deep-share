@@ -2,6 +2,27 @@
 function injectShareButton(onClickHandler) {
     if (document.querySelector('.deepseek-share-btn')) return;
   
+    // Inject modal first
+    const modal = document.createElement('div');
+    modal.className = 'deepseek-share-modal';
+    modal.innerHTML = `
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>分享对话</h3>
+          <button class="close-btn">&times;</button>
+        </div>
+        <div class="modal-body">
+          <pre id="conversation-content"></pre>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+
+    // Close button handler
+    modal.querySelector('.close-btn').addEventListener('click', () => {
+      modal.style.display = 'none';
+    });
+
     const buttonContainer = document.createElement('div');
     buttonContainer.className = 'deepseek-share-btn';
     buttonContainer.innerHTML = `

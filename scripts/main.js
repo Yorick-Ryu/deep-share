@@ -1,11 +1,11 @@
 let messages = [];
 
 const handleShareClick = () => {
-    // 获取对话内容
     messages = getMessages();
-    // const modal = document.querySelector('.deepseek-share-modal');
-    // modal.style.display = 'block';
-    // generatePreview(conversations);
+    const modal = document.querySelector('.deepseek-share-modal');
+    const contentArea = modal.querySelector('#conversation-content');
+    contentArea.textContent = JSON.stringify(messages, null, 2);
+    modal.style.display = 'block';
 };
 
 // 使用 MutationObserver 监听 DOM 变化

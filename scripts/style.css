@@ -1,3 +1,25 @@
+:root {
+  --modal-bg: #ffffff;
+  --modal-text: #333333;
+  --modal-border: #eeeeee;
+  --button-color: rgb(139, 139, 139);
+  --button-hover-bg: rgba(77, 107, 254, 0.1);
+  --button-hover-color: rgb(77, 107, 254);
+  --modal-overlay: rgba(0, 0, 0, 0.5);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --modal-bg: #1e1e1e;
+    --modal-text: #e0e0e0;
+    --modal-border: #333333;
+    --button-color: rgb(180, 180, 180);
+    --button-hover-bg: rgba(77, 107, 254, 0.2);
+    --button-hover-color: rgb(107, 137, 254);
+    --modal-overlay: rgba(0, 0, 0, 0.7);
+  }
+}
+
 /* 分享按钮样式 */
 .deepseek-share-btn {
   display: flex;
@@ -14,7 +36,7 @@
   border: none;
   cursor: pointer;
   padding: 6px;
-  color: rgb(139, 139, 139);
+  color: var(--button-color);
   border-radius: 6px;
   display: flex;
   align-items: center;
@@ -25,8 +47,8 @@
 }
 
 .deepseek-share-btn .share-button:hover {
-  background: rgba(77, 107, 254, 0.1);
-  color: rgb(77, 107, 254);
+  background: var(--button-hover-bg);
+  color: var(--button-hover-color);
   transform: scale(1.05);
 }
 
@@ -36,4 +58,57 @@
 
 .f8d1e4c0 {
   position: relative;
+}
+
+.deepseek-share-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--modal-overlay);
+  z-index: 1000;
+}
+
+.deepseek-share-modal .modal-content {
+  background: var(--modal-bg);
+  color: var(--modal-text);
+  width: 90%;
+  max-width: 600px;
+  margin: 50px auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.modal-header {
+  padding: 15px 20px;
+  border-bottom: 1px solid var(--modal-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: var(--button-color);
+}
+
+.close-btn:hover {
+  color: var(--button-hover-color);
+}
+
+.modal-body {
+  padding: 20px;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+#conversation-content {
+  white-space: pre-wrap;
+  word-break: break-all;
+  color: var(--modal-text);
 }
