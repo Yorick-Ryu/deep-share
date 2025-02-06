@@ -13,7 +13,8 @@
         "default_popup": "popup/popup.html"
     },
     "permissions": [
-        "activeTab"
+        "activeTab",
+        "clipboard-write"
     ],
     "host_permissions": [
         "https://chat.deepseek.com/*"
