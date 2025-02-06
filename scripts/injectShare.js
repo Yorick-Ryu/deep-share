@@ -1,7 +1,15 @@
-// Inject share button
-function injectShareButton(onClickHandler) {
-    if (document.querySelector('.deepseek-share-btn')) return;
-  
+// Inject share
+function injectShare(onClickHandler) {
+    // 检查是否在对话页面
+    if (!location.pathname.includes('/chat/')) return;
+    
+    // 清理旧的元素
+    document.querySelector('.deepseek-share-modal')?.remove();
+    const existingBtn = document.querySelector('.deepseek-share-btn');
+    if (existingBtn) {
+        existingBtn.remove();
+    }
+
     // Inject modal first
     const modal = document.createElement('div');
     modal.className = 'deepseek-share-modal';
@@ -21,6 +29,13 @@ function injectShareButton(onClickHandler) {
     // Close button handler
     modal.querySelector('.close-btn').addEventListener('click', () => {
       modal.style.display = 'none';
+    });
+
+    // 添加点击外部关闭功能
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.style.display = 'none';
+        }
     });
 
     const buttonContainer = document.createElement('div');
@@ -45,4 +60,31 @@ function injectShareButton(onClickHandler) {
   
     // Use the passed click handler
     buttonContainer.addEventListener('click', onClickHandler);
+}
+
+function formatAsText(messages) {
+    return messages.map(msg => {
+        const role = msg.role === 'user' ? '我' : 'AI';
+        let text = `${role}: ${msg.content}`;
+        if (msg.reasoning_content) {
+            text += `\n思考过程 (${msg.reasoning_time}s):\n${msg.reasoning_content}`;
+        }
+        return text;
+    }).join('\n\n');
+}
+
+function formatAsMarkdown(messages) {
+    return messages.map(msg => {
+        const role = msg.role === 'user' ? '### 我' : '### AI';
+        let text = `${role}\n${msg.content}`;
+        if (msg.reasoning_content) {
+            text += `\n\n> 思考过程 (${msg.reasoning_time}s):\n> ${msg.reasoning_content}`;
+        }
+        return text;
+    }).join('\n\n');
+}
+
+function renderAsImage(messages, canvas) {
+    // TODO: Implement image rendering
+    console.log('Image rendering to be implemented');
 }

@@ -28,7 +28,7 @@
             ],
             "js": [
                 "scripts/getMessages.js",
-                "scripts/injectShareButton.js",
+                "scripts/injectShare.js",
                 "scripts/main.js"
             ]
         }

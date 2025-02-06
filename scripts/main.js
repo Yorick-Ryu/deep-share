@@ -3,16 +3,43 @@ let messages = [];
 const handleShareClick = () => {
     messages = getMessages();
     const modal = document.querySelector('.deepseek-share-modal');
+    if (!modal) {
+        injectShare(handleShareClick);
+        return;
+    }
     const contentArea = modal.querySelector('#conversation-content');
     contentArea.textContent = JSON.stringify(messages, null, 2);
     modal.style.display = 'block';
 };
 
-// 使用 MutationObserver 监听 DOM 变化
+// URL 变化监听
+let lastUrl = location.href;
+const urlObserver = new MutationObserver(() => {
+    if (location.href !== lastUrl) {
+        lastUrl = location.href;
+        console.log('URL changed:', lastUrl);
+        // 移除旧的模态框和按钮
+        document.querySelector('.deepseek-share-modal')?.remove();
+        document.querySelector('.deepseek-share-btn')?.remove();
+        // 重新注入
+        if (location.pathname.includes('/chat/')) {
+            injectShare(handleShareClick);
+        }
+    }
+});
+
+// 监听 URL 变化
+urlObserver.observe(document.body, {
+    childList: true,
+    subtree: true
+});
+
+// DOM 变化监听
 const observer = new MutationObserver((mutations) => {
-    for (const mutation of mutations) {
-        if (mutation.addedNodes.length) {
-            injectShareButton();
+    if (location.pathname.includes('/chat/')) {
+        const shareBtn = document.querySelector('.deepseek-share-btn');
+        if (!shareBtn) {
+            injectShare(handleShareClick);
         }
     }
 });
@@ -25,9 +52,9 @@ observer.observe(document.body, {
 
 // 确保在DOM加载完成后执行
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => injectShareButton(handleShareClick));
+    document.addEventListener('DOMContentLoaded', () => injectShare(handleShareClick));
 } else {
-    injectShareButton(handleShareClick);
+    injectShare(handleShareClick);
 }
 
 
