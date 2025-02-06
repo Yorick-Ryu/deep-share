@@ -114,25 +114,51 @@
 }
 
 /* 标签页样式 */
+.tab-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--modal-border);
+    padding-bottom: 1px;
+}
+
 .tab-container {
     display: flex;
-    border-bottom: 1px solid var(--modal-border);
-    margin-bottom: 20px;
+    gap: 20px;
 }
 
 .tab-btn {
-    padding: 10px 20px;
+    padding: 10px 0;
     background: none;
     border: none;
     color: var(--modal-text);
     cursor: pointer;
     opacity: 0.7;
     transition: all 0.2s;
+    min-width: 60px;
+    text-align: center;
 }
 
 .tab-btn.active {
     opacity: 1;
     border-bottom: 2px solid var(--button-hover-color);
+}
+
+.copy-btn {
+    padding: 6px 12px;
+    font-size: 13px;
+    background: var(--button-hover-bg);
+    color: var(--button-hover-color);
+    border: 1px solid var(--button-hover-color);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.copy-btn:hover {
+    background: var(--button-hover-color);
+    color: white;
 }
 
 /* 面板样式 */
@@ -149,7 +175,7 @@
     min-height: 200px;
     max-height: 60vh;
     overflow-y: auto;
-    margin-bottom: 15px;
+    margin-bottom: 0;  /* 移除底部间距 */
     border: 1px solid var(--modal-border);
     border-radius: 4px;
     background: var(--modal-bg);
@@ -182,4 +208,25 @@
 
 .download-btn:hover {
     opacity: 0.9;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.download-btn, .copy-btn {
+    padding: 6px 12px;
+    font-size: 13px;
+    background: var(--button-hover-bg);
+    color: var(--button-hover-color);
+    border: 1px solid var(--button-hover-color);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.download-btn:hover, .copy-btn:hover {
+    background: var(--button-hover-color);
+    color: white;
 }

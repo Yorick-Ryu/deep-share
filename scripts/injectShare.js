@@ -20,9 +20,15 @@ function injectShare(onClickHandler) {
                 <button class="close-btn">&times;</button>
             </div>
             <div class="modal-body">
-                <div class="tab-container">
-                    <button class="tab-btn active" data-tab="image">截图</button>
-                    <button class="tab-btn" data-tab="text">文本</button>
+                <div class="tab-header">
+                    <div class="tab-container">
+                        <button class="tab-btn active" data-tab="image">截图</button>
+                        <button class="tab-btn" data-tab="text">文本</button>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="download-btn">下载</button>
+                        <button class="copy-btn">复制</button>
+                    </div>
                 </div>
                 <div class="tab-panels">
                     <div class="tab-panel active" id="image-panel">
@@ -30,7 +36,6 @@ function injectShare(onClickHandler) {
                             <div class="image-loading">正在生成截图...</div>
                             <img id="conversation-image" style="display: none" alt="对话截图">
                         </div>
-                        <button class="download-btn">下载图片</button>
                     </div>
                     <div class="tab-panel" id="text-panel">
                         <pre id="conversation-content"></pre>
@@ -100,13 +105,59 @@ function injectShare(onClickHandler) {
         });
     });
 
-    // 下载图片按钮事件
-    modal.querySelector('.download-btn').addEventListener('click', () => {
-        const img = modal.querySelector('#conversation-image');
+    // 下载按钮事件
+    const downloadBtn = modal.querySelector('.download-btn');
+    downloadBtn.addEventListener('click', () => {
+        const activeTab = modal.querySelector('.tab-btn.active').dataset.tab;
         const link = document.createElement('a');
-        link.download = 'deepseek-chat.png';
-        link.href = img.src;
+        
+        if (activeTab === 'image') {
+            const img = modal.querySelector('#conversation-image');
+            link.download = 'deepseek-chat.png';
+            link.href = img.src;
+        } else {
+            const text = formatAsText(messages);
+            const blob = new Blob([text], { type: 'text/plain' });
+            link.download = 'deepseek-chat.txt';
+            link.href = URL.createObjectURL(blob);
+        }
+        
         link.click();
+    });
+
+    // 复制按钮事件
+    const copyBtn = modal.querySelector('.copy-btn');
+    copyBtn.addEventListener('click', async () => {
+        const activeTab = modal.querySelector('.tab-btn.active').dataset.tab;
+        const originalText = copyBtn.textContent;
+        
+        try {
+            if (activeTab === 'text') {
+                const text = formatAsText(messages);
+                await navigator.clipboard.writeText(text);
+            } else if (activeTab === 'image') {
+                const img = modal.querySelector('#conversation-image');
+                if (img.src) {
+                    const blob = await fetch(img.src).then(r => r.blob());
+                    await navigator.clipboard.write([
+                        new ClipboardItem({ 'image/png': blob })
+                    ]);
+                } else {
+                    throw new Error('Image not ready');
+                }
+            }
+            
+            copyBtn.textContent = '已复制！';
+            setTimeout(() => {
+                copyBtn.textContent = originalText;
+            }, 2000);
+        } catch (error) {
+            console.error('Copy failed:', error);
+            copyBtn.textContent = '复制失败！';
+            setTimeout(() => {
+                copyBtn.textContent = originalText;
+            }, 2000);
+        }
     });
 
     const buttonContainer = document.createElement('div');
