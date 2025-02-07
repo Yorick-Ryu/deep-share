@@ -36,10 +36,24 @@
     button:hover {
       background: #3D5BEE;
     }
+    .checkbox-group {
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .checkbox-group label {
+      margin: 0;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
   <h1>Deep Share</h1>
+  <div class="checkbox-group">
+    <input type="checkbox" id="hideDefaultWatermark">
+    <label for="hideDefaultWatermark">隐藏默认水印</label>
+  </div>
   <div class="form-group">
     <label for="watermark">自定义水印文字（可选）</label>
     <input type="text" id="watermark" placeholder="在此输入自定义水印">

@@ -2,6 +2,9 @@ window.captureMessages = async function(customWatermark) {
     const container = document.querySelector('.dad65929');
     if (!container) return null;
 
+    // 获取水印设置
+    const { hideDefaultWatermark } = await chrome.storage.sync.get('hideDefaultWatermark');
+
     // 设置容器为相对定位以支持水印的绝对定位
     const originalPosition = container.style.position;
     container.style.position = 'relative';
@@ -41,10 +44,13 @@ window.captureMessages = async function(customWatermark) {
             font-weight: bold;  // 添加加粗样式
         `;
         customWatermarkEl.textContent = customWatermark;
-        // 先添加自定义水印，再添加默认水印
         watermarkContainer.appendChild(customWatermarkEl);
-        watermarkContainer.appendChild(defaultWatermark);
-    } else {
+        // 只在未隐藏默认水印时添加
+        if (!hideDefaultWatermark) {
+            watermarkContainer.appendChild(defaultWatermark);
+        }
+    } else if (!hideDefaultWatermark) {
+        // 没有自定义水印且未隐藏默认水印时添加
         watermarkContainer.appendChild(defaultWatermark);
     }
 
