@@ -59,6 +59,6 @@
 - 提交 Bug 反馈或功能建议
 - 😊赞助项目发展（微信扫码赞助）
 
-<img src="pic/sponsor-code.png" alt="donate" width="200"/>
+<img src="icons/sponsor-code.png" alt="donate" width="200"/>
 
 感谢您的支持！

@@ -47,6 +47,7 @@
             "resources": [
                 "lib/html2canvas.min.js",
                 "icons/deepshare-icon.svg",
+                "icons/sponsor-code.png",
                 "popup/popup.css"
             ],
             "matches": [
