@@ -1,4 +1,4 @@
-window.captureMessages = async function() {
+window.captureMessages = async function(customWatermark) {
     const container = document.querySelector('.dad65929');
     if (!container) return null;
 
@@ -6,21 +6,47 @@ window.captureMessages = async function() {
     const originalPosition = container.style.position;
     container.style.position = 'relative';
 
-    // 创建水印元素
-    const watermark = document.createElement('div');
-    watermark.style.cssText = `
+    // 创建水印容器
+    const watermarkContainer = document.createElement('div');
+    watermarkContainer.style.cssText = `
         position: absolute;
         bottom: 20px;
         right: 20px;
-        padding: 8px 16px;
-        border-radius: 4px;
-        font-size: 13px;
-        color: #666;
-        z-index: 999999;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 4px;  // 减小间距
+        z-index: 9999;
         pointer-events: none;
         user-select: none;
     `;
-    watermark.innerHTML = '内容由<strong>DeepSeek AI</strong>生成，由<strong>DeepShare</strong>插件截取';
+
+    // 创建默认水印和自定义水印
+    const defaultWatermark = document.createElement('div');
+    defaultWatermark.style.cssText = `
+        padding: 4px 16px;  // 减小上下内边距
+        border-radius: 4px;
+        font-size: 13px;
+        color: #666;
+    `;
+    defaultWatermark.innerHTML = '内容由<strong>DeepSeek AI</strong>生成，由<strong>DeepShare</strong>插件截取';
+
+    if (customWatermark) {
+        const customWatermarkEl = document.createElement('div');
+        customWatermarkEl.style.cssText = `
+            padding: 4px 16px;  // 减小上下内边距
+            border-radius: 4px;
+            font-size: 13px;
+            color: #666;
+            font-weight: bold;  // 添加加粗样式
+        `;
+        customWatermarkEl.textContent = customWatermark;
+        // 先添加自定义水印，再添加默认水印
+        watermarkContainer.appendChild(customWatermarkEl);
+        watermarkContainer.appendChild(defaultWatermark);
+    } else {
+        watermarkContainer.appendChild(defaultWatermark);
+    }
 
     try {
         if (typeof html2canvas === 'undefined') {
@@ -42,11 +68,13 @@ window.captureMessages = async function() {
         }
 
         // 在截图前添加水印
-        container.appendChild(watermark);
+        container.appendChild(watermarkContainer);
 
         // 调整水印样式以适应深色主题
         if (document.documentElement.classList.contains('dark')) {
-            watermark.style.color = '#aaa';
+            watermarkContainer.querySelectorAll('div').forEach(el => {
+                el.style.color = '#aaa';
+            });
         }
 
         // 等待一小段时间确保水印渲染完成
@@ -63,14 +91,14 @@ window.captureMessages = async function() {
         });
         
         // 移除水印并恢复容器原始定位
-        container.removeChild(watermark);
+        container.removeChild(watermarkContainer);
         container.style.position = originalPosition;
         
         return canvas.toDataURL('image/png');
     } catch (error) {
         // 确保发生错误时也清理现场
-        if (watermark.parentNode) {
-            container.removeChild(watermark);
+        if (watermarkContainer.parentNode) {
+            container.removeChild(watermarkContainer);
         }
         container.style.position = originalPosition;
         console.error('Screenshot failed:', error);

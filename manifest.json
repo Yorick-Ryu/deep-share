@@ -17,7 +17,8 @@
     "permissions": [
         "activeTab",
         "clipboard-write",
-        "desktopCapture"
+        "desktopCapture",
+        "storage"
     ],
     "host_permissions": [
         "https://chat.deepseek.com/*"

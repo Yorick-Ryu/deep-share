@@ -4,15 +4,47 @@
   <meta charset="UTF-8">
   <title>DeepSeek Share</title>
   <style>
-    /* Add your CSS styles here */
+    body {
+      width: 300px;
+      padding: 16px;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+    .form-group {
+      margin-bottom: 16px;
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #666;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    button {
+      width: 100%;
+      padding: 8px;
+      background: #4D6BFE;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #3D5BEE;
+    }
   </style>
 </head>
 <body>
-  <h1>DeepShare</h1>
-  <button id="capture">Capture</button>
-  <label>
-    <input type="checkbox" id="longImage"> 长图模式
-  </label>
+  <h1>Deep Share</h1>
+  <div class="form-group">
+    <label for="watermark">自定义水印文字（可选）</label>
+    <input type="text" id="watermark" placeholder="在此输入自定义水印">
+  </div>
+  <button id="save">保存设置</button>
   <script src="popup.js"></script>
 </body>
 </html>

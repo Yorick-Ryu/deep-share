@@ -53,7 +53,9 @@ const handleShareClick = async () => {
     loadingEl.style.display = 'block';
 
     try {
-        const imageUrl = await window.captureMessages();
+        // 获取保存的自定义水印
+        const { customWatermark } = await chrome.storage.sync.get('customWatermark');
+        const imageUrl = await window.captureMessages(customWatermark);
         if (imageUrl) {
             img.onload = () => {
                 img.style.display = 'block';
