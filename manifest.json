@@ -4,6 +4,8 @@
     "version": "1.0",
     "description": "分享 DeepSeek AI 对话的浏览器插件",
     "icons": {
+        "16": "icons/icon16.png",
+        "32": "icons/icon32.png",
         "48": "icons/icon48.png",
         "128": "icons/icon128.png"
     },
@@ -37,8 +39,14 @@
             ]
         }
     ],
-    "web_accessible_resources": [{
-        "resources": ["lib/html2canvas.min.js"],
-        "matches": ["https://chat.deepseek.com/*"]
-    }]
+    "web_accessible_resources": [
+        {
+            "resources": [
+                "lib/html2canvas.min.js"
+            ],
+            "matches": [
+                "https://chat.deepseek.com/*"
+            ]
+        }
+    ]
 }
