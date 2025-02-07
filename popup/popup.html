@@ -3,140 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>DeepSeek Share</title>
-  <style>
-    :root {
-      --bg-color: #ffffff;
-      --text-color: #333333;
-      --text-secondary: #666666;
-      --border-color: #dddddd;
-      --input-bg: #ffffff;
-      --primary-color: #4D6BFE;
-      --primary-hover: #3D5BEE;
-    }
-
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg-color: #1e1e1e;
-        --text-color: #ffffff;
-        --text-secondary: #aaaaaa;
-        --border-color: #333333;
-        --input-bg: #2d2d2d;
-        --primary-color: #4D6BFE;
-        --primary-hover: #3D5BEE;
-      }
-    }
-
-    body {
-      width: 300px;
-      padding: 16px;
-      font-family: system-ui, -apple-system, sans-serif;
-      background: var(--bg-color);
-      color: var(--text-color);
-    }
-
-    .form-group {
-      margin-bottom: 16px;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 8px;
-      color: var(--text-secondary);
-    }
-
-    input[type="text"] {
-      width: 100%;
-      padding: 8px;
-      border: 1px solid var(--border-color);
-      border-radius: 4px;
-      box-sizing: border-box;
-      background: var(--input-bg);
-      color: var(--text-color);
-    }
-
-    input[type="text"]::placeholder {
-      color: var(--text-secondary);
-      opacity: 0.7;
-    }
-
-    button {
-      width: 100%;
-      padding: 8px;
-      background: var(--primary-color);
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: var(--primary-hover);
-    }
-
-    .checkbox-group {
-      margin-bottom: 16px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .checkbox-group label {
-      margin: 0;
-      cursor: pointer;
-      color: var(--text-color);
-    }
-
-    .title-container {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 8px;
-    }
-    
-    .title-container h1 {
-      margin: 0;
-      color: var(--text-color);
-    }
-    
-    .title-icon {
-      width: 24px;
-      height: 24px;
-    }
-
-    .description {
-      color: var(--text-secondary);
-      font-size: 13px;
-      line-height: 1.4;
-      margin: -8px 0 16px;
-    }
-
-    /* Replace modal styles with sponsor section styles */
-    .sponsor-section {
-      display: none; /* Initially hidden */
-      margin-top: 16px;
-      text-align: center;
-      animation: fadeIn 0.3s ease;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    .sponsor-title {
-      margin: 0 0 12px;
-      font-size: 14px;
-      color: var(--text-secondary);
-    }
-
-    .sponsor-image {
-      width: 200px;
-      height: 200px;
-      margin: 0 auto;
-      display: block;
-      border-radius: 8px;
-    }
-  </style>
+  <link rel="stylesheet" href="popup.css">
 </head>
 <body>
   <div class="title-container">
@@ -154,7 +21,6 @@
   </div>
   <button id="save">保存设置</button>
   
-  <!-- Replace modal with static sponsor section -->
   <div id="sponsorSection" class="sponsor-section">
     <h3 class="sponsor-title">感谢使用！如果觉得好用，欢迎赞助😊</h3>
     <img src="../icons/sponsor-code.png" alt="赞助码" class="sponsor-image">

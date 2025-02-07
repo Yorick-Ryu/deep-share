@@ -46,7 +46,8 @@
         {
             "resources": [
                 "lib/html2canvas.min.js",
-                "icons/deepshare-icon.svg"
+                "icons/deepshare-icon.svg",
+                "popup/popup.css"
             ],
             "matches": [
                 "https://chat.deepseek.com/*"
