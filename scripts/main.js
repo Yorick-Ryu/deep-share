@@ -74,7 +74,6 @@ let lastUrl = location.href;
 const urlObserver = new MutationObserver(() => {
     if (location.href !== lastUrl) {
         lastUrl = location.href;
-        console.log('URL changed:', lastUrl);
         // 移除旧的模态框和按钮
         document.querySelector('.deepseek-share-modal')?.remove();
         document.querySelector('.deepseek-share-btn')?.remove();
