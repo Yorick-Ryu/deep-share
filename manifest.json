@@ -16,7 +16,6 @@
     },
     "permissions": [
         "activeTab",
-        "clipboard-write",
         "desktopCapture",
         "storage"
     ],

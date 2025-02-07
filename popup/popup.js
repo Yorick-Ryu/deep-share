@@ -17,6 +17,10 @@ document.getElementById('save').addEventListener('click', () => {
   }, () => {
     const button = document.getElementById('save');
     button.textContent = '已保存';
+    
+    // Show sponsor section
+    document.getElementById('sponsorSection').style.display = 'block';
+    
     setTimeout(() => {
       button.textContent = '保存设置';
     }, 1000);

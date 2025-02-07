@@ -109,6 +109,33 @@
       line-height: 1.4;
       margin: -8px 0 16px;
     }
+
+    /* Replace modal styles with sponsor section styles */
+    .sponsor-section {
+      display: none; /* Initially hidden */
+      margin-top: 16px;
+      text-align: center;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .sponsor-title {
+      margin: 0 0 12px;
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    .sponsor-image {
+      width: 200px;
+      height: 200px;
+      margin: 0 auto;
+      display: block;
+      border-radius: 8px;
+    }
   </style>
 </head>
 <body>
@@ -126,6 +153,12 @@
     <input type="text" id="watermark" placeholder="在此输入自定义水印">
   </div>
   <button id="save">保存设置</button>
+  
+  <!-- Replace modal with static sponsor section -->
+  <div id="sponsorSection" class="sponsor-section">
+    <h3 class="sponsor-title">感谢使用！如果觉得好用，欢迎赞助😊</h3>
+    <img src="../icons/sponsor-code.png" alt="赞助码" class="sponsor-image">
+  </div>
   <script src="popup.js"></script>
 </body>
 </html>
