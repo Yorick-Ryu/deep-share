@@ -4,21 +4,21 @@
   <img src="icons/deepshare-icon.svg" alt="deepshare-icon" width="128"/>
 </p>
 
-一个用来分享DeepSeek对话的浏览器插件，可以将对话内容以图片或文本的形式保存，便于分享。
+一个用来分享 DeepSeek 对话的浏览器插件，可以将对话内容以图片或文本的形式保存，便于分享。
 
 ## 功能特点
 
-- 一键截取DeepSeek对话内容
+- 一键截取 DeepSeek 对话内容
 - 支持分享图片或纯文本
 - 支持自定义水印
 - 简洁的操作界面
 
 ## 安装方式
 
-1. 从Edge\Chrome网上应用店安装
+1. 从 Edge\Chrome 网上应用店安装
 2. 下载源码本地安装:
    - 下载并解压源码
-   - 打开Edge\Chrome扩展程序页面
+   - 打开 Edge\Chrome 扩展程序页面
    - 启用开发者模式
    - 点击"加载已解压的扩展程序"
    - 选择解压后的文件夹
