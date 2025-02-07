@@ -1,4 +1,4 @@
-# DeepSeek Share
+# DeepShare
 
 <p align="center">
   <img src="icons/deepshare-icon.svg" alt="deepshare-icon" width="128"/>
