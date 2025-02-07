@@ -82,23 +82,42 @@
 }
 
 .modal-header {
-  padding: 0px 20px;
+  padding: 6px 20px;
   border-bottom: 1px solid var(--modal-border);
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.close-btn {
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-  color: var(--button-color);
+.header-buttons {
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
-.close-btn:hover {
+/* Replace old button styles with unified header button style */
+.header-btn {
+  width: 32px;
+  height: 32px;
+  background: none;
+  border: none;
+  padding: 6px;
+  cursor: pointer;
+  color: var(--button-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.header-btn:hover {
+  background: var(--button-hover-bg);
   color: var(--button-hover-color);
+}
+
+.header-btn:active {
+  transform: scale(0.95);
 }
 
 .modal-body {
