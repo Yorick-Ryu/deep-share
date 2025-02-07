@@ -43,7 +43,8 @@
     "web_accessible_resources": [
         {
             "resources": [
-                "lib/html2canvas.min.js"
+                "lib/html2canvas.min.js",
+                "icons/deepshare-icon.svg"
             ],
             "matches": [
                 "https://chat.deepseek.com/*"

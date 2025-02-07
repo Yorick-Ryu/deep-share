@@ -46,10 +46,35 @@
       margin: 0;
       cursor: pointer;
     }
+    .title-container {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;  /* 减小标题底部间距 */
+    }
+    
+    .title-container h1 {
+      margin: 0;
+    }
+    
+    .title-icon {
+      width: 24px;
+      height: 24px;
+    }
+    .description {
+      color: #666;
+      font-size: 13px;
+      line-height: 1.4;
+      margin: -8px 0 16px;
+    }
   </style>
 </head>
 <body>
-  <h1>Deep Share</h1>
+  <div class="title-container">
+    <img src="../icons/deepshare-icon.svg" alt="DeepShare" class="title-icon">
+    <h1>Deep Share</h1>
+  </div>
+  <p class="description">一键分享 DeepSeek AI 对话，支持图片、文字！</p>
   <div class="checkbox-group">
     <input type="checkbox" id="hideDefaultWatermark">
     <label for="hideDefaultWatermark">隐藏默认水印</label>
