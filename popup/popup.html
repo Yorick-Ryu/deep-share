@@ -4,65 +4,107 @@
   <meta charset="UTF-8">
   <title>DeepSeek Share</title>
   <style>
+    :root {
+      --bg-color: #ffffff;
+      --text-color: #333333;
+      --text-secondary: #666666;
+      --border-color: #dddddd;
+      --input-bg: #ffffff;
+      --primary-color: #4D6BFE;
+      --primary-hover: #3D5BEE;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg-color: #1e1e1e;
+        --text-color: #ffffff;
+        --text-secondary: #aaaaaa;
+        --border-color: #333333;
+        --input-bg: #2d2d2d;
+        --primary-color: #4D6BFE;
+        --primary-hover: #3D5BEE;
+      }
+    }
+
     body {
       width: 300px;
       padding: 16px;
       font-family: system-ui, -apple-system, sans-serif;
+      background: var(--bg-color);
+      color: var(--text-color);
     }
+
     .form-group {
       margin-bottom: 16px;
     }
+
     label {
       display: block;
       margin-bottom: 8px;
-      color: #666;
+      color: var(--text-secondary);
     }
+
     input[type="text"] {
       width: 100%;
       padding: 8px;
-      border: 1px solid #ddd;
+      border: 1px solid var(--border-color);
       border-radius: 4px;
       box-sizing: border-box;
+      background: var(--input-bg);
+      color: var(--text-color);
     }
+
+    input[type="text"]::placeholder {
+      color: var(--text-secondary);
+      opacity: 0.7;
+    }
+
     button {
       width: 100%;
       padding: 8px;
-      background: #4D6BFE;
+      background: var(--primary-color);
       color: white;
       border: none;
       border-radius: 4px;
       cursor: pointer;
     }
+
     button:hover {
-      background: #3D5BEE;
+      background: var(--primary-hover);
     }
+
     .checkbox-group {
       margin-bottom: 16px;
       display: flex;
       align-items: center;
       gap: 8px;
     }
+
     .checkbox-group label {
       margin: 0;
       cursor: pointer;
+      color: var(--text-color);
     }
+
     .title-container {
       display: flex;
       align-items: center;
       gap: 8px;
-      margin-bottom: 8px;  /* 减小标题底部间距 */
+      margin-bottom: 8px;
     }
     
     .title-container h1 {
       margin: 0;
+      color: var(--text-color);
     }
     
     .title-icon {
       width: 24px;
       height: 24px;
     }
+
     .description {
-      color: #666;
+      color: var(--text-secondary);
       font-size: 13px;
       line-height: 1.4;
       margin: -8px 0 16px;
