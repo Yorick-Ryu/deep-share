@@ -127,3 +127,20 @@ button:hover {
   display: block;
   border-radius: 8px;
 }
+
+.github-link {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  color: var(--text-secondary);
+  transition: color 0.2s ease;
+}
+
+.github-link:hover {
+  color: var(--text-color);
+}
+
+.github-icon {
+  width: 20px;
+  height: 20px;
+}
