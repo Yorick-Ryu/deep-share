@@ -1,6 +1,32 @@
 let messages = [];
 
 const handleShareClick = async () => {
+    // 先获取容器并执行滚动
+    const container = document.querySelector('.dad65929');
+    if (container) {
+        const scrollToTop = () => {
+            window.scrollTo(0, 0);
+            document.documentElement.scrollTo(0, 0);
+            document.body.scrollTo(0, 0);
+            container.scrollTo(0, 0);
+            
+            window.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
+            document.body.scrollTop = 0;
+            container.scrollTop = 0;
+            
+            let parent = container.parentElement;
+            while (parent) {
+                parent.scrollTop = 0;
+                parent = parent.parentElement;
+            }
+        };
+
+        scrollToTop();
+        await new Promise(resolve => setTimeout(resolve, 200));
+    }
+
+    // 然后再处理对话框和截图
     messages = getMessages();
     const modal = document.querySelector('.deepseek-share-modal');
     if (!modal) {
@@ -8,7 +34,6 @@ const handleShareClick = async () => {
         return;
     }
 
-    // 默认显示图片模式
     modal.style.display = 'block';
     
     // 确保切换到图片面板
