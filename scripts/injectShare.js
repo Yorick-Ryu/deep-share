@@ -178,25 +178,57 @@ function injectShare(onClickHandler) {
         chrome.runtime.sendMessage({ action: 'openPopup' });
     });
 
-    const buttonContainer = document.createElement('div');
-    buttonContainer.className = 'deepseek-share-btn';
-    buttonContainer.innerHTML = `
-      <button title="分享对话" class="share-button">
-        <svg width="24" height="24" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
-          <path d="M911.6 651.6l0 209.2c0 36-30.4 66.2-66.2 66.2l-699.6 1.2c-35.8 0-65-29.2-65-65.2l1.2-699.6c0-35.8 30.4-66.2 66.2-66.2l387 0L535.2 20.2 148.2 20.2c-81.8 0-143 82.8-143 156.8l0 686c0 77.6 63 140.8 140.8 140.8l686 0c82 0 156.6-68.2 156.6-143L988.6 651.6 911.6 651.6 911.6 651.6zM730.2 60.8l288.6 289.2L730.2 639l0-165.2c0 0-286.4-31.8-453.6 206.6 0 0 52.6-454.4 453.6-454.4L730.2 60.8 730.2 60.8z" fill="currentColor"/>
-        </svg>
-      </button>
-    `;
-  
-    // 修改目标容器为 f8d1e4c0
-    const targetElement = document.querySelector('.f8d1e4c0');
-    if (targetElement) {
-      // 添加到 f8d1e4c0 的末尾
-      targetElement.appendChild(buttonContainer);
+    // 重新组织按钮注入逻辑为独立函数
+    function injectButton() {
+        const buttonContainer = document.createElement('div');
+        buttonContainer.className = 'deepseek-share-btn';
+        buttonContainer.innerHTML = `
+            <button title="分享对话" class="share-button">
+                <svg width="24" height="24" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M911.6 651.6l0 209.2c0 36-30.4 66.2-66.2 66.2l-699.6 1.2c-35.8 0-65-29.2-65-65.2l1.2-699.6c0-35.8 30.4-66.2 66.2-66.2l387 0L535.2 20.2 148.2 20.2c-81.8 0-143 82.8-143 156.8l0 686c0 77.6 63 140.8 140.8 140.8l686 0c82 0 156.6-68.2 156.6-143L988.6 651.6 911.6 651.6 911.6 651.6zM730.2 60.8l288.6 289.2L730.2 639l0-165.2c0 0-286.4-31.8-453.6 206.6 0 0 52.6-454.4 453.6-454.4L730.2 60.8 730.2 60.8z" fill="currentColor"/>
+                </svg>
+            </button>
+        `;
+
+        const targetElement = document.querySelector('.f8d1e4c0');
+        if (targetElement) {
+            // 移除旧的按钮
+            document.querySelector('.deepseek-share-btn')?.remove();
+            
+            if (window.innerWidth <= 768) {
+                // 移动端视图
+                const targetIcon = document.querySelector('.d7829b2f.ecf90b28');
+                if (targetIcon) {
+                    targetIcon.parentNode.insertBefore(buttonContainer, targetIcon);
+                    buttonContainer.style.marginRight = '8px';
+                } else {
+                    targetElement.appendChild(buttonContainer);
+                }
+            } else {
+                // 桌面端视图
+                targetElement.appendChild(buttonContainer);
+            }
+
+            // 绑定点击事件
+            buttonContainer.addEventListener('click', onClickHandler);
+        }
     }
-  
-    // Use the passed click handler
-    buttonContainer.addEventListener('click', onClickHandler);
+
+    // 初始注入
+    injectButton();
+
+    // 添加响应式监听
+    const resizeObserver = new ResizeObserver((entries) => {
+        injectButton();
+    });
+
+    // 监听 body 元素的大小变化
+    resizeObserver.observe(document.body);
+
+    // 在组件卸载时清理观察器
+    return () => {
+        resizeObserver.disconnect();
+    };
 }
 
 function formatAsText(messages) {
