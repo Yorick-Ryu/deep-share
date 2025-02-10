@@ -18,7 +18,7 @@ window.captureMessages = async function(customWatermark) {
         display: flex;
         flex-direction: column;
         align-items: flex-end;
-        gap: 4px;  // 减小间距
+        gap: 2px;
         z-index: 9999;
         pointer-events: none;
         user-select: none;
@@ -27,17 +27,17 @@ window.captureMessages = async function(customWatermark) {
     // 创建默认水印和自定义水印
     const defaultWatermark = document.createElement('div');
     defaultWatermark.style.cssText = `
-        padding: 4px 16px;  // 减小上下内边距
+        padding: 2px 16px;
         border-radius: 4px;
         font-size: 13px;
         color: #666;
     `;
-    defaultWatermark.innerHTML = '内容由<strong>DeepSeek AI</strong>生成，由<strong>DeepShare</strong>插件截取';
+    defaultWatermark.innerHTML = '内容由 <strong>DeepSeek AI</strong> 生成，图片由 <strong>DeepShare</strong> 插件截取';
 
     if (customWatermark) {
         const customWatermarkEl = document.createElement('div');
         customWatermarkEl.style.cssText = `
-            padding: 4px 16px;  // 减小上下内边距
+            padding: 2px 16px;
             border-radius: 4px;
             font-size: 13px;
             color: #666;
