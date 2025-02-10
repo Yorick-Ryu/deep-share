@@ -199,13 +199,25 @@ function injectShare(onClickHandler) {
                 // 移动端视图
                 const targetIcon = document.querySelector('.d7829b2f.ecf90b28');
                 if (targetIcon) {
-                    targetIcon.parentNode.insertBefore(buttonContainer, targetIcon);
-                    buttonContainer.style.marginRight = '8px';
-                } else {
-                    targetElement.appendChild(buttonContainer);
+                    // 创建右侧图标容器
+                    const rightContainer = document.createElement('div');
+                    rightContainer.style.display = 'flex';
+                    rightContainer.style.alignItems = 'center';
+                    rightContainer.style.marginLeft = 'auto'; // 将容器推到右侧
+
+                    // 将原来的图标从其父元素中移除
+                    const originalParent = targetIcon.parentNode;
+                    originalParent.removeChild(targetIcon);
+
+                    // 将分享按钮和原图标都加入新容器
+                    rightContainer.appendChild(buttonContainer);
+                    rightContainer.appendChild(targetIcon);
+
+                    // 将新容器添加到原来的父元素中
+                    originalParent.appendChild(rightContainer);
                 }
             } else {
-                // 桌面端视图
+                // 桌面端视图保持不变
                 targetElement.appendChild(buttonContainer);
             }
 
