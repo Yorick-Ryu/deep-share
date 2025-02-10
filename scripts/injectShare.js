@@ -112,7 +112,7 @@ function injectShare(onClickHandler) {
                     }
                 } catch (error) {
                     console.error('Screenshot failed:', error);
-                    loadingEl.textContent = '截图生成失败，请重试';
+                    loadingEl.textContent = '截图生成失败，建议刷新网页后重试';
                 }
             }
         });
