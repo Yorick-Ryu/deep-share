@@ -16,7 +16,6 @@
     },
     "permissions": [
         "activeTab",
-        "desktopCapture",
         "storage"
     ],
     "host_permissions": [
