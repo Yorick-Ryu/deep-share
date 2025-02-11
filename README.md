@@ -6,6 +6,8 @@
 
 一个用来分享 DeepSeek 对话的浏览器插件，可以将对话内容以图片或文本的形式保存，便于分享。
 
+A browser extension designed for sharing DeepSeek conversations, enabling users to save dialogue content as images or text for easy sharing.
+
 ## 功能特点
 
 - 一键截取 DeepSeek 对话内容
