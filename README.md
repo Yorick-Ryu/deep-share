@@ -6,6 +6,8 @@
 
 一个用来分享 DeepSeek 对话的浏览器插件，可以将对话内容以图片或文本的形式保存，便于分享。
 
+A browser extension designed for sharing DeepSeek conversations, enabling users to save dialogue content as images or text for easy sharing.
+
 ## 功能特点
 
 - 一键截取 DeepSeek 对话内容
@@ -15,7 +17,7 @@
 
 ## 安装方式
 
-1. 从 Edge\Chrome 网上应用店安装
+1. 从 Edge\Chrome 网上应用商店安装
 2. 下载源码本地安装:
    - 下载并解压源码
    - 打开 Edge\Chrome 扩展程序页面
