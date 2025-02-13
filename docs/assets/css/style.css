@@ -249,7 +249,7 @@ main {
 
 .demo-video {
     width: 100%;
-    max-width: 800px;
+    max-width: 1080px;
     margin: 0 auto;
     border-radius: 12px;
     overflow: hidden;
@@ -257,6 +257,23 @@ main {
 
 .demo-video video {
     width: 100%;
+}
+
+/* Responsive Douyin iframe styles */
+.douyin-desktop {
+    display: block;
+}
+.douyin-mobile {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .douyin-desktop {
+        display: none;
+    }
+    .douyin-mobile {
+        display: block;
+    }
 }
 
 /* Footer */
