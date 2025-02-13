@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="50" height="50" viewBox="0 0 512 512">
+<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="1024" height="1024" viewBox="0 0 512 512">
     <!-- Background circle remains unchanged -->
     <path fill="#D4D2B1" d="M504.1,256c0,137-111.1,248.1-248.1,248.1S7.9,393,7.9,256C7.9,119,119,7.9,256,7.9S504.1,119,504.1,256"></path>
     <!-- Enlarge central bird details by wrapping in a group with scale transform -->
