@@ -255,19 +255,3 @@ function formatAsText(messages) {
         return text;
     }).join('\n\n');
 }
-
-function formatAsMarkdown(messages) {
-    return messages.map(msg => {
-        const role = msg.role === 'user' ? '### 我' : '### AI';
-        let text = `${role}\n${msg.content}`;
-        if (msg.reasoning_content) {
-            text += `\n\n> 思考过程 (${msg.reasoning_time}s):\n> ${msg.reasoning_content}`;
-        }
-        return text;
-    }).join('\n\n');
-}
-
-function renderAsImage(messages, canvas) {
-    // TODO: Implement image rendering
-    console.log('Image rendering to be implemented');
-}
