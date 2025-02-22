@@ -1,4 +1,4 @@
-window.captureMessages = async function(customWatermark) {
+window.captureMessages = async function (customWatermark) {
     const container = document.querySelector('.dad65929');
     if (!container) return null;
 
@@ -61,11 +61,11 @@ window.captureMessages = async function(customWatermark) {
 
         // 获取实际背景色，优先从对话容器获取，然后是body
         let backgroundColor = getComputedStyle(container).backgroundColor;
-        
+
         // 如果背景色是透明的，尝试获取 body 的背景色
         if (backgroundColor === 'transparent' || backgroundColor === 'rgba(0, 0, 0, 0)') {
             backgroundColor = getComputedStyle(document.body).backgroundColor;
-            
+
             // 如果还是透明的，使用固定的背景色
             if (backgroundColor === 'transparent' || backgroundColor === 'rgba(0, 0, 0, 0)') {
                 // 根据页面主题设置默认背景色
@@ -95,11 +95,11 @@ window.captureMessages = async function(customWatermark) {
                 return element.classList.contains('deepseek-share-btn');
             }
         });
-        
+
         // 移除水印并恢复容器原始定位
         container.removeChild(watermarkContainer);
         container.style.position = originalPosition;
-        
+
         return canvas.toDataURL('image/png');
     } catch (error) {
         // 确保发生错误时也清理现场

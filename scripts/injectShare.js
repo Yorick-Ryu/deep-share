@@ -2,7 +2,7 @@
 function injectShare(onClickHandler) {
     // 检查是否在对话页面
     if (!location.pathname.includes('/chat/')) return;
-    
+
     // 清理旧的元素
     document.querySelector('.deepseek-share-modal')?.remove();
     const existingBtn = document.querySelector('.deepseek-share-btn');
@@ -62,7 +62,7 @@ function injectShare(onClickHandler) {
 
     // Close button handler
     modal.querySelector('.close-btn').addEventListener('click', () => {
-      modal.style.display = 'none';
+        modal.style.display = 'none';
     });
 
     // 添加点击外部关闭功能
@@ -78,10 +78,10 @@ function injectShare(onClickHandler) {
         tab.addEventListener('click', async () => {
             tabs.forEach(t => t.classList.remove('active'));
             tab.classList.add('active');
-            
+
             const panels = modal.querySelectorAll('.tab-panel');
             panels.forEach(p => p.classList.remove('active'));
-            
+
             const targetPanel = modal.querySelector(`#${tab.dataset.tab}-panel`);
             targetPanel.classList.add('active');
 
@@ -94,12 +94,12 @@ function injectShare(onClickHandler) {
                 const loadingEl = modal.querySelector('.image-loading');
                 img.style.display = 'none';
                 loadingEl.style.display = 'block';
-                
+
                 try {
                     if (typeof window.captureMessages !== 'function') {
                         throw new Error('Screenshot function not available');
                     }
-                    
+
                     const imageUrl = await window.captureMessages();
                     if (imageUrl) {
                         img.onload = () => {
@@ -112,7 +112,7 @@ function injectShare(onClickHandler) {
                     }
                 } catch (error) {
                     console.error('Screenshot failed:', error);
-                    loadingEl.textContent = '截图生成失败，建议刷新网页后重试';
+                    loadingEl.textContent = chrome.i18n.getMessage('generateFailed');
                 }
             }
         });
@@ -123,7 +123,7 @@ function injectShare(onClickHandler) {
     downloadBtn.addEventListener('click', () => {
         const activeTab = modal.querySelector('.tab-btn.active').dataset.tab;
         const link = document.createElement('a');
-        
+
         if (activeTab === 'image') {
             const img = modal.querySelector('#conversation-image');
             link.download = 'deepseek-chat.png';
@@ -134,7 +134,7 @@ function injectShare(onClickHandler) {
             link.download = 'deepseek-chat.txt';
             link.href = URL.createObjectURL(blob);
         }
-        
+
         link.click();
     });
 
@@ -143,7 +143,7 @@ function injectShare(onClickHandler) {
     copyBtn.addEventListener('click', async () => {
         const activeTab = modal.querySelector('.tab-btn.active').dataset.tab;
         const originalText = copyBtn.textContent;
-        
+
         try {
             if (activeTab === 'text') {
                 const text = formatAsText(messages);
@@ -159,7 +159,7 @@ function injectShare(onClickHandler) {
                     throw new Error('Image not ready');
                 }
             }
-            
+
             copyBtn.textContent = chrome.i18n.getMessage('copied');
             setTimeout(() => {
                 copyBtn.textContent = originalText;
@@ -195,7 +195,7 @@ function injectShare(onClickHandler) {
         if (targetElement) {
             // 移除旧的按钮
             document.querySelector('.deepseek-share-btn')?.remove();
-            
+
             if (window.innerWidth <= 768) {
                 // 移动端视图
                 const targetIcon = document.querySelector('.d7829b2f.ecf90b28');

@@ -9,12 +9,12 @@ const handleShareClick = async () => {
             document.documentElement.scrollTo(0, 0);
             document.body.scrollTo(0, 0);
             container.scrollTo(0, 0);
-            
+
             window.scrollTop = 0;
             document.documentElement.scrollTop = 0;
             document.body.scrollTop = 0;
             container.scrollTop = 0;
-            
+
             let parent = container.parentElement;
             while (parent) {
                 parent.scrollTop = 0;
@@ -35,14 +35,14 @@ const handleShareClick = async () => {
     }
 
     modal.style.display = 'block';
-    
+
     // 确保切换到图片面板
     const imageTab = modal.querySelector('.tab-btn[data-tab="image"]');
     const imagePanel = modal.querySelector('#image-panel');
-    
+
     modal.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
     modal.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-    
+
     imageTab.classList.add('active');
     imagePanel.classList.add('active');
 
@@ -67,7 +67,7 @@ const handleShareClick = async () => {
         }
     } catch (error) {
         console.error('Screenshot failed:', error);
-        loadingEl.textContent = '截图生成失败，建议刷新网页后重试！';
+        loadingEl.textContent = chrome.i18n.getMessage('generateFailed');
     }
 };
 
@@ -114,5 +114,3 @@ if (document.readyState === 'loading') {
 } else {
     injectShare(handleShareClick);
 }
-
-
