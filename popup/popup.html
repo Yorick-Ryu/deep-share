@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>DeepSeek Share</title>
+  <title>DeepShare</title>
   <link rel="stylesheet" href="popup.css">
 </head>
 <body>
@@ -15,19 +15,19 @@
     <img src="../icons/deepshare-icon.svg" alt="DeepShare" class="title-icon">
     <h1>DeepShare</h1>
   </div>
-  <p class="description">一键分享 DeepSeek AI 对话，支持图片、文字！</p>
+  <p class="description" id="extensionDescription"></p>
   <div class="checkbox-group">
     <input type="checkbox" id="hideDefaultWatermark">
-    <label for="hideDefaultWatermark">隐藏默认水印</label>
+    <label for="hideDefaultWatermark" id="hideDefaultWatermarkLabel"></label>
   </div>
   <div class="form-group">
-    <label for="watermark">自定义水印文字（可选）</label>
-    <input type="text" id="watermark" placeholder="在此输入自定义水印">
+    <label for="watermark" id="customWatermarkLabel"></label>
+    <input type="text" id="watermark">
   </div>
-  <button id="save">保存设置</button>
+  <button id="save"></button>
   
   <div id="sponsorSection" class="sponsor-section">
-    <h3 class="sponsor-title">感谢使用！如果觉得好用，欢迎微信扫码赞助😊</h3>
+    <h3 class="sponsor-title" id="sponsorTitle"></h3>
     <img src="../icons/sponsor-code.png" alt="赞助码" class="sponsor-image">
   </div>
   <script src="popup.js"></script>

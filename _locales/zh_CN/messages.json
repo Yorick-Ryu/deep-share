@@ -1,0 +1,62 @@
+{
+    "extensionName": {
+        "message": "DeepShare（DeepSeek对话截图分享）"
+    },
+    "extensionDescription": {
+        "message": "一键分享 DeepSeek AI 对话为图片或文字。"
+    },
+    "shareButton": {
+        "message": "分享对话"
+    },
+    "modalTitle": {
+        "message": "分享对话"
+    },
+    "imageTab": {
+        "message": "截图"
+    },
+    "textTab": {
+        "message": "文本"
+    },
+    "downloadButton": {
+        "message": "下载"
+    },
+    "copyButton": {
+        "message": "复制"
+    },
+    "copied": {
+        "message": "已复制！"
+    },
+    "copyFailed": {
+        "message": "复制失败！"
+    },
+    "generatingImage": {
+        "message": "正在生成截图..."
+    },
+    "generateFailed": {
+        "message": "截图生成失败，建议刷新网页后重试！"
+    },
+    "defaultWatermark": {
+        "message": "内容由 DeepSeek AI 生成，图片由 DeepShare 插件截取"
+    },
+    "settingsButton": {
+        "message": "水印设置"
+    },
+    "hideDefaultWatermarkLabel": {
+        "message": "隐藏默认水印"
+    },
+    "customWatermarkLabel": {
+        "message": "自定义水印文字（可选）"
+    },
+    "customWatermarkPlaceholder": {
+        "message": "在此输入自定义水印"
+    },
+    "saveSettings": {
+        "message": "保存设置"
+    },
+    "settingsSaved": {
+        "message": "已保存"
+    },
+    "sponsorTitle": {
+        "message": "感谢使用！如果觉得好用，欢迎微信扫码赞助😊"
+    }
+}

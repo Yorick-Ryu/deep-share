@@ -4,6 +4,14 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('watermark').value = data.customWatermark || '';
     document.getElementById('hideDefaultWatermark').checked = !!data.hideDefaultWatermark;
   });
+
+  // Set all i18n text
+  document.getElementById('extensionDescription').textContent = chrome.i18n.getMessage('extensionDescription');
+  document.getElementById('hideDefaultWatermarkLabel').textContent = chrome.i18n.getMessage('hideDefaultWatermarkLabel');
+  document.getElementById('customWatermarkLabel').textContent = chrome.i18n.getMessage('customWatermarkLabel');
+  document.getElementById('watermark').placeholder = chrome.i18n.getMessage('customWatermarkPlaceholder');
+  document.getElementById('save').textContent = chrome.i18n.getMessage('saveSettings');
+  document.getElementById('sponsorTitle').textContent = chrome.i18n.getMessage('sponsorTitle');
 });
 
 // 保存设置
@@ -16,13 +24,13 @@ document.getElementById('save').addEventListener('click', () => {
     hideDefaultWatermark: hideDefaultWatermark 
   }, () => {
     const button = document.getElementById('save');
-    button.textContent = '已保存';
+    button.textContent = chrome.i18n.getMessage('settingsSaved');
     
     // Show sponsor section
     document.getElementById('sponsorSection').style.display = 'block';
     
     setTimeout(() => {
-      button.textContent = '保存设置';
+      button.textContent = chrome.i18n.getMessage('saveSettings');
     }, 1000);
   });
 });

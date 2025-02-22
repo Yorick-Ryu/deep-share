@@ -32,7 +32,7 @@ window.captureMessages = async function(customWatermark) {
         font-size: 13px;
         color: #666;
     `;
-    defaultWatermark.innerHTML = '内容由 <strong>DeepSeek AI</strong> 生成，图片由 <strong>DeepShare</strong> 插件截取';
+    defaultWatermark.innerHTML = chrome.i18n.getMessage('defaultWatermark');
 
     if (customWatermark) {
         const customWatermarkEl = document.createElement('div');
