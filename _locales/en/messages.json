@@ -61,5 +61,11 @@
     },
     "selectButton": {
         "message": "Select Messages"
+    },
+    "selectAllButton": {
+        "message": "Select All"
+    },
+    "unselectAllButton": {
+        "message": "Unselect All"
     }
 }

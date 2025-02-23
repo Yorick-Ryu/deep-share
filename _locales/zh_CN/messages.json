@@ -61,5 +61,11 @@
     },
     "selectButton": {
         "message": "选择对话"
+    },
+    "selectAllButton": {
+        "message": "全选"
+    },
+    "unselectAllButton": {
+        "message": "取消全选"
     }
 }
