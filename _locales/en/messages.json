@@ -58,5 +58,8 @@
     },
     "sponsorTitle": {
         "message": "Thanks for using! If you find it helpful, feel free to sponsor via WeChat QR code 😊"
+    },
+    "selectButton": {
+        "message": "Select Messages"
     }
 }

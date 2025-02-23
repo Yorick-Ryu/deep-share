@@ -24,17 +24,19 @@
 .deepseek-share-btn {
   display: flex;
   align-items: center;
+  gap: 10px;  /* 增加按钮之间的间距 */
   margin-right: 8px;
   /* 添加右边距 */
 }
 
-.deepseek-share-btn .share-button {
+/* 按钮通用样式 */
+.deepseek-share-btn .share-button,
+.deepseek-share-btn .select-button {
   background: none;
   border: none;
   cursor: pointer;
   padding: 6px;
   color: rgb(139, 139, 139);
-  /* 浅色模式下的颜色 */
   border-radius: 6px;
   display: flex;
   align-items: center;
@@ -44,30 +46,38 @@
   transition: all 0.2s ease;
 }
 
-.deepseek-share-btn .share-button:hover {
+.deepseek-share-btn .share-button:hover,
+.deepseek-share-btn .select-button:hover {
   background: rgba(139, 139, 139, 0.1);
-  /* 浅色模式下的悬停背景色 */
   color: rgb(139, 139, 139);
-  /* 保持原色 */
   transform: scale(1.05);
+}
+
+.deepseek-share-btn .share-button:active {
+  transform: scale(0.95);
 }
 
 /* 深色模式覆盖 */
 @media (prefers-color-scheme: dark) {
-  .deepseek-share-btn .share-button {
+  .deepseek-share-btn .share-button,
+  .deepseek-share-btn .select-button {
     color: rgb(205, 212, 223);
     /* 深色模式下的颜色 */
   }
 
-  .deepseek-share-btn .share-button:hover {
+  .deepseek-share-btn .share-button:hover,
+  .deepseek-share-btn .select-button:hover {
     background: rgba(205, 212, 223, 0.1);
     /* 深色模式下的悬停背景色 */
     color: rgb(205, 212, 223);
   }
 }
 
-.deepseek-share-btn .share-button:active {
-  transform: scale(0.95);
+.select-button svg {
+  width: 23px;  /* 增加SVG图标大小 */
+  height: 23px;
+  min-width: 23px;  /* 确保最小尺寸 */
+  min-height: 23px;
 }
 
 .f8d1e4c0 {
