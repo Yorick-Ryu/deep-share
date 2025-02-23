@@ -10,6 +10,7 @@ A browser extension for sharing DeepSeek conversations, enabling users to save d
 
 ## Features
 
+- Open source, free, and ad-free
 - One-click capture of DeepSeek chat content
 - Support sharing as image or text
 - Customizable watermark
