@@ -4,72 +4,74 @@
   <img src="icons/deepshare-icon.svg" alt="deepshare-icon" width="128"/>
 </p>
 
-一个用来分享 DeepSeek 对话的浏览器插件，可以将对话内容以图片或文本的形式保存，便于分享。
+A browser extension for sharing DeepSeek conversations, enabling users to save dialogue content as images or text for easy sharing.
 
-A browser extension designed for sharing DeepSeek conversations, enabling users to save dialogue content as images or text for easy sharing.
+[中文文档](README.zh-CN.md)
 
-## 功能特点
+## Features
 
-- 一键截取 DeepSeek 对话内容
-- 支持分享图片或纯文本
-- 支持自定义水印
-- 支持选择性分享对话内容
-  - 可选择单条或多条对话
-  - 支持一键全选/取消全选
-- 简洁的操作界面
+- One-click capture of DeepSeek chat content
+- Support sharing as image or text
+- Customizable watermark
+- Selective message sharing
+  - Select single or multiple messages
+  - Quick select/unselect all messages
+- Clean and intuitive interface
 
-## 安装方式
+## Installation
 
-1. 从 Edge\Chrome 网上应用商店安装
-2. 下载源码本地安装:
-   - 下载并解压源码
-   - 打开 Edge\Chrome 扩展程序页面
-   - 启用开发者模式
-   - 点击"加载已解压的扩展程序"
-   - 选择解压后的文件夹
+1. Install from Edge/Chrome Web Store
+   - [Edge Add-ons Store](https://microsoftedge.microsoft.com/addons/detail/deepshare/pdccjnppfegekpnhfljbngammgfbcofm)
+   - [Chrome Web Store](https://chromewebstore.google.com/detail/deepsharedeepseek%E5%AF%B9%E8%AF%9D%E6%88%AA%E5%9B%BE%E5%88%86%E4%BA%AB/omnaecaamcabmnbjnpjpecoaalfgidop)
+2. Install from source code:
+   - Download and extract the source code
+   - Open Edge/Chrome extensions page
+   - Enable Developer Mode
+   - Click "Load unpacked extension"
+   - Select the extracted folder
 
-## 使用方法
+## Usage
 
-前提：安装插件
+Prerequisites: Install the extension
 
-1. 访问 https://chat.deepseek.com/
-2. 点击开始新对话
-3. 在右上角可以看到两个按钮：
-   - 选择对话按钮：开启选择模式，可以选择要分享的对话
-   - 分享按钮：直接分享所有对话
-4. 选择对话模式下：
-   - 可以勾选想要分享的对话
-   - 使用"全选"/"取消全选"按钮快速操作
-   - 点击分享按钮生成所选对话的内容
-5. 选择分享格式:
-   - 截图模式：生成一张包含对话内容的长图
-   - 文本模式：包含对话内容的纯文本
-6. 复制或者下载生成的图片和文本
+1. Visit https://chat.deepseek.com/
+2. Start a new conversation
+3. In the top-right corner, you'll see two buttons:
+   - Select Messages: Enable selection mode to choose messages
+   - Share: Share all messages directly
+4. In selection mode:
+   - Check the messages you want to share
+   - Use "Select All"/"Unselect All" for quick operations
+   - Click share button to generate content of selected messages
+5. Choose sharing format:
+   - Image mode: Generates a long image of the conversation
+   - Text mode: Plain text of the conversation
+6. Copy or download the generated image/text
 
-## 水印设置
+## Watermark Settings
 
-点击分享对话框右上角的设置界面，支持：
+Click the settings icon in the top-right corner of the share dialog to:
 
-- 隐藏默认截图水印
-- 自定义水印内容
+- Hide default watermark
+- Add custom watermark text
 
-## 贡献指南
+## Contributing
 
-欢迎提交Issue和Pull Request来帮助改进项目。
+Issues and Pull Requests are welcome to help improve the project.
 
-## 许可证
+## License
 
-本项目基于 [MIT License](LICENSE) 开源，请自由地使用、修改和分发。
+This project is licensed under the [Creative Commons Attribution-NonCommercial 4.0 International License](LICENSE). This means you can freely use and modify the code for non-commercial purposes, but any commercial use is prohibited.
 
-## 支持项目
+## Support
 
-如果您觉得这个项目对您有帮助，欢迎支持项目的发展:
+If you find this project helpful, you can support its development by:
 
-- 🌟Star 本项目
-- 分享给更多的人
-- 提交 Bug 反馈或功能建议
-- 😊赞助项目发展（微信扫码赞助）
+- 🌟 Star this project
+- Share it with others
+- Submit bug reports or feature requests
+- 😊 Sponsor via WeChat QR code
 
 <img src="icons/sponsor-code.png" alt="donate" width="200"/>
 
-感谢您的支持！
+Thank you for your support!
