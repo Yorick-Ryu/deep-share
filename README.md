@@ -13,6 +13,9 @@ A browser extension designed for sharing DeepSeek conversations, enabling users 
 - 一键截取 DeepSeek 对话内容
 - 支持分享图片或纯文本
 - 支持自定义水印
+- 支持选择性分享对话内容
+  - 可选择单条或多条对话
+  - 支持一键全选/取消全选
 - 简洁的操作界面
 
 ## 安装方式
@@ -31,11 +34,17 @@ A browser extension designed for sharing DeepSeek conversations, enabling users 
 
 1. 访问 https://chat.deepseek.com/
 2. 点击开始新对话
-3. 在右上角点击分享按钮
-4. 选择分享格式:
+3. 在右上角可以看到两个按钮：
+   - 选择对话按钮：开启选择模式，可以选择要分享的对话
+   - 分享按钮：直接分享所有对话
+4. 选择对话模式下：
+   - 可以勾选想要分享的对话
+   - 使用"全选"/"取消全选"按钮快速操作
+   - 点击分享按钮生成所选对话的内容
+5. 选择分享格式:
    - 截图模式：生成一张包含对话内容的长图
    - 文本模式：包含对话内容的纯文本
-5. 复制或者下载生成的图片和文本
+6. 复制或者下载生成的图片和文本
 
 ## 水印设置
 
