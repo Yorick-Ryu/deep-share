@@ -281,3 +281,43 @@
   background: var(--button-hover-color);
   color: white;
 }
+
+/* 对话选择复选框样式 */
+.message-checkbox-wrapper {
+  position: absolute;
+  top: 8px;
+  right: -30px;
+}
+
+.message-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--button-color);
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.message-checkbox:checked {
+  background-color: var(--button-hover-color);
+  border-color: var(--button-hover-color);
+}
+
+.message-checkbox:checked::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: white;
+}
+
+.message-checkbox:hover {
+  border-color: var(--button-hover-color);
+}

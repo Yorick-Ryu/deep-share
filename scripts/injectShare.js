@@ -230,7 +230,43 @@ function injectShare(onClickHandler) {
 
             // 绑定点击事件
             buttonContainer.addEventListener('click', onClickHandler);
+            
+            // 绑定选择按钮事件处理
+            const selectBtn = buttonContainer.querySelector('.select-button');
+            selectBtn.addEventListener('click', (e) => {
+                e.stopPropagation(); // 阻止事件冒泡，防止触发父元素的click
+                toggleSelectionMode();
+            });
         }
+    }
+
+    function toggleSelectionMode() {
+        // 检查是否已经存在复选框
+        const existingCheckboxes = document.querySelectorAll('.message-checkbox-wrapper');
+        if (existingCheckboxes.length > 0) {
+            // 如果存在复选框，则清除它们
+            existingCheckboxes.forEach(el => el.remove());
+            return;
+        }
+        
+        // 为每个问题和回答添加复选框
+        document.querySelectorAll('.fa81, .f9bf7997.c05b5566').forEach(messageDiv => {
+            const checkboxWrapper = document.createElement('div');
+            checkboxWrapper.className = 'message-checkbox-wrapper';
+            
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.className = 'message-checkbox';
+            checkbox.checked = true; // 默认选中
+            
+            checkboxWrapper.appendChild(checkbox);
+            messageDiv.appendChild(checkboxWrapper);
+            
+            // 设置相对定位以支持复选框的绝对定位
+            if (!messageDiv.style.position) {
+                messageDiv.style.position = 'relative';
+            }
+        });
     }
 
     // 初始注入
@@ -259,4 +295,16 @@ function formatAsText(messages) {
         }
         return text;
     }).join('\n\n');
+}
+
+// 修改原有的handleShareClick为getSelectedMessages，用于获取选中的消息
+function getSelectedMessages() {
+    const messages = [];
+    document.querySelectorAll('.message-checkbox').forEach(checkbox => {
+        if (checkbox.checked) {
+            const messageDiv = checkbox.closest('.fa81, .f9bf7997');
+            // ... 获取消息内容的逻辑 ...
+        }
+    });
+    return messages;
 }
