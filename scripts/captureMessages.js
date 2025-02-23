@@ -2,6 +2,18 @@ window.captureMessages = async function (customWatermark) {
     const container = document.querySelector('.dad65929');
     if (!container) return null;
 
+    // 检查是否存在复选框
+    const checkboxes = document.querySelectorAll('.message-checkbox');
+    if (checkboxes.length > 0) {
+        // 如果存在复选框，隐藏未选中的对话
+        checkboxes.forEach(checkbox => {
+            const messageDiv = checkbox.closest('.fa81, .f9bf7997.c05b5566');
+            if (messageDiv) {
+                messageDiv.style.display = checkbox.checked ? '' : 'none';
+            }
+        });
+    }
+
     // 获取水印设置
     const { hideDefaultWatermark } = await chrome.storage.sync.get('hideDefaultWatermark');
 
@@ -92,9 +104,20 @@ window.captureMessages = async function (customWatermark) {
             scale: window.devicePixelRatio,
             allowTaint: true,
             ignoreElements: (element) => {
-                return element.classList.contains('deepseek-share-btn');
+                return element.classList.contains('deepseek-share-btn') ||
+                       element.classList.contains('message-checkbox-wrapper');
             }
         });
+
+        // 恢复被隐藏的对话
+        if (checkboxes.length > 0) {
+            checkboxes.forEach(checkbox => {
+                const messageDiv = checkbox.closest('.fa81, .f9bf7997.c05b5566');
+                if (messageDiv) {
+                    messageDiv.style.display = '';
+                }
+            });
+        }
 
         // 移除水印并恢复容器原始定位
         container.removeChild(watermarkContainer);
