@@ -257,7 +257,7 @@ function injectShare(onClickHandler) {
             const checkbox = document.createElement('input');
             checkbox.type = 'checkbox';
             checkbox.className = 'message-checkbox';
-            checkbox.checked = true; // 默认选中
+            checkbox.checked = false; // 默认不选中
             
             checkboxWrapper.appendChild(checkbox);
             messageDiv.appendChild(checkboxWrapper);
