@@ -6,6 +6,12 @@ function getMessages() {
         return getAllMessages();
     }
 
+    // 检查是否有选中的对话
+    const hasSelectedMessages = Array.from(checkboxes).some(checkbox => checkbox.checked);
+    if (!hasSelectedMessages) {
+        throw new Error('NO_SELECTION');
+    }
+
     // 如果存在复选框，只获取选中的对话
     const messages = [];
     checkboxes.forEach(checkbox => {

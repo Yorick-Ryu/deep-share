@@ -67,5 +67,8 @@
     },
     "unselectAllButton": {
         "message": "Unselect All"
+    },
+    "noMessageSelected": {
+        "message": "Please select at least one message"
     }
 }

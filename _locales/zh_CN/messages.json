@@ -67,5 +67,8 @@
     },
     "unselectAllButton": {
         "message": "取消全选"
+    },
+    "noMessageSelected": {
+        "message": "请至少选择一条对话"
     }
 }
