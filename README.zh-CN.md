@@ -23,7 +23,7 @@
 
 1. 从 Edge/Chrome 网上应用商店安装
    - [Edge 外接程序商店](https://microsoftedge.microsoft.com/addons/detail/deepshare/pdccjnppfegekpnhfljbngammgfbcofm)
-   - [Chrome 网上应用商店](https://chromewebstore.google.com/detail/deepsharedeepseek%E5%AF%B9%E8%AF%9D%E6%88%AA%E5%9B%BE%E5%88%86%E4%BA%AB/omnaecaamcabmnbjnpjpecoaalfgidop)
+   - [Chrome 网上应用商店](https://chromewebstore.google.com/detail/omnaecaamcabmnbjnpjpecoaalfgidop)
 2. 下载源码本地安装:
    - 下载并解压源码
    - 打开 Edge\Chrome 扩展程序页面
