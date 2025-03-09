@@ -18,6 +18,7 @@ A browser extension for sharing DeepSeek conversations, enabling users to save d
   - Select single or multiple messages
   - Quick select/unselect all messages
 - Clean and intuitive interface
+- One-click LaTeX formula copying (click on any math formula to copy its LaTeX code)
 
 ## Installation
 

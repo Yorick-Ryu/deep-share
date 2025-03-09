@@ -353,3 +353,42 @@
     border-color: var(--button-hover-color);
   }
 }
+
+/* KaTeX copy functionality styles */
+.katex {
+  position: relative;
+  transition: background-color 0.2s ease;
+}
+
+.katex:hover {
+  background-color: rgba(77, 107, 254, 0.1);
+  border-radius: 4px;
+}
+
+/* Add pulsing animation for KaTeX on click */
+@keyframes katex-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(77, 107, 254, 0.4); }
+  70% { box-shadow: 0 0 0 6px rgba(77, 107, 254, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(77, 107, 254, 0); }
+}
+
+.katex:active {
+  animation: katex-pulse 0.5s;
+}
+
+/* KaTeX copy notification styles */
+.katex-copy-notification {
+  animation: notification-appear 0.3s ease forwards;
+  white-space: nowrap;
+}
+
+@keyframes notification-appear {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}

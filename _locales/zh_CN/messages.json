@@ -29,6 +29,12 @@
     "copyFailed": {
         "message": "复制失败！"
     },
+    "latexCopied": {
+        "message": "LaTeX 代码已复制！"
+    },
+    "clickToCopyLatex": {
+        "message": "点击复制 LaTeX 代码"
+    },
     "generatingImage": {
         "message": "正在生成截图..."
     },

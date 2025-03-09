@@ -38,6 +38,7 @@
                 "scripts/captureMessages.js",
                 "scripts/getMessages.js",
                 "scripts/injectShare.js",
+                "scripts/copyKatex.js",
                 "scripts/main.js"
             ]
         }
