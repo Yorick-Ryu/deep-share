@@ -70,10 +70,10 @@ This project is licensed under the [Creative Commons Attribution-NonCommercial 4
 
 If you find this project helpful, you can support its development by:
 
-- 🌟 Star this project
-- Share it with others
-- Submit bug reports or feature requests
-- 😊 Sponsor via WeChat QR code
+- ⭐ Star this project
+- 📢 Share it with others
+- 🐛 Submit bug reports or feature requests
+- 🧧 Sponsor via WeChat QR code
 
 <img src="icons/sponsor-code.png" alt="donate" width="200"/>
 
