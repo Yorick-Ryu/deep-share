@@ -24,7 +24,7 @@ A browser extension for sharing DeepSeek conversations, enabling users to save d
 
 1. Install from Edge/Chrome Web Store
    - [Edge Add-ons Store](https://microsoftedge.microsoft.com/addons/detail/deepshare/pdccjnppfegekpnhfljbngammgfbcofm)
-   - [Chrome Web Store](https://chromewebstore.google.com/detail/deepsharedeepseek%E5%AF%B9%E8%AF%9D%E6%88%AA%E5%9B%BE%E5%88%86%E4%BA%AB/omnaecaamcabmnbjnpjpecoaalfgidop)
+   - [Chrome Web Store](https://chromewebstore.google.com/detail/omnaecaamcabmnbjnpjpecoaalfgidop)
 2. Install from source code:
    - Download and extract the source code
    - Open Edge/Chrome extensions page
