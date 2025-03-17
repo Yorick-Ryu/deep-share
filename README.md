@@ -31,6 +31,7 @@ A browser extension for sharing DeepSeek conversations, enabling users to save d
    - Enable Developer Mode
    - Click "Load unpacked extension"
    - Select the extracted folder
+3. **Important:** After installation, refresh any open DeepSeek chat pages for the extension to take effect.
 
 ## Usage
 
