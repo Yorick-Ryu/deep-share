@@ -82,11 +82,11 @@ async function convertToDocx(message, sourceButton) {
         
         // Clean up
         URL.revokeObjectURL(url);
-        showSuccessNotification();
+        showNotification(chrome.i18n.getMessage('docxConversionSuccess'));
         
     } catch (error) {
         console.error('DOCX conversion failed:', error);
-        showErrorNotification(error.message);
+        showNotification(error.message, true);
     }
 }
 
@@ -105,90 +105,84 @@ function generateFilename(message) {
     return `deepseek_${role}_${filename}_${timestamp}`;
 }
 
-// Function to show a success notification
-function showSuccessNotification() {
-    const notification = document.createElement('div');
-    notification.className = 'deepseek-notification success';
-    notification.textContent = chrome.i18n.getMessage('docxConversionSuccess');
+// Function to show a notification (success or error)
+function showNotification(message, isError = false) {
+    // Find the container similar to KaTeX notifications
+    const container = document.querySelector("#root > div > div.c3ecdb44 > div.f2eea526");
     
-    // Style the notification
-    Object.assign(notification.style, {
-        position: 'fixed',
-        bottom: '20px',
-        right: '20px',
-        padding: '10px 20px',
-        backgroundColor: '#4caf50',
-        color: 'white',
-        borderRadius: '4px',
-        boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
-        zIndex: '9999',
-        opacity: '0',
-        transition: 'opacity 0.3s ease'
-    });
+    // Create feedback element
+    const feedback = document.createElement('div');
+    feedback.textContent = message;
+    feedback.className = 'katex-copy-notification'; // Use the same class as KaTeX notifications
+    feedback.style.cssText = `
+        position: absolute;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: ${isError ? '#f44336' : '#4d6bfe'};
+        color: white;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 14px;
+        font-weight: 500;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+        z-index: 1000;
+        text-align: center;
+        min-width: 100px;
+    `;
     
-    document.body.appendChild(notification);
-    
-    // Fade in
-    setTimeout(() => {
-        notification.style.opacity = '1';
-    }, 10);
-    
-    // Fade out and remove after 3 seconds
-    setTimeout(() => {
-        notification.style.opacity = '0';
+    if (container) {
+        // Target container exists
+        if (getComputedStyle(container).position === 'static') {
+            container.style.position = 'relative';
+        }
+        
+        // Add feedback inside the container at the top
+        container.appendChild(feedback);
+        
+        // Show with animation
         setTimeout(() => {
-            document.body.removeChild(notification);
-        }, 300);
-    }, 3000);
-}
-
-// Function to show an error notification
-function showErrorNotification(errorMessage) {
-    const notification = document.createElement('div');
-    notification.className = 'deepseek-notification error';
-    
-    // Add error message
-    const defaultMessage = chrome.i18n.getMessage('docxConversionError');
-    notification.textContent = defaultMessage;
-    
-    // Add details if available
-    if (errorMessage) {
-        const details = document.createElement('div');
-        details.style.fontSize = '0.8em';
-        details.style.marginTop = '5px';
-        details.textContent = errorMessage;
-        notification.appendChild(details);
+            feedback.style.opacity = '1';
+            feedback.style.transform = 'translateX(-50%) translateY(0)';
+        }, 10);
+        
+        // Hide and remove after delay
+        setTimeout(() => {
+            feedback.style.opacity = '0';
+            feedback.style.transform = 'translateX(-50%) translateY(-10px)';
+            setTimeout(() => {
+                if (container.contains(feedback)) {
+                    container.removeChild(feedback);
+                }
+            }, 300);
+        }, 2000);
+    } else {
+        // Fallback to body if container not found
+        document.body.appendChild(feedback);
+        feedback.style.position = 'fixed';
+        feedback.style.top = '20px';
+        feedback.style.left = '50%';
+        
+        // Show with animation
+        setTimeout(() => {
+            feedback.style.opacity = '1';
+            feedback.style.transform = 'translateX(-50%) translateY(0)';
+        }, 10);
+        
+        // Hide and remove after delay
+        setTimeout(() => {
+            feedback.style.opacity = '0';
+            feedback.style.transform = 'translateX(-50%) translateY(-10px)';
+            setTimeout(() => {
+                if (document.body.contains(feedback)) {
+                    document.body.removeChild(feedback);
+                }
+            }, 300);
+        }, 2000);
     }
-    
-    // Style the notification
-    Object.assign(notification.style, {
-        position: 'fixed',
-        bottom: '20px',
-        right: '20px',
-        padding: '10px 20px',
-        backgroundColor: '#f44336',
-        color: 'white',
-        borderRadius: '4px',
-        boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
-        zIndex: '9999',
-        opacity: '0',
-        transition: 'opacity 0.3s ease'
-    });
-    
-    document.body.appendChild(notification);
-    
-    // Fade in
-    setTimeout(() => {
-        notification.style.opacity = '1';
-    }, 10);
-    
-    // Fade out and remove after 5 seconds for errors (longer than success)
-    setTimeout(() => {
-        notification.style.opacity = '0';
-        setTimeout(() => {
-            document.body.removeChild(notification);
-        }, 300);
-    }, 5000);
 }
 
 // Initialize the module
