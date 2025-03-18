@@ -61,7 +61,7 @@ async function convertToDocx(message, sourceButton) {
             },
             body: JSON.stringify({
                 content: clipboardContent,
-                filename: generateFilename(message)
+                filename: generateFilename(clipboardContent) // Use clipboardContent as primary source
             })
         });
         
@@ -90,19 +90,32 @@ async function convertToDocx(message, sourceButton) {
     }
 }
 
-// Helper function to generate a filename based on the message content
-function generateFilename(message) {
-    const role = message.role || 'conversation';
-    const content = message.content || '';
+// Helper function to generate a filename based on the clipboard content
+function generateFilename(content) {
+    if (!content || typeof content !== 'string') {
+        // Fallback if no valid content
+        const timestamp = new Date().toISOString().replace(/[:.]/g, '-').substring(0, 19);
+        return `document_${timestamp}`;
+    }
     
     // Extract the first line or first few words for the filename
-    let filename = content.split('\n')[0] || 'document';
-    // Limit length and remove special characters
-    filename = filename.substring(0, 30).trim().replace(/[^a-zA-Z0-9_\u4e00-\u9fa5]/g, '_');
+    const firstLine = content.split('\n')[0] || '';
+    let filename = firstLine.trim();
+    
+    // If first line is too long, truncate it
+    filename = filename.substring(0, 30).trim();
+    
+    // Remove special characters that aren't allowed in filenames
+    filename = filename.replace(/[^a-zA-Z0-9_\u4e00-\u9fa5]/g, '');
+    
+    // If filename is still empty after cleaning, use a default
+    if (!filename) {
+        filename = 'document';
+    }
     
     // Add role and timestamp
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-').substring(0, 19);
-    return `deepseek_${role}_${filename}_${timestamp}`;
+    return `${filename}_${timestamp}`;
 }
 
 // Function to show a notification (success or error)
