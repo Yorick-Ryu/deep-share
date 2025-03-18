@@ -23,6 +23,18 @@
     "copyButton": {
         "message": "Copy"
     },
+    "docxButton": {
+        "message": "Save as DOCX"
+    },
+    "docxFeatureComingSoon": {
+        "message": "DOCX export feature coming soon!"
+    },
+    "docxConversionSuccess": {
+        "message": "Successfully converted to DOCX!"
+    },
+    "docxConversionError": {
+        "message": "Failed to convert to DOCX. Please make sure the conversion service is running."
+    },
     "copied": {
         "message": "Copied!"
     },

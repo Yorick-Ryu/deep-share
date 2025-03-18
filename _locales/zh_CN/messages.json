@@ -23,6 +23,18 @@
     "copyButton": {
         "message": "复制"
     },
+    "docxButton": {
+        "message": "保存为Word"
+    },
+    "docxFeatureComingSoon": {
+        "message": "Word文档导出功能即将推出！"
+    },
+    "docxConversionSuccess": {
+        "message": "成功转换为Word文档！"
+    },
+    "docxConversionError": {
+        "message": "转换Word文档失败。请确保转换服务正在运行。"
+    },
     "copied": {
         "message": "已复制！"
     },

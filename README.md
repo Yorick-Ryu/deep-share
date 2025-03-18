@@ -13,6 +13,7 @@ A browser extension for sharing DeepSeek conversations, enabling users to save d
 - Open source, free, and ad-free
 - One-click capture of DeepSeek chat content
 - Support sharing as image or text
+- Quick export to Word document (DOCX)
 - Customizable watermark
 - Selective message sharing
   - Select single or multiple messages
@@ -50,6 +51,8 @@ Prerequisites: Install the extension
    - Image mode: Generates a long image of the conversation
    - Text mode: Plain text of the conversation
 6. Copy or download the generated image/text
+7. For individual messages, use the buttons next to the copy button:
+   - DOCX button: Save the message as a Word document
 
 ## Watermark Settings
 

@@ -39,6 +39,8 @@
                 "scripts/getMessages.js",
                 "scripts/injectShare.js",
                 "scripts/copyKatex.js",
+                "scripts/docxConverter.js",
+                "scripts/injectDocxButton.js",
                 "scripts/main.js"
             ]
         }

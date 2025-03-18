@@ -392,3 +392,44 @@
     transform: translateX(-50%) translateY(0);
   }
 }
+
+/* DOCX button in message panel */
+.deepseek-docx-btn {
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.deepseek-docx-btn:hover {
+  color: var(--button-hover-color) !important;
+  background-color: var(--button-hover-bg);
+  border-radius: 4px;
+  transform: scale(1.05);
+}
+
+.deepseek-docx-btn:active {
+  transform: scale(0.95);
+}
+
+/* Notification styles */
+.deepseek-notification {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 10px 20px;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 9999;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  max-width: 300px;
+}
+
+.deepseek-notification.success {
+  background-color: #4caf50;
+  color: white;
+}
+
+.deepseek-notification.error {
+  background-color: #f44336;
+  color: white;
+}
