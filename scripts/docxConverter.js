@@ -10,7 +10,7 @@ function initDocxConverter() {
     // Listen for messages from the main content script
     document.addEventListener('deepshare:convertToDocx', async (event) => {
         const message = event.detail?.messages || {};
-        const sourceButton = event.detail?.sourceButton; // New: get the source button
+        const sourceButton = event.detail?.sourceButton; // Get the source button
         await convertToDocx(message, sourceButton);
     });
 }
@@ -82,11 +82,13 @@ async function convertToDocx(message, sourceButton) {
         
         // Clean up
         URL.revokeObjectURL(url);
-        showNotification(chrome.i18n.getMessage('docxConversionSuccess'));
+        
+        // Show success notification using the toast notification system
+        window.showToastNotification(chrome.i18n.getMessage('docxConversionSuccess'), 'success');
         
     } catch (error) {
         console.error('DOCX conversion failed:', error);
-        showNotification(error.message, true);
+        window.showToastNotification(error.message, 'error');
     }
 }
 
@@ -116,86 +118,6 @@ function generateFilename(content) {
     // Add role and timestamp
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-').substring(0, 19);
     return `${filename}_${timestamp}`;
-}
-
-// Function to show a notification (success or error)
-function showNotification(message, isError = false) {
-    // Find the container similar to KaTeX notifications
-    const container = document.querySelector("#root > div > div.c3ecdb44 > div.f2eea526");
-    
-    // Create feedback element
-    const feedback = document.createElement('div');
-    feedback.textContent = message;
-    feedback.className = 'katex-copy-notification'; // Use the same class as KaTeX notifications
-    feedback.style.cssText = `
-        position: absolute;
-        top: 10px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: ${isError ? '#f44336' : '#4d6bfe'};
-        color: white;
-        padding: 4px 8px;
-        border-radius: 4px;
-        font-size: 14px;
-        font-weight: 500;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-        pointer-events: none;
-        opacity: 0;
-        transition: opacity 0.3s ease, transform 0.3s ease;
-        z-index: 1000;
-        text-align: center;
-        min-width: 100px;
-    `;
-    
-    if (container) {
-        // Target container exists
-        if (getComputedStyle(container).position === 'static') {
-            container.style.position = 'relative';
-        }
-        
-        // Add feedback inside the container at the top
-        container.appendChild(feedback);
-        
-        // Show with animation
-        setTimeout(() => {
-            feedback.style.opacity = '1';
-            feedback.style.transform = 'translateX(-50%) translateY(0)';
-        }, 10);
-        
-        // Hide and remove after delay
-        setTimeout(() => {
-            feedback.style.opacity = '0';
-            feedback.style.transform = 'translateX(-50%) translateY(-10px)';
-            setTimeout(() => {
-                if (container.contains(feedback)) {
-                    container.removeChild(feedback);
-                }
-            }, 300);
-        }, 2000);
-    } else {
-        // Fallback to body if container not found
-        document.body.appendChild(feedback);
-        feedback.style.position = 'fixed';
-        feedback.style.top = '20px';
-        feedback.style.left = '50%';
-        
-        // Show with animation
-        setTimeout(() => {
-            feedback.style.opacity = '1';
-            feedback.style.transform = 'translateX(-50%) translateY(0)';
-        }, 10);
-        
-        // Hide and remove after delay
-        setTimeout(() => {
-            feedback.style.opacity = '0';
-            feedback.style.transform = 'translateX(-50%) translateY(-10px)';
-            setTimeout(() => {
-                if (document.body.contains(feedback)) {
-                    document.body.removeChild(feedback);
-                }
-            }, 300);
-        }, 2000);
-    }
 }
 
 // Initialize the module
