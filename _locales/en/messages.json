@@ -35,6 +35,24 @@
     "docxConversionError": {
         "message": "Failed to convert to DOCX. Please make sure the conversion service is running."
     },
+    "watermarkSettings": {
+        "message": "Watermark Settings"
+    },
+    "docxSettings": {
+        "message": "Word (DOCX) Conversion"
+    },
+    "docxServerUrlLabel": {
+        "message": "Server URL"
+    },
+    "docxModeLabel": {
+        "message": "Conversion Mode"
+    },
+    "modeLocalLabel": {
+        "message": "Local (Pandoc)"
+    },
+    "modeApiLabel": {
+        "message": "API"
+    },
     "copied": {
         "message": "Copied!"
     },

@@ -53,37 +53,20 @@ async function convertToDocx(message, sourceButton) {
             throw new Error('Failed to get content from clipboard');
         }
         
-        // Step 3: Call the conversion API
-        const response = await fetch('http://127.0.0.1:8000/convert-text', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                content: clipboardContent,
-                filename: generateFilename(clipboardContent) // Use clipboardContent as primary source
-            })
+        // Get settings from storage
+        const settings = await chrome.storage.sync.get({
+            docxServerUrl: 'http://127.0.0.1:8000',
+            docxMode: 'local'
         });
         
-        if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(`API error: ${response.status} ${errorText}`);
+        // Use the appropriate conversion method based on mode
+        if (settings.docxMode === 'local') {
+            await convertToDocxLocally(clipboardContent);
+        } else {
+            await convertToDocxViaApi(clipboardContent, settings.docxServerUrl);
         }
         
-        // Step 4: Download the file
-        const blob = await response.blob();
-        const filename = response.headers.get('content-disposition')?.split('filename=')[1] || 'document.docx';
-        
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = filename;
-        link.click();
-        
-        // Clean up
-        URL.revokeObjectURL(url);
-        
-        // Show success notification using the toast notification system
+        // Show success notification
         window.showToastNotification(chrome.i18n.getMessage('docxConversionSuccess'), 'success');
         
     } catch (error) {
@@ -92,8 +75,92 @@ async function convertToDocx(message, sourceButton) {
     }
 }
 
+// Function to convert text to DOCX locally using browser APIs
+async function convertToDocxLocally(content) {
+    try {
+        // For now, create simple HTML to convert to a Blob
+        const html = `
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="utf-8">
+                <title>Document</title>
+                <style>
+                    body { font-family: Arial, sans-serif; line-height: 1.5; }
+                    pre { white-space: pre-wrap; }
+                </style>
+            </head>
+            <body>
+                <pre>${escapeHtml(content)}</pre>
+            </body>
+            </html>
+        `;
+        
+        // Create a Blob from the HTML
+        const blob = new Blob([html], {type: 'text/html'});
+        
+        // Generate filename
+        const filename = generateFilename(content) + '.html';
+        
+        // Download the file (users can open it in Word)
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = filename;
+        link.click();
+        
+        // Clean up
+        URL.revokeObjectURL(url);
+    } catch (error) {
+        throw new Error('Local conversion failed: ' + error.message);
+    }
+}
+
+// Helper function to escape HTML special characters
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+// Function to convert text to DOCX via API
+async function convertToDocxViaApi(content, serverUrl) {
+    const url = serverUrl || 'http://127.0.0.1:8000';
+    
+    // Call the conversion API
+    const response = await fetch(`${url}/convert-text`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            content: content,
+            filename: generateFilename(content)
+        })
+    });
+    
+    if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`API error: ${response.status} ${errorText}`);
+    }
+    
+    // Download the file
+    const blob = await response.blob();
+    const filename = response.headers.get('content-disposition')?.split('filename=')[1] || 'document.docx';
+    
+    const downloadUrl = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = downloadUrl;
+    link.download = filename;
+    link.click();
+    
+    // Clean up
+    URL.revokeObjectURL(downloadUrl);
+}
+
 // Helper function to generate a filename based on the clipboard content
 function generateFilename(content) {
+    // Default filename generation
     if (!content || typeof content !== 'string') {
         // Fallback if no valid content
         const timestamp = new Date().toISOString().replace(/[:.]/g, '-').substring(0, 19);
@@ -115,7 +182,7 @@ function generateFilename(content) {
         filename = 'document';
     }
     
-    // Add role and timestamp
+    // Add timestamp
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-').substring(0, 19);
     return `${filename}_${timestamp}`;
 }

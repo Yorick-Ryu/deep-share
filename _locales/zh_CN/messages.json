@@ -35,6 +35,24 @@
     "docxConversionError": {
         "message": "转换Word文档失败。请确保转换服务正在运行。"
     },
+    "watermarkSettings": {
+        "message": "水印设置"
+    },
+    "docxSettings": {
+        "message": "Word文档转换"
+    },
+    "docxServerUrlLabel": {
+        "message": "服务器地址"
+    },
+    "docxModeLabel": {
+        "message": "转换模式"
+    },
+    "modeLocalLabel": {
+        "message": "本地转换 (Pandoc)"
+    },
+    "modeApiLabel": {
+        "message": "API转换"
+    },
     "copied": {
         "message": "已复制！"
     },

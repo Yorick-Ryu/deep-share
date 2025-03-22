@@ -6,6 +6,8 @@
   --input-bg: #ffffff;
   --primary-color: #4D6BFE;
   --primary-hover: #3D5BEE;
+  --card-bg: #ffffff;
+  --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -15,19 +17,74 @@
     --text-secondary: #aaaaaa;
     --border-color: #333333;
     --input-bg: #2d2d2d;
+    --card-bg: #2d2d2d;
+    --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   }
 }
 
 body {
-  width: 300px;
+  width: 320px;
   padding: 16px;
   font-family: system-ui, -apple-system, sans-serif;
   background: var(--bg-color);
   color: var(--text-color);
 }
 
+/* Card styles */
+.cards {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.card {
+  background: var(--card-bg);
+  border-radius: 8px;
+  box-shadow: var(--card-shadow);
+  overflow: hidden;
+}
+
+.card-header {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-color);
+  cursor: pointer;
+}
+
+.card-header h2 {
+  margin: 0;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-color);
+}
+
+.card-header svg {
+  transition: transform 0.2s ease;
+}
+
+.card-header.collapsed svg {
+  transform: rotate(-90deg);
+}
+
+.card-body {
+  padding: 16px;
+}
+
 .form-group {
   margin-bottom: 16px;
+}
+
+.form-group:last-child {
+  margin-bottom: 0;
+}
+
+.form-hint {
+  display: block;
+  margin-top: 4px;
+  color: var(--text-secondary);
+  font-size: 12px;
 }
 
 label {
@@ -51,6 +108,11 @@ input[type="text"]::placeholder {
   opacity: 0.7;
 }
 
+input[type="text"]:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 button {
   width: 100%;
   padding: 8px;
@@ -72,7 +134,34 @@ button:hover {
   gap: 8px;
 }
 
+.checkbox-group:last-child {
+  margin-bottom: 0;
+}
+
 .checkbox-group label {
+  margin: 0;
+  cursor: pointer;
+  color: var(--text-color);
+}
+
+.radio-group {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.radio-option input[type="radio"] {
+  margin: 0;
+  cursor: pointer;
+}
+
+.radio-option label {
   margin: 0;
   cursor: pointer;
   color: var(--text-color);
