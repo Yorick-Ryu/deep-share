@@ -272,6 +272,24 @@ function injectShare(onClickHandler) {
             isAllSelected = false; // 重置状态
             return;
         }
+
+        const container = document.querySelector('.dad65929');
+        if (container) {
+            const scrollToTop = () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                document.documentElement.scrollTo({ top: 0, behavior: 'smooth' });
+                document.body.scrollTo({ top: 0, behavior: 'smooth' });
+                container.scrollTo({ top: 0, behavior: 'smooth' });
+
+                let parent = container.parentElement;
+                while (parent) {
+                    parent.scrollTo({ top: 0, behavior: 'smooth' });
+                    parent = parent.parentElement;
+                }
+            };
+
+            scrollToTop();
+        }
         
         // 显示全选按钮并重置选中状态
         selectAllBtn.style.display = '';
