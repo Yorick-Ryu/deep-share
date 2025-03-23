@@ -278,8 +278,8 @@ function injectShare(onClickHandler) {
         selectAllBtn.textContent = chrome.i18n.getMessage('selectAllButton');
         isAllSelected = false; // 重置状态
         
-        // 为每个消息添加复选框
-        document.querySelectorAll('.fa81, .f9bf7997.c05b5566').forEach(messageDiv => {
+        // 为每个消息添加复选框，使用与getMessages.js相同的选择器
+        document.querySelectorAll('._9663006, ._4f9bf79._43c05b5, ._4f9bf79.d7dc56a8._43c05b5').forEach(messageDiv => {
             const checkboxWrapper = document.createElement('div');
             checkboxWrapper.className = 'message-checkbox-wrapper';
             
@@ -340,16 +340,4 @@ function formatAsText(messages) {
         }
         return text;
     }).join('\n\n');
-}
-
-// 修改原有的handleShareClick为getSelectedMessages，用于获取选中的消息
-function getSelectedMessages() {
-    const messages = [];
-    document.querySelectorAll('.message-checkbox').forEach(checkbox => {
-        if (checkbox.checked) {
-            const messageDiv = checkbox.closest('.fa81, .f9bf7997');
-            // ... 获取消息内容的逻辑 ...
-        }
-    });
-    return messages;
 }

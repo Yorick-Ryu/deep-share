@@ -7,7 +7,7 @@ window.captureMessages = async function (customWatermark) {
     if (checkboxes.length > 0) {
         // 如果存在复选框，隐藏未选中的对话
         checkboxes.forEach(checkbox => {
-            const messageDiv = checkbox.closest('.fa81, .f9bf7997.c05b5566');
+            const messageDiv = checkbox.closest('._9663006, ._4f9bf79._43c05b5, ._4f9bf79.d7dc56a8._43c05b5');
             if (messageDiv) {
                 messageDiv.style.display = checkbox.checked ? '' : 'none';
             }
@@ -112,7 +112,7 @@ window.captureMessages = async function (customWatermark) {
         // 恢复被隐藏的对话
         if (checkboxes.length > 0) {
             checkboxes.forEach(checkbox => {
-                const messageDiv = checkbox.closest('.fa81, .f9bf7997.c05b5566');
+                const messageDiv = checkbox.closest('._9663006, ._4f9bf79._43c05b5, ._4f9bf79.d7dc56a8._43c05b5');
                 if (messageDiv) {
                     messageDiv.style.display = '';
                 }

@@ -16,10 +16,10 @@ function getMessages() {
     const messages = [];
     checkboxes.forEach(checkbox => {
         if (checkbox.checked) {
-            const messageDiv = checkbox.closest('.fa81, .f9bf7997.c05b5566');
+            const messageDiv = checkbox.closest('._9663006, ._4f9bf79._43c05b5, ._4f9bf79.d7dc56a8._43c05b5');
             if (messageDiv) {
                 // 提取消息内容
-                if (messageDiv.classList.contains('fa81')) {
+                if (messageDiv.classList.contains('_9663006')) {
                     // 用户问题
                     const userElement = messageDiv.querySelector('.fbb737a4');
                     const userText = Array.from(userElement?.childNodes || [])
@@ -37,7 +37,7 @@ function getMessages() {
                         .filter(Boolean)
                         .join('\n');
 
-                    const thinkTime = messageDiv.querySelector('.a6d716f5.db5991dd')?.textContent.trim() || '';
+                    const thinkTime = messageDiv.querySelector('._58a6d71._19db599')?.textContent.trim() || '';
                     const timeNumber = parseInt(thinkTime.match(/\d+/)?.[0] || '0');
 
                     const response = messageDiv.querySelector('.ds-markdown--block')?.textContent.trim() || '';
@@ -65,13 +65,12 @@ function getMessages() {
 
 // 获取所有对话的函数
 function getAllMessages() {
-    const dialogGroups = document.querySelectorAll('.fa81');
+    const userMessageContainers = document.querySelectorAll('._9663006');
     let messages = [];
 
-    Array.from(dialogGroups).forEach((group, index) => {
-
+    Array.from(userMessageContainers).forEach((userContainer) => {
         // 获取用户问题
-        const userElement = group.querySelector('.fbb737a4');
+        const userElement = userContainer.querySelector('.fbb737a4');
         const userText = Array.from(userElement?.childNodes || [])
             .find(node => node.nodeType === Node.TEXT_NODE)?.textContent?.trim();
 
@@ -82,11 +81,10 @@ function getAllMessages() {
             });
         }
 
-        // AI 回复容器
-        const aiContainer = document.querySelector(`.f9bf7997[data-conversation-id="${group.dataset.conversationId}"]`) ||
-            group.nextElementSibling;
-
-        if (aiContainer?.classList.contains('f9bf7997')) {
+        // AI 回复容器 - 在用户消息后面的元素
+        const aiContainer = userContainer.nextElementSibling;
+        if (aiContainer && (aiContainer.classList.contains('_4f9bf79') || 
+                         aiContainer.classList.contains('_43c05b5'))) {
             // 思考内容和时间
             const thinkingContent = Array.from(aiContainer.querySelectorAll('.e1675d8b .ba94db8a'))
                 .map(p => p.textContent.trim())
@@ -94,7 +92,7 @@ function getAllMessages() {
                 .join('\n');
 
             // 解析思考时间，只保留数字
-            const thinkTime = aiContainer.querySelector('.a6d716f5.db5991dd')?.textContent.trim() || '';
+            const thinkTime = aiContainer.querySelector('._58a6d71._19db599')?.textContent.trim() || '';
             const timeNumber = parseInt(thinkTime.match(/\d+/)?.[0] || '0');
 
             // 最终回复
