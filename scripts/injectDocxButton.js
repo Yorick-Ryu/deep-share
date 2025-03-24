@@ -111,20 +111,59 @@ function injectDocxButton() {
         let element = buttonEl;
         let maxIterations = 10; // Safety check to prevent infinite loop
         
+        console.debug('Finding conversation element starting from button:', buttonEl);
+        
         while (element && maxIterations > 0) {
             // Try different class patterns that might identify a message
-            if (element.classList.contains('fa81') || 
-                element.classList.contains('c05b5566') || 
+            // New class patterns based on the latest HTML structure
+            if (element.classList.contains('_4f9bf79') || // Assistant message container
+                element.classList.contains('_43c05b5') || // Assistant message class
+                element.classList.contains('fbb737a4') || // Content container
+                element.classList.contains('dad65929') || // Main conversation container
                 element.classList.contains('ds-message')) {
+                
+                console.debug('Found conversation element with class:', [...element.classList]);
                 return element;
             }
             
             element = element.parentElement;
             maxIterations--;
             
-            if (!element) return null;
+            if (!element) {
+                console.debug('Reached null parent element');
+                return null;
+            }
         }
         
+        // Fallback: Check if we're inside a message container by looking at parent structure
+        element = buttonEl;
+        let buttonContainer = buttonEl.closest('.ds-flex[style*="align-items: center"][style*="gap: 12px"]');
+        
+        if (buttonContainer) {
+            // Try to find the closest message container by walking up a few levels
+            let parent = buttonContainer.parentElement;
+            for (let i = 0; i < A5; i++) {
+                if (!parent) break;
+                
+                // Check for message container classes from the HTML sample
+                if (parent.classList.contains('_9663006') ||
+                    parent.classList.contains('_4f9bf79') || 
+                    parent.classList.contains('_43c05b5')) {
+                    console.debug('Found message container through fallback method:', parent);
+                    return parent;
+                }
+                
+                // Check if this element contains markdown content (likely an assistant message)
+                if (parent.querySelector('.ds-markdown')) {
+                    console.debug('Found message container with markdown content:', parent);
+                    return parent;
+                }
+                
+                parent = parent.parentElement;
+            }
+        }
+        
+        console.error('Could not find conversation element after trying all methods');
         return null;
     }
 
@@ -132,24 +171,40 @@ function injectDocxButton() {
     function extractConversationData(conversationEl) {
         // More robust extraction based on the container structure
         let role = 'unknown';
+        let contentEl;
         
-        // Try to determine role from container classes
-        if (conversationEl.classList.contains('f9bf7997') || 
-            conversationEl.classList.contains('ds-message-assistant')) {
+        // Try to determine role from container classes based on the HTML sample
+        if (conversationEl.classList.contains('_4f9bf79') || 
+            conversationEl.classList.contains('_43c05b5') ||
+            conversationEl.classList.contains('d7dc56a8')) {
             role = 'assistant';
-        } else {
+            // For assistant messages, look for markdown content
+            contentEl = conversationEl.querySelector('.ds-markdown') || conversationEl;
+        } else if (conversationEl.classList.contains('_9663006')) {
             role = 'user';
+            // For user messages, look for the content container
+            contentEl = conversationEl.querySelector('.fbb737a4') || conversationEl;
+        } else {
+            // Try to infer the role by looking at the content structure
+            if (conversationEl.querySelector('.ds-markdown')) {
+                role = 'assistant';
+                contentEl = conversationEl.querySelector('.ds-markdown');
+            } else if (conversationEl.querySelector('.fbb737a4')) {
+                role = 'user';
+                contentEl = conversationEl.querySelector('.fbb737a4');
+            } else {
+                // Default fallback
+                contentEl = conversationEl;
+            }
         }
-        
-        // Try to find the content element that holds the main text
-        let contentEl = conversationEl.querySelector('.ds-message-content') || 
-                      conversationEl.querySelector('.markdown-body') ||
-                      conversationEl;
                       
-        // Extract text content
+        // Extract text content, ensuring we get a clean string
+        const content = contentEl ? contentEl.textContent.trim() : '';
+        console.debug(`Extracted ${role} content:`, content.substring(0, 50) + (content.length > 50 ? '...' : ''));
+        
         return {
             role: role,
-            content: contentEl.textContent.trim()
+            content: content
         };
     }
 
