@@ -12,71 +12,81 @@ function injectDocxButton() {
         const observer = new MutationObserver((mutations) => {
             for (const mutation of mutations) {
                 if (mutation.type === 'childList') {
-                    // Look for copy buttons in conversation
-                    const copyButtons = document.querySelectorAll('.ds-flex.abe97156 .ds-icon-button');
+                    // Updated selector to match new DOM structure
+                    const buttonContainers = document.querySelectorAll('.ds-flex[style*="margin-top: 12px"][style*="height: 20px"][style*="align-items: center"]');
                     
-                    copyButtons.forEach(copyBtn => {
-                        // Check if this is a copy button by looking at its SVG content
-                        const svgEl = copyBtn.querySelector('svg');
-                        if (!svgEl) return;
+                    buttonContainers.forEach(container => {
+                        // Find the button container within this container
+                        const buttonGroup = container.querySelector('.ds-flex[style*="align-items: center"][style*="gap: 12px"]');
+                        if (!buttonGroup) return;
                         
-                        // Check if it's the copy button by looking for part of its path content
-                        const pathEl = svgEl.querySelector('g path[d*="M5.03 14.64"]'); 
-                        if (!pathEl) return;
+                        // Look for copy buttons
+                        const copyButtons = buttonGroup.querySelectorAll('.ds-icon-button');
                         
-                        // Check if we've already added our button next to this copy button
-                        const nextSibling = copyBtn.nextElementSibling;
-                        if (nextSibling && nextSibling.classList.contains('deepseek-docx-btn')) {
-                            return; // Button already exists
-                        }
-                        
-                        // Create the DOCX button
-                        const docxButton = document.createElement('div');
-                        docxButton.className = 'ds-icon-button deepseek-docx-btn';
-                        docxButton.tabIndex = 0;
-                        docxButton.title = chrome.i18n.getMessage('docxButton');
-                        docxButton.style = '--ds-icon-button-text-color: #909090; --ds-icon-button-size: 20px;';
-                        
-                        // Create button inner content with outline icon (not filled)
-                        docxButton.innerHTML = `
-                            <div class="ds-icon" style="font-size: 20px; width: 20px; height: 20px;">
-                                <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M16 18H4C3.45 18 3 17.55 3 17V3C3 2.45 3.45 2 4 2H12L17 7V17C17 17.55 16.55 18 16 18Z" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                                    <path d="M12 2V7H17" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                                    <path d="M6 10.5H14" stroke="currentColor" stroke-width="1.5"/>
-                                    <path d="M6 14H12" stroke="currentColor" stroke-width="1.5"/>
-                                    <path d="M8.5 6.5L7.5 7.5L8.5 8.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <path d="M11.5 6.5L12.5 7.5L11.5 8.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <path d="M10 5.5L10 9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                            </div>
-                        `;
-                        
-                        // Insert after the copy button
-                        copyBtn.parentNode.insertBefore(docxButton, copyBtn.nextSibling);
-                        
-                        // Add click handler
-                        docxButton.addEventListener('click', (e) => {
-                            e.stopPropagation();
+                        copyButtons.forEach(copyBtn => {
+                            // Check if this is a copy button by looking at its SVG content
+                            const svgEl = copyBtn.querySelector('svg');
+                            if (!svgEl) return;
                             
-                            // Find the conversation container
-                            const conversationEl = findConversationElement(docxButton);
-                            if (!conversationEl) {
-                                console.error('Could not find conversation element');
-                                return;
+                            // Check if it's the copy button by looking for part of its path content
+                            // This looks for the copy icon path pattern
+                            const pathEl = svgEl.querySelector('path[d*="M5.03 14.64"]');
+                            if (!pathEl) return;
+                            
+                            // Check if we've already added our button next to this copy button
+                            const nextSibling = copyBtn.nextElementSibling;
+                            if (nextSibling && nextSibling.classList.contains('deepseek-docx-btn')) {
+                                return; // Button already exists
                             }
                             
-                            // Extract conversation data
-                            const conversationData = extractConversationData(conversationEl);
+                            // Create the DOCX button
+                            const docxButton = document.createElement('div');
+                            docxButton.className = 'ds-icon-button deepseek-docx-btn';
+                            docxButton.tabIndex = 0;
+                            docxButton.title = chrome.i18n.getMessage('docxButton');
+                            docxButton.style = '--ds-icon-button-size: 20px;';
                             
-                            // Trigger the docx conversion and pass the button reference
-                            const event = new CustomEvent('deepshare:convertToDocx', {
-                                detail: {
-                                    messages: conversationData,
-                                    sourceButton: docxButton // Pass the button reference
+                            // Create button inner content with outline icon (not filled)
+                            docxButton.innerHTML = `
+                                <div class="ds-icon" style="font-size: 20px; width: 20px; height: 20px;">
+                                    <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M16 18H4C3.45 18 3 17.55 3 17V3C3 2.45 3.45 2 4 2H12L17 7V17C17 17.55 16.55 18 16 18Z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                                        <path d="M12 2V7H17" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                                        <path d="M6 10.5H14" stroke="currentColor" stroke-width="1.5"/>
+                                        <path d="M6 14H12" stroke="currentColor" stroke-width="1.5"/>
+                                        <path d="M8.5 6.5L7.5 7.5L8.5 8.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M11.5 6.5L12.5 7.5L11.5 8.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M10 5.5L10 9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </div>
+                            `;
+                            
+                            // Insert after the copy button
+                            copyBtn.parentNode.insertBefore(docxButton, copyBtn.nextSibling);
+                            
+                            // Add click handler
+                            docxButton.addEventListener('click', (e) => {
+                                e.stopPropagation();
+                                
+                                // Find the conversation container
+                                const conversationEl = findConversationElement(docxButton);
+                                if (!conversationEl) {
+                                    console.error('Could not find conversation element');
+                                    return;
                                 }
+                                
+                                // Extract conversation data
+                                const conversationData = extractConversationData(conversationEl);
+                                
+                                // Trigger the docx conversion and pass the button reference
+                                const event = new CustomEvent('deepshare:convertToDocx', {
+                                    detail: {
+                                        messages: conversationData,
+                                        sourceButton: docxButton // Pass the button reference
+                                    }
+                                });
+                                document.dispatchEvent(event);
                             });
-                            document.dispatchEvent(event);
                         });
                     });
                 }

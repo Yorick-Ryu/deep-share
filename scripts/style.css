@@ -13,7 +13,7 @@
     --modal-bg: #1e1e1e;
     --modal-text: #e0e0e0;
     --modal-border: #333333;
-    --button-color: rgb(180, 180, 180);
+    --button-color: rgb(205, 212, 223);
     --button-hover-bg: rgba(77, 107, 254, 0.2);
     --button-hover-color: rgb(107, 137, 254);
     --modal-overlay: rgba(0, 0, 0, 0.7);
@@ -397,17 +397,22 @@
 .deepseek-docx-btn {
   position: relative;
   transition: all 0.2s ease;
+  color: var(--button-color) !important;
 }
 
 .deepseek-docx-btn:hover {
-  color: var(--button-hover-color) !important;
   background-color: var(--button-hover-bg);
   border-radius: 4px;
-  transform: scale(1.05);
 }
 
 .deepseek-docx-btn:active {
   transform: scale(0.95);
+}
+
+@media (prefers-color-scheme: dark) {
+  .deepseek-docx-btn {
+    color: var(--button-color) !important;
+  }
 }
 
 /* Notification styles */
