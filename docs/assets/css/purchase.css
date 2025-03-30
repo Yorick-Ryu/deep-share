@@ -512,3 +512,187 @@ input[type="number"]::-webkit-outer-spin-button {
         padding: 1.5rem;
     }
 }
+
+/* Quota Checker styles */
+.quota-checker {
+    background-color: #f5f8ff;
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    border-left: 4px solid #4D6BFE;
+}
+
+.quota-form {
+    margin: 1.5rem 0;
+}
+
+.check-quota-btn {
+    background: #4D6BFE;
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.2s ease;
+    width: 100%;
+}
+
+.check-quota-btn:hover {
+    background: #3D5BEE;
+    transform: translateY(-2px);
+}
+
+.quota-result-card {
+    background-color: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    margin-top: 1.5rem;
+}
+
+.quota-stats {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+}
+
+.quota-stat-item {
+    text-align: center;
+    flex: 1;
+}
+
+.quota-stat-label {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 0.5rem;
+}
+
+.quota-stat-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.quota-stat-value.highlight {
+    color: #4D6BFE;
+}
+
+.quota-progress-wrapper {
+    padding: 0.5rem 0;
+}
+
+.quota-progress-bg {
+    height: 8px;
+    background-color: #eee;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.quota-progress-fill {
+    height: 100%;
+    background-color: #4D6BFE;
+    border-radius: 4px;
+    width: 0%;
+    transition: width 0.6s ease;
+}
+
+/* Dark mode styles for quota checker */
+@media (prefers-color-scheme: dark) {
+    .quota-checker {
+        background-color: #2a2d3a;
+    }
+    
+    .quota-result-card {
+        background-color: #2d2d2d;
+    }
+    
+    .quota-progress-bg {
+        background-color: #444;
+    }
+    
+    .quota-stat-label {
+        color: #aaa;
+    }
+}
+
+/* API Key Input Styles */
+.api-key-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.api-key-input-wrapper input {
+    padding-right: 70px; /* Make room for both buttons */
+}
+
+/* Hide browser's default password reveal icon */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear,
+input[type="password"]::-webkit-contacts-auto-fill-button,
+input[type="password"]::-webkit-credentials-auto-fill-button {
+    display: none !important;
+    visibility: hidden;
+    pointer-events: none;
+    opacity: 0;
+}
+
+.toggle-visibility-btn,
+.copy-api-key-btn {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #666;
+    padding: 4px;
+    height: 32px;
+    width: 32px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.toggle-visibility-btn:hover,
+.copy-api-key-btn:hover {
+    background: rgba(77, 107, 254, 0.1);
+    color: #4D6BFE;
+}
+
+.toggle-visibility-btn {
+    right: 36px;
+}
+
+.copy-api-key-btn {
+    right: 4px;
+}
+
+/* Tooltip for copy success */
+.copy-tooltip {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 12px;
+    top: -30px;
+    right: 0;
+    white-space: nowrap;
+    opacity: 0;
+    animation: fadeInOut 1.5s ease;
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+    .toggle-visibility-btn,
+    .copy-api-key-btn {
+        color: #aaa;
+    }
+    
+    .toggle-visibility-btn:hover,
+    .copy-api-key-btn:hover {
+        color: #fff;
+    }
+}

@@ -125,37 +125,112 @@ function escapeHtml(text) {
 
 // Function to convert text to DOCX via API
 async function convertToDocxViaApi(content, serverUrl) {
-    const url = serverUrl || 'http://127.0.0.1:8000';
-    
-    // Call the conversion API
-    const response = await fetch(`${url}/convert-text`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            content: content,
-            filename: generateFilename(content)
-        })
-    });
-    
-    if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`API error: ${response.status} ${errorText}`);
+    try {
+        // Get API settings from storage
+        const settings = await chrome.storage.sync.get({
+            docxServerUrl: 'http://127.0.0.1:8000',
+            docxApiKey: ''
+        });
+        
+        const url = serverUrl || settings.docxServerUrl || 'http://127.0.0.1:8000';
+        const apiKey = settings.docxApiKey;
+        
+        // Ensure API key is provided
+        if (!apiKey) {
+            throw new Error('API Key not set. Please configure your API key in the extension settings.');
+        }
+        
+        // Call the conversion API
+        const response = await fetch(`${url}/convert-text`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-API-Key': apiKey
+            },
+            body: JSON.stringify({
+                content: content,
+                filename: generateFilename(content)
+            })
+        });
+        
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`API error: ${response.status} ${errorText}`);
+        }
+        
+        // Download the file
+        const blob = await response.blob();
+        const filename = response.headers.get('content-disposition')?.split('filename=')[1] || 'document.docx';
+        
+        const downloadUrl = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.download = filename;
+        link.click();
+        
+        // Clean up
+        URL.revokeObjectURL(downloadUrl);
+        
+        // After successful conversion, check and update the quota
+        checkQuota();
+    } catch (error) {
+        throw error;
     }
-    
-    // Download the file
-    const blob = await response.blob();
-    const filename = response.headers.get('content-disposition')?.split('filename=')[1] || 'document.docx';
-    
-    const downloadUrl = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = downloadUrl;
-    link.download = filename;
-    link.click();
-    
-    // Clean up
-    URL.revokeObjectURL(downloadUrl);
+}
+
+// Function to check user's quota
+async function checkQuota() {
+    try {
+        // Get API settings from storage
+        const settings = await chrome.storage.sync.get({
+            docxServerUrl: 'http://127.0.0.1:8000',
+            docxApiKey: ''
+        });
+        
+        const url = settings.docxServerUrl;
+        const apiKey = settings.docxApiKey;
+        
+        // If not configured, exit quietly
+        if (!apiKey || !url) {
+            return;
+        }
+        
+        // Call the quota API
+        const response = await fetch(`${url}/auth/quota`, {
+            method: 'GET',
+            headers: {
+                'X-API-Key': apiKey
+            }
+        });
+        
+        if (!response.ok) {
+            console.error('Failed to check quota');
+            return;
+        }
+        
+        const quotaData = await response.json();
+        
+        // Store quota information in local storage for access by popup
+        chrome.storage.local.set({
+            quotaData: {
+                total: quotaData.total_quota,
+                used: quotaData.used_quota,
+                remaining: quotaData.remaining_quota,
+                lastChecked: new Date().toISOString()
+            }
+        });
+        
+        // Notify the popup if it's open
+        chrome.runtime.sendMessage({
+            action: 'quotaUpdated',
+            data: quotaData
+        }).catch(() => {
+            // It's ok if this fails (popup might not be open)
+        });
+        
+    } catch (error) {
+        console.error('Error checking quota:', error);
+    }
 }
 
 // Helper function to generate a filename based on the clipboard content
@@ -189,3 +264,4 @@ function generateFilename(content) {
 
 // Initialize the module
 initDocxConverter();
+checkQuota(); // Check quota on startup

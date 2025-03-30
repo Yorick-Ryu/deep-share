@@ -46,6 +46,62 @@
                 </div>
             </div>
             
+            <!-- Add quota checker section -->
+            <div class="quota-checker">
+                <h2>查询剩余次数</h2>
+                <p>如果您已购买转换次数，可以在此查询您的配额情况：</p>
+                
+                <div class="quota-form">
+                    <div class="form-group">
+                        <label for="check-api-key">您的 API Key</label>
+                        <div class="api-key-input-wrapper">
+                            <input type="password" id="check-api-key" placeholder="输入您的 API Key">
+                            <button type="button" class="toggle-visibility-btn" id="toggleQuotaApiKeyVisibility" title="显示/隐藏">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="eye-off-icon" style="display: none;">
+                                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                                </svg>
+                            </button>
+                            <button type="button" class="copy-api-key-btn" id="copyQuotaApiKey" title="复制">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <button class="check-quota-btn">查询配额</button>
+                </div>
+                
+                <div id="quota-results" style="display: none;">
+                    <div class="quota-result-card">
+                        <div class="quota-stats">
+                            <div class="quota-stat-item">
+                                <div class="quota-stat-label">总计次数</div>
+                                <div class="quota-stat-value" id="total-quota">-</div>
+                            </div>
+                            <div class="quota-stat-item">
+                                <div class="quota-stat-label">已使用</div>
+                                <div class="quota-stat-value" id="used-quota">-</div>
+                            </div>
+                            <div class="quota-stat-item">
+                                <div class="quota-stat-label">剩余次数</div>
+                                <div class="quota-stat-value highlight" id="remaining-quota">-</div>
+                            </div>
+                        </div>
+                        <div class="quota-progress-wrapper">
+                            <div class="quota-progress-bg">
+                                <div class="quota-progress-fill" id="quota-progress"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
             <!-- API instructions -->
             <div class="api-instructions">
                 <h2>如何使用</h2>
@@ -68,7 +124,7 @@
 
             <div class="promotion-details">
                 <span class="promotion-badge">限时活动：充多少送多少</span>
-                <p>即日起至 2025 年 6 月 1 日，充值 5 元以上，充多少送多少！</p>
+                <p>即日起至 2025 年 6 月 1 日 12:00，充值 5 元以上，充多少送多少！</p>
                 <p>例如：充值 10 元，获得价值 20 元的 100 次转换</p>
                 <p><small>* 赠送上限为 200 元</small></p>
             </div>

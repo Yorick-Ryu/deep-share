@@ -4,6 +4,59 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Purchase form functionality
     initPurchaseForm();
+    
+    // Load API key from Chrome storage if available
+    loadApiKeyFromStorage();
+    
+    // Set up API key visibility toggle
+    const toggleApiKeyBtn = document.getElementById('toggleQuotaApiKeyVisibility');
+    const apiKeyInput = document.getElementById('check-api-key');
+    
+    if (toggleApiKeyBtn && apiKeyInput) {
+        const eyeIcon = toggleApiKeyBtn.querySelector('.eye-icon');
+        const eyeOffIcon = toggleApiKeyBtn.querySelector('.eye-off-icon');
+        
+        toggleApiKeyBtn.addEventListener('click', () => {
+            if (apiKeyInput.type === 'password') {
+                apiKeyInput.type = 'text';
+                eyeIcon.style.display = 'none';
+                eyeOffIcon.style.display = 'block';
+            } else {
+                apiKeyInput.type = 'password';
+                eyeIcon.style.display = 'block';
+                eyeOffIcon.style.display = 'none';
+            }
+        });
+    }
+    
+    // Set up API key copy button
+    const copyApiKeyBtn = document.getElementById('copyQuotaApiKey');
+    
+    if (copyApiKeyBtn && apiKeyInput) {
+        copyApiKeyBtn.addEventListener('click', () => {
+            const apiKey = apiKeyInput.value.trim();
+            
+            if (!apiKey) {
+                return;
+            }
+            
+            // Copy to clipboard
+            navigator.clipboard.writeText(apiKey).then(() => {
+                // Show success tooltip
+                const tooltip = document.createElement('span');
+                tooltip.className = 'copy-tooltip';
+                tooltip.textContent = '已复制!';
+                copyApiKeyBtn.appendChild(tooltip);
+                
+                // Remove tooltip after animation completes
+                setTimeout(() => {
+                    if (tooltip.parentNode === copyApiKeyBtn) {
+                        copyApiKeyBtn.removeChild(tooltip);
+                    }
+                }, 1500);
+            });
+        });
+    }
 });
 
 // Initialize theme system based on browser preference or saved setting
@@ -95,6 +148,12 @@ function initPurchaseForm() {
             // Call payment processing function
             processPayment(email, amount);
         });
+    }
+    
+    // Set up quota checker functionality
+    const checkQuotaBtn = document.querySelector('.check-quota-btn');
+    if (checkQuotaBtn) {
+        checkQuotaBtn.addEventListener('click', checkQuota);
     }
 }
 
@@ -271,4 +330,90 @@ function closeModal(modal) {
     setTimeout(() => {
         document.body.removeChild(modal);
     }, 300);
+}
+
+// Function to check API quota
+async function checkQuota() {
+    const apiKey = document.getElementById('check-api-key').value.trim();
+    const resultsDiv = document.getElementById('quota-results');
+    
+    if (!apiKey) {
+        alert('请输入您的 API Key');
+        return;
+    }
+    
+    // Show loading state
+    const checkBtn = document.querySelector('.check-quota-btn');
+    const originalText = checkBtn.textContent;
+    checkBtn.textContent = '查询中...';
+    checkBtn.disabled = true;
+    
+    try {
+        const response = await fetch('http://127.0.0.1:8000/auth/quota', {
+            method: 'GET',
+            headers: {
+                'X-API-Key': apiKey
+            }
+        });
+        
+        if (!response.ok) {
+            throw new Error(`API Key 无效或服务器错误: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        // Display results
+        document.getElementById('total-quota').textContent = data.total_quota;
+        document.getElementById('used-quota').textContent = data.used_quota;
+        document.getElementById('remaining-quota').textContent = data.remaining_quota;
+        
+        // Calculate percentage of remaining quota (not used quota) and update progress bar
+        const percentRemaining = (data.remaining_quota / data.total_quota) * 100;
+        const progressBar = document.getElementById('quota-progress');
+        progressBar.style.width = `${percentRemaining}%`;
+        
+        // Change color if running low (less than 20% remaining)
+        if (data.remaining_quota < data.total_quota * 0.2) {
+            progressBar.style.backgroundColor = '#FF6B6B';
+        } else {
+            progressBar.style.backgroundColor = '#4D6BFE';
+        }
+        
+        // Show results
+        resultsDiv.style.display = 'block';
+        
+    } catch (error) {
+        alert(`查询失败: ${error.message}`);
+        resultsDiv.style.display = 'none';
+    } finally {
+        // Reset button
+        checkBtn.textContent = originalText;
+        checkBtn.disabled = false;
+    }
+}
+
+// Function to load API key from Chrome storage
+function loadApiKeyFromStorage() {
+    // Check if we can access Chrome storage (we're in the extension context)
+    if (typeof chrome !== 'undefined' && chrome.storage) {
+        chrome.storage.sync.get(['docxApiKey'], (data) => {
+            if (data.docxApiKey) {
+                const apiKeyInput = document.getElementById('check-api-key');
+                if (apiKeyInput) {
+                    apiKeyInput.value = data.docxApiKey;
+                }
+            }
+        });
+    } else {
+        // Alternative method using localStorage for web page context
+        const urlParams = new URLSearchParams(window.location.search);
+        const apiKey = urlParams.get('apiKey');
+        
+        if (apiKey) {
+            const apiKeyInput = document.getElementById('check-api-key');
+            if (apiKeyInput) {
+                apiKeyInput.value = apiKey;
+            }
+        }
+    }
 }
