@@ -61,6 +61,24 @@ nav {
     height: 32px;
 }
 
+.logo span {
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+/* Add styling to remove default link appearance from logo */
+.logo a {
+    text-decoration: none;
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.logo a:hover {
+    color: var(--text-color); /* Ensure the color doesn't change on hover */
+}
+
 .nav-links {
     display: flex;
     gap: 2rem;

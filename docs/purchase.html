@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>购买转换次数 - DeepShare</title>
+    <link rel="icon" type="image/svg+xml" href="./assets/images/deepshare-icon.svg">
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <link rel="stylesheet" href="./assets/css/purchase.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="./index.html">
+                    <img src="./assets/images/deepshare-icon.svg" alt="DeepShare Logo">
+                    <span>DeepShare</span>
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="content">
+        <h1>购买 Word 转换次数</h1>
+        
+        <!-- Add wrapper div for left column elements -->
+        <div class="left-column-wrapper">
+            <!-- Free features section -->
+            <div class="free-features-section">
+                <h2>DeepShare 大部分功能完全免费</h2>
+                <p>DeepShare 是一款开源免费的浏览器插件，以下所有功能都是<strong>永久免费</strong>的：</p>
+                
+                <div class="free-features-list">
+                    <div class="free-feature-item">一键截取 DeepSeek 对话内容</div>
+                    <div class="free-feature-item">分享对话为高质量图片</div>
+                    <div class="free-feature-item">导出为纯文本格式</div>
+                    <div class="free-feature-item">自定义水印</div>
+                    <div class="free-feature-item">选择性分享对话内容</div>
+                    <div class="free-feature-item">一键全选/取消全选</div>
+                    <div class="free-feature-item">一键复制 LaTeX 公式</div>
+                    <div class="free-feature-item">简洁无广告的界面</div>
+                </div>
+                
+                <div class="paid-feature-explanation">
+                    <p><strong>仅有 Word 文档转换功能需要付费</strong>，因为它需要使用服务器资源进行高质量排版和格式转换。您可以在下方购买转换次数。</p>
+                </div>
+            </div>
+            
+            <!-- API instructions -->
+            <div class="api-instructions">
+                <h2>如何使用</h2>
+                <p>完成购买后，我们将发送 API Key 到您的邮箱。按照以下步骤设置您的 DeepShare 扩展：</p>
+                <ol style="list-style-type: none;">
+                    <li><span class="step-number">1</span> 在浏览器中点击 DeepShare 扩展图标</li>
+                    <li><span class="step-number">2</span> 填入服务器地址: <code>https://api.ds.rick216.com</code></li>
+                    <li><span class="step-number">3</span> 填入您收到的 API Key</li>
+                    <li><span class="step-number">4</span> 保存设置</li>
+                </ol>
+                <p>现在您可以在 DeepSeek 对话中使用 "导出为 Word" 功能了！</p>
+            </div>
+        </div>
+        
+        <div class="pricing-card">
+           
+            <p class="feature-description">将您的 DeepSeek 对话一键导出为精美排版的 Word 文档，轻松分享和保存！</p>
+            
+            <div class="price-tag">¥0.2 <span class="per-unit">/ 次</span></div>
+
+            <div class="promotion-details">
+                <span class="promotion-badge">限时活动：充多少送多少</span>
+                <p>即日起至 2025 年 6 月 1 日，充值 5 元以上，充多少送多少！</p>
+                <p>例如：充值 10 元，获得价值 20 元的 100 次转换</p>
+                <p><small>* 赠送上限为 200 元</small></p>
+            </div>
+            
+            <div class="purchase-form">
+                <div class="form-group">
+                    <label for="email">您的邮箱（用于绑定 API Key）</label>
+                    <input type="email" id="email" placeholder="example@email.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>选择充值金额</label>
+                    <div class="amount-options">
+                        <div class="amount-option" data-value="1">
+                            <div class="amount-value">¥1</div>
+                            <div class="conversions">5 次转换</div>
+                        </div>
+                        <div class="amount-option" data-value="5">
+                            <div class="amount-value">¥5</div>
+                            <div class="conversions">25 次转换</div>
+                            <div class="bonus">+25 次赠送</div>
+                        </div>
+                        <div class="amount-option selected" data-value="10">
+                            <div class="amount-value">¥10</div>
+                            <div class="conversions">50 次转换</div>
+                            <div class="bonus">+50 次赠送</div>
+                        </div>
+                        <div class="amount-option" data-value="20">
+                            <div class="amount-value">¥20</div>
+                            <div class="conversions">100 次转换</div>
+                            <div class="bonus">+100 次赠送</div>
+                        </div>
+                        <div class="amount-option" data-value="60">
+                            <div class="amount-value">¥60</div>
+                            <div class="conversions">300 次转换</div>
+                            <div class="bonus">+300 次赠送</div>
+                        </div>
+                        <div class="amount-option" data-value="100">
+                            <div class="amount-value">¥100</div>
+                            <div class="conversions">500 次转换</div>
+                            <div class="bonus">+500 次赠送</div>
+                        </div>
+                        <div class="amount-option" data-value="200">
+                            <div class="amount-value">¥200</div>
+                            <div class="conversions">1000 次转换</div>
+                            <div class="bonus">+1000 次赠送</div>
+                        </div>
+                        <div class="amount-option" data-value="custom">
+                            <div class="amount-value">自定义</div>
+                            <div class="conversions">金额</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Custom amount input (initially hidden) -->
+                    <div id="custom-amount-container" style="display: none; margin-top: 1rem;">
+                        <label for="custom-amount">输入自定义金额（整数）</label>
+                        <div class="custom-amount-input-group">
+                            <span class="currency-symbol">¥</span>
+                            <input type="number" id="custom-amount" min="1" step="1" placeholder="请输入金额（最小 1 元）">
+                        </div>
+                        <div id="custom-amount-details" class="custom-amount-details">
+                            <p>充值金额: <span id="custom-amount-value">--</span> 元</p>
+                            <p>可获得 <span id="custom-conversions">--</span> 次转换</p>
+                            <p class="bonus-text" id="custom-bonus-text" style="display: none;">赠送 <span id="custom-bonus">--</span> 次转换</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="purchase-btn">立即购买</button>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="https://github.com/Yorick-Ryu/deep-share">GitHub</a>
+                <a href="./privacy.html">隐私政策</a>
+                <a href="./terms.html">使用条款</a>
+                <a href="./purchase.html">购买次数</a>
+            </div>
+            <p class="copyright">© 2025 DeepShare. All rights reserved.</p>
+        </div>
+    </footer>
+    <script src="./assets/js/purchase.js"></script>
+</body>
+</html>

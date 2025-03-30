@@ -87,6 +87,16 @@ body {
   font-size: 12px;
 }
 
+.form-hint a {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.form-hint a:hover {
+  text-decoration: underline;
+}
+
 label {
   display: block;
   margin-bottom: 8px;

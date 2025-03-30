@@ -14,12 +14,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // DOCX conversion settings
     document.getElementById('docxServerUrl').value = data.docxServerUrl || 'http://127.0.0.1:8000';
     
-    // Set docx mode - default to local if not set
-    const mode = data.docxMode || 'local';
-    document.querySelector(`input[name="docxMode"][value="${mode}"]`).checked = true;
+    // Always set docx mode to API
+    document.getElementById('modeApi').checked = true;
     
-    // Handle server URL field visibility based on mode
-    toggleServerUrlVisibility(mode);
+    // Always show server URL field
+    const serverUrlGroup = document.querySelector('label[for="docxServerUrl"]').parentNode;
+    serverUrlGroup.style.display = 'block';
   });
 
   // Set all i18n text
@@ -53,25 +53,18 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
-  
-  // Add event listeners for docx mode radio buttons
-  document.querySelectorAll('input[name="docxMode"]').forEach(radio => {
-    radio.addEventListener('change', function() {
-      toggleServerUrlVisibility(this.value);
-    });
-  });
 });
 
-// Toggle server URL field visibility based on selected mode
+// Modify toggleServerUrlVisibility to always show the server URL
 function toggleServerUrlVisibility(mode) {
   const serverUrlGroup = document.querySelector('label[for="docxServerUrl"]').parentNode;
-  serverUrlGroup.style.display = mode === 'api' ? 'block' : 'none';
+  serverUrlGroup.style.display = 'block'; // Always show
 }
 
 // 保存设置
 document.getElementById('save').addEventListener('click', () => {
-  // Get selected docx mode
-  const docxMode = document.querySelector('input[name="docxMode"]:checked').value;
+  // Always use API mode
+  const docxMode = 'api';
   
   // Collect all settings
   const settings = {

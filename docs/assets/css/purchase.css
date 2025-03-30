@@ -1,0 +1,352 @@
+/* Purchase page specific styles */
+.pricing-card {
+    border-radius: 12px;
+    border: 1px solid #eee;
+    padding: 2rem;
+    margin: 2rem 0;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+}
+.pricing-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+}
+.price-tag {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #4D6BFE;
+    margin: 1rem 0;
+}
+.per-unit {
+    font-size: 1rem;
+    color: #666;
+    font-weight: normal;
+}
+.promotion-badge {
+    display: inline-block;
+    background-color: #FF6B6B;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+.promotion-details {
+    background-color: rgba(255, 107, 107, 0.1);
+    border-left: 4px solid #FF6B6B;
+    padding: 1rem;
+    margin: 1.5rem 0;
+}
+.purchase-form {
+    margin-top: 2rem;
+}
+.form-group {
+    margin-bottom: 1.5rem;
+}
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+.form-group input {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+.amount-options {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin: 1rem 0;
+}
+.amount-option {
+    background: white;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.amount-option:hover {
+    border-color: #4D6BFE;
+}
+.amount-option.selected {
+    border-color: #4D6BFE;
+    background: rgba(77, 107, 254, 0.05);
+}
+.amount-value {
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+.conversions {
+    color: #666;
+    font-size: 0.9rem;
+    margin-top: 0.3rem;
+}
+.bonus {
+    color: #FF6B6B;
+    font-weight: bold;
+    font-size: 0.9rem;
+    margin-top: 0.3rem;
+}
+.purchase-btn {
+    background: #4D6BFE;
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    width: 100%;
+    transition: all 0.2s ease;
+}
+.purchase-btn:hover {
+    background: #3D5BEE;
+    transform: translateY(-2px);
+}
+.api-instructions {
+    margin-top: 3rem;
+    padding: 1.5rem;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+.step-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background-color: #4D6BFE;
+    color: white;
+    border-radius: 50%;
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin-right: 0.5rem;
+}
+code {
+    background: rgba(77, 107, 254, 0.1);
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-family: monospace;
+}
+
+/* Custom amount styles */
+.custom-amount-input-group {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.currency-symbol {
+    background-color: #f5f5f5;
+    padding: 0.8rem;
+    border-right: 1px solid #ddd;
+    font-weight: bold;
+}
+
+.custom-amount-input-group input {
+    border: none;
+    border-radius: 0;
+    flex: 1;
+}
+
+.custom-amount-input-group input:focus {
+    outline: none;
+}
+
+.custom-amount-details {
+    margin-top: 1rem;
+    padding: 1rem;
+    background-color: #f9f9f9;
+    border-radius: 6px;
+}
+
+.bonus-text {
+    font-weight: bold;
+    color: #FF6B6B;
+}
+
+input[type="number"] {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+input[type="number"]::-webkit-inner-spin-button, 
+input[type="number"]::-webkit-outer-spin-button { 
+    opacity: 1;
+}
+
+/* Responsive adjustments for amount options */
+@media (max-width: 768px) {
+    .amount-options {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Purchase page specific styles */
+.feature-description {
+    font-size: 1.2rem;
+    font-weight: 500;
+    line-height: 1.6;
+    margin: 1.5rem 0;
+    color: #333;
+    border-left: 4px solid #4D6BFE;
+    padding-left: 1rem;
+}
+
+/* Content layout styles */
+.content {
+    max-width: 1200px;
+    margin: 100px auto;
+    padding: 0 20px;
+}
+
+/* Two-column layout for desktop */
+@media (min-width: 992px) {
+    .content > h1 {
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+    
+    /* Create a two-column layout */
+    .content {
+        display: grid;
+        grid-template-columns: 5fr 7fr;
+        grid-template-areas: 
+            "heading heading"
+            "left-col right-col";
+        gap: 2rem;
+    }
+    
+    .content > h1 {
+        grid-area: heading;
+        width: 100%;
+    }
+    
+    /* Left column with free features and API instructions */
+    .left-column-wrapper {
+        grid-area: left-col;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .free-features-section {
+        margin: 0;
+    }
+    
+    .api-instructions {
+        margin: 0;
+        width: auto;
+    }
+    
+    /* Right column with pricing card */
+    .pricing-card {
+        grid-area: right-col;
+        margin: 0;
+        align-self: start;
+        padding-top: 1rem;
+    }
+}
+
+/* Free features section */
+.free-features-section {
+    background-color: #f5f8ff;
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    border-left: 4px solid #4D6BFE;
+}
+.free-features-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-top: 1rem;
+}
+.free-feature-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+}
+.free-feature-item:before {
+    content: "✓";
+    color: #4D6BFE;
+    font-weight: bold;
+}
+.paid-feature-explanation {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(77, 107, 254, 0.2);
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+    .pricing-card {
+        border-color: #333;
+        background-color: #2d2d2d;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    .amount-option {
+        background: #2d2d2d;
+        border-color: #444;
+    }
+    .amount-option.selected {
+        background: rgba(77, 107, 254, 0.2);
+    }
+    .api-instructions {
+        background-color: #2d2d2d;
+        border-color: #333;
+    }
+    .form-group input {
+        background-color: #2d2d2d;
+        border-color: #444;
+        color: #fff;
+    }
+    .currency-symbol {
+        background-color: #333;
+        border-color: #444;
+    }
+    .custom-amount-details {
+        background-color: #2d2d2d;
+    }
+    input[type="number"] {
+        background-color: #2d2d2d;
+        border-color: #444;
+        color: #fff;
+    }
+    .feature-description {
+        color: #eee;
+    }
+    .free-features-section {
+        background-color: #2a2d3a;
+        border-left-color: #4D6BFE;
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 991px) {
+    /* On mobile and tablets, stack the elements in the original order */
+    .free-features-section,
+    .pricing-card,
+    .api-instructions {
+        margin: 2rem 0;
+    }
+}
+
+/* Responsive adjustments for free features list */
+@media (max-width: 768px) {
+    .free-features-list {
+        grid-template-columns: 1fr;
+    }
+}

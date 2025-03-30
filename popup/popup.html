@@ -56,7 +56,7 @@
         </h2>
       </div>
       <div class="card-body">
-        <div class="form-group">
+        <div class="form-group" style="display: none;">
           <label id="docxModeLabel">Conversion Mode</label>
           <div class="radio-group">
             <div class="radio-option">
@@ -72,6 +72,11 @@
         <div class="form-group">
           <label for="docxServerUrl" id="docxServerUrlLabel">Server URL</label>
           <input type="text" id="docxServerUrl" placeholder="http://127.0.0.1:8000">
+        </div>
+        <div class="form-group">
+          <label for="docxApiKey" id="docxApiKeyLabel">API Key</label>
+          <input type="text" id="docxApiKey" placeholder="your-api-key">
+          <span class="form-hint" id="apiKeyHint">购买 API Key? <a href="../docs/purchase.html" target="_blank">点击此处</a></span>
         </div>
       </div>
     </div>
