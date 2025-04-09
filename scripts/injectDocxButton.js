@@ -16,22 +16,18 @@ function injectDocxButton() {
                     const buttonContainers = document.querySelectorAll('.ds-flex[style*="margin-top: 12px"][style*="height: 20px"][style*="align-items: center"]');
                     
                     buttonContainers.forEach(container => {
-                        // Find the button container within this container
-                        const buttonGroup = container.querySelector('.ds-flex[style*="align-items: center"][style*="gap: 12px"]');
+                        // Find the button container within this container - updated to support both gap values
+                        const buttonGroup = container.querySelector('.ds-flex[style*="align-items: center"][style*="gap: 16px"], .ds-flex[style*="align-items: center"][style*="gap: 12px"], .ds-flex._965abe9');
                         if (!buttonGroup) return;
                         
                         // Look for copy buttons
                         const copyButtons = buttonGroup.querySelectorAll('.ds-icon-button');
                         
                         copyButtons.forEach(copyBtn => {
-                            // Check if this is a copy button by looking at its SVG content
-                            const svgEl = copyBtn.querySelector('svg');
-                            if (!svgEl) return;
+                            // Check if this is a copy button (first button in the new structure)
+                            const isCopyButton = copyBtn === buttonGroup.querySelector('.ds-icon-button:first-child');
                             
-                            // Check if it's the copy button by looking for part of its path content
-                            // This looks for the copy icon path pattern
-                            const pathEl = svgEl.querySelector('path[d*="M5.03 14.64"]');
-                            if (!pathEl) return;
+                            if (!isCopyButton) return;
                             
                             // Check if we've already added our button next to this copy button
                             const nextSibling = copyBtn.nextElementSibling;
@@ -44,7 +40,7 @@ function injectDocxButton() {
                             docxButton.className = 'ds-icon-button deepseek-docx-btn';
                             docxButton.tabIndex = 0;
                             docxButton.title = chrome.i18n.getMessage('docxButton');
-                            docxButton.style = '--ds-icon-button-size: 20px;';
+                            docxButton.style = '--ds-icon-button-text-color: #909090; --ds-icon-button-size: 20px;';
                             
                             // Create button inner content with outline icon (not filled)
                             docxButton.innerHTML = `
@@ -137,12 +133,12 @@ function injectDocxButton() {
         
         // Fallback: Check if we're inside a message container by looking at parent structure
         element = buttonEl;
-        let buttonContainer = buttonEl.closest('.ds-flex[style*="align-items: center"][style*="gap: 12px"]');
+        let buttonContainer = buttonEl.closest('.ds-flex[style*="align-items: center"][style*="gap: 16px"], .ds-flex[style*="align-items: center"][style*="gap: 12px"], .ds-flex._965abe9');
         
         if (buttonContainer) {
             // Try to find the closest message container by walking up a few levels
             let parent = buttonContainer.parentElement;
-            for (let i = 0; i < A5; i++) {
+            for (let i = 0; i < 5; i++) { // Fixed A5 to 5
                 if (!parent) break;
                 
                 // Check for message container classes from the HTML sample
