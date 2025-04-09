@@ -47,14 +47,19 @@ function showToastNotification(message, type = 'success', duration = 2000) {
         width: auto;
     `;
     
-    // Create toast element
+    // Detect dark mode
+    const isDarkMode = document.documentElement.classList.contains('dark') || 
+                       document.body.classList.contains('dark') ||
+                       window.matchMedia('(prefers-color-scheme: dark)').matches;
+    
+    // Create toast element with appropriate dark mode styling
     const toast = document.createElement('div');
     toast.className = `ds-toast ds-toast--plain ds-toast--${type}`;
     toast.style.cssText = `
-        background-color: ${document.documentElement.classList.contains('dark') ? '#1e1e1e' : 'white'};
-        color: ${document.documentElement.classList.contains('dark') ? '#e0e0e0' : '#333'};
+        background-color: ${isDarkMode ? '#3a3a45' : 'white'};
+        color: ${isDarkMode ? '#e0e0e0' : '#333'};
         border-radius: 8px;
-        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+        box-shadow: ${isDarkMode ? '0 2px 12px rgba(0, 0, 0, 0.4)' : '0 2px 12px rgba(0, 0, 0, 0.15)'};
         padding: 8px 16px;
         display: flex;
         align-items: center;
@@ -65,12 +70,17 @@ function showToastNotification(message, type = 'success', duration = 2000) {
     
     // Add icon based on type
     let iconSVG;
+    let iconColor;
+    
     if (type === 'success') {
         iconSVG = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 20 20"><g fill="none"><path d="M10 2a8 8 0 1 1 0 16a8 8 0 0 1 0-16zm3.358 5.646a.5.5 0 0 0-.637-.057l-.07.057L9 11.298L7.354 9.651l-.07-.058a.5.5 0 0 0-.695.696l.057.07l2 2l.07.057a.5.5 0 0 0 .568 0l.07-.058l4.004-4.004l.058-.07a.5.5 0 0 0-.058-.638z" fill="currentColor"></path></g></svg>';
+        iconColor = '#4caf50';
     } else if (type === 'error') {
         iconSVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><g fill="none"><path d="M10 2a8 8 0 1 1 0 16a8 8 0 0 1 0-16zm0 1.5a6.5 6.5 0 1 0 0 13a6.5 6.5 0 0 0 0-13zM10 9a1 1 0 0 1 1 1v3a1 1 0 1 1-2 0v-3a1 1 0 0 1 1-1zm0-3a1 1 0 1 1 0 2a1 1 0 0 1 0-2z" fill="currentColor"></path></g></svg>';
+        iconColor = '#f44336';
     } else { // info type
         iconSVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><g fill="none"><path d="M10 2a8 8 0 1 1 0 16a8 8 0 0 1 0-16zm0 1.5a6.5 6.5 0 1 0 0 13a6.5 6.5 0 0 0 0-13zM10 6a1 1 0 0 1 1 1v5a1 1 0 1 1-2 0V7a1 1 0 0 1 1-1zm0 9a1 1 0 1 1 0-2a1 1 0 0 1 0 2z" fill="currentColor"></path></g></svg>';
+        iconColor = '#2196f3';
     }
 
     // Create icon container
@@ -83,7 +93,7 @@ function showToastNotification(message, type = 'success', duration = 2000) {
         width: 20px;
         height: 20px;
         flex-shrink: 0;
-        color: ${type === 'success' ? '#4caf50' : type === 'error' ? '#f44336' : '#2196f3'};
+        color: ${iconColor};
     `;
     iconDiv.innerHTML = iconSVG;
     
@@ -97,7 +107,7 @@ function showToastNotification(message, type = 'success', duration = 2000) {
     `;
     contentDiv.textContent = message;
     
-    // Create close button
+    // Create close button with consistent styling in dark mode
     const closeDiv = document.createElement('div');
     closeDiv.className = 'ds-toast__close';
     closeDiv.style.cssText = `
@@ -110,8 +120,18 @@ function showToastNotification(message, type = 'success', duration = 2000) {
         opacity: 0.6;
         transition: opacity 0.2s ease;
         flex-shrink: 0;
+        color: ${isDarkMode ? '#e0e0e0' : '#333'};
     `;
     closeDiv.innerHTML = '<svg viewBox="0 0 10 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M9.314 1.187a.97.97 0 0 1 0 1.373L2.059 9.815A.97.97 0 1 1 .686 8.443l7.255-7.256a.97.97 0 0 1 1.373 0z" fill="currentColor"></path><path fill-rule="evenodd" clip-rule="evenodd" d="M.686 1.185a.97.97 0 0 1 1.373 0l7.255 7.256A.97.97 0 0 1 7.94 9.814L.686 2.558a.97.97 0 0 1 0-1.373z" fill="currentColor"></path></svg>';
+    
+    // Add hover effect to close button
+    closeDiv.addEventListener('mouseenter', () => {
+        closeDiv.style.opacity = '1';
+    });
+    
+    closeDiv.addEventListener('mouseleave', () => {
+        closeDiv.style.opacity = '0.6';
+    });
     
     // Assemble the toast
     toast.appendChild(iconDiv);
