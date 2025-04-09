@@ -55,7 +55,7 @@ async function convertToDocx(message, sourceButton) {
         
         // Get settings from storage
         const settings = await chrome.storage.sync.get({
-            docxServerUrl: 'http://127.0.0.1:8000',
+            docxServerUrl: 'https://api.ds.rick216.cn',
             docxMode: 'local'
         });
         
@@ -128,11 +128,11 @@ async function convertToDocxViaApi(content, serverUrl) {
     try {
         // Get API settings from storage
         const settings = await chrome.storage.sync.get({
-            docxServerUrl: 'http://127.0.0.1:8000',
+            docxServerUrl: 'https://api.ds.rick216.cn',
             docxApiKey: ''
         });
         
-        const url = serverUrl || settings.docxServerUrl || 'http://127.0.0.1:8000';
+        const url = serverUrl || settings.docxServerUrl || 'https://api.ds.rick216.cn';
         const apiKey = settings.docxApiKey;
         
         // Ensure API key is provided
@@ -183,7 +183,7 @@ async function checkQuota() {
     try {
         // Get API settings from storage
         const settings = await chrome.storage.sync.get({
-            docxServerUrl: 'http://127.0.0.1:8000',
+            docxServerUrl: 'https://api.ds.rick216.cn',
             docxApiKey: ''
         });
         

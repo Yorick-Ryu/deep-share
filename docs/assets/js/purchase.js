@@ -349,7 +349,7 @@ async function checkQuota() {
     checkBtn.disabled = true;
     
     try {
-        const response = await fetch('http://127.0.0.1:8000/auth/quota', {
+        const response = await fetch('https://api.ds.rick216.cn/auth/quota', {
             method: 'GET',
             headers: {
                 'X-API-Key': apiKey

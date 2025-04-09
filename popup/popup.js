@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('hideDefaultWatermark').checked = !!data.hideDefaultWatermark;
     
     // DOCX conversion settings
-    document.getElementById('docxServerUrl').value = data.docxServerUrl || 'http://127.0.0.1:8000';
+    document.getElementById('docxServerUrl').value = data.docxServerUrl || 'https://api.ds.rick216.cn';
     document.getElementById('docxApiKey').value = data.docxApiKey || '';
     
     // Always set docx mode to API
