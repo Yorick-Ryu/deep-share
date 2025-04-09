@@ -78,7 +78,11 @@ function showToastNotification(message, type = 'success', duration = 2000) {
     } else if (type === 'error') {
         iconSVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><g fill="none"><path d="M10 2a8 8 0 1 1 0 16a8 8 0 0 1 0-16zm0 1.5a6.5 6.5 0 1 0 0 13a6.5 6.5 0 0 0 0-13zM10 9a1 1 0 0 1 1 1v3a1 1 0 1 1-2 0v-3a1 1 0 0 1 1-1zm0-3a1 1 0 1 1 0 2a1 1 0 0 1 0-2z" fill="currentColor"></path></g></svg>';
         iconColor = '#f44336';
-    } else { // info type
+    } else if (type === 'loading') {
+        // Loading spinner icon
+        iconSVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="spinning-loader"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="50 20"></circle></svg>';
+        iconColor = '#2196f3';
+    } else { // info type and default
         iconSVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><g fill="none"><path d="M10 2a8 8 0 1 1 0 16a8 8 0 0 1 0-16zm0 1.5a6.5 6.5 0 1 0 0 13a6.5 6.5 0 0 0 0-13zM10 6a1 1 0 0 1 1 1v5a1 1 0 1 1-2 0V7a1 1 0 0 1 1-1zm0 9a1 1 0 1 1 0-2a1 1 0 0 1 0 2z" fill="currentColor"></path></g></svg>';
         iconColor = '#2196f3';
     }
@@ -96,6 +100,26 @@ function showToastNotification(message, type = 'success', duration = 2000) {
         color: ${iconColor};
     `;
     iconDiv.innerHTML = iconSVG;
+    
+    // Add spinning animation if this is a loading icon
+    if (type === 'loading') {
+        // Add keyframes for the spinner animation
+        if (!document.querySelector('#ds-spinner-keyframes')) {
+            const styleSheet = document.createElement('style');
+            styleSheet.id = 'ds-spinner-keyframes';
+            styleSheet.textContent = `
+                @keyframes ds-spin {
+                    0% { transform: rotate(0deg); }
+                    100% { transform: rotate(360deg); }
+                }
+                .spinning-loader {
+                    animation: ds-spin 1.5s linear infinite;
+                    transform-origin: center center;
+                }
+            `;
+            document.head.appendChild(styleSheet);
+        }
+    }
     
     // Create content
     const contentDiv = document.createElement('div');
