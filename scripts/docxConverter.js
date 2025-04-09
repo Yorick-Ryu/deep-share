@@ -160,7 +160,7 @@ async function convertToDocxViaApi(content, serverUrl) {
         
         // Download the file
         const blob = await response.blob();
-        const filename = response.headers.get('content-disposition')?.split('filename=')[1] || 'document.docx';
+        const filename = generateFilename(content) + '.docx';
         
         const downloadUrl = URL.createObjectURL(blob);
         const link = document.createElement('a');
@@ -235,10 +235,26 @@ async function checkQuota() {
 
 // Helper function to generate a filename based on the clipboard content
 function generateFilename(content) {
+    // Helper function to get China time zone timestamp
+    function getChinaTimestamp() {
+        const now = new Date();
+        // Format date in China timezone (UTC+8)
+        const options = { 
+            timeZone: 'Asia/Shanghai',
+            year: 'numeric', month: '2-digit', day: '2-digit',
+            hour: '2-digit', minute: '2-digit', second: '2-digit',
+            hour12: false
+        };
+        const chinaTime = now.toLocaleString('zh-CN', options)
+            .replace(/[\/\s:]/g, '-')
+            .replace(',', '');
+        return chinaTime;
+    }
+    
     // Default filename generation
     if (!content || typeof content !== 'string') {
         // Fallback if no valid content
-        const timestamp = new Date().toISOString().replace(/[:.]/g, '-').substring(0, 19);
+        const timestamp = getChinaTimestamp();
         return `document_${timestamp}`;
     }
     
@@ -247,7 +263,7 @@ function generateFilename(content) {
     let filename = firstLine.trim();
     
     // If first line is too long, truncate it
-    filename = filename.substring(0, 30).trim();
+    filename = filename.substring(0, 10).trim();
     
     // Remove special characters that aren't allowed in filenames
     filename = filename.replace(/[^a-zA-Z0-9_\u4e00-\u9fa5]/g, '');
@@ -257,8 +273,8 @@ function generateFilename(content) {
         filename = 'document';
     }
     
-    // Add timestamp
-    const timestamp = new Date().toISOString().replace(/[:.]/g, '-').substring(0, 19);
+    // Add timestamp with China timezone
+    const timestamp = getChinaTimestamp();
     return `${filename}_${timestamp}`;
 }
 
