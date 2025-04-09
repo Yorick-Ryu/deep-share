@@ -15,47 +15,50 @@
     </svg>
   </a>
   
-  <div class="title-container">
-    <img src="../icons/deepshare-icon.svg" alt="DeepShare" class="title-icon">
-    <h1>DeepShare</h1>
-  </div>
-  
-  <p class="description" id="extensionDescription"></p>
-  
-  <div class="cards">
-    <!-- Watermark Settings Card -->
-    <div class="card">
-      <div class="card-header">
-        <h2>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M20 8l-8 8-8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          <span id="watermarkSettingsTitle">Watermark Settings</span>
-        </h2>
+  <div class="popup-container">
+    <!-- Sidebar with tabs -->
+    <div class="sidebar">
+      <div class="title-container">
+        <img src="../icons/deepshare-icon.svg" alt="DeepShare" class="title-icon">
+        <h1>DeepShare</h1>
       </div>
-      <div class="card-body">
-        <div class="checkbox-group">
-          <input type="checkbox" id="hideDefaultWatermark">
-          <label for="hideDefaultWatermark" id="hideDefaultWatermarkLabel"></label>
-        </div>
-        <div class="form-group">
-          <label for="watermark" id="customWatermarkLabel"></label>
-          <input type="text" id="watermark">
-        </div>
+      
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="docx-tab" id="docxTabBtn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+            <polyline points="10 9 9 9 8 9"></polyline>
+          </svg>
+          <span id="docxTabLabel">Document Conversion</span>
+        </button>
+        
+        <button class="tab-btn" data-tab="watermark-tab" id="watermarkTabBtn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"></path>
+            <line x1="16" y1="8" x2="2" y2="22"></line>
+            <line x1="17.5" y1="15" x2="9" y2="15"></line>
+          </svg>
+          <span id="watermarkTabLabel">Watermark</span>
+        </button>
+        
+        <button class="tab-btn" data-tab="sponsor-tab" id="sponsorTabBtn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
+          </svg>
+          <span id="sponsorTabLabel">Sponsor</span>
+        </button>
       </div>
     </div>
-
-    <!-- DOCX Converter Settings Card -->
-    <div class="card">
-      <div class="card-header">
-        <h2>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M20 8l-8 8-8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          <span id="docxSettingsTitle">Word (DOCX) Conversion</span>
-        </h2>
-      </div>
-      <div class="card-body">
+    
+    <!-- Main content area -->
+    <div class="content">
+      <!-- Document Conversion Tab Content -->
+      <div class="tab-content active" id="docx-tab">
+        <h2 id="docxSettingsTitle">Document Conversion Settings</h2>
+        
         <div class="form-group" style="display: none;">
           <label id="docxModeLabel">Conversion Mode</label>
           <div class="radio-group">
@@ -69,10 +72,12 @@
             </div>
           </div>
         </div>
+        
         <div class="form-group">
           <label for="docxServerUrl" id="docxServerUrlLabel">Server URL</label>
           <input type="text" id="docxServerUrl" placeholder="https://api.ds.rick216.cn">
         </div>
+        
         <div class="form-group">
           <label for="docxApiKey" id="docxApiKeyLabel">API Key</label>
           <div class="api-key-input-wrapper">
@@ -97,7 +102,7 @@
           <span class="form-hint" id="apiKeyHint">购买 API Key? <a href="../docs/purchase.html" target="_blank">点击此处</a></span>
         </div>
         
-        <!-- Add quota information section -->
+        <!-- Quota information section -->
         <div class="quota-section" id="quotaSection" style="display: none;">
           <div class="quota-info">
             <h3 id="quotaTitle">您的转换次数</h3>
@@ -125,14 +130,32 @@
           </div>
         </div>
       </div>
+      
+      <!-- Watermark Tab Content -->
+      <div class="tab-content" id="watermark-tab">
+        <h2 id="watermarkSettingsTitle">Watermark Settings</h2>
+        
+        <div class="checkbox-group">
+          <input type="checkbox" id="hideDefaultWatermark">
+          <label for="hideDefaultWatermark" id="hideDefaultWatermarkLabel">Hide Default Watermark</label>
+        </div>
+        
+        <div class="form-group">
+          <label for="watermark" id="customWatermarkLabel">Custom Watermark Text (Optional)</label>
+          <input type="text" id="watermark" placeholder="Enter custom watermark here">
+        </div>
+      </div>
+      
+      <!-- Sponsor Tab Content -->
+      <div class="tab-content" id="sponsor-tab">
+        <h2 id="sponsorTabTitle">Sponsor</h2>
+        
+        <div class="sponsor-content">
+          <p class="sponsor-description" id="sponsorTitle">Thanks for using! If you find it helpful, feel free to sponsor via WeChat QR code 😊</p>
+          <img src="../icons/sponsor-code.png" alt="Sponsor QR Code" class="sponsor-image">
+        </div>
+      </div>
     </div>
-  </div>
-
-  <button id="save"></button>
-
-  <div id="sponsorSection" class="sponsor-section">
-    <h3 class="sponsor-title" id="sponsorTitle"></h3>
-    <img src="../icons/sponsor-code.png" alt="赞助码" class="sponsor-image">
   </div>
   
   <script src="popup.js"></script>

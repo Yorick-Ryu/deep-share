@@ -39,10 +39,13 @@
         "message": "Watermark Settings"
     },
     "docxSettings": {
-        "message": "Word (DOCX) Conversion"
+        "message": "Document Conversion Settings"
     },
     "docxServerUrlLabel": {
         "message": "Server URL"
+    },
+    "docxApiKeyLabel": {
+        "message": "API Key"
     },
     "docxModeLabel": {
         "message": "Conversion Mode"
@@ -106,5 +109,23 @@
     },
     "noMessageSelected": {
         "message": "Please select at least one message"
+    },
+    "sponsorTabLabel": {
+        "message": "Sponsor"
+    },
+    "totalQuotaLabel": {
+        "message": "Total:"
+    },
+    "usedQuotaLabel": {
+        "message": "Used:"
+    },
+    "remainingQuotaLabel": {
+        "message": "Remaining:"
+    },
+    "quotaTitle": {
+        "message": "Your Conversion Quota"
+    },
+    "apiKeyHint": {
+        "message": "Purchase API Key? <a href=\"../docs/purchase.html\" target=\"_blank\">Click here</a>"
     }
 }

@@ -39,10 +39,13 @@
         "message": "水印设置"
     },
     "docxSettings": {
-        "message": "Word文档转换"
+        "message": "文档转换设置"
     },
     "docxServerUrlLabel": {
         "message": "服务器地址"
+    },
+    "docxApiKeyLabel": {
+        "message": "API密钥"
     },
     "docxModeLabel": {
         "message": "转换模式"
@@ -106,5 +109,23 @@
     },
     "noMessageSelected": {
         "message": "请至少选择一条对话"
+    },
+    "sponsorTabLabel": {
+        "message": "赞助"
+    },
+    "totalQuotaLabel": {
+        "message": "总计:"
+    },
+    "usedQuotaLabel": {
+        "message": "已用:"
+    },
+    "remainingQuotaLabel": {
+        "message": "剩余:"
+    },
+    "quotaTitle": {
+        "message": "您的转换次数"
+    },
+    "apiKeyHint": {
+        "message": "购买 API Key? <a href=\"../docs/purchase.html\" target=\"_blank\">点击此处</a>"
     }
 }

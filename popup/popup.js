@@ -1,6 +1,23 @@
-// 加载保存的设置
+// Initialize and load settings
 document.addEventListener('DOMContentLoaded', () => {
   // Load saved settings
+  loadSettings();
+
+  // Set up tab switching
+  setupTabs();
+
+  // Set up auto-save functionality
+  setupAutoSave();
+
+  // Set up other UI elements
+  setupUIElements();
+
+  // Set all i18n text
+  loadI18nText();
+});
+
+// Function to load saved settings
+function loadSettings() {
   chrome.storage.sync.get([
     'customWatermark', 
     'hideDefaultWatermark',
@@ -18,55 +35,72 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Always set docx mode to API
     document.getElementById('modeApi').checked = true;
-    
-    // Always show server URL field
-    const serverUrlGroup = document.querySelector('label[for="docxServerUrl"]').parentNode;
-    serverUrlGroup.style.display = 'block';
 
     // If API key is set, check quota
     if (data.docxApiKey) {
       checkQuota();
     }
   });
+}
 
-  // Set all i18n text
-  document.getElementById('extensionDescription').textContent = chrome.i18n.getMessage('extensionDescription');
-  document.getElementById('watermarkSettingsTitle').textContent = chrome.i18n.getMessage('watermarkSettings') || 'Watermark Settings';
-  document.getElementById('hideDefaultWatermarkLabel').textContent = chrome.i18n.getMessage('hideDefaultWatermarkLabel');
-  document.getElementById('customWatermarkLabel').textContent = chrome.i18n.getMessage('customWatermarkLabel');
-  document.getElementById('watermark').placeholder = chrome.i18n.getMessage('customWatermarkPlaceholder');
-  document.getElementById('docxSettingsTitle').textContent = chrome.i18n.getMessage('docxSettings') || 'Word (DOCX) Conversion';
-  document.getElementById('docxModeLabel').textContent = chrome.i18n.getMessage('docxModeLabel') || 'Conversion Mode';
-  document.getElementById('modeLocalLabel').textContent = chrome.i18n.getMessage('modeLocalLabel') || 'Local';
-  document.getElementById('modeApiLabel').textContent = chrome.i18n.getMessage('modeApiLabel') || 'API';
-  document.getElementById('docxServerUrlLabel').textContent = chrome.i18n.getMessage('docxServerUrlLabel') || 'Server URL';
-  document.getElementById('docxApiKeyLabel').textContent = chrome.i18n.getMessage('docxApiKeyLabel') || 'API Key';
-  document.getElementById('save').textContent = chrome.i18n.getMessage('saveSettings');
-  document.getElementById('sponsorTitle').textContent = chrome.i18n.getMessage('sponsorTitle');
+// Set up tab switching functionality
+function setupTabs() {
+  const tabButtons = document.querySelectorAll('.tab-btn');
   
-  // Toggle card expansion when header is clicked
-  document.querySelectorAll('.card-header').forEach(header => {
-    header.addEventListener('click', () => {
-      const parent = header.parentElement;
-      const body = parent.querySelector('.card-body');
+  tabButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const targetTabId = button.getAttribute('data-tab');
       
-      if (header.classList.contains('collapsed')) {
-        // Expand
-        header.classList.remove('collapsed');
-        body.style.display = 'block';
-      } else {
-        // Collapse
-        header.classList.add('collapsed');
-        body.style.display = 'none';
-      }
+      // Update active tab button
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      button.classList.add('active');
+      
+      // Show the selected tab content
+      document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      document.getElementById(targetTabId).classList.add('active');
     });
   });
+}
 
-  // Set up quota refresh button event
-  document.getElementById('refreshQuota').addEventListener('click', () => {
-    checkQuota(true);
+// Set up auto-save functionality
+function setupAutoSave() {
+  // Get all input elements that need auto-save
+  const inputs = [
+    document.getElementById('watermark'),
+    document.getElementById('hideDefaultWatermark'),
+    document.getElementById('docxServerUrl'),
+    document.getElementById('docxApiKey'),
+    document.getElementById('modeApi'),
+    document.getElementById('modeLocal')
+  ];
+  
+  // Add change event listeners to each input
+  inputs.forEach(input => {
+    input.addEventListener('change', saveSettings);
+    // For text inputs, also listen for 'input' with small delay
+    if (input.type === 'text' || input.type === 'password') {
+      input.addEventListener('input', debounce(saveSettings, 500));
+    }
   });
+}
 
+// Debounce function to prevent too many saves on text input
+function debounce(func, delay) {
+  let timeout;
+  return function() {
+    const context = this;
+    const args = arguments;
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(context, args), delay);
+  };
+}
+
+// Set up other UI elements
+function setupUIElements() {
   // Set up API key visibility toggle
   const toggleApiKeyBtn = document.getElementById('toggleApiKeyVisibility');
   const apiKeyInput = document.getElementById('docxApiKey');
@@ -111,12 +145,66 @@ document.addEventListener('DOMContentLoaded', () => {
       }, 1500);
     });
   });
-});
 
-// Modify toggleServerUrlVisibility to always show the server URL
-function toggleServerUrlVisibility(mode) {
-  const serverUrlGroup = document.querySelector('label[for="docxServerUrl"]').parentNode;
-  serverUrlGroup.style.display = 'block'; // Always show
+  // Set up quota refresh button event
+  document.getElementById('refreshQuota').addEventListener('click', () => {
+    checkQuota(true);
+  });
+}
+
+// Load all i18n text
+function loadI18nText() {
+  // Tab labels
+  document.getElementById('docxTabLabel').textContent = chrome.i18n.getMessage('docxSettings') || 'Document Conversion';
+  document.getElementById('watermarkTabLabel').textContent = chrome.i18n.getMessage('watermarkSettings') || 'Watermark';
+  document.getElementById('sponsorTabLabel').textContent = chrome.i18n.getMessage('sponsorTabLabel') || 'Sponsor';
+  document.getElementById('sponsorTabTitle').textContent = chrome.i18n.getMessage('sponsorTabLabel') || 'Sponsor';
+  
+  // Document Conversion tab
+  document.getElementById('docxSettingsTitle').textContent = chrome.i18n.getMessage('docxSettings') || 'Word (DOCX) Conversion';
+  document.getElementById('docxModeLabel').textContent = chrome.i18n.getMessage('docxModeLabel') || 'Conversion Mode';
+  document.getElementById('modeLocalLabel').textContent = chrome.i18n.getMessage('modeLocalLabel') || 'Local';
+  document.getElementById('modeApiLabel').textContent = chrome.i18n.getMessage('modeApiLabel') || 'API';
+  document.getElementById('docxServerUrlLabel').textContent = chrome.i18n.getMessage('docxServerUrlLabel') || 'Server URL';
+  document.getElementById('docxApiKeyLabel').textContent = chrome.i18n.getMessage('docxApiKeyLabel') || 'API Key';
+  
+  // Watermark tab
+  document.getElementById('watermarkSettingsTitle').textContent = chrome.i18n.getMessage('watermarkSettings') || 'Watermark Settings';
+  document.getElementById('hideDefaultWatermarkLabel').textContent = chrome.i18n.getMessage('hideDefaultWatermarkLabel') || 'Hide Default Watermark';
+  document.getElementById('customWatermarkLabel').textContent = chrome.i18n.getMessage('customWatermarkLabel') || 'Custom Watermark Text (Optional)';
+  document.getElementById('watermark').placeholder = chrome.i18n.getMessage('customWatermarkPlaceholder') || 'Enter custom watermark here';
+
+  // Sponsor tab
+  document.getElementById('sponsorTitle').textContent = chrome.i18n.getMessage('sponsorTitle');
+}
+
+// Function to save settings
+function saveSettings() {
+  // Always use API mode
+  const docxMode = 'api';
+  
+  // Collect all settings
+  const settings = {
+    // Watermark settings
+    customWatermark: document.getElementById('watermark').value,
+    hideDefaultWatermark: document.getElementById('hideDefaultWatermark').checked,
+    
+    // DOCX settings
+    docxServerUrl: document.getElementById('docxServerUrl').value,
+    docxApiKey: document.getElementById('docxApiKey').value,
+    docxMode: docxMode
+  };
+
+  // Save all settings at once
+  chrome.storage.sync.set(settings, () => {
+    console.log('Settings saved automatically');
+    
+    const apiKey = document.getElementById('docxApiKey').value;
+    if (apiKey) {
+      // Check quota after saving if API key is provided
+      setTimeout(checkQuota, 500);
+    }
+  });
 }
 
 // Function to check quota
@@ -208,40 +296,3 @@ function displayQuotaData(data) {
     progressBar.style.backgroundColor = '#4D6BFE';
   }
 }
-
-// 保存设置
-document.getElementById('save').addEventListener('click', () => {
-  // Always use API mode
-  const docxMode = 'api';
-  
-  // Collect all settings
-  const settings = {
-    // Watermark settings
-    customWatermark: document.getElementById('watermark').value,
-    hideDefaultWatermark: document.getElementById('hideDefaultWatermark').checked,
-    
-    // DOCX settings
-    docxServerUrl: document.getElementById('docxServerUrl').value,
-    docxApiKey: document.getElementById('docxApiKey').value,
-    docxMode: docxMode
-  };
-
-  // Save all settings at once
-  chrome.storage.sync.set(settings, () => {
-    const button = document.getElementById('save');
-    button.textContent = chrome.i18n.getMessage('settingsSaved');
-
-    // Show sponsor section
-    document.getElementById('sponsorSection').style.display = 'block';
-
-    setTimeout(() => {
-      button.textContent = chrome.i18n.getMessage('saveSettings');
-    }, 1000);
-
-    const apiKey = document.getElementById('docxApiKey').value;
-    if (apiKey) {
-      // Check quota after saving if API key is provided
-      setTimeout(checkQuota, 500);
-    }
-  });
-});
