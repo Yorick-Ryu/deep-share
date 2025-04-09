@@ -32,6 +32,9 @@
     "docxConversionSuccess": {
         "message": "成功转换为Word文档！"
     },
+    "docxConverting": {
+        "message": "正在转换为文档..."
+    },
     "docxConversionError": {
         "message": "转换Word文档失败。请确保转换服务正在运行。"
     },

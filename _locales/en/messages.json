@@ -32,6 +32,9 @@
     "docxConversionSuccess": {
         "message": "Successfully converted to DOCX!"
     },
+    "docxConverting": {
+        "message": "Converting to document..."
+    },
     "docxConversionError": {
         "message": "Failed to convert to DOCX. Please make sure the conversion service is running."
     },

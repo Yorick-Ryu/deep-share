@@ -17,6 +17,8 @@ function initDocxConverter() {
 
 // Function to handle the conversion process
 async function convertToDocx(message, sourceButton) {
+    let convertingNotificationId = null;
+    
     try {
         // Step 1: Find the correct copy button that's next to the clicked DOCX button
         let copyBtn;
@@ -40,6 +42,9 @@ async function convertToDocx(message, sourceButton) {
                 throw new Error('Copy button not found');
             }
         }
+        
+        // Show the converting notification
+        convertingNotificationId = window.showToastNotification(chrome.i18n.getMessage('docxConverting'), 'info', 30000); // 30s timeout as max
         
         // Click the copy button to copy content to clipboard
         copyBtn.click();
@@ -66,11 +71,22 @@ async function convertToDocx(message, sourceButton) {
             await convertToDocxViaApi(clipboardContent, settings.docxServerUrl);
         }
         
+        // Hide converting notification
+        if (convertingNotificationId !== null) {
+            window.dismissToastNotification(convertingNotificationId);
+        }
+        
         // Show success notification
         window.showToastNotification(chrome.i18n.getMessage('docxConversionSuccess'), 'success');
         
     } catch (error) {
         console.error('DOCX conversion failed:', error);
+        
+        // Hide converting notification
+        if (convertingNotificationId !== null) {
+            window.dismissToastNotification(convertingNotificationId);
+        }
+        
         window.showToastNotification(error.message, 'error');
     }
 }

@@ -3,8 +3,14 @@
  * Displays notifications using DeepSeek's native toast notification style
  */
 
+// Store notifications by ID to allow specific dismissals
+const activeToasts = new Map();
+let toastCounter = 0;
+
 // Function to show a toast notification in DeepSeek's native style
 function showToastNotification(message, type = 'success', duration = 2000) {
+    const toastId = ++toastCounter;
+    
     // Check if there's already an existing notification container
     let container = document.querySelector('.ds-toast-container');
     
@@ -32,6 +38,7 @@ function showToastNotification(message, type = 'success', duration = 2000) {
     // Create animation wrapper
     const animationWrapper = document.createElement('div');
     animationWrapper.className = 'ds-toast-animation';
+    animationWrapper.dataset.toastId = toastId;
     animationWrapper.style.cssText = `
         pointer-events: auto;
         margin: 0 auto;
@@ -57,9 +64,14 @@ function showToastNotification(message, type = 'success', duration = 2000) {
     `;
     
     // Add icon based on type
-    const iconSVG = type === 'success' 
-        ? '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 20 20"><g fill="none"><path d="M10 2a8 8 0 1 1 0 16a8 8 0 0 1 0-16zm3.358 5.646a.5.5 0 0 0-.637-.057l-.07.057L9 11.298L7.354 9.651l-.07-.058a.5.5 0 0 0-.695.696l.057.07l2 2l.07.057a.5.5 0 0 0 .568 0l.07-.058l4.004-4.004l.058-.07a.5.5 0 0 0-.058-.638z" fill="currentColor"></path></g></svg>'
-        : '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><g fill="none"><path d="M10 2a8 8 0 1 1 0 16a8 8 0 0 1 0-16zm0 1.5a6.5 6.5 0 1 0 0 13a6.5 6.5 0 0 0 0-13zM10 9a1 1 0 0 1 1 1v3a1 1 0 1 1-2 0v-3a1 1 0 0 1 1-1zm0-3a1 1 0 1 1 0 2a1 1 0 0 1 0-2z" fill="currentColor"></path></g></svg>';
+    let iconSVG;
+    if (type === 'success') {
+        iconSVG = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 20 20"><g fill="none"><path d="M10 2a8 8 0 1 1 0 16a8 8 0 0 1 0-16zm3.358 5.646a.5.5 0 0 0-.637-.057l-.07.057L9 11.298L7.354 9.651l-.07-.058a.5.5 0 0 0-.695.696l.057.07l2 2l.07.057a.5.5 0 0 0 .568 0l.07-.058l4.004-4.004l.058-.07a.5.5 0 0 0-.058-.638z" fill="currentColor"></path></g></svg>';
+    } else if (type === 'error') {
+        iconSVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><g fill="none"><path d="M10 2a8 8 0 1 1 0 16a8 8 0 0 1 0-16zm0 1.5a6.5 6.5 0 1 0 0 13a6.5 6.5 0 0 0 0-13zM10 9a1 1 0 0 1 1 1v3a1 1 0 1 1-2 0v-3a1 1 0 0 1 1-1zm0-3a1 1 0 1 1 0 2a1 1 0 0 1 0-2z" fill="currentColor"></path></g></svg>';
+    } else { // info type
+        iconSVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><g fill="none"><path d="M10 2a8 8 0 1 1 0 16a8 8 0 0 1 0-16zm0 1.5a6.5 6.5 0 1 0 0 13a6.5 6.5 0 0 0 0-13zM10 6a1 1 0 0 1 1 1v5a1 1 0 1 1-2 0V7a1 1 0 0 1 1-1zm0 9a1 1 0 1 1 0-2a1 1 0 0 1 0 2z" fill="currentColor"></path></g></svg>';
+    }
 
     // Create icon container
     const iconDiv = document.createElement('div');
@@ -71,7 +83,7 @@ function showToastNotification(message, type = 'success', duration = 2000) {
         width: 20px;
         height: 20px;
         flex-shrink: 0;
-        color: ${type === 'success' ? '#4caf50' : '#f44336'};
+        color: ${type === 'success' ? '#4caf50' : type === 'error' ? '#f44336' : '#2196f3'};
     `;
     iconDiv.innerHTML = iconSVG;
     
@@ -121,19 +133,10 @@ function showToastNotification(message, type = 'success', duration = 2000) {
         { duration: 300, fill: 'forwards', easing: 'ease-out' }
     );
     
-    // Handle close button click
-    closeDiv.addEventListener('click', () => {
-        removeToast();
-    });
-    
-    // Auto-remove after duration
-    const timeoutId = setTimeout(() => {
-        removeToast();
-    }, duration);
-    
     // Function to remove the toast with animation
     function removeToast() {
         clearTimeout(timeoutId);
+        activeToasts.delete(toastId);
         
         const fadeOutAnimation = animationWrapper.animate(
             [
@@ -156,7 +159,33 @@ function showToastNotification(message, type = 'success', duration = 2000) {
             }
         };
     }
+    
+    // Handle close button click
+    closeDiv.addEventListener('click', () => {
+        removeToast();
+    });
+    
+    // Store the removeToast function so we can call it programmatically
+    activeToasts.set(toastId, removeToast);
+    
+    // Auto-remove after duration (if not info type)
+    const timeoutId = setTimeout(() => {
+        removeToast();
+    }, duration);
+    
+    return toastId; // Return ID for programmatic dismissal
 }
 
-// Export the function for other scripts to use
+// Function to dismiss a specific notification by ID
+function dismissToastNotification(id) {
+    const removeToast = activeToasts.get(id);
+    if (removeToast) {
+        removeToast();
+        return true;
+    }
+    return false;
+}
+
+// Export the functions for other scripts to use
 window.showToastNotification = showToastNotification;
+window.dismissToastNotification = dismissToastNotification;
