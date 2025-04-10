@@ -268,7 +268,7 @@ main {
     width: 48px;
     height: 48px;
     stroke: var(--primary-color);
-    stroke-width: 2;
+    stroke-width: 1.6;
     fill: none;
     margin-bottom: 1rem;
 }
