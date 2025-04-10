@@ -1,7 +1,12 @@
 // Initialize and load settings
 document.addEventListener('DOMContentLoaded', () => {
+  // Check for action parameters in the URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const action = urlParams.get('action');
+  const highlightApiKey = action === 'apiKeyMissing';
+
   // Load saved settings
-  loadSettings();
+  loadSettings(highlightApiKey);
 
   // Set up tab switching
   setupTabs();
@@ -17,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Function to load saved settings
-function loadSettings() {
+function loadSettings(highlightApiKey = false) {
   chrome.storage.sync.get([
     'customWatermark', 
     'hideDefaultWatermark',
@@ -31,7 +36,9 @@ function loadSettings() {
     
     // DOCX conversion settings
     document.getElementById('docxServerUrl').value = data.docxServerUrl || 'https://api.ds.rick216.cn';
-    document.getElementById('docxApiKey').value = data.docxApiKey || '';
+    
+    const apiKeyInput = document.getElementById('docxApiKey');
+    apiKeyInput.value = data.docxApiKey || '';
     
     // Always set docx mode to API
     document.getElementById('modeApi').checked = true;
@@ -39,6 +46,26 @@ function loadSettings() {
     // If API key is set, check quota
     if (data.docxApiKey) {
       checkQuota();
+    }
+    
+    // If API key is missing and we should highlight it, add highlighting and focus
+    if (highlightApiKey || (!data.docxApiKey && highlightApiKey !== false)) {
+      // Add highlight class to API key input
+      apiKeyInput.classList.add('highlight-required');
+      
+      // Ensure the API key tab is active
+      document.querySelector('.tab-btn[data-tab="docx-tab"]').click();
+      
+      // Focus on API key input
+      setTimeout(() => {
+        apiKeyInput.focus();
+        
+        // Remove highlight when user starts typing
+        apiKeyInput.addEventListener('input', function onInput() {
+          apiKeyInput.classList.remove('highlight-required');
+          apiKeyInput.removeEventListener('input', onInput);
+        });
+      }, 100);
     }
   });
 }

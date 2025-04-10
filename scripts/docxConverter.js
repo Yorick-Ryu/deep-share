@@ -17,6 +17,34 @@ function initDocxConverter() {
 
 // Function to handle the conversion process
 async function convertToDocx(message, sourceButton) {
+    // Check for API key first
+    try {
+        const settings = await chrome.storage.sync.get({
+            docxServerUrl: 'https://api.ds.rick216.cn',
+            docxApiKey: '',
+            docxMode: 'api'
+        });
+        
+        // If no API key is set and using API mode, show notification and open popup
+        if (settings.docxMode === 'api' && (!settings.docxApiKey || settings.docxApiKey.trim() === '')) {
+            window.showToastNotification(
+                chrome.i18n.getMessage('apiKeyMissing') || '请购买或填写API-Key以使用文档转换功能', 
+                'error', 
+                5000
+            );
+            
+            // Try to open the extension popup
+            try {
+                chrome.runtime.sendMessage({ action: 'openPopup' });
+            } catch (err) {
+                console.log('Failed to send message to open popup:', err);
+            }
+            return;
+        }
+    } catch (error) {
+        console.error('Error checking API key:', error);
+    }
+
     let convertingNotificationId = null;
     
     try {

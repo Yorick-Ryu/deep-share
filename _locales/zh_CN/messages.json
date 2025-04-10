@@ -130,5 +130,8 @@
     },
     "apiKeyHint": {
         "message": "购买 API Key? <a href=\"../docs/purchase.html\" target=\"_blank\">点击此处</a>"
+    },
+    "apiKeyMissing": {
+        "message": "请购买或填写API-Key以使用文档转换功能"
     }
 }

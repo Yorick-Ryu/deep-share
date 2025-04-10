@@ -11,6 +11,7 @@
   --sidebar-bg: #f8f9fa;
   --tab-active-bg: #ffffff;
   --tab-hover-bg: #f0f2f5;
+  --error-color: #f44336;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -403,6 +404,24 @@ button:hover {
 .api-key-input-wrapper input[type="password"] {
   padding-right: 70px; /* Make room for both buttons */
   width: 100%;
+}
+
+/* Highlight style for API Key input when action required */
+.api-key-input-wrapper input.highlight-required {
+  border-color: var(--error-color);
+  box-shadow: 0 0 0 1px var(--error-color);
+  animation: pulse-border 1s infinite;
+}
+
+@keyframes pulse-border {
+  0%, 100% {
+    border-color: var(--error-color);
+    box-shadow: 0 0 0 1px var(--error-color);
+  }
+  50% {
+    border-color: #ff7875;
+    box-shadow: 0 0 0 2px rgba(244, 67, 54, 0.5);
+  }
 }
 
 /* Hide browser's default password reveal icon */

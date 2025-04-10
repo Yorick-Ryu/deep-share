@@ -130,5 +130,8 @@
     },
     "apiKeyHint": {
         "message": "Purchase API Key? <a href=\"../docs/purchase.html\" target=\"_blank\">Click here</a>"
+    },
+    "apiKeyMissing": {
+        "message": "Please purchase or enter an API Key to use the document conversion feature"
     }
 }
