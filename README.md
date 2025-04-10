@@ -10,16 +10,16 @@ A browser extension for sharing DeepSeek conversations, enabling users to save d
 
 ## Features
 
-- Open source, free, and ad-free
 - One-click capture of DeepSeek chat content
 - Support sharing as image or text
-- Quick export to Word document (DOCX)
+- One-click LaTeX formula copying (click on any math formula to copy its LaTeX code)
+- Quick export to Word document (DOCX) with formula formatting preserved
 - Customizable watermark
 - Selective message sharing
   - Select single or multiple messages
   - Quick select/unselect all messages
 - Clean and intuitive interface
-- One-click LaTeX formula copying (click on any math formula to copy its LaTeX code)
+- Open source and ad-free
 
 ## Installation
 
