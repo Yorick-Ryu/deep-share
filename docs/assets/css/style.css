@@ -108,9 +108,60 @@ nav {
     fill: currentColor;
 }
 
+/* Announcement Banner */
+.announcement-banner {
+    background: linear-gradient(90deg, rgba(77, 107, 254, 0.1) 0%, rgba(77, 107, 254, 0.2) 100%);
+    padding: 0.75rem;
+    text-align: center;
+    margin-top: 64px; /* Match the header height */
+}
+
+.announcement-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.announcement-text {
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.new-badge {
+    background-color: #FF6B6B;
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.announcement-button {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.announcement-button:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-2px);
+}
+
 /* Main Content */
 main {
-    margin-top: 64px;
+    margin-top: 0;
     padding: 2rem;
 }
 
@@ -359,6 +410,11 @@ footer {
     .nav-links {
         display: none;
     }
+
+    .announcement-content {
+        flex-direction: column;
+        padding: 0.5rem 0;
+    }
 }
 
 /* Carousel */
@@ -428,4 +484,10 @@ footer {
 
 .dot.active {
     background: white;
+}
+
+@media (prefers-color-scheme: dark) {
+    .announcement-banner {
+        background: linear-gradient(90deg, rgba(77, 107, 254, 0.2) 0%, rgba(77, 107, 254, 0.3) 100%);
+    }
 }
