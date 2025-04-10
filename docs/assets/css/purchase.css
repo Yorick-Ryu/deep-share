@@ -443,6 +443,14 @@ input[type="number"]::-webkit-outer-spin-button {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
+.wechat-id {
+    margin-top: 0.5rem;
+    text-align: center;
+    font-weight: 500;
+    font-size: 1rem;
+    color: #333;
+}
+
 .payment-note {
     margin: 1.5rem 0;
     font-size: 0.9rem;
@@ -503,6 +511,10 @@ input[type="number"]::-webkit-outer-spin-button {
     
     .payment-note {
         color: #aaa;
+    }
+    
+    .wechat-id {
+        color: #eee;
     }
 }
 

@@ -256,6 +256,7 @@ function showWeChatModal() {
             </div>
             <div class="wechat-qrcode">
                 <img src="./assets/images/wechat-code.jpg" alt="WeChat QR Code">
+                <p class="wechat-id">微信号：yorick_cn</p>
             </div>
             <p class="payment-note">完成付款后，我们将在24小时内向您的微信或邮箱发送 API Key</p>
             <button class="copy-again-btn">再次复制付款信息</button>
