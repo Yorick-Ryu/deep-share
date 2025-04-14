@@ -267,6 +267,7 @@ function checkQuota(forceRefresh = false) {
       document.getElementById('totalQuota').textContent = '...';
       document.getElementById('usedQuota').textContent = '...';
       document.getElementById('remainingQuota').textContent = '...';
+      document.getElementById('expirationDate').textContent = '...';
       quotaSection.style.display = 'block';
       
       const response = await fetch(`${serverUrl}/auth/quota`, {
@@ -287,6 +288,7 @@ function checkQuota(forceRefresh = false) {
         total: data.total_quota,
         used: data.used_quota,
         remaining: data.remaining_quota,
+        expiresAt: data.expires_at,
         lastChecked: now.toISOString()
       };
       
@@ -298,6 +300,7 @@ function checkQuota(forceRefresh = false) {
       document.getElementById('totalQuota').textContent = 'Error';
       document.getElementById('usedQuota').textContent = 'Error';
       document.getElementById('remainingQuota').textContent = 'Error';
+      document.getElementById('expirationDate').textContent = 'Error';
     }
   });
 }
@@ -311,6 +314,14 @@ function displayQuotaData(data) {
   document.getElementById('usedQuota').textContent = data.used;
   document.getElementById('remainingQuota').textContent = data.remaining;
   
+  // Format and display expiration date if available
+  if (data.expiresAt) {
+    const expirationDate = new Date(data.expiresAt);
+    document.getElementById('expirationDate').textContent = formatDate(expirationDate);
+  } else {
+    document.getElementById('expirationDate').textContent = '未知';
+  }
+  
   // Update progress bar to show remaining quota percentage instead of used
   const progressBar = document.getElementById('quotaProgress');
   const remainingPercentage = (data.remaining / data.total) * 100;
@@ -322,4 +333,12 @@ function displayQuotaData(data) {
   } else {
     progressBar.style.backgroundColor = '#4D6BFE';
   }
+}
+
+// Helper function to format date in a user-friendly way
+function formatDate(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}年${month}月${day}日`;
 }

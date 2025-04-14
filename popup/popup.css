@@ -492,3 +492,22 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
 .cards {
   display: none;
 }
+
+/* Expiration date display */
+.expiration-info {
+  display: flex;
+  justify-content: flex-start; /* Changed from center to flex-start */
+  align-items: center;
+  margin-top: 12px;
+  font-size: 12px;
+}
+
+.expiration-label {
+  color: var(--text-secondary);
+  margin-right: 5px;
+}
+
+.expiration-value {
+  color: var(--text-secondary);
+  font-weight: 500;
+}

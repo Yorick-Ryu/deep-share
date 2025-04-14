@@ -368,6 +368,15 @@ async function checkQuota() {
         document.getElementById('used-quota').textContent = data.used_quota;
         document.getElementById('remaining-quota').textContent = data.remaining_quota;
         
+        // Format and display expiration date
+        if (data.expires_at) {
+            const expirationDate = new Date(data.expires_at);
+            const formattedDate = formatDate(expirationDate);
+            document.getElementById('expiration-date').textContent = formattedDate;
+        } else {
+            document.getElementById('expiration-date').textContent = '未知';
+        }
+        
         // Calculate percentage of remaining quota (not used quota) and update progress bar
         const percentRemaining = (data.remaining_quota / data.total_quota) * 100;
         const progressBar = document.getElementById('quota-progress');
@@ -391,6 +400,14 @@ async function checkQuota() {
         checkBtn.textContent = originalText;
         checkBtn.disabled = false;
     }
+}
+
+// Helper function to format date in a user-friendly way
+function formatDate(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}年${month}月${day}日`;
 }
 
 // Function to load API key from Chrome storage

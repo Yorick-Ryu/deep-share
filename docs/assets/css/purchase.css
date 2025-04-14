@@ -609,6 +609,38 @@ input[type="number"]::-webkit-outer-spin-button {
     transition: width 0.6s ease;
 }
 
+/* Add styles for expiration date display */
+.quota-expiration {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.quota-expiration-label {
+    font-size: 0.9rem;
+    color: #666;
+    margin-right: 0.5rem;
+}
+
+.quota-expiration-value {
+    font-weight: 500;
+    color: #666;
+}
+
+/* Dark mode styles */
+@media (prefers-color-scheme: dark) {
+    .quota-expiration {
+        border-top-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .quota-expiration-label {
+        color: #aaa;
+    }
+}
+
 /* Dark mode styles for quota checker */
 @media (prefers-color-scheme: dark) {
     .quota-checker {
@@ -706,5 +738,89 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
     .toggle-visibility-btn:hover,
     .copy-api-key-btn:hover {
         color: #fff;
+    }
+}
+
+/* FAQ Section Styles */
+.faq-section {
+    background-color: #f5f8ff;
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    border-left: 4px solid #4D6BFE;
+}
+
+.faq-section h2 {
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+    font-size: 1.5rem;
+}
+
+.faq-card {
+    border-bottom: 1px solid rgba(77, 107, 254, 0.2);
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+}
+
+.faq-card:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.faq-question {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    font-size: 1.05rem;
+    color: var(--text-color);
+}
+
+.faq-answer {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+/* Dark mode styles for FAQ section */
+@media (prefers-color-scheme: dark) {
+    .faq-section {
+        background-color: #2a2d3a;
+    }
+    
+    .faq-card {
+        border-bottom-color: rgba(77, 107, 254, 0.3);
+    }
+}
+
+/* FAQ styles that work with the api-instructions class */
+.api-instructions .faq-card {
+    border-bottom: 1px solid rgba(77, 107, 254, 0.2);
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+}
+
+.api-instructions .faq-card:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.api-instructions .faq-question {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    font-size: 1.05rem;
+    color: var(--text-color);
+}
+
+.api-instructions .faq-answer {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+    .api-instructions .faq-card {
+        border-bottom-color: rgba(77, 107, 254, 0.3);
     }
 }
