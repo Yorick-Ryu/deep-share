@@ -16,6 +16,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Set up other UI elements
   setupUIElements();
+  
+  // Set up manual markdown conversion functionality
+  setupManualConversion();
 
   // Set all i18n text
   loadI18nText();
@@ -341,4 +344,151 @@ function formatDate(date) {
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
   return `${year}年${month}月${day}日`;
+}
+
+// Function to set up manual markdown conversion
+function setupManualConversion() {
+  const convertBtn = document.getElementById('convertMarkdownBtn');
+  const clearBtn = document.getElementById('clearMarkdownBtn');
+  const markdownInput = document.getElementById('markdownInput');
+  
+  // Store the original button content
+  const originalButtonHTML = convertBtn.innerHTML;
+  
+  // Convert button click handler
+  convertBtn.addEventListener('click', async () => {
+    const markdownText = markdownInput.value.trim();
+    
+    // Validate input
+    if (!markdownText) {
+      alert(chrome.i18n.getMessage('emptyMarkdownError') || '请输入Markdown文本');
+      return;
+    }
+    
+    // Check API key
+    const settings = await chrome.storage.sync.get({
+      docxServerUrl: 'https://api.ds.rick216.cn',
+      docxApiKey: '',
+      docxMode: 'api'
+    });
+    
+    // Check if API key is provided
+    if (!settings.docxApiKey || settings.docxApiKey.trim() === '') {
+      alert(chrome.i18n.getMessage('apiKeyMissing') || '请购买或填写API-Key以使用文档转换功能');
+      document.getElementById('docxApiKey').focus();
+      document.getElementById('docxApiKey').classList.add('highlight-required');
+      return;
+    }
+    
+    try {
+      // Show loading state on the button itself
+      convertBtn.disabled = true;
+      convertBtn.innerHTML = `
+        <div class="button-spinner"></div>
+        <span>${chrome.i18n.getMessage('docxConverting') || '正在转换...'}</span>
+      `;
+      
+      // Call the conversion function with markdown text
+      await convertMarkdownToDocx(markdownText, settings.docxServerUrl, settings.docxApiKey);
+      
+      // Update button to show success message briefly
+      convertBtn.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;">
+          <path d="M20 6L9 17l-5-5"/>
+        </svg>
+        <span>${chrome.i18n.getMessage('docxConversionSuccess') || '转换成功!'}</span>
+      `;
+      
+      // After a timeout, restore the original button
+      setTimeout(() => {
+        convertBtn.disabled = false;
+        convertBtn.innerHTML = originalButtonHTML;
+      }, 2000);
+      
+      // Refresh quota after conversion
+      checkQuota(true);
+      
+    } catch (error) {
+      // Show error message on button
+      console.error('Conversion error:', error);
+      convertBtn.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="15" y1="9" x2="9" y2="15"></line>
+          <line x1="9" y1="9" x2="15" y2="15"></line>
+        </svg>
+        <span>${error.message || '转换失败'}</span>
+      `;
+      
+      // After a timeout, restore the original button
+      setTimeout(() => {
+        convertBtn.disabled = false;
+        convertBtn.innerHTML = originalButtonHTML;
+      }, 3000);
+    }
+  });
+  
+  // Clear button click handler
+  clearBtn.addEventListener('click', () => {
+    markdownInput.value = '';
+  });
+}
+
+// Function to convert markdown text to DOCX
+async function convertMarkdownToDocx(markdownText, serverUrl, apiKey) {
+  try {
+    const url = serverUrl || 'https://api.ds.rick216.cn';
+    
+    // Generate filename based on content
+    const firstLine = markdownText.split('\n')[0] || '';
+    let filename = firstLine.trim().substring(0, 10).replace(/[^a-zA-Z0-9_\u4e00-\u9fa5]/g, '') || 'document';
+    
+    // Add China timezone timestamp
+    const now = new Date();
+    const options = { 
+      timeZone: 'Asia/Shanghai',
+      year: 'numeric', month: '2-digit', day: '2-digit',
+      hour: '2-digit', minute: '2-digit', second: '2-digit',
+      hour12: false
+    };
+    const timestamp = now.toLocaleString('zh-CN', options)
+      .replace(/[\/\s:]/g, '-')
+      .replace(',', '');
+    
+    filename = `${filename}_${timestamp}`;
+    
+    // Call the conversion API
+    const response = await fetch(`${url}/convert-text`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-API-Key': apiKey
+      },
+      body: JSON.stringify({
+        content: markdownText,
+        filename: filename
+      })
+    });
+    
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`API错误: ${response.status} ${errorText}`);
+    }
+    
+    // Download the file
+    const blob = await response.blob();
+    const downloadUrl = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = downloadUrl;
+    link.download = `${filename}.docx`;
+    link.click();
+    
+    // Clean up
+    URL.revokeObjectURL(downloadUrl);
+    
+    return true;
+  } catch (error) {
+    console.error('Error in convertMarkdownToDocx:', error);
+    throw error;
+  }
 }

@@ -122,7 +122,6 @@
                 <span class="quota-value quota-remaining" id="remainingQuota">--</span>
               </div>
             </div>
-
           </div>
           <div class="quota-progress-container">
             <div class="quota-progress" id="quotaProgress"></div>
@@ -134,6 +133,28 @@
           <div class="quota-actions">
             <button id="refreshQuota" class="secondary-btn">刷新</button>
             <a href="https://ds.rick216.cn/purchase.html" target="_blank" class="purchase-link">购买次数</a>
+          </div>
+        </div>
+        
+        <!-- Manual Markdown Conversion section -->
+        <div class="manual-conversion-section" id="manualConversionSection">
+          <h3 id="manualConversionTitle">手动转换</h3>
+          <div class="form-group">
+            <label for="markdownInput" id="markdownInputLabel">Markdown 文本</label>
+            <textarea id="markdownInput" placeholder="在此粘贴 Markdown 格式文本..." rows="6"></textarea>
+          </div>
+          <div class="form-actions">
+            <button id="convertMarkdownBtn" class="primary-btn">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;">
+                <path d="M14 3v4a1 1 0 0 0 1 1h4"></path>
+                <path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2z"></path>
+                <line x1="9" y1="9" x2="10" y2="9"></line>
+                <line x1="9" y1="13" x2="15" y2="13"></line>
+                <line x1="9" y1="17" x2="15" y2="17"></line>
+              </svg>
+              转换为文档
+            </button>
+            <button id="clearMarkdownBtn" class="secondary-btn">清空</button>
           </div>
         </div>
       </div>
