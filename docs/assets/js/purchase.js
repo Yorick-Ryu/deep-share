@@ -84,6 +84,9 @@ function initThemeSystem() {
     }
 }
 
+// Set up global API base URL
+const baseUrl = 'https://api.ds.rick216.cn';
+
 // Initialize purchase form elements and event handlers
 function initPurchaseForm() {
     const customAmountContainer = document.getElementById('custom-amount-container');
@@ -120,7 +123,8 @@ function initPurchaseForm() {
     const purchaseBtn = document.querySelector('.purchase-btn');
     if (purchaseBtn) {
         purchaseBtn.addEventListener('click', () => {
-            const email = document.getElementById('email').value;
+            const emailInput = document.getElementById('email');
+            const email = emailInput.value.trim();
             const selectedOption = document.querySelector('.amount-option.selected');
             let amount;
             
@@ -140,8 +144,16 @@ function initPurchaseForm() {
                 amount = selectedOption.getAttribute('data-value');
             }
             
+            // Validate email format
             if (!email) {
                 alert('请填写您的邮箱地址');
+                emailInput.focus();
+                return;
+            }
+            
+            if (!isValidEmail(email)) {
+                alert('请输入有效的邮箱地址');
+                emailInput.focus();
                 return;
             }
             
@@ -155,6 +167,12 @@ function initPurchaseForm() {
     if (checkQuotaBtn) {
         checkQuotaBtn.addEventListener('click', checkQuota);
     }
+}
+
+// Function to validate email format
+function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
 }
 
 // Calculate and display custom amount details
@@ -188,78 +206,122 @@ function updateCustomAmountDetails() {
     }
 }
 
-// Process payment by generating text, copying to clipboard and showing WeChat instructions
-function processPayment(email, amount) {
-    // Calculate conversions and bonus
+// Process payment by creating an order through the API and showing the payment modal
+async function processPayment(email, amount) {
+    // Calculate conversions and bonus (still needed for display)
     const conversions = amount * 5;
     let bonus = 0;
     if (amount >= 5) {
         bonus = Math.min(amount, 200) * 5;
     }
     
-    // Generate payment information text
-    const paymentText = `DeepShare充值申请：
-金额: ${amount}元
-邮箱: ${email}
-可获得: ${conversions}次转换${bonus > 0 ? '\n赠送: ' + bonus + '次转换' : ''}
-总计: ${conversions + bonus}次转换`;
+    // Show loading state on the purchase button
+    const purchaseBtn = document.querySelector('.purchase-btn');
+    const originalBtnText = purchaseBtn.textContent;
+    purchaseBtn.textContent = '处理中...';
+    purchaseBtn.disabled = true;
     
-    // Copy to clipboard
-    copyToClipboard(paymentText);
-    
-    // Show WeChat payment modal
-    showWeChatModal();
+    try {
+        // Create the payment order via API
+        const response = await fetch(`${baseUrl}/payments/guest-create`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: email,
+                amount: parseFloat(amount),
+                payment_method: 'alipay',
+                return_url: window.location.href
+            })
+        });
+        
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.detail || '创建订单失败，请稍后重试');
+        }
+        
+        const orderData = await response.json();
+        
+        // Show the Alipay payment modal with the QR code
+        showPaymentModal(orderData, email, amount, conversions, bonus);
+        
+    } catch (error) {
+        alert('支付处理出错: ' + error.message);
+    } finally {
+        // Reset button state
+        purchaseBtn.textContent = originalBtnText;
+        purchaseBtn.disabled = false;
+    }
 }
 
-// Copy text to clipboard
-function copyToClipboard(text) {
-    // Create a temporary textarea element
-    const textarea = document.createElement('textarea');
-    textarea.value = text;
-    textarea.setAttribute('readonly', '');
-    textarea.style.position = 'absolute';
-    textarea.style.left = '-9999px';
-    document.body.appendChild(textarea);
-    
-    // Select and copy the text
-    textarea.select();
-    document.execCommand('copy');
-    
-    // Remove the temporary element
-    document.body.removeChild(textarea);
-}
-
-// Show WeChat payment modal with instructions
-function showWeChatModal() {
+// Show Alipay payment modal with QR code
+function showPaymentModal(orderData, email, amount, conversions, bonus) {
     // Create modal container
     const modal = document.createElement('div');
     modal.className = 'payment-modal';
     
-    // Create modal content
+    // Detect if user is on mobile
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    
+    // If on mobile and have payment_url, we can redirect directly
+    if (isMobile && orderData.payment_url) {
+        // Store the order info in localStorage so we can check status if user returns to page
+        localStorage.setItem('pendingOrder', JSON.stringify({
+            order_no: orderData.order_no,
+            api_key: orderData.api_key,
+            amount: amount,
+            conversions: conversions,
+            bonus: bonus,
+            total: conversions + bonus,
+            email: email,
+            timestamp: new Date().getTime()
+        }));
+        
+        // Redirect to payment URL after a short delay
+        setTimeout(() => {
+            window.location.href = orderData.payment_url;
+        }, 500);
+        
+        return;
+    }
+    
+    // Create modal content for QR code payment - optimized more compact layout with single column
     modal.innerHTML = `
         <div class="payment-modal-content">
             <span class="close-modal">&times;</span>
-            <h2>请通过微信支付</h2>
-            <div class="payment-steps">
-                <div class="payment-step">
-                    <div class="step-number">1</div>
-                    <p>付款信息已复制到剪贴板</p>
+            <div class="payment-header">
+                <img src="assets/images/alipay.svg" alt="支付宝" class="alipay-logo">
+                <h2>支付宝扫码付款</h2>
+            </div>
+            
+            <div class="payment-container-single">
+                <div class="alipay-qrcode-large">
+                    <img src="${orderData.qr_img}" alt="支付宝支付二维码">
+                    <div class="payment-status-wrapper">
+                        <div class="payment-progress-spinner"></div>
+                        <p class="payment-status">等待支付中...</p>
+                    </div>
                 </div>
-                <div class="payment-step">
-                    <div class="step-number">2</div>
-                    <p>扫描下方二维码添加客服微信</p>
+                
+                <div class="order-summary">
+                    <div class="order-detail"><span>DeepShare 转换次数</span></div>
+                    <div class="order-detail"><span>金额:</span><span>¥${amount}</span></div>
+                    <div class="order-detail"><span>基础:</span><span>${conversions} 次</span></div>
+                    ${bonus > 0 ? `<div class="order-detail bonus"><span>赠送:</span><span>${bonus} 次</span></div>` : ''}
+                    <div class="order-detail total"><span>总计:</span><span>${conversions + bonus} 次</span></div>
                 </div>
-                <div class="payment-step">
-                    <div class="step-number">3</div>
-                    <p>将复制的文本粘贴给客服，完成付款</p>
+                
+                ${isMobile && orderData.payment_url ? `
+                    <a href="${orderData.payment_url}" target="_blank" class="open-alipay-btn">
+                        打开支付宝付款
+                    </a>
+                ` : ''}
+                
+                <div class="order-id">
+                    <span>订单号: ${orderData.order_no}</span>
                 </div>
             </div>
-            <div class="wechat-qrcode">
-                <img src="./assets/images/wechat-code.jpg" alt="WeChat QR Code">
-                <p class="wechat-id">微信号：yorick_cn</p>
-            </div>
-            <p class="payment-note">完成付款后，我们将在24小时内向您的微信或邮箱发送 API Key</p>
-            <button class="copy-again-btn">再次复制付款信息</button>
         </div>
     `;
     
@@ -274,55 +336,271 @@ function showWeChatModal() {
     // Close button functionality
     const closeBtn = modal.querySelector('.close-modal');
     closeBtn.addEventListener('click', () => {
-        closeModal(modal);
-    });
-    
-    // "Copy again" button functionality
-    const copyAgainBtn = modal.querySelector('.copy-again-btn');
-    copyAgainBtn.addEventListener('click', () => {
-        const email = document.getElementById('email').value;
-        const selectedOption = document.querySelector('.amount-option.selected');
-        let amount;
-        
-        if (selectedOption.getAttribute('data-value') === 'custom') {
-            amount = document.getElementById('custom-amount').value;
-            amount = parseInt(amount);
-        } else {
-            amount = selectedOption.getAttribute('data-value');
+        // Confirm before closing if payment hasn't been confirmed
+        if (confirm('确定要关闭支付页面吗？')) {
+            closeModal(modal);
         }
-        
-        // Recalculate and copy the payment information
-        const conversions = amount * 5;
-        let bonus = 0;
-        if (amount >= 5) {
-            bonus = Math.min(amount, 200) * 5;
-        }
-        
-        const paymentText = `DeepShare充值申请：
-金额: ${amount}元
-邮箱: ${email}
-可获得: ${conversions}次转换${bonus > 0 ? '\n赠送: ' + bonus + '次转换' : ''}
-总计: ${conversions + bonus}次转换`;
-        
-        copyToClipboard(paymentText);
-        
-        // Show confirmation
-        const confirmCopy = document.createElement('div');
-        confirmCopy.className = 'copy-confirmation';
-        confirmCopy.textContent = '已复制!';
-        copyAgainBtn.appendChild(confirmCopy);
-        
-        setTimeout(() => {
-            confirmCopy.remove();
-        }, 2000);
     });
     
     // Close if clicking outside the modal content
     modal.addEventListener('click', (e) => {
         if (e.target === modal) {
-            closeModal(modal);
+            // Same confirmation as close button
+            if (confirm('确定要关闭支付页面吗？')) {
+                closeModal(modal);
+            }
         }
     });
+    
+    // Start polling for payment status
+    pollPaymentStatus(orderData.order_no, orderData.api_key, modal);
+}
+
+// Poll the API for payment status
+function pollPaymentStatus(orderNo, apiKey, modal) {
+    let pollCount = 0;
+    const maxPolls = 120; // Poll for maximum 10 minutes (120 * 5 seconds)
+    const pollInterval = 5000; // Poll every 5 seconds
+    
+    const checkStatus = async () => {
+        try {
+            const response = await fetch(`${baseUrl}/payments/status/${orderNo}`, {
+                method: 'GET',
+                headers: {
+                    'X-API-Key': apiKey
+                }
+            });
+            
+            if (!response.ok) {
+                throw new Error('获取支付状态失败');
+            }
+            
+            const data = await response.json();
+            
+            // If payment was successful
+            if (data.status === 'success') {
+                // Update UI to show success
+                const statusElement = modal.querySelector('.payment-status');
+                const spinnerElement = modal.querySelector('.payment-progress-spinner');
+                
+                if (statusElement) {
+                    statusElement.textContent = '支付成功！';
+                    statusElement.classList.add('success');
+                }
+                
+                if (spinnerElement) {
+                    spinnerElement.style.display = 'none';
+                }
+                
+                // Replace modal content with success information
+                setTimeout(() => {
+                    showSuccessInformation(modal, apiKey, data);
+                }, 1500);
+                
+                return;
+            }
+            
+            // If payment failed
+            if (data.status === 'failed') {
+                const statusElement = modal.querySelector('.payment-status');
+                const spinnerElement = modal.querySelector('.payment-progress-spinner');
+                
+                if (statusElement) {
+                    statusElement.textContent = '支付失败';
+                    statusElement.classList.add('error');
+                }
+                
+                if (spinnerElement) {
+                    spinnerElement.style.display = 'none';
+                }
+                
+                return;
+            }
+            
+            // Continue polling if still pending
+            if (data.status === 'pending') {
+                pollCount++;
+                
+                if (pollCount < maxPolls) {
+                    setTimeout(checkStatus, pollInterval);
+                } else {
+                    // Stop polling after max attempts
+                    const statusElement = modal.querySelector('.payment-status');
+                    if (statusElement) {
+                        statusElement.textContent = '等待支付超时，请稍后查询订单状态';
+                    }
+                }
+            }
+            
+        } catch (error) {
+            console.error('Error checking payment status:', error);
+            pollCount++;
+            
+            // Continue polling even with errors, within limits
+            if (pollCount < maxPolls) {
+                setTimeout(checkStatus, pollInterval);
+            }
+        }
+    };
+    
+    // Start the polling
+    checkStatus();
+}
+
+// Show success information after payment
+function showSuccessInformation(modal, apiKey, paymentData) {
+    const modalContent = modal.querySelector('.payment-modal-content');
+    
+    if (modalContent) {
+        modalContent.innerHTML = `
+            <span class="close-modal">&times;</span>
+            <div class="success-container">
+                <div class="success-header">
+                    <div class="success-icon">✓</div>
+                    <h2>支付成功</h2>
+                </div>
+                
+                <div class="success-content">
+                    <div class="api-key-section">
+                        <h3>您的 API Key</h3>
+                        <p class="api-key-instruction">请妥善保存您的 API Key，推荐下载到本地</p>
+                        <div class="api-key-display-wrapper">
+                            <input type="text" id="success-api-key" value="${apiKey}" readonly>
+                            <button type="button" class="copy-api-key-btn" id="copySuccessApiKey" title="复制">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                            </button>
+                            <button type="button" class="download-api-key-btn" id="downloadSuccessApiKey" title="下载">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                    <polyline points="7 10 12 15 17 10"></polyline>
+                                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="quota-summary-compact">
+                        <div class="quota-stat-row">
+                            <span class="quota-label">总计次数:</span>
+                            <span class="quota-value">${paymentData.quota + paymentData.gift_quota}</span>
+                        </div>
+                        <div class="quota-stat-row">
+                            <span class="quota-label">基础次数:</span>
+                            <span class="quota-value">${paymentData.quota}</span>
+                        </div>
+                        <div class="quota-stat-row">
+                            <span class="quota-label">赠送次数:</span>
+                            <span class="quota-value highlight">${paymentData.gift_quota}</span>
+                        </div>
+                    </div>
+
+                    <div class="usage-instructions">
+                        <h3 class="usage-title">如何使用？</h3>
+                        <ol class="usage-steps">
+                            <li>在浏览器中点击 DeepShare 扩展图标 <img src="assets/images/deepshare-icon.svg" alt="DeepShare Icon" class="inline-icon"></li>
+                            <li>填入您收到的 API Key</li>
+                            <li>遇到问题请联系客服，微信：yorick_cn</li>
+                        </ol>
+                    </div>
+                </div>
+                
+                <button class="success-close-btn">关闭窗口</button>
+            </div>
+        `;
+        
+        // Set up event listeners for the new elements
+        const closeBtn = modalContent.querySelector('.close-modal');
+        const successCloseBtn = modalContent.querySelector('.success-close-btn');
+        const apiKeyInput = modalContent.querySelector('#success-api-key');
+        const copyApiKeyBtn = modalContent.querySelector('#copySuccessApiKey');
+        const downloadApiKeyBtn = modalContent.querySelector('#downloadSuccessApiKey');
+        
+        // Close button functionality
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => {
+                closeModal(modal);
+            });
+        }
+        
+        // Success close button functionality
+        if (successCloseBtn) {
+            successCloseBtn.addEventListener('click', () => {
+                closeModal(modal);
+                
+                // After closing, populate the API key in the quota checker field
+                const checkApiKeyInput = document.getElementById('check-api-key');
+                if (checkApiKeyInput) {
+                    checkApiKeyInput.value = apiKey;
+                    // Scroll to the quota checker section
+                    const quotaChecker = document.querySelector('.quota-checker');
+                    if (quotaChecker) {
+                        quotaChecker.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
+            });
+        }
+        
+        // Copy API key button functionality
+        if (copyApiKeyBtn && apiKeyInput) {
+            copyApiKeyBtn.addEventListener('click', () => {
+                // Copy to clipboard
+                navigator.clipboard.writeText(apiKey).then(() => {
+                    // Show success tooltip
+                    const tooltip = document.createElement('span');
+                    tooltip.className = 'copy-tooltip';
+                    tooltip.textContent = '已复制!';
+                    tooltip.style.opacity = '1';
+                    copyApiKeyBtn.appendChild(tooltip);
+                    
+                    // Remove tooltip after animation completes
+                    setTimeout(() => {
+                        if (tooltip.parentNode === copyApiKeyBtn) {
+                            copyApiKeyBtn.removeChild(tooltip);
+                        }
+                    }, 1500);
+                });
+            });
+        }
+        
+        // Download API key button functionality
+        if (downloadApiKeyBtn && apiKeyInput) {
+            downloadApiKeyBtn.addEventListener('click', () => {
+                // Create a text file with the API key
+                const blob = new Blob([apiKey], {type: 'text/plain'});
+                const url = URL.createObjectURL(blob);
+                
+                // Create temporary link and trigger download
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'deepshare_api_key.txt';
+                document.body.appendChild(a);
+                a.click();
+                
+                // Clean up
+                setTimeout(() => {
+                    document.body.removeChild(a);
+                    window.URL.revokeObjectURL(url);
+                    
+                    // Show success tooltip
+                    const tooltip = document.createElement('span');
+                    tooltip.className = 'copy-tooltip';
+                    tooltip.textContent = '已下载!';
+                    tooltip.style.opacity = '1';
+                    downloadApiKeyBtn.appendChild(tooltip);
+                    
+                    // Remove tooltip after animation completes
+                    setTimeout(() => {
+                        if (tooltip.parentNode === downloadApiKeyBtn) {
+                            downloadApiKeyBtn.removeChild(tooltip);
+                        }
+                    }, 1500);
+                }, 100);
+            });
+        }
+    }
 }
 
 // Close modal with animation
@@ -331,6 +609,38 @@ function closeModal(modal) {
     setTimeout(() => {
         document.body.removeChild(modal);
     }, 300);
+}
+
+// Copy text to clipboard using newer Clipboard API if available, with fallback
+function copyToClipboard(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text)
+            .catch(err => {
+                console.error('Failed to copy text: ', err);
+                fallbackCopyToClipboard(text);
+            });
+    } else {
+        fallbackCopyToClipboard(text);
+    }
+}
+
+// Fallback method for copying to clipboard
+function fallbackCopyToClipboard(text) {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.setAttribute('readonly', '');
+    textarea.style.position = 'absolute';
+    textarea.style.left = '-9999px';
+    document.body.appendChild(textarea);
+    
+    try {
+        textarea.select();
+        document.execCommand('copy');
+    } catch (err) {
+        console.error('Fallback clipboard copy failed: ', err);
+    }
+    
+    document.body.removeChild(textarea);
 }
 
 // Function to check API quota
@@ -350,7 +660,7 @@ async function checkQuota() {
     checkBtn.disabled = true;
     
     try {
-        const response = await fetch('https://api.ds.rick216.cn/auth/quota', {
+        const response = await fetch(`${baseUrl}/auth/quota`, {
             method: 'GET',
             headers: {
                 'X-API-Key': apiKey

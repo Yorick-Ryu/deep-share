@@ -824,3 +824,817 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
         border-bottom-color: rgba(77, 107, 254, 0.3);
     }
 }
+
+/* Alipay Payment Modal Styles */
+.alipay-qrcode {
+    margin: 2rem auto;
+    max-width: 200px;
+    text-align: center;
+}
+
+.alipay-qrcode img {
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.payment-status {
+    font-size: 1rem;
+    font-weight: 500;
+    margin-top: 1rem;
+    color: #666;
+}
+
+.payment-status.success {
+    color: #4CAF50;
+}
+
+.payment-status.error {
+    color: #FF5252;
+}
+
+.payment-progress-spinner {
+    margin: 1rem auto;
+    width: 30px;
+    height: 30px;
+    border: 3px solid rgba(77, 107, 254, 0.3);
+    border-top-color: #4D6BFE;
+    border-radius: 50%;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.order-summary {
+    margin: 1.5rem auto;
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    padding: 1.5rem;
+    max-width: 300px;
+    text-align: left;
+}
+
+.order-detail {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+    width: 100%;
+}
+
+.order-detail span:first-child {
+    text-align: left;
+}
+
+.order-detail span:last-child {
+    text-align: right;
+}
+
+.order-detail.total {
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid #ddd;
+    font-weight: bold;
+}
+
+.order-id {
+    margin-top: 1.5rem;
+    font-size: 0.85rem;
+    color: #888;
+}
+
+.open-alipay-btn {
+    display: inline-block;
+    background-color: #00a0e9; /* Alipay blue color */
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    text-decoration: none;
+    margin: 1rem 0;
+    transition: all 0.2s ease;
+}
+
+.open-alipay-btn:hover {
+    background-color: #0092d2;
+}
+
+/* Success screen after payment */
+.success-icon {
+    width: 64px;
+    height: 64px;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    margin: 0 auto 1rem auto;
+}
+
+.api-key-section {
+    margin: 1.5rem 0;
+    padding: 1rem;
+    border-radius: 8px;
+    background-color: #f8f8f8;
+}
+
+.api-key-display-wrapper {
+    position: relative;
+    display: flex;
+    margin: 1rem 0;
+}
+
+.api-key-display-wrapper input {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-family: monospace;
+    letter-spacing: 1px;
+}
+
+.api-key-instruction {
+    font-size: 0.9rem;
+    color: #666;
+    margin-top: 0.5rem;
+}
+
+.quota-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    margin: 1rem 0;
+}
+
+.quota-stat-item {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+    min-width: 100px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.quota-stat-label {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 0.5rem;
+}
+
+.quota-stat-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.quota-stat-value.highlight {
+    color: #FF6B6B;
+}
+
+.success-close-btn {
+    background: #4D6BFE;
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.2s ease;
+    margin-top: 1.5rem;
+}
+
+.success-close-btn:hover {
+    background: #3D5BEE;
+}
+
+.next-steps {
+    text-align: left;
+    margin: 1.5rem 0;
+    padding: 1rem;
+    background-color: #f0f4ff;
+    border-radius: 8px;
+}
+
+.next-steps h3 {
+    margin-bottom: 0.8rem;
+}
+
+.next-steps ol {
+    margin-left: 1.5rem;
+    padding: 0;
+}
+
+.next-steps li {
+    margin-bottom: 0.5rem;
+}
+
+/* Dark mode adjustments for Alipay payment modal */
+@media (prefers-color-scheme: dark) {
+    .order-summary {
+        background-color: #333;
+    }
+    
+    .order-detail.total {
+        border-top-color: #555;
+    }
+    
+    .api-key-section {
+        background-color: #333;
+    }
+    
+    .api-key-display-wrapper input {
+        background-color: #2d2d2d;
+        border-color: #444;
+        color: #fff;
+    }
+    
+    .quota-stat-item {
+        background-color: #2d2d2d;
+    }
+    
+    .api-key-instruction,
+    .payment-status {
+        color: #aaa;
+    }
+    
+    .next-steps {
+        background-color: #2a2d3a;
+    }
+}
+
+/* Optimized payment modal layout */
+.payment-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 100%;
+}
+
+.payment-qrcode-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.payment-info-area {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.payment-steps-compact {
+    padding: 0;
+    margin: 0 0 0 1.5rem;
+}
+
+.payment-steps-compact li {
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.payment-instructions {
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    padding: 0.8rem 1rem;
+}
+
+/* Desktop layout - side by side */
+@media (min-width: 640px) {
+    .payment-container {
+        flex-direction: row;
+        align-items: flex-start;
+    }
+    
+    .payment-qrcode-area {
+        width: 40%;
+        padding-right: 1rem;
+        border-right: 1px solid #eee;
+    }
+    
+    .payment-info-area {
+        width: 60%;
+        padding-left: 1rem;
+    }
+    
+    .payment-modal-content {
+        max-width: 600px;
+    }
+    
+    .order-summary {
+        margin-top: 0;
+    }
+}
+
+/* Dark mode adjustments for optimized modal */
+@media (prefers-color-scheme: dark) {
+    .payment-instructions {
+        background-color: #333;
+    }
+    
+    @media (min-width: 640px) {
+        .payment-qrcode-area {
+            border-right-color: #444;
+        }
+    }
+}
+
+/* Optimized success modal layout */
+.success-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.success-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.success-header h2 {
+    margin-top: 0.5rem;
+    margin-bottom: 0;
+}
+
+.success-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem; /* 减小gap从1rem到0.8rem */
+    margin-top: 0.5rem; /* 减小上边距 */
+}
+
+.quota-summary-compact {
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+.quota-stat-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+    padding: 0.25rem 0;
+}
+
+.quota-stat-row:last-child {
+    margin-bottom: 0;
+}
+
+.quota-label {
+    font-weight: 500;
+    color: #666;
+}
+
+.quota-value {
+    font-weight: 600;
+}
+
+.quota-value.highlight {
+    color: #FF6B6B;
+}
+
+.next-steps-compact {
+    background-color: #f0f4ff;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 0;
+}
+
+.next-steps-compact h4 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+}
+
+.next-steps-compact ol {
+    margin: 0.5rem 0 0 1.5rem;
+    padding: 0;
+}
+
+.next-steps-compact li {
+    margin-bottom: 0.25rem;
+    font-size: 0.9rem;
+}
+
+.next-steps-compact li:last-child {
+    margin-bottom: 0;
+}
+
+.next-steps-compact code {
+    font-size: 0.85rem;
+    padding: 0.15rem 0.3rem;
+}
+
+/* Dark mode adjustments for success modal */
+@media (prefers-color-scheme: dark) {
+    .quota-summary-compact {
+        background-color: #333;
+    }
+    
+    .quota-label {
+        color: #aaa;
+    }
+    
+    .next-steps-compact {
+        background-color: #2a2d3a;
+    }
+}
+
+/* Modified Payment Modal Styles */
+.payment-modal-content {
+    max-width: 400px; /* Reduced from 500px to 400px for a slimmer modal */
+}
+
+.payment-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    gap: 0.5rem;
+}
+
+.alipay-logo {
+    width: 36px;
+    height: 36px;
+}
+
+.payment-header h2 {
+    margin: 0;
+    font-size: 1.6rem;
+}
+
+.payment-container-single {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem; /* Reduced gap from 1.5rem to 1rem */
+}
+
+.alipay-qrcode-large {
+    width: 220px; /* Slightly smaller QR code that fits better in the narrower modal */
+    margin: 0 auto;
+    text-align: center;
+}
+
+.alipay-qrcode-large img {
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.payment-status-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 0.8rem; /* Reduced from 1rem */
+    gap: 0.8rem;
+}
+
+.payment-progress-spinner {
+    margin: 0;
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(77, 107, 254, 0.3);
+    border-top-color: #4D6BFE;
+    border-radius: 50%;
+    animation: spin 1s ease-in-out infinite;
+}
+
+.payment-status {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #666;
+}
+
+.order-summary {
+    margin: 0.5rem auto; /* Reduced top/bottom margin from 1.5rem to 0.5rem */
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    padding: 1rem;
+    width: 220px; /* Make it the same width as the QR code */
+    text-align: left;
+}
+
+.order-id {
+    margin-top: 0.5rem; /* Reduced from 1.5rem to 0.5rem */
+    font-size: 0.85rem;
+    color: #888;
+}
+
+/* Dark mode adjustments for modified payment modal */
+@media (prefers-color-scheme: dark) {
+    .payment-status {
+        color: #aaa;
+    }
+}
+
+/* API key display and button styles */
+.api-key-display-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-top: 0.5rem;
+}
+
+.api-key-instruction {
+    font-size: 0.9rem;
+    color: #666;
+    margin: 0.3rem 0 0 0;
+}
+
+.api-key-display-wrapper input {
+    padding-right: 70px; /* Make room for both buttons */
+    width: 100%;
+    font-family: monospace;
+}
+
+.copy-api-key-btn,
+.download-api-key-btn {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #666;
+    padding: 4px;
+    height: 32px;
+    width: 32px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.copy-api-key-btn:hover,
+.download-api-key-btn:hover {
+    background: rgba(77, 107, 254, 0.1);
+    color: #4D6BFE;
+}
+
+.copy-api-key-btn {
+    right: 4px;
+}
+
+.download-api-key-btn {
+    right: 38px;
+}
+
+/* 使用说明样式 */
+.usage-instructions {
+    margin-top: 0.5rem;
+    background-color: #f5f8ff;
+    border-radius: 8px;
+    padding: 0.8rem 1rem;
+}
+
+.usage-instructions h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1rem;
+}
+
+.usage-steps {
+    list-style-type: decimal;
+    padding-left: 1.5rem;
+    margin: 0.5rem 0 0 0;
+}
+
+.usage-steps li {
+    margin-bottom: 0.4rem;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+}
+
+.usage-steps li:last-child {
+    margin-bottom: 0;
+}
+
+.inline-icon {
+    height: 1em;
+    width: auto;
+    vertical-align: middle;
+    margin: 0 0.25rem;
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+    .usage-instructions {
+        background-color: #2a2d3a;
+    }
+    
+    .api-key-instruction {
+        color: #aaa;
+    }
+}
+
+/* 成功模态框整体布局调整 */
+.success-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem; /* 减小整体间距 */
+}
+
+.success-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 0; /* 从0.6rem减小到0.4rem - 减少支付成功与下面元素的距离 */
+}
+
+.success-header h2 {
+    margin-top: 0.3rem; /* 从0.4rem减小到0.3rem */
+    margin-bottom: 0;
+}
+
+.success-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem; /* 从0.8rem减小到0.6rem */
+    margin-top: 0.3rem; /* 从0.4rem减小到0.3rem */
+}
+
+/* API Key 区域调整 */
+.api-key-section {
+    margin: 0.4rem 0; /* 从0.6rem 0减小到0.4rem 0 */
+    padding: 0.7rem; /* 从0.8rem减小到0.7rem */
+}
+
+.api-key-instruction {
+    margin: 0.2rem 0 0 0; 
+    font-size: 0.85rem; /* 缩小说明文字 */
+    color: #666;
+}
+
+.api-key-display-wrapper {
+    margin-top: 0.4rem;
+    margin-bottom: 0;
+}
+
+.api-key-display-wrapper input {
+    padding-right: 80px; /* 适应两个按钮 */
+    width: 100%;
+    font-family: monospace;
+    font-size: 0.9rem; /* 减小API Key字体大小 */
+}
+
+/* 使用说明调整 */
+.usage-instructions {
+    margin-top: 0.4rem;
+    background-color: #f5f8ff;
+    border-radius: 8px;
+    padding: 0.7rem; /* 与quota-summary-compact内边距保持一致 */
+}
+
+.usage-title {
+    margin: 0;
+    font-size: 1rem;
+    padding-left: 0; /* 移除左内边距 */
+    text-align: left;
+}
+
+.usage-steps {
+    list-style-position: inside; /* 确保列表符号在容器内 */
+    padding-left: 0; /* 移除默认的左内边距 */
+    margin: 0.3rem 0 0 0;
+    text-align: left;
+}
+
+.usage-steps li {
+    margin-bottom: 0.3rem;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    padding-left: 0; /* 移除左内边距 */
+}
+
+/* 调整quota-summary-compact的样式使其与usage-instructions保持一致 */
+.quota-summary-compact {
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    padding: 0.7rem; /* 从1rem减小到0.7rem */
+}
+
+/* 使用说明调整 */
+.usage-instructions {
+    margin-top: 0.4rem;
+    background-color: #f5f8ff;
+    border-radius: 8px;
+    padding: 0.7rem; /* 与quota-summary-compact内边距保持一致 */
+}
+
+.usage-title {
+    margin: 0;
+    font-size: 1rem;
+    padding-left: 0; /* 移除左内边距 */
+    text-align: left;
+}
+
+.usage-steps {
+    list-style-position: inside; /* 确保列表符号在容器内 */
+    padding-left: 0; /* 移除默认的左内边距 */
+    margin: 0.3rem 0 0 0;
+    text-align: left;
+}
+
+.usage-steps li {
+    margin-bottom: 0.3rem;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    padding-left: 0; /* 移除左内边距 */
+}
+
+/* 调整quota-summary-compact的样式使其与usage-instructions保持一致 */
+.quota-summary-compact {
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    padding: 0.7rem; /* 从1rem减小到0.7rem */
+}
+
+/* 使用说明调整 */
+.usage-instructions {
+    margin-top: 0.4rem;
+    background-color: #f5f8ff;
+    border-radius: 8px;
+    padding: 0.7rem; /* 与quota-summary-compact内边距保持一致 */
+}
+
+.usage-title {
+    margin: 0;
+    font-size: 1rem;
+    padding-left: 0; /* 移除左内边距 */
+    text-align: left;
+}
+
+.usage-steps {
+    list-style-position: inside; /* 确保列表符号在容器内 */
+    padding-left: 0; /* 移除默认的左内边距 */
+    margin: 0.3rem 0 0 0;
+    text-align: left;
+}
+
+.usage-steps li {
+    margin-bottom: 0.3rem;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    padding-left: 0; /* 移除左内边距 */
+}
+
+/* 调整quota-summary-compact的样式使其与usage-instructions保持一致 */
+.quota-summary-compact {
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    padding: 0.7rem; /* 从1rem减小到0.7rem */
+}
+
+/* 使用说明调整 */
+.usage-instructions {
+    margin-top: 0.4rem;
+    background-color: #f5f8ff;
+    border-radius: 8px;
+    padding: 0.7rem; /* 与quota-summary-compact内边距保持一致 */
+}
+
+.usage-title {
+    margin: 0;
+    font-size: 1rem;
+    padding-left: 0; /* 移除左内边距 */
+    text-align: left;
+}
+
+.usage-steps {
+    list-style-position: inside; /* 确保列表符号在容器内 */
+    padding-left: 0; /* 移除默认的左内边距 */
+    margin: 0.3rem 0 0 0;
+    text-align: left;
+}
+
+.usage-steps li {
+    margin-bottom: 0.3rem;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    padding-left: 0; /* 移除左内边距 */
+}
+
+/* 调整quota-summary-compact的样式使其与usage-instructions保持一致 */
+.quota-summary-compact {
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    padding: 0.7rem; /* 从1rem减小到0.7rem */
+}
