@@ -337,7 +337,7 @@ function showPaymentModal(orderData, email, amount, conversions, bonus) {
     const closeBtn = modal.querySelector('.close-modal');
     closeBtn.addEventListener('click', () => {
         // Confirm before closing if payment hasn't been confirmed
-        if (confirm('确定要关闭支付页面吗？')) {
+        if (confirm('确定要关闭支付页面吗？如果您已经付款，关闭后将接收不到支付结果通知！')) {
             closeModal(modal);
         }
     });
@@ -346,7 +346,7 @@ function showPaymentModal(orderData, email, amount, conversions, bonus) {
     modal.addEventListener('click', (e) => {
         if (e.target === modal) {
             // Same confirmation as close button
-            if (confirm('确定要关闭支付页面吗？')) {
+            if (confirm('确定要关闭支付页面吗？如果您已经付款，关闭后将接收不到支付结果通知！')) {
                 closeModal(modal);
             }
         }
@@ -359,10 +359,21 @@ function showPaymentModal(orderData, email, amount, conversions, bonus) {
 // Poll the API for payment status
 function pollPaymentStatus(orderNo, apiKey, modal) {
     let pollCount = 0;
-    const maxPolls = 120; // Poll for maximum 10 minutes (120 * 5 seconds)
+    const maxPolls = 80; // Poll for maximum 6.67 minutes (80 * 5 seconds)
     const pollInterval = 5000; // Poll every 5 seconds
     
+    // Create an AbortController to allow stopping the polling
+    const abortController = new AbortController();
+    // Store the controller in the modal element so we can access it when closing
+    modal._abortController = abortController;
+    
     const checkStatus = async () => {
+        // Check if polling has been aborted
+        if (abortController.signal.aborted) {
+            console.log('Payment status polling was aborted');
+            return;
+        }
+        
         try {
             const response = await fetch(`${baseUrl}/payments/status/${orderNo}`, {
                 method: 'GET',
@@ -421,7 +432,7 @@ function pollPaymentStatus(orderNo, apiKey, modal) {
             if (data.status === 'pending') {
                 pollCount++;
                 
-                if (pollCount < maxPolls) {
+                if (pollCount < maxPolls && !abortController.signal.aborted) {
                     setTimeout(checkStatus, pollInterval);
                 } else {
                     // Stop polling after max attempts
@@ -437,7 +448,7 @@ function pollPaymentStatus(orderNo, apiKey, modal) {
             pollCount++;
             
             // Continue polling even with errors, within limits
-            if (pollCount < maxPolls) {
+            if (pollCount < maxPolls && !abortController.signal.aborted) {
                 setTimeout(checkStatus, pollInterval);
             }
         }
@@ -605,6 +616,12 @@ function showSuccessInformation(modal, apiKey, paymentData) {
 
 // Close modal with animation
 function closeModal(modal) {
+    // Stop polling if it exists
+    if (modal._abortController) {
+        modal._abortController.abort();
+        console.log('Payment polling stopped');
+    }
+    
     modal.style.opacity = '0';
     setTimeout(() => {
         document.body.removeChild(modal);
