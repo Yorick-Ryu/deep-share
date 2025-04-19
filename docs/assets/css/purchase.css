@@ -1043,10 +1043,15 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
 @media (prefers-color-scheme: dark) {
     .order-summary {
         background-color: #333;
+        color: #e0e0e0; /* Adding text color for dark mode */
     }
     
     .order-detail.total {
         border-top-color: #555;
+    }
+    
+    .order-id {
+        color: #aaa; /* Lighter color for order ID in dark mode */
     }
     
     .api-key-section {
@@ -1339,6 +1344,15 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
 @media (prefers-color-scheme: dark) {
     .payment-status {
         color: #aaa;
+    }
+    
+    .order-summary {
+        background-color: #333 !important;
+        color: #e0e0e0;
+    }
+    
+    .order-detail {
+        color: #e0e0e0;
     }
 }
 
@@ -1637,4 +1651,25 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
     background-color: #f8f8f8;
     border-radius: 8px;
     padding: 0.7rem; /* 从1rem减小到0.7rem */
+}
+
+/* Dark mode adjustments for success modal */
+@media (prefers-color-scheme: dark) {
+    .quota-summary-compact {
+        background-color: #333 !important;
+        color: #e0e0e0;
+    }
+    
+    .quota-label {
+        color: #aaa;
+    }
+    
+    .next-steps-compact {
+        background-color: #2a2d3a;
+    }
+    
+    .usage-instructions {
+        background-color: #2a2d3a !important;
+        color: #e0e0e0;
+    }
 }
