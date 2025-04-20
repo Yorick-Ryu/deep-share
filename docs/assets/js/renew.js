@@ -492,7 +492,7 @@ function showSuccessInformation(modal, apiKey, paymentData) {
                     <div class="usage-instructions">
                         <h3 class="usage-title">使用提示</h3>
                         <ol class="usage-steps">
-                            <li>续费已成功添加到您的账户</li>
+                            <li>次数已成功添加到您的账户</li>
                             <li>可以查询总次数验证</li>
                             <li>遇到问题请联系客服，微信：yorick_cn</li>
                         </ol>
