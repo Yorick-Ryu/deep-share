@@ -136,5 +136,29 @@
     },
     "apiKeyMissing": {
         "message": "请购买或填写API-Key以使用文档转换功能"
+    },
+    "manualConversionExplanation": {
+        "message": "支持ChatGPT、豆包、元宝等，复制需要转换的对话到Markdown输入框，点击\"转换为文档\"按钮立即下载Word格式，排版精美，支持公式！"
+    },
+    "manualConversionTitle": {
+        "message": "手动转换"
+    },
+    "markdownInputLabel": {
+        "message": "Markdown 文本"
+    },
+    "markdownInputPlaceholder": {
+        "message": "在此粘贴 Markdown 格式文本..."
+    },
+    "convertToDocx": {
+        "message": "转换为文档"
+    },
+    "clearMarkdown": {
+        "message": "清空"
+    },
+    "emptyMarkdownError": {
+        "message": "请输入Markdown文本"
+    },
+    "manualDocxSettings": {
+        "message": "手动转换文档"
     }
 }

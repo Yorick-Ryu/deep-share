@@ -521,10 +521,17 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
 }
 
 /* Manual conversion section styles */
-.manual-conversion-section {
-  margin-top: 20px;
-  padding-top: 16px;
-  border-top: 1px solid var(--border-color);
+.manual-conversion-section, #manual-docx-tab {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+}
+
+#manual-docx-tab h3 {
+  margin: 0 0 16px;
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--text-color);
 }
 
 .manual-conversion-section h3 {
@@ -533,7 +540,7 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
   color: var(--text-color);
 }
 
-.manual-conversion-section textarea {
+#manual-docx-tab textarea, .manual-conversion-section textarea {
   width: 100%;
   padding: 8px;
   border: 1px solid var(--border-color);
@@ -543,9 +550,10 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
   font-family: monospace;
   resize: vertical;
   box-sizing: border-box;
+  min-height: 200px;
 }
 
-.manual-conversion-section textarea::placeholder {
+#manual-docx-tab textarea::placeholder, .manual-conversion-section textarea::placeholder {
   color: var(--text-secondary);
   opacity: 0.7;
 }

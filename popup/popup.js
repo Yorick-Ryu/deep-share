@@ -11,6 +11,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // Set up tab switching
   setupTabs();
 
+  // Restore the last active tab
+  restoreLastActiveTab(highlightApiKey);
+
   // Set up auto-save functionality
   setupAutoSave();
 
@@ -92,7 +95,30 @@ function setupTabs() {
         tab.classList.remove('active');
       });
       document.getElementById(targetTabId).classList.add('active');
+      
+      // Save the active tab ID to chrome.storage.sync
+      chrome.storage.sync.set({ 'lastActiveTab': targetTabId });
     });
+  });
+}
+
+// Function to restore the last active tab
+function restoreLastActiveTab(highlightApiKey) {
+  // Skip restoring tab if we should highlight API key (that already activates its tab)
+  if (highlightApiKey) {
+    return;
+  }
+  
+  chrome.storage.sync.get(['lastActiveTab'], (data) => {
+    if (data.lastActiveTab) {
+      // Find the button for this tab
+      const tabButton = document.querySelector(`.tab-btn[data-tab="${data.lastActiveTab}"]`);
+      
+      if (tabButton) {
+        // Simulate a click on the tab button
+        tabButton.click();
+      }
+    }
   });
 }
 
@@ -186,18 +212,36 @@ function setupUIElements() {
 function loadI18nText() {
   // Tab labels
   document.getElementById('docxTabLabel').textContent = chrome.i18n.getMessage('docxSettings') || 'Document Conversion';
+  document.getElementById('manualDocxTabLabel').textContent = chrome.i18n.getMessage('manualDocxSettings') || '手动转换文档';
   document.getElementById('watermarkTabLabel').textContent = chrome.i18n.getMessage('watermarkSettings') || 'Watermark';
   document.getElementById('sponsorTabLabel').textContent = chrome.i18n.getMessage('sponsorTabLabel') || 'Sponsor';
   document.getElementById('sponsorTabTitle').textContent = chrome.i18n.getMessage('sponsorTabLabel') || 'Sponsor';
   
   // Document Conversion tab
   document.getElementById('docxSettingsTitle').textContent = chrome.i18n.getMessage('docxSettings') || 'Word (DOCX) Conversion';
-  document.getElementById('docxFeatureExplanation').textContent = chrome.i18n.getMessage('docxFeatureExplanation') || 'Used to configure AI conversation to Word document conversion. Other features like image sharing, text sharing, and LaTeX formula copying are free and ready to use.';
+  document.getElementById('docxFeatureExplanation').textContent = chrome.i18n.getMessage('docxFeatureExplanation') || 'Used to configure AI conversation to Word document conversion. Other features like conversation screenshots, LaTeX formula copying, and image sharing are free and ready to use.';
   document.getElementById('docxModeLabel').textContent = chrome.i18n.getMessage('docxModeLabel') || 'Conversion Mode';
   document.getElementById('modeLocalLabel').textContent = chrome.i18n.getMessage('modeLocalLabel') || 'Local';
   document.getElementById('modeApiLabel').textContent = chrome.i18n.getMessage('modeApiLabel') || 'API';
   document.getElementById('docxServerUrlLabel').textContent = chrome.i18n.getMessage('docxServerUrlLabel') || 'Server URL';
   document.getElementById('docxApiKeyLabel').textContent = chrome.i18n.getMessage('docxApiKeyLabel') || 'API Key';
+  
+  // Manual Document Conversion tab
+  document.getElementById('manualConversionTitle').textContent = chrome.i18n.getMessage('manualConversionTitle') || '手动转换';
+  document.getElementById('manualConversionExplanation').textContent = chrome.i18n.getMessage('manualConversionExplanation') || '支持ChatGPT、豆包、元宝等，复制需要转换的对话到Markdown输入框，点击"转换为文档"按钮立即下载Word格式，排版精美，支持公式！';
+  document.getElementById('markdownInputLabel').textContent = chrome.i18n.getMessage('markdownInputLabel') || 'Markdown 文本';
+  document.getElementById('convertMarkdownBtn').innerHTML = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;">
+      <path d="M14 3v4a1 1 0 0 0 1 1h4"></path>
+      <path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2z"></path>
+      <line x1="9" y1="9" x2="10" y2="9"></line>
+      <line x1="9" y1="13" x2="15" y2="13"></line>
+      <line x1="9" y1="17" x2="15" y2="17"></line>
+    </svg>
+    ${chrome.i18n.getMessage('convertToDocx') || '转换为文档'}
+  `;
+  document.getElementById('clearMarkdownBtn').textContent = chrome.i18n.getMessage('clearMarkdown') || '清空';
+  document.getElementById('markdownInput').placeholder = chrome.i18n.getMessage('markdownInputPlaceholder') || '在此粘贴 Markdown 格式文本...';
   
   // Watermark tab
   document.getElementById('watermarkSettingsTitle').textContent = chrome.i18n.getMessage('watermarkSettings') || 'Watermark Settings';
@@ -375,9 +419,28 @@ function setupManualConversion() {
     
     // Check if API key is provided
     if (!settings.docxApiKey || settings.docxApiKey.trim() === '') {
+      // Show message
       alert(chrome.i18n.getMessage('apiKeyMissing') || '请购买或填写API-Key以使用文档转换功能');
-      document.getElementById('docxApiKey').focus();
-      document.getElementById('docxApiKey').classList.add('highlight-required');
+      
+      // Switch to document conversion tab
+      const docxTabBtn = document.querySelector('.tab-btn[data-tab="docx-tab"]');
+      if (docxTabBtn) {
+        docxTabBtn.click();
+      }
+      
+      // Highlight and focus on the API key input
+      const apiKeyInput = document.getElementById('docxApiKey');
+      apiKeyInput.classList.add('highlight-required');
+      setTimeout(() => {
+        apiKeyInput.focus();
+        
+        // Remove highlight when user starts typing
+        apiKeyInput.addEventListener('input', function onInput() {
+          apiKeyInput.classList.remove('highlight-required');
+          apiKeyInput.removeEventListener('input', onInput);
+        });
+      }, 100);
+      
       return;
     }
     

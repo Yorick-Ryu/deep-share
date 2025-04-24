@@ -136,5 +136,29 @@
     },
     "apiKeyMissing": {
         "message": "Please purchase or enter an API Key to use the document conversion feature"
+    },
+    "manualConversionExplanation": {
+        "message": "Supports ChatGPT, Doubao, Yuanbao, etc. Copy your conversation to the Markdown input box, click \"Convert to Document\" to download a beautifully formatted Word document with formula support!"
+    },
+    "manualConversionTitle": {
+        "message": "Manual Conversion"
+    },
+    "markdownInputLabel": {
+        "message": "Markdown Text"
+    },
+    "markdownInputPlaceholder": {
+        "message": "Paste Markdown formatted text here..."
+    },
+    "convertToDocx": {
+        "message": "Convert to Document"
+    },
+    "clearMarkdown": {
+        "message": "Clear"
+    },
+    "emptyMarkdownError": {
+        "message": "Please enter Markdown text"
+    },
+    "manualDocxSettings": {
+        "message": "Manual Document Conversion"
     }
 }
