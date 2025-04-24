@@ -192,6 +192,7 @@ function loadI18nText() {
   
   // Document Conversion tab
   document.getElementById('docxSettingsTitle').textContent = chrome.i18n.getMessage('docxSettings') || 'Word (DOCX) Conversion';
+  document.getElementById('docxFeatureExplanation').textContent = chrome.i18n.getMessage('docxFeatureExplanation') || 'Used to configure AI conversation to Word document conversion. Other features like image sharing, text sharing, and LaTeX formula copying are free and ready to use.';
   document.getElementById('docxModeLabel').textContent = chrome.i18n.getMessage('docxModeLabel') || 'Conversion Mode';
   document.getElementById('modeLocalLabel').textContent = chrome.i18n.getMessage('modeLocalLabel') || 'Local';
   document.getElementById('modeApiLabel').textContent = chrome.i18n.getMessage('modeApiLabel') || 'API';

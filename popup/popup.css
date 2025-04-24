@@ -160,6 +160,14 @@ body {
   font-size: 12px;
 }
 
+.feature-explanation {
+  margin-top: -8px;
+  margin-bottom: 16px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
 .form-hint a {
   color: var(--primary-color);
   text-decoration: none;
@@ -508,7 +516,7 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
 }
 
 .expiration-value {
-  color: var(--text-secondary);
+  color: var (--text-secondary);
   font-weight: 500;
 }
 

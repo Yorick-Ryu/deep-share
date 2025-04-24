@@ -29,6 +29,9 @@
     "docxFeatureComingSoon": {
         "message": "Word文档导出功能即将推出！"
     },
+    "docxFeatureExplanation": {
+        "message": "用于配置AI对话转Word文档功能，其他功能如对话截图和LaTeX公式复制都是免费的，无需配置即可使用。"
+    },
     "docxConversionSuccess": {
         "message": "成功转换为Word文档！"
     },
