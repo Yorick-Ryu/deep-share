@@ -36,7 +36,7 @@
         "message": "Successfully converted to DOCX!"
     },
     "docxConverting": {
-        "message": "Converting to document..."
+        "message": "Converting to document, please do not close this popup!"
     },
     "docxConversionError": {
         "message": "Failed to convert to DOCX. Please make sure the conversion service is running."
@@ -102,7 +102,7 @@
         "message": "Saved"
     },
     "sponsorTitle": {
-        "message": "Thanks for using! If you find it helpful, feel free to sponsor via WeChat QR code 😊 Message selection and formula copying features are free for a limited time. Donate any amount ($1 or more) now for permanent free access!"
+        "message": "Thank you for using! If you find it helpful, feel free to sponsor via WeChat QR code 😊"
     },
     "selectButton": {
         "message": "Select Messages"
@@ -141,7 +141,7 @@
         "message": "Supports ChatGPT, Doubao, Yuanbao, etc. Copy your conversation to the Markdown input box, click \"Convert to Document\" to download a beautifully formatted Word document with formula support!"
     },
     "manualConversionTitle": {
-        "message": "Manual Conversion"
+        "message": "Manual Document Conversion"
     },
     "markdownInputLabel": {
         "message": "Markdown Text"

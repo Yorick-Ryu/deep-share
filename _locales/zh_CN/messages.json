@@ -36,7 +36,7 @@
         "message": "成功转换为Word文档！"
     },
     "docxConverting": {
-        "message": "正在转换为文档..."
+        "message": "正在转换为文档，请不要关闭此界面！"
     },
     "docxConversionError": {
         "message": "转换Word文档失败。请确保转换服务正在运行。"
@@ -102,7 +102,7 @@
         "message": "已保存"
     },
     "sponsorTitle": {
-        "message": "感谢使用！如果觉得好用，欢迎微信扫码赞助😊 对话选择和公式复制功能为限时免费，现在捐赠任意金额（1元及以上）将享受永久免费！"
+        "message": "感谢使用！如果觉得好用，欢迎微信扫码赞助😊"
     },
     "selectButton": {
         "message": "选择对话"
@@ -141,7 +141,7 @@
         "message": "支持ChatGPT、豆包、元宝等，复制需要转换的对话到Markdown输入框，点击\"转换为文档\"按钮立即下载Word格式，排版精美，支持公式！"
     },
     "manualConversionTitle": {
-        "message": "手动转换"
+        "message": "手动转换文档"
     },
     "markdownInputLabel": {
         "message": "Markdown 文本"
