@@ -47,6 +47,16 @@ async function convertToDocx(message, sourceButton) {
 
     let convertingNotificationId = null;
     
+    // Disable the DOCX button if provided
+    if (sourceButton && sourceButton instanceof Element) {
+        sourceButton.style.opacity = '0.5';
+        sourceButton.style.pointerEvents = 'none';
+        sourceButton.setAttribute('disabled', 'true');
+        // Store original title and update with converting message
+        sourceButton._originalTitle = sourceButton.title || chrome.i18n.getMessage('docxButton');
+        sourceButton.title = chrome.i18n.getMessage('docxConverting');
+    }
+    
     try {
         // Step 1: Find the correct copy button that's next to the clicked DOCX button
         let copyBtn;
@@ -116,6 +126,18 @@ async function convertToDocx(message, sourceButton) {
         }
         
         window.showToastNotification(error.message, 'error');
+    } finally {
+        // Re-enable the DOCX button if provided
+        if (sourceButton && sourceButton instanceof Element) {
+            sourceButton.style.opacity = '';
+            sourceButton.style.pointerEvents = '';
+            sourceButton.removeAttribute('disabled');
+            // Restore original title
+            if (sourceButton._originalTitle) {
+                sourceButton.title = sourceButton._originalTitle;
+                delete sourceButton._originalTitle;
+            }
+        }
     }
 }
 
