@@ -20,7 +20,8 @@
         "storage"
     ],
     "host_permissions": [
-        "https://chat.deepseek.com/*"
+        "https://chat.deepseek.com/*",
+        "https://yuanbao.tencent.com/chat/*"
     ],
     "background": {
         "service_worker": "background.js"
@@ -43,6 +44,18 @@
                 "scripts/docxConverter.js",
                 "scripts/injectDocxButton.js",
                 "scripts/main.js"
+            ]
+        },
+        {
+            "matches": [
+               "https://yuanbao.tencent.com/chat/*"
+            ],
+            "css": [
+                "scripts/style.css"
+            ],
+            "js": [
+                "scripts/notifications.js",
+                "scripts/copyKatex.js"
             ]
         }
     ],
