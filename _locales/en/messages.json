@@ -160,5 +160,26 @@
     },
     "manualDocxSettings": {
         "message": "Manual Document Conversion"
+    },
+    "formulaTabLabel": {
+        "message": "Formula Copy Settings"
+    },
+    "formulaSettingsTitle": {
+        "message": "Formula Copy Settings"
+    },
+    "enableFormulaCopyLabel": {
+        "message": "Enable Formula Copy"
+    },
+    "formulaFormatLabel": {
+        "message": "Formula Copy Format"
+    },
+    "formatMathMLLabel": {
+        "message": "MathML"
+    },
+    "formatLaTeXLabel": {
+        "message": "LaTeX"
+    },
+    "formulaFormatHint": {
+        "message": "MathML is compatible with more editors, LaTeX is for professional typesetting"
     }
 }

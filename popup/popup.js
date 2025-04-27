@@ -34,7 +34,9 @@ function loadSettings(highlightApiKey = false) {
     'hideDefaultWatermark',
     'docxServerUrl',
     'docxApiKey',
-    'docxMode'
+    'docxMode',
+    'enableFormulaCopy',
+    'formulaFormat'
   ], (data) => {
     // Watermark settings
     document.getElementById('watermark').value = data.customWatermark || '';
@@ -48,6 +50,12 @@ function loadSettings(highlightApiKey = false) {
     
     // Always set docx mode to API
     document.getElementById('modeApi').checked = true;
+
+    // Formula copy settings
+    document.getElementById('enableFormulaCopy').checked = data.enableFormulaCopy !== false; // Default to true
+    const formulaFormat = data.formulaFormat || 'mathml'; // Default to MathML
+    document.getElementById('formatMathML').checked = formulaFormat === 'mathml';
+    document.getElementById('formatLaTeX').checked = formulaFormat === 'latex';
 
     // If API key is set, check quota
     if (data.docxApiKey) {
@@ -131,7 +139,11 @@ function setupAutoSave() {
     document.getElementById('docxServerUrl'),
     document.getElementById('docxApiKey'),
     document.getElementById('modeApi'),
-    document.getElementById('modeLocal')
+    document.getElementById('modeLocal'),
+    // 添加公式复制相关的设置元素
+    document.getElementById('enableFormulaCopy'),
+    document.getElementById('formatMathML'),
+    document.getElementById('formatLaTeX')
   ];
   
   // Add change event listeners to each input
@@ -213,6 +225,7 @@ function loadI18nText() {
   // Tab labels
   document.getElementById('docxTabLabel').textContent = chrome.i18n.getMessage('docxSettings') || 'Document Conversion';
   document.getElementById('manualDocxTabLabel').textContent = chrome.i18n.getMessage('manualDocxSettings') || '手动转换文档';
+  document.getElementById('formulaTabLabel').textContent = chrome.i18n.getMessage('formulaTabLabel') || 'Formula Settings';
   document.getElementById('watermarkTabLabel').textContent = chrome.i18n.getMessage('watermarkSettings') || 'Watermark';
   document.getElementById('sponsorTabLabel').textContent = chrome.i18n.getMessage('sponsorTabLabel') || 'Sponsor';
   document.getElementById('sponsorTabTitle').textContent = chrome.i18n.getMessage('sponsorTabLabel') || 'Sponsor';
@@ -225,6 +238,14 @@ function loadI18nText() {
   document.getElementById('modeApiLabel').textContent = chrome.i18n.getMessage('modeApiLabel') || 'API';
   document.getElementById('docxServerUrlLabel').textContent = chrome.i18n.getMessage('docxServerUrlLabel') || 'Server URL';
   document.getElementById('docxApiKeyLabel').textContent = chrome.i18n.getMessage('docxApiKeyLabel') || 'API Key';
+  
+  // Formula Copy Settings tab
+  document.getElementById('formulaSettingsTitle').textContent = chrome.i18n.getMessage('formulaSettingsTitle') || 'Formula Copy Settings';
+  document.getElementById('enableFormulaCopyLabel').textContent = chrome.i18n.getMessage('enableFormulaCopyLabel') || 'Enable Formula Copy';
+  document.getElementById('formulaFormatLabel').textContent = chrome.i18n.getMessage('formulaFormatLabel') || 'Formula Copy Format';
+  document.getElementById('formatMathMLLabel').textContent = chrome.i18n.getMessage('formatMathMLLabel') || 'MathML';
+  document.getElementById('formatLaTeXLabel').textContent = chrome.i18n.getMessage('formatLaTeXLabel') || 'LaTeX';
+  document.getElementById('formulaFormatHint').textContent = chrome.i18n.getMessage('formulaFormatHint') || 'MathML is compatible with more editors, LaTeX is for professional typesetting';
   
   // Manual Document Conversion tab
   document.getElementById('manualConversionTitle').textContent = chrome.i18n.getMessage('manualConversionTitle') || '手动转换';
@@ -258,6 +279,12 @@ function saveSettings() {
   // Always use API mode
   const docxMode = 'api';
   
+  // Get formula format from radio buttons
+  let formulaFormat = 'mathml'; // 默认为 MathML
+  if (document.getElementById('formatLaTeX').checked) {
+    formulaFormat = 'latex';
+  }
+  
   // Collect all settings
   const settings = {
     // Watermark settings
@@ -267,7 +294,11 @@ function saveSettings() {
     // DOCX settings
     docxServerUrl: document.getElementById('docxServerUrl').value,
     docxApiKey: document.getElementById('docxApiKey').value,
-    docxMode: docxMode
+    docxMode: docxMode,
+    
+    // Formula copy settings
+    enableFormulaCopy: document.getElementById('enableFormulaCopy').checked,
+    formulaFormat: formulaFormat
   };
 
   // Save all settings at once

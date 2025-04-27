@@ -48,6 +48,15 @@
           <span id="manualDocxTabLabel">手动转换文档</span>
         </button>
         
+        <button class="tab-btn" data-tab="formula-tab" id="formulaTabBtn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <line x1="10" y1="14" x2="21" y2="3"></line>
+          </svg>
+          <span id="formulaTabLabel">公式复制设置</span>
+        </button>
+        
         <button class="tab-btn" data-tab="watermark-tab" id="watermarkTabBtn">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"></path>
@@ -185,6 +194,31 @@
         <div class="form-group">
           <label for="watermark" id="customWatermarkLabel">Custom Watermark Text (Optional)</label>
           <input type="text" id="watermark" placeholder="Enter custom watermark here">
+        </div>
+      </div>
+      
+      <!-- Formula Copy Settings Tab Content -->
+      <div class="tab-content" id="formula-tab">
+        <h2 id="formulaSettingsTitle">公式复制设置</h2>
+        
+        <div class="checkbox-group">
+          <input type="checkbox" id="enableFormulaCopy" checked>
+          <label for="enableFormulaCopy" id="enableFormulaCopyLabel">启用公式复制功能</label>
+        </div>
+        
+        <div class="form-group">
+          <label id="formulaFormatLabel">公式复制格式</label>
+          <div class="radio-group">
+            <div class="radio-option">
+              <input type="radio" id="formatMathML" name="formulaFormat" value="mathml" checked>
+              <label for="formatMathML" id="formatMathMLLabel">MathML</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" id="formatLaTeX" name="formulaFormat" value="latex">
+              <label for="formatLaTeX" id="formatLaTeXLabel">LaTeX</label>
+            </div>
+          </div>
+          <span class="form-hint" id="formulaFormatHint">MathML 格式兼容更多编辑器，LaTeX 适合专业排版</span>
         </div>
       </div>
       
