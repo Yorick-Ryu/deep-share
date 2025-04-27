@@ -1,5 +1,5 @@
 /**
- * KaTeX formula copy functionality for DouBao platform
+ * KaTeX formula copy functionality for Doubao platform
  * Adds click events to formulas with data-custom-copy-text to extract the LaTeX code and convert to MathML
  */
 
@@ -9,8 +9,8 @@ let formulaSettings = {
   formulaFormat: 'mathml'   // 默认使用 MathML
 };
 
-// Function to add copy functionality to LaTeX formulas in DouBao platform
-function enableKatexCopy4DouBao() {
+// Function to add copy functionality to LaTeX formulas in Doubao platform
+function enableKatexCopy4Doubao() {
   // Find all elements with data-custom-copy-text attribute
   const latexElements = document.querySelectorAll('[data-custom-copy-text]');
   
@@ -119,12 +119,12 @@ function loadSettings() {
   }, (settings) => {
     formulaSettings = settings;
     updateAllElements();
-    enableKatexCopy4DouBao();
+    enableKatexCopy4Doubao();
   });
 }
 
 // Initialize when DOM is loaded
-function initKatexCopy4DouBao() {
+function initKatexCopy4Doubao() {
   // 首先加载设置
   loadSettings();
   
@@ -132,7 +132,7 @@ function initKatexCopy4DouBao() {
   const observer = new MutationObserver((mutations) => {
     mutations.forEach(mutation => {
       if (mutation.addedNodes.length > 0) {
-        enableKatexCopy4DouBao();
+        enableKatexCopy4Doubao();
       }
     });
   });
@@ -160,7 +160,7 @@ function initKatexCopy4DouBao() {
 
 // Run initialization
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initKatexCopy4DouBao);
+  document.addEventListener('DOMContentLoaded', initKatexCopy4Doubao);
 } else {
-  initKatexCopy4DouBao();
+  initKatexCopy4Doubao();
 }
