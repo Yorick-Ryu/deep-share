@@ -22,7 +22,8 @@
     "host_permissions": [
         "https://chat.deepseek.com/*",
         "https://yuanbao.tencent.com/chat/*",
-        "https://www.doubao.com/chat/*"
+        "https://www.doubao.com/chat/*",
+        "https://chatgpt.com/c/*"
     ],
     "background": {
         "service_worker": "background.js"
@@ -50,7 +51,8 @@
         },
         {
             "matches": [
-               "https://yuanbao.tencent.com/chat/*"
+                "https://yuanbao.tencent.com/chat/*",
+                "https://chatgpt.com/c/*"
             ],
             "css": [
                 "scripts/style.css"
