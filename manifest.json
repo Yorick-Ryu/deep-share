@@ -21,7 +21,8 @@
     ],
     "host_permissions": [
         "https://chat.deepseek.com/*",
-        "https://yuanbao.tencent.com/chat/*"
+        "https://yuanbao.tencent.com/chat/*",
+        "https://www.doubao.com/chat/*"
     ],
     "background": {
         "service_worker": "background.js"
@@ -36,6 +37,7 @@
             ],
             "js": [
                 "lib/html2canvas.min.js",
+                "lib/katex.min.js",
                 "scripts/notifications.js",
                 "scripts/captureMessages.js",
                 "scripts/getMessages.js",
@@ -54,8 +56,22 @@
                 "scripts/style.css"
             ],
             "js": [
+                "lib/katex.min.js",
                 "scripts/notifications.js",
                 "scripts/copyKatex.js"
+            ]
+        },
+        {
+            "matches": [
+                "https://www.doubao.com/chat/*"
+            ],
+            "css": [
+                "scripts/style.css"
+            ],
+            "js": [
+                "lib/katex.min.js",
+                "scripts/notifications.js",
+                "scripts/copyKatex4DouBao.js"
             ]
         }
     ],

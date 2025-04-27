@@ -1,14 +1,14 @@
 /**
- * KaTeX formula copy functionality
- * Adds click events to KaTeX formulas to allow copying the LaTeX code or MathML
+ * KaTeX formula copy functionality for DouBao platform
+ * Adds click events to formulas with data-custom-copy-text to extract the LaTeX code and convert to MathML
  */
 
-// Function to add copy functionality to KaTeX formulas
-function enableKatexCopy() {
-    // Find all KaTeX elements on the page
-    const katexElements = document.querySelectorAll('.katex');
+// Function to add copy functionality to LaTeX formulas in DouBao platform
+function enableKatexCopy4DouBao() {
+    // Find all elements with data-custom-copy-text attribute
+    const latexElements = document.querySelectorAll('[data-custom-copy-text]');
     
-    katexElements.forEach(element => {
+    latexElements.forEach(element => {
         // Make sure we haven't already processed this element
         if (element.dataset.katexCopyEnabled) return;
         
@@ -17,12 +17,13 @@ function enableKatexCopy() {
         
         // Add click event listener
         element.addEventListener('click', async (e) => {
-            // Find the annotation element that contains the LaTeX code
-            const annotation = element.querySelector('.katex-mathml annotation[encoding="application/x-tex"]');
-            
-            if (annotation) {
-                // Trim whitespace from LaTeX code before copying
-                const latexCode = annotation.textContent.trim();
+            // Get the LaTeX code from data-custom-copy-text attribute
+            if (element.dataset.customCopyText) {
+                // Remove the \( and \) from the beginning and end
+                let latexCode = element.dataset.customCopyText;
+                if (latexCode.startsWith('\\(') && latexCode.endsWith('\\)')) {
+                    latexCode = latexCode.substring(2, latexCode.length - 2);
+                }
                 
                 try {
                     // Convert LaTeX to MathML using KaTeX
@@ -76,15 +77,15 @@ function convertLatexToMathML(latexCode) {
 }
 
 // Initialize when DOM is loaded
-function initKatexCopy() {
+function initKatexCopy4DouBao() {
     // Initial setup
-    enableKatexCopy();
+    enableKatexCopy4DouBao();
     
-    // Use MutationObserver to handle dynamically added KaTeX elements
+    // Use MutationObserver to handle dynamically added elements
     const observer = new MutationObserver((mutations) => {
         mutations.forEach(mutation => {
             if (mutation.addedNodes.length > 0) {
-                enableKatexCopy();
+                enableKatexCopy4DouBao();
             }
         });
     });
@@ -98,7 +99,7 @@ function initKatexCopy() {
 
 // Run initialization
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initKatexCopy);
+    document.addEventListener('DOMContentLoaded', initKatexCopy4DouBao);
 } else {
-    initKatexCopy();
+    initKatexCopy4DouBao();
 }

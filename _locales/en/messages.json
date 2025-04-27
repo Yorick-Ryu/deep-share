@@ -68,8 +68,8 @@
     "copyFailed": {
         "message": "Copy failed!"
     },
-    "latexCopied": {
-        "message": "LaTeX copied!"
+    "formulaCopied": {
+        "message": "Formula copied!"
     },
     "clickToCopyLatex": {
         "message": "Click to copy LaTeX code"
