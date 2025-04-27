@@ -4,79 +4,86 @@
   <img src="icons/deepshare-icon.svg" alt="deepshare-icon" width="128"/>
 </p>
 
-A browser extension for sharing DeepSeek conversations, enabling users to save dialogue content as images or text for easy sharing.
+A lightweight browser extension designed for AI users to easily share, save, and export AI conversations with special optimization for mathematical formulas. Supports DeepSeek, DoubaoAI, Yuanbao, ChatGPT and more.
 
-[中文文档](README.zh-CN.md)
+[简体中文](README.zh-CN.md)
 
 ## Features
 
-- One-click capture of DeepSeek chat content
-- Support sharing as image or text
-- One-click LaTeX formula copying (click on any math formula to copy its LaTeX code)
-- Quick export to Word document (DOCX) with formula formatting preserved
-- Customizable watermark
-- Selective message sharing
-  - Select single or multiple messages
-  - Quick select/unselect all messages
-- Clean and intuitive interface
-- Open source and ad-free
+- One-click screenshot of AI conversations (DeepSeek only currently)
+- Share as image or plain text
+- One-click LaTeX formula copying (click any math formula to copy its LaTeX code)
+- Export to Word document (DOCX) with formula formatting preserved (one-click export supported in DeepSeek only)
+- Custom watermark support
+- Selective sharing of conversation content
+  - Choose single or multiple conversation turns
+  - One-click select all/deselect all functionality
+- Clean and simple interface
+- Open source with no ads
+
+## Supported Platforms
+
+| AI Platform | Formula Copy | Word Export | Conversation Screenshot |
+|-------------|-------------|-------------|------------------------|
+| DeepSeek | ✓ | ✓ | ✓ |
+| Doubao | ✓ | Manual copy | ✗ |
+| Yuanbao | ✓ | Manual copy | ✗ |
+| ChatGPT | ✓ | Manual copy | ✗ |
 
 ## Installation
 
 1. Install from Edge/Chrome Web Store
-   - [Edge Add-ons Store](https://microsoftedge.microsoft.com/addons/detail/deepshare/pdccjnppfegekpnhfljbngammgfbcofm)
+   - [Microsoft Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/deepshare/pdccjnppfegekpnhfljbngammgfbcofm)
    - [Chrome Web Store](https://chromewebstore.google.com/detail/omnaecaamcabmnbjnpjpecoaalfgidop)
 2. Install from source code:
    - Download and extract the source code
-   - Open Edge/Chrome extensions page
-   - Enable Developer Mode
-   - Click "Load unpacked extension"
+   - Open Edge\Chrome extensions page
+   - Enable developer mode
+   - Click "Load unpacked"
    - Select the extracted folder
-3. **Important:** After installation, refresh any open DeepSeek chat pages for the extension to take effect.
+3. **Important Note:** After installation, please refresh any open AI chat pages for the extension to take effect.
 
 ## Usage
 
 Prerequisites: Install the extension
 
-1. Visit https://chat.deepseek.com/
+1. Visit a supported AI platform (e.g., https://chat.deepseek.com/)
 2. Start a new conversation
-3. In the top-right corner, you'll see two buttons:
-   - Select Messages: Enable selection mode to choose messages
-   - Share: Share all messages directly
+3. Look for two buttons in the top-right corner:
+   - Select button: Enables selection mode to choose conversations
+   - Share button: Directly share all conversations
 4. In selection mode:
-   - Check the messages you want to share
-   - Use "Select All"/"Unselect All" for quick operations
-   - Click share button to generate content of selected messages
+   - Check the conversations you want to share
+   - Use "Select All"/"Deselect All" buttons for quick operations
+   - Click the share button to generate content for selected conversations
 5. Choose sharing format:
-   - Image mode: Generates a long image of the conversation
-   - Text mode: Plain text of the conversation
-6. Copy or download the generated image/text
-7. For individual messages, use the buttons next to the copy button:
-   - DOCX button: Save the message as a Word document
+   - Screenshot mode: Generates a long image with conversation content (DeepSeek only)
+   - Text mode: Plain text containing conversation content
+6. Copy or download the generated image and text
 
 ## Watermark Settings
 
 Click the settings icon in the top-right corner of the share dialog to:
 
-- Hide default watermark
-- Add custom watermark text
+- Hide the default screenshot watermark
+- Customize watermark content
 
 ## Contributing
 
-Issues and Pull Requests are welcome to help improve the project.
+Contributions via Issues and Pull Requests are welcome.
 
 ## License
 
-This project is licensed under the [Creative Commons Attribution-NonCommercial 4.0 International License](LICENSE). This means you can freely use and modify the code for non-commercial purposes, but any commercial use is prohibited.
+This project is open-sourced under the [CC BY-NC 4.0 License](LICENSE). This means you are free to use and modify the code for non-commercial purposes, but commercial use is prohibited.
 
-## Support
+## Support the Project
 
-If you find this project helpful, you can support its development by:
+If you find this project helpful, please consider supporting its development:
 
 - ⭐ Star this project
 - 📢 Share it with others
-- 🐛 Submit bug reports or feature requests
-- 🧧 Sponsor via WeChat QR code
+- 🐛 Submit bug reports or feature suggestions
+- 🧧 Sponsor the project (scan QR code with WeChat)
 
 <img src="icons/sponsor-code.png" alt="donate" width="200"/>
 

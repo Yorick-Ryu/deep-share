@@ -491,3 +491,127 @@ footer {
         background: linear-gradient(90deg, rgba(77, 107, 254, 0.2) 0%, rgba(77, 107, 254, 0.3) 100%);
     }
 }
+
+/* Compatibility Table Styles */
+.compatibility {
+  padding: 5rem 2rem;
+  text-align: center;
+}
+
+.compatibility h2 {
+  margin-bottom: 2rem;
+  position: relative;
+  display: inline-block;
+}
+
+.compatibility h2::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 3px;
+  background: linear-gradient(90deg, #4d6bfe, #2c3e9e);
+}
+
+.table-container {
+  max-width: 800px;
+  margin: 0 auto;
+  overflow-x: auto;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+.compatibility-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+}
+
+.compatibility-table th,
+.compatibility-table td {
+  padding: 1rem;
+  border: 1px solid #eee;
+}
+
+.compatibility-table th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+}
+
+.compatibility-table tr:nth-child(even) {
+  background-color: #f8f9fa;
+}
+
+.compatibility-table td:first-child {
+  text-align: left;
+  font-weight: 500;
+}
+
+.supported {
+  color: #2ecc71;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.not-supported {
+  color: #e74c3c;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.partial {
+  color: #f39c12;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .compatibility-table th {
+    background-color: #2c2c2c;
+  }
+  
+  .compatibility-table tr:nth-child(even) {
+    background-color: #2c2c2c;
+  }
+  
+  .compatibility-table th,
+  .compatibility-table td {
+    border-color: #444;
+  }
+  
+  .table-container {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  }
+  
+  .supported {
+    color: #2ecc71;
+  }
+  
+  .not-supported {
+    color: #e74c3c;
+  }
+  
+  .partial {
+    color: #f39c12;
+  }
+}
+
+/* Media query for mobile devices */
+@media (max-width: 768px) {
+  .compatibility-table th,
+  .compatibility-table td {
+    padding: 0.75rem 0.5rem;
+    font-size: 0.9rem;
+  }
+  
+  .supported, .not-supported {
+    font-size: 1rem;
+  }
+  
+  .partial {
+    font-size: 0.8rem;
+  }
+}

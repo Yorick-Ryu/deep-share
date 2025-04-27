@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DeepShare - DeepSeek对话分享工具</title>
+    <title>DeepShare - AI对话分享工具</title>
     <link rel="icon" type="image/svg+xml" href="./assets/images/deepshare-icon.svg">
     <link rel="stylesheet" href="./assets/css/style.css">
 </head>
@@ -45,17 +45,18 @@
         <section class="hero">
             <div class="hero-content">
                 <h1>DeepShare</h1>
-                <p>一键分享 DeepSeek AI 对话，支持图片、文字！</p>
+                <p>轻松分享、保存和导出 AI 对话内容，特别优化数学公式处理！</p>
                 <div class="cta-buttons">
                     <a href="https://microsoftedge.microsoft.com/addons/detail/deepshare/pdccjnppfegekpnhfljbngammgfbcofm" class="cta-button primary">Edge商店安装</a>
                     <a href="https://chromewebstore.google.com/detail/omnaecaamcabmnbjnpjpecoaalfgidop"
                         class="cta-button secondary">Chrome商店安装</a>
                 </div>
-                <p class="install-note">⚠️ 安装后请刷新已打开的 DeepSeek 页面使插件生效</p>
+                <p class="install-note">⚠️ 安装后请刷新已打开的 AI 对话使插件生效</p>
             </div>
             <div class="hero-image">
                 <div class="carousel">
                     <div class="carousel-container">
+                        <img src="./assets/images/md2docx.png" alt="DeepShare md2docx" class="carousel-slide">
                         <img src="./assets/images/buttons.png" alt="DeepShare Buttons" class="carousel-slide">
                         <img src="./assets/images/select.png" alt="DeepShare Selection" class="carousel-slide">
                         <img src="./assets/images/main.png" alt="DeepShare Main" class="carousel-slide">
@@ -111,26 +112,50 @@
                         <path d="M8 13h8M8 17h8M8 9h1" />
                     </svg>
                     <h3>导出为Word文档</h3>
-                    <p>将DeepSeek回答一键转换为排版精美的Word文档，公式、代码完美保留</p>
+                    <p>将 AI 回答一键转换为排版精美的Word文档，公式、代码完美保留</p>
                 </div>
             </div>
         </section>
 
-        <section id="install" class="install">
-            <h2>安装教程</h2>
-            <div class="install-steps">
-                <div class="step">
-                    <div class="step-number">1</div>
-                    <p>从 Chrome / Edge 应用商店安装</p>
-                </div>
-                <div class="step">
-                    <div class="step-number">2</div>
-                    <p>与 DeepSeek 进行对话</p>
-                </div>
-                <div class="step">
-                    <div class="step-number">3</div>
-                    <p>开始使用分享功能</p>
-                </div>
+        <section id="compatibility" class="compatibility">
+            <h2>功能适配</h2>
+            <div class="table-container">
+                <table class="compatibility-table">
+                    <thead>
+                        <tr>
+                            <th>AI平台</th>
+                            <th>公式复制</th>
+                            <th>对话转Word</th>
+                            <th>对话截图</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>DeepSeek</td>
+                            <td><span class="supported">✓</span></td>
+                            <td><span class="supported">✓</span></td>
+                            <td><span class="supported">✓</span></td>
+                        </tr>
+                        <tr>
+                            <td>豆包</td>
+                            <td><span class="supported">✓</span></td>
+                            <td><span class="partial">手动复制</span></td>
+                            <td><span class="not-supported">✗</span></td>
+                        </tr>
+                        <tr>
+                            <td>元宝</td>
+                            <td><span class="supported">✓</span></td>
+                            <td><span class="partial">手动复制</span></td>
+                            <td><span class="not-supported">✗</span></td>
+                        </tr>
+                        <tr>
+                            <td>ChatGPT</td>
+                            <td><span class="supported">✓</span></td>
+                            <td><span class="partial">手动复制</span></td>
+                            <td><span class="not-supported">✗</span></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </section>
 
