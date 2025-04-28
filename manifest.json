@@ -31,7 +31,8 @@
         "https://askmanyai.cn/chat/*",
         "https://bot.n.cn/chat/*",
         "https://chat.yixiaai.com/chat/?*",
-        "https://www.wanzhi.com/chat/*"
+        "https://www.wanzhi.com/chat/*",
+        "https://www.zhihu.com/*"
     ],
     "background": {
         "service_worker": "background.js"
@@ -90,6 +91,19 @@
                 "lib/katex.min.js",
                 "scripts/notifications.js",
                 "scripts/copyKatex4Doubao.js"
+            ]
+        },
+        {
+            "matches": [
+                "https://www.zhihu.com/*"
+            ],
+            "css": [
+                "scripts/style.css"
+            ],
+            "js": [
+                "lib/katex.min.js",
+                "scripts/notifications.js",
+                "scripts/copyKatex4Zhihu.js"
             ]
         }
     ],
