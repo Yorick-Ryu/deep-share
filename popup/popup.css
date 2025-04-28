@@ -30,8 +30,10 @@
 }
 
 body {
-  width: 600px; /* Increased width */
-  height: 500px; /* Set a fixed height */
+  width: 600px;
+  /* Increased width */
+  height: 500px;
+  /* Set a fixed height */
   padding: 0;
   margin: 0;
   font-family: system-ui, -apple-system, sans-serif;
@@ -132,8 +134,13 @@ body {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 .content h2 {
@@ -364,7 +371,8 @@ button:hover {
 .quota-progress {
   height: 100%;
   background-color: var(--primary-color);
-  width: 0%; /* Will be set dynamically by JS */
+  width: 0%;
+  /* Will be set dynamically by JS */
   transition: width 0.3s ease;
 }
 
@@ -410,7 +418,8 @@ button:hover {
 
 .api-key-input-wrapper input[type="text"],
 .api-key-input-wrapper input[type="password"] {
-  padding-right: 70px; /* Make room for both buttons */
+  padding-right: 70px;
+  /* Make room for both buttons */
   width: 100%;
 }
 
@@ -422,10 +431,13 @@ button:hover {
 }
 
 @keyframes pulse-border {
-  0%, 100% {
+
+  0%,
+  100% {
     border-color: var(--error-color);
     box-shadow: 0 0 0 1px var(--error-color);
   }
+
   50% {
     border-color: #ff7875;
     box-shadow: 0 0 0 2px rgba(244, 67, 54, 0.5);
@@ -490,10 +502,21 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
 }
 
 @keyframes fadeInOut {
-  0% { opacity: 0; }
-  20% { opacity: 1; }
-  80% { opacity: 1; }
-  100% { opacity: 0; }
+  0% {
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 1;
+  }
+
+  80% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
 }
 
 /* Card styles - remove or adjust as they're not used in the new design */
@@ -504,7 +527,8 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
 /* Expiration date display */
 .expiration-info {
   display: flex;
-  justify-content: flex-start; /* Changed from center to flex-start */
+  justify-content: flex-start;
+  /* Changed from center to flex-start */
   align-items: center;
   margin-top: 12px;
   font-size: 12px;
@@ -521,7 +545,8 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
 }
 
 /* Manual conversion section styles */
-.manual-conversion-section, #manual-docx-tab {
+.manual-conversion-section,
+#manual-docx-tab {
   margin-top: 0;
   padding-top: 0;
   border-top: none;
@@ -540,7 +565,8 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
   color: var(--text-color);
 }
 
-#manual-docx-tab textarea, .manual-conversion-section textarea {
+#manual-docx-tab textarea,
+.manual-conversion-section textarea {
   width: 100%;
   padding: 8px;
   border: 1px solid var(--border-color);
@@ -553,7 +579,8 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
   min-height: 200px;
 }
 
-#manual-docx-tab textarea::placeholder, .manual-conversion-section textarea::placeholder {
+#manual-docx-tab textarea::placeholder,
+.manual-conversion-section textarea::placeholder {
   color: var(--text-secondary);
   opacity: 0.7;
 }

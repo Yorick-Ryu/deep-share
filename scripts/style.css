@@ -24,7 +24,8 @@
 .deepseek-share-btn {
   display: flex;
   align-items: center;
-  gap: 10px;  /* 增加按钮之间的间距 */
+  gap: 10px;
+  /* 增加按钮之间的间距 */
   margin-right: 8px;
   /* 添加右边距 */
 }
@@ -59,6 +60,7 @@
 
 /* 深色模式覆盖 */
 @media (prefers-color-scheme: dark) {
+
   .deepseek-share-btn .share-button,
   .deepseek-share-btn .select-button {
     color: rgb(205, 212, 223);
@@ -74,9 +76,11 @@
 }
 
 .select-button svg {
-  width: 23px;  /* 增加SVG图标大小 */
+  width: 23px;
+  /* 增加SVG图标大小 */
   height: 23px;
-  min-width: 23px;  /* 确保最小尺寸 */
+  min-width: 23px;
+  /* 确保最小尺寸 */
   min-height: 23px;
 }
 
@@ -367,9 +371,17 @@
 
 /* Add pulsing animation for KaTeX on click */
 @keyframes katex-pulse {
-  0% { box-shadow: 0 0 0 0 rgba(77, 107, 254, 0.4); }
-  70% { box-shadow: 0 0 0 6px rgba(77, 107, 254, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(77, 107, 254, 0); }
+  0% {
+    box-shadow: 0 0 0 0 rgba(77, 107, 254, 0.4);
+  }
+
+  70% {
+    box-shadow: 0 0 0 6px rgba(77, 107, 254, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(77, 107, 254, 0);
+  }
 }
 
 .katex:active {
@@ -387,6 +399,7 @@
     opacity: 0;
     transform: translateX(-50%) translateY(-10px);
   }
+
   to {
     opacity: 1;
     transform: translateX(-50%) translateY(0);

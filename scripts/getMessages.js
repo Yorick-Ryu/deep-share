@@ -83,8 +83,8 @@ function getAllMessages() {
 
         // AI 回复容器 - 在用户消息后面的元素
         const aiContainer = userContainer.nextElementSibling;
-        if (aiContainer && (aiContainer.classList.contains('_4f9bf79') || 
-                         aiContainer.classList.contains('_43c05b5'))) {
+        if (aiContainer && (aiContainer.classList.contains('_4f9bf79') ||
+            aiContainer.classList.contains('_43c05b5'))) {
             // 思考内容和时间
             const thinkingContent = Array.from(aiContainer.querySelectorAll('.e1675d8b .ba94db8a'))
                 .map(p => p.textContent.trim())

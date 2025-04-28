@@ -214,7 +214,7 @@ function injectShare(onClickHandler) {
 
             // 绑定点击事件
             buttonContainer.addEventListener('click', onClickHandler);
-            
+
             // 绑定选择按钮事件处理
             const selectBtn = buttonContainer.querySelector('.select-button');
             selectBtn.addEventListener('click', (e) => {
@@ -241,7 +241,7 @@ function injectShare(onClickHandler) {
     function toggleSelectionMode(buttonContainer) {
         const selectAllBtn = buttonContainer.querySelector('.select-all-btn');
         const existingCheckboxes = document.querySelectorAll('.message-checkbox-wrapper');
-        
+
         if (existingCheckboxes.length > 0) {
             // 如果存在复选框，清除它们并隐藏全选按钮
             existingCheckboxes.forEach(el => el.remove());
@@ -267,25 +267,25 @@ function injectShare(onClickHandler) {
 
             scrollToTop();
         }
-        
+
         // 显示全选按钮并重置选中状态
         selectAllBtn.style.display = '';
         selectAllBtn.textContent = chrome.i18n.getMessage('selectAllButton');
         isAllSelected = false; // 重置状态
-        
+
         // 为每个消息添加复选框，使用与getMessages.js相同的选择器
         document.querySelectorAll('._9663006, ._4f9bf79._43c05b5, ._4f9bf79.d7dc56a8._43c05b5').forEach(messageDiv => {
             const checkboxWrapper = document.createElement('div');
             checkboxWrapper.className = 'message-checkbox-wrapper';
-            
+
             const checkbox = document.createElement('input');
             checkbox.type = 'checkbox';
             checkbox.className = 'message-checkbox';
             checkbox.checked = false;
-            
+
             checkboxWrapper.appendChild(checkbox);
             messageDiv.appendChild(checkboxWrapper);
-            
+
             if (!messageDiv.style.position) {
                 messageDiv.style.position = 'relative';
             }

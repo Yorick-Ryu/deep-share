@@ -105,7 +105,7 @@ window.captureMessages = async function (customWatermark) {
             allowTaint: true,
             ignoreElements: (element) => {
                 return element.classList.contains('deepseek-share-btn') ||
-                       element.classList.contains('message-checkbox-wrapper');
+                    element.classList.contains('message-checkbox-wrapper');
             }
         });
 

@@ -6,7 +6,7 @@
 // Function to initialize the DOCX conversion feature
 function initDocxConverter() {
     console.log('DOCX converter initialized');
-    
+
     // Listen for messages from the main content script
     document.addEventListener('deepshare:convertToDocx', async (event) => {
         const message = event.detail?.messages || {};
@@ -24,15 +24,15 @@ async function convertToDocx(message, sourceButton) {
             docxApiKey: '',
             docxMode: 'api'
         });
-        
+
         // If no API key is set and using API mode, show notification and open popup
         if (settings.docxMode === 'api' && (!settings.docxApiKey || settings.docxApiKey.trim() === '')) {
             window.showToastNotification(
-                chrome.i18n.getMessage('apiKeyMissing') || '请购买或填写API-Key以使用文档转换功能', 
-                'error', 
+                chrome.i18n.getMessage('apiKeyMissing') || '请购买或填写API-Key以使用文档转换功能',
+                'error',
                 5000
             );
-            
+
             // Try to open the extension popup
             try {
                 chrome.runtime.sendMessage({ action: 'openPopup' });
@@ -46,7 +46,7 @@ async function convertToDocx(message, sourceButton) {
     }
 
     let convertingNotificationId = null;
-    
+
     // Disable the DOCX button if provided
     if (sourceButton && sourceButton instanceof Element) {
         sourceButton.style.opacity = '0.5';
@@ -56,11 +56,11 @@ async function convertToDocx(message, sourceButton) {
         sourceButton._originalTitle = sourceButton.title || chrome.i18n.getMessage('docxButton');
         sourceButton.title = chrome.i18n.getMessage('docxConverting');
     }
-    
+
     try {
         // Step 1: Find the correct copy button that's next to the clicked DOCX button
         let copyBtn;
-        
+
         // If we have the sourceButton reference, use it to find the adjacent copy button
         if (sourceButton && sourceButton instanceof Element) {
             // The copy button should be the previous sibling of the DOCX button
@@ -74,57 +74,57 @@ async function convertToDocx(message, sourceButton) {
             if (!docxBtn) {
                 throw new Error('DOCX button not found');
             }
-            
+
             copyBtn = docxBtn.previousElementSibling;
             if (!copyBtn || !copyBtn.classList.contains('ds-icon-button')) {
                 throw new Error('Copy button not found');
             }
         }
-        
+
         // Show the converting notification with loading spinner
         convertingNotificationId = window.showToastNotification(chrome.i18n.getMessage('docxConverting'), 'loading', 30000); // 30s timeout as max
-        
+
         // Click the copy button to copy content to clipboard
         copyBtn.click();
-        
+
         // Wait for clipboard to be populated
         await new Promise(resolve => setTimeout(resolve, 500));
-        
+
         // Step 2: Get content from clipboard
         const clipboardContent = await navigator.clipboard.readText();
         if (!clipboardContent) {
             throw new Error('Failed to get content from clipboard');
         }
-        
+
         // Get settings from storage
         const settings = await chrome.storage.sync.get({
             docxServerUrl: 'https://api.ds.rick216.cn',
             docxMode: 'local'
         });
-        
+
         // Use the appropriate conversion method based on mode
         if (settings.docxMode === 'local') {
             await convertToDocxLocally(clipboardContent);
         } else {
             await convertToDocxViaApi(clipboardContent, settings.docxServerUrl);
         }
-        
+
         // Hide converting notification
         if (convertingNotificationId !== null) {
             window.dismissToastNotification(convertingNotificationId);
         }
-        
+
         // Show success notification
         window.showToastNotification(chrome.i18n.getMessage('docxConversionSuccess'), 'success');
-        
+
     } catch (error) {
         console.error('DOCX conversion failed:', error);
-        
+
         // Hide converting notification
         if (convertingNotificationId !== null) {
             window.dismissToastNotification(convertingNotificationId);
         }
-        
+
         window.showToastNotification(error.message, 'error');
     } finally {
         // Re-enable the DOCX button if provided
@@ -161,20 +161,20 @@ async function convertToDocxLocally(content) {
             </body>
             </html>
         `;
-        
+
         // Create a Blob from the HTML
-        const blob = new Blob([html], {type: 'text/html'});
-        
+        const blob = new Blob([html], { type: 'text/html' });
+
         // Generate filename
         const filename = generateFilename(content) + '.html';
-        
+
         // Download the file (users can open it in Word)
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
         link.download = filename;
         link.click();
-        
+
         // Clean up
         URL.revokeObjectURL(url);
     } catch (error) {
@@ -197,15 +197,15 @@ async function convertToDocxViaApi(content, serverUrl) {
             docxServerUrl: 'https://api.ds.rick216.cn',
             docxApiKey: ''
         });
-        
+
         const url = serverUrl || settings.docxServerUrl || 'https://api.ds.rick216.cn';
         const apiKey = settings.docxApiKey;
-        
+
         // Ensure API key is provided
         if (!apiKey) {
             throw new Error('API Key not set. Please configure your API key in the extension settings.');
         }
-        
+
         // Call the conversion API
         const response = await fetch(`${url}/convert-text`, {
             method: 'POST',
@@ -218,25 +218,25 @@ async function convertToDocxViaApi(content, serverUrl) {
                 filename: generateFilename(content)
             })
         });
-        
+
         if (!response.ok) {
             const errorText = await response.text();
             throw new Error(`API error: ${response.status} ${errorText}`);
         }
-        
+
         // Download the file
         const blob = await response.blob();
         const filename = generateFilename(content) + '.docx';
-        
+
         const downloadUrl = URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = downloadUrl;
         link.download = filename;
         link.click();
-        
+
         // Clean up
         URL.revokeObjectURL(downloadUrl);
-        
+
         // After successful conversion, check and update the quota
         checkQuota();
     } catch (error) {
@@ -252,15 +252,15 @@ async function checkQuota() {
             docxServerUrl: 'https://api.ds.rick216.cn',
             docxApiKey: ''
         });
-        
+
         const url = settings.docxServerUrl;
         const apiKey = settings.docxApiKey;
-        
+
         // If not configured, exit quietly
         if (!apiKey || !url) {
             return;
         }
-        
+
         // Call the quota API
         const response = await fetch(`${url}/auth/quota`, {
             method: 'GET',
@@ -268,14 +268,14 @@ async function checkQuota() {
                 'X-API-Key': apiKey
             }
         });
-        
+
         if (!response.ok) {
             console.error('Failed to check quota');
             return;
         }
-        
+
         const quotaData = await response.json();
-        
+
         // Store quota information in local storage for access by popup
         chrome.storage.local.set({
             quotaData: {
@@ -285,7 +285,7 @@ async function checkQuota() {
                 lastChecked: new Date().toISOString()
             }
         });
-        
+
         // Notify the popup if it's open
         chrome.runtime.sendMessage({
             action: 'quotaUpdated',
@@ -293,7 +293,7 @@ async function checkQuota() {
         }).catch(() => {
             // It's ok if this fails (popup might not be open)
         });
-        
+
     } catch (error) {
         console.error('Error checking quota:', error);
     }
@@ -305,7 +305,7 @@ function generateFilename(content) {
     function getChinaTimestamp() {
         const now = new Date();
         // Format date in China timezone (UTC+8)
-        const options = { 
+        const options = {
             timeZone: 'Asia/Shanghai',
             year: 'numeric', month: '2-digit', day: '2-digit',
             hour: '2-digit', minute: '2-digit', second: '2-digit',
@@ -316,29 +316,29 @@ function generateFilename(content) {
             .replace(',', '');
         return chinaTime;
     }
-    
+
     // Default filename generation
     if (!content || typeof content !== 'string') {
         // Fallback if no valid content
         const timestamp = getChinaTimestamp();
         return `document_${timestamp}`;
     }
-    
+
     // Extract the first line or first few words for the filename
     const firstLine = content.split('\n')[0] || '';
     let filename = firstLine.trim();
-    
+
     // If first line is too long, truncate it
     filename = filename.substring(0, 10).trim();
-    
+
     // Remove special characters that aren't allowed in filenames
     filename = filename.replace(/[^a-zA-Z0-9_\u4e00-\u9fa5]/g, '');
-    
+
     // If filename is still empty after cleaning, use a default
     if (!filename) {
         filename = 'document';
     }
-    
+
     // Add timestamp with China timezone
     const timestamp = getChinaTimestamp();
     return `${filename}_${timestamp}`;

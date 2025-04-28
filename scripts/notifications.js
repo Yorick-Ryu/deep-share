@@ -10,10 +10,10 @@ let toastCounter = 0;
 // Function to show a toast notification in DeepSeek's native style
 function showToastNotification(message, type = 'success', duration = 2000) {
     const toastId = ++toastCounter;
-    
+
     // Check if there's already an existing notification container
     let container = document.querySelector('.ds-toast-container');
-    
+
     // If no container exists, create one matching DeepSeek's structure
     if (!container) {
         container = document.createElement('div');
@@ -31,10 +31,10 @@ function showToastNotification(message, type = 'success', duration = 2000) {
             width: auto;
             pointer-events: none;
         `;
-        
+
         document.body.appendChild(container);
     }
-    
+
     // Create animation wrapper
     const animationWrapper = document.createElement('div');
     animationWrapper.className = 'ds-toast-animation';
@@ -46,12 +46,12 @@ function showToastNotification(message, type = 'success', duration = 2000) {
         justify-content: center;
         width: auto;
     `;
-    
+
     // Detect dark mode
-    const isDarkMode = document.documentElement.classList.contains('dark') || 
-                       document.body.classList.contains('dark') ||
-                       window.matchMedia('(prefers-color-scheme: dark)').matches;
-    
+    const isDarkMode = document.documentElement.classList.contains('dark') ||
+        document.body.classList.contains('dark') ||
+        window.matchMedia('(prefers-color-scheme: dark)').matches;
+
     // Create toast element with appropriate dark mode styling
     const toast = document.createElement('div');
     toast.className = `ds-toast ds-toast--plain ds-toast--${type}`;
@@ -67,11 +67,11 @@ function showToastNotification(message, type = 'success', duration = 2000) {
         min-width: 200px;
         max-width: 80vw;
     `;
-    
+
     // Add icon based on type
     let iconSVG;
     let iconColor;
-    
+
     if (type === 'success') {
         iconSVG = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 20 20"><g fill="none"><path d="M10 2a8 8 0 1 1 0 16a8 8 0 0 1 0-16zm3.358 5.646a.5.5 0 0 0-.637-.057l-.07.057L9 11.298L7.354 9.651l-.07-.058a.5.5 0 0 0-.695.696l.057.07l2 2l.07.057a.5.5 0 0 0 .568 0l.07-.058l4.004-4.004l.058-.07a.5.5 0 0 0-.058-.638z" fill="currentColor"></path></g></svg>';
         iconColor = '#4caf50';
@@ -100,7 +100,7 @@ function showToastNotification(message, type = 'success', duration = 2000) {
         color: ${iconColor};
     `;
     iconDiv.innerHTML = iconSVG;
-    
+
     // Add spinning animation if this is a loading icon
     if (type === 'loading') {
         // Add keyframes for the spinner animation
@@ -120,7 +120,7 @@ function showToastNotification(message, type = 'success', duration = 2000) {
             document.head.appendChild(styleSheet);
         }
     }
-    
+
     // Create content
     const contentDiv = document.createElement('div');
     contentDiv.className = 'ds-toast__content';
@@ -130,7 +130,7 @@ function showToastNotification(message, type = 'success', duration = 2000) {
         line-height: 1.5;
     `;
     contentDiv.textContent = message;
-    
+
     // Create close button with consistent styling in dark mode
     const closeDiv = document.createElement('div');
     closeDiv.className = 'ds-toast__close';
@@ -147,27 +147,27 @@ function showToastNotification(message, type = 'success', duration = 2000) {
         color: ${isDarkMode ? '#e0e0e0' : '#333'};
     `;
     closeDiv.innerHTML = '<svg viewBox="0 0 10 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M9.314 1.187a.97.97 0 0 1 0 1.373L2.059 9.815A.97.97 0 1 1 .686 8.443l7.255-7.256a.97.97 0 0 1 1.373 0z" fill="currentColor"></path><path fill-rule="evenodd" clip-rule="evenodd" d="M.686 1.185a.97.97 0 0 1 1.373 0l7.255 7.256A.97.97 0 0 1 7.94 9.814L.686 2.558a.97.97 0 0 1 0-1.373z" fill="currentColor"></path></svg>';
-    
+
     // Add hover effect to close button
     closeDiv.addEventListener('mouseenter', () => {
         closeDiv.style.opacity = '1';
     });
-    
+
     closeDiv.addEventListener('mouseleave', () => {
         closeDiv.style.opacity = '0.6';
     });
-    
+
     // Assemble the toast
     toast.appendChild(iconDiv);
     toast.appendChild(contentDiv);
     toast.appendChild(closeDiv);
-    
+
     // Add toast to animation wrapper
     animationWrapper.appendChild(toast);
-    
+
     // Add to container
     container.appendChild(animationWrapper);
-    
+
     // Apply fade-in animation
     animationWrapper.animate(
         [
@@ -176,12 +176,12 @@ function showToastNotification(message, type = 'success', duration = 2000) {
         ],
         { duration: 300, fill: 'forwards', easing: 'ease-out' }
     );
-    
+
     // Function to remove the toast with animation
     function removeToast() {
         clearTimeout(timeoutId);
         activeToasts.delete(toastId);
-        
+
         const fadeOutAnimation = animationWrapper.animate(
             [
                 { opacity: 1, transform: 'translateY(0) scale(1)' },
@@ -189,12 +189,12 @@ function showToastNotification(message, type = 'success', duration = 2000) {
             ],
             { duration: 300, fill: 'forwards', easing: 'ease-in' }
         );
-        
+
         fadeOutAnimation.onfinish = () => {
             if (container.contains(animationWrapper)) {
                 container.removeChild(animationWrapper);
             }
-            
+
             // If no more toasts, remove the container
             if (container.children.length === 0) {
                 if (document.body.contains(container)) {
@@ -203,20 +203,20 @@ function showToastNotification(message, type = 'success', duration = 2000) {
             }
         };
     }
-    
+
     // Handle close button click
     closeDiv.addEventListener('click', () => {
         removeToast();
     });
-    
+
     // Store the removeToast function so we can call it programmatically
     activeToasts.set(toastId, removeToast);
-    
+
     // Auto-remove after duration (if not info type)
     const timeoutId = setTimeout(() => {
         removeToast();
     }, duration);
-    
+
     return toastId; // Return ID for programmatic dismissal
 }
 
