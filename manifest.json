@@ -24,7 +24,14 @@
         "https://yuanbao.tencent.com/chat/*",
         "https://www.doubao.com/chat/*",
         "https://chatgpt.com/c/*",
-        "https://www.tongyi.com/*"
+        "https://grok.com/chat/*",
+        "https://www.tongyi.com/*",
+        "https://chatglm.cn/main/*",
+        "https://poe.com/chat/*",
+        "https://askmanyai.cn/chat/*",
+        "https://bot.n.cn/chat/*",
+        "https://chat.yixiaai.com/chat/?*",
+        "https://www.wanzhi.com/chat/*"
     ],
     "background": {
         "service_worker": "background.js"
@@ -54,7 +61,14 @@
             "matches": [
                 "https://yuanbao.tencent.com/chat/*",
                 "https://chatgpt.com/c/*",
-                "https://www.tongyi.com/*"
+                "https://grok.com/chat/*",
+                "https://www.tongyi.com/*",
+                "https://chatglm.cn/main/*",
+                "https://poe.com/chat/*",
+                "https://askmanyai.cn/chat/*",
+                "https://bot.n.cn/chat/*",
+                "https://chat.yixiaai.com/chat?*",
+                "https://www.wanzhi.com/chat/*"
             ],
             "css": [
                 "scripts/style.css"
