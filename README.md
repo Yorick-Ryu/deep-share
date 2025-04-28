@@ -31,7 +31,9 @@ A lightweight browser extension designed for AI users to easily share, save, and
 | ChatGPT | ✓ | Manual copy | ✗ |
 | Grok | ✓ | Manual copy | ✗ |
 | Tongyi | ✓ | Manual copy | ✗ |
+| Xunfei Xinghuo | ✓ | Manual copy | ✗ |
 | ChatGLM | ✓ | Manual copy | ✗ |
+| OpenRouter | ✓ | Manual copy | ✗ |
 | Poe | ✓ | Manual copy | ✗ |
 | AskManyAI | ✓ | Manual copy | ✗ |
 | Wanzhi | ✓ | Manual copy | ✗ |
