@@ -29,6 +29,15 @@ A lightweight browser extension designed for AI users to easily share, save, and
 | Doubao | ✓ | Manual copy | ✗ |
 | Yuanbao | ✓ | Manual copy | ✗ |
 | ChatGPT | ✓ | Manual copy | ✗ |
+| Grok | ✓ | Manual copy | ✗ |
+| Tongyi | ✓ | Manual copy | ✗ |
+| ChatGLM | ✓ | Manual copy | ✗ |
+| Poe | ✓ | Manual copy | ✗ |
+| AskManyAI | ✓ | Manual copy | ✗ |
+| Wanzhi | ✓ | Manual copy | ✗ |
+| Yi Xiao | ✓ | Manual copy | ✗ |
+| Bot.n | ✓ | Manual copy | ✗ |
+| Zhihu | ✓ | Manual copy | ✗ |
 
 ## Installation
 

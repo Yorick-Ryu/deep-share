@@ -545,7 +545,7 @@ footer {
 }
 
 .compatibility-table td:first-child {
-  text-align: left;
+  text-align: center;
   font-weight: 500;
 }
 
