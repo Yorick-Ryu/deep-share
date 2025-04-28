@@ -23,7 +23,8 @@
         "https://chat.deepseek.com/*",
         "https://yuanbao.tencent.com/chat/*",
         "https://www.doubao.com/chat/*",
-        "https://chatgpt.com/c/*"
+        "https://chatgpt.com/c/*",
+        "https://www.tongyi.com/*"
     ],
     "background": {
         "service_worker": "background.js"
@@ -52,7 +53,8 @@
         {
             "matches": [
                 "https://yuanbao.tencent.com/chat/*",
-                "https://chatgpt.com/c/*"
+                "https://chatgpt.com/c/*",
+                "https://www.tongyi.com/*"
             ],
             "css": [
                 "scripts/style.css"
