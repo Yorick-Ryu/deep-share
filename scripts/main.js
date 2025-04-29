@@ -1,73 +1,81 @@
 let messages = [];
 
 const handleShareClick = async () => {
-    // 先获取容器并执行滚动
-    const container = document.querySelector('.dad65929');
-    if (container) {
-        const scrollToTop = () => {
-            window.scrollTo(0, 0);
-            document.documentElement.scrollTo(0, 0);
-            document.body.scrollTo(0, 0);
-            container.scrollTo(0, 0);
-            
-            window.scrollTop = 0;
-            document.documentElement.scrollTop = 0;
-            document.body.scrollTop = 0;
-            container.scrollTop = 0;
-            
-            let parent = container.parentElement;
-            while (parent) {
-                parent.scrollTop = 0;
-                parent = parent.parentElement;
-            }
-        };
-
-        scrollToTop();
-        await new Promise(resolve => setTimeout(resolve, 200));
-    }
-
-    // 然后再处理对话框和截图
-    messages = getMessages();
-    const modal = document.querySelector('.deepseek-share-modal');
-    if (!modal) {
-        injectShare(handleShareClick);
-        return;
-    }
-
-    modal.style.display = 'block';
-    
-    // 确保切换到图片面板
-    const imageTab = modal.querySelector('.tab-btn[data-tab="image"]');
-    const imagePanel = modal.querySelector('#image-panel');
-    
-    modal.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
-    modal.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-    
-    imageTab.classList.add('active');
-    imagePanel.classList.add('active');
-
-    // 立即开始生成截图
-    const img = modal.querySelector('#conversation-image');
-    const loadingEl = modal.querySelector('.image-loading');
-    img.style.display = 'none';
-    loadingEl.style.display = 'block';
-
     try {
-        // 获取保存的自定义水印
-        const { customWatermark } = await chrome.storage.sync.get('customWatermark');
-        const imageUrl = await window.captureMessages(customWatermark);
-        if (imageUrl) {
-            img.onload = () => {
-                img.style.display = 'block';
-                loadingEl.style.display = 'none';
+        // 先获取容器并执行滚动
+        const container = document.querySelector('.dad65929');
+        if (container) {
+            const scrollToTop = () => {
+                window.scrollTo(0, 0);
+                document.documentElement.scrollTo(0, 0);
+                document.body.scrollTo(0, 0);
+                container.scrollTo(0, 0);
+
+                window.scrollTop = 0;
+                document.documentElement.scrollTop = 0;
+                document.body.scrollTop = 0;
+                container.scrollTop = 0;
+
+                let parent = container.parentElement;
+                while (parent) {
+                    parent.scrollTop = 0;
+                    parent = parent.parentElement;
+                }
             };
-            img.src = imageUrl;
-        } else {
-            throw new Error('Failed to generate image');
+
+            scrollToTop();
+            await new Promise(resolve => setTimeout(resolve, 200));
+        }
+
+        // 然后再处理对话框和截图
+        messages = getMessages();
+        const modal = document.querySelector('.deepseek-share-modal');
+        if (!modal) {
+            injectShare(handleShareClick);
+            return;
+        }
+
+        modal.style.display = 'block';
+
+        // 确保切换到图片面板
+        const imageTab = modal.querySelector('.tab-btn[data-tab="image"]');
+        const imagePanel = modal.querySelector('#image-panel');
+
+        modal.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+        modal.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+
+        imageTab.classList.add('active');
+        imagePanel.classList.add('active');
+
+        // 立即开始生成截图
+        const img = modal.querySelector('#conversation-image');
+        const loadingEl = modal.querySelector('.image-loading');
+        img.style.display = 'none';
+        loadingEl.style.display = 'block';
+
+        try {
+            // 获取保存的自定义水印
+            const { customWatermark } = await chrome.storage.sync.get('customWatermark');
+            const imageUrl = await window.captureMessages(customWatermark);
+            if (imageUrl) {
+                img.onload = () => {
+                    img.style.display = 'block';
+                    loadingEl.style.display = 'none';
+                };
+                img.src = imageUrl;
+            } else {
+                throw new Error('Failed to generate image');
+            }
+        } catch (error) {
+            console.error('Screenshot failed:', error);
+            loadingEl.textContent = chrome.i18n.getMessage('generateFailed');
         }
     } catch (error) {
-        console.error('Screenshot failed:', error);
-        loadingEl.textContent = '截图生成失败，请重试';
+        if (error.message === 'NO_SELECTION') {
+            alert(chrome.i18n.getMessage('noMessageSelected'));
+            return;
+        }
+        console.error('Share failed:', error);
     }
 };
 
@@ -114,5 +122,3 @@ if (document.readyState === 'loading') {
 } else {
     injectShare(handleShareClick);
 }
-
-

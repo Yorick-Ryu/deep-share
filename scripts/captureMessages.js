@@ -1,6 +1,18 @@
-window.captureMessages = async function(customWatermark) {
+window.captureMessages = async function (customWatermark) {
     const container = document.querySelector('.dad65929');
     if (!container) return null;
+
+    // 检查是否存在复选框
+    const checkboxes = document.querySelectorAll('.message-checkbox');
+    if (checkboxes.length > 0) {
+        // 如果存在复选框，隐藏未选中的对话
+        checkboxes.forEach(checkbox => {
+            const messageDiv = checkbox.closest('._9663006, ._4f9bf79._43c05b5, ._4f9bf79.d7dc56a8._43c05b5');
+            if (messageDiv) {
+                messageDiv.style.display = checkbox.checked ? '' : 'none';
+            }
+        });
+    }
 
     // 获取水印设置
     const { hideDefaultWatermark } = await chrome.storage.sync.get('hideDefaultWatermark');
@@ -32,7 +44,7 @@ window.captureMessages = async function(customWatermark) {
         font-size: 13px;
         color: #666;
     `;
-    defaultWatermark.innerHTML = '内容由 <strong>DeepSeek AI</strong> 生成，图片由 <strong>DeepShare</strong> 插件截取';
+    defaultWatermark.innerHTML = chrome.i18n.getMessage('defaultWatermark');
 
     if (customWatermark) {
         const customWatermarkEl = document.createElement('div');
@@ -61,11 +73,11 @@ window.captureMessages = async function(customWatermark) {
 
         // 获取实际背景色，优先从对话容器获取，然后是body
         let backgroundColor = getComputedStyle(container).backgroundColor;
-        
+
         // 如果背景色是透明的，尝试获取 body 的背景色
         if (backgroundColor === 'transparent' || backgroundColor === 'rgba(0, 0, 0, 0)') {
             backgroundColor = getComputedStyle(document.body).backgroundColor;
-            
+
             // 如果还是透明的，使用固定的背景色
             if (backgroundColor === 'transparent' || backgroundColor === 'rgba(0, 0, 0, 0)') {
                 // 根据页面主题设置默认背景色
@@ -92,14 +104,25 @@ window.captureMessages = async function(customWatermark) {
             scale: window.devicePixelRatio,
             allowTaint: true,
             ignoreElements: (element) => {
-                return element.classList.contains('deepseek-share-btn');
+                return element.classList.contains('deepseek-share-btn') ||
+                    element.classList.contains('message-checkbox-wrapper');
             }
         });
-        
+
+        // 恢复被隐藏的对话
+        if (checkboxes.length > 0) {
+            checkboxes.forEach(checkbox => {
+                const messageDiv = checkbox.closest('._9663006, ._4f9bf79._43c05b5, ._4f9bf79.d7dc56a8._43c05b5');
+                if (messageDiv) {
+                    messageDiv.style.display = '';
+                }
+            });
+        }
+
         // 移除水印并恢复容器原始定位
         container.removeChild(watermarkContainer);
         container.style.position = originalPosition;
-        
+
         return canvas.toDataURL('image/png');
     } catch (error) {
         // 确保发生错误时也清理现场

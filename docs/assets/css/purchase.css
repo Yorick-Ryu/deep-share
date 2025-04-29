@@ -1,0 +1,1675 @@
+/* Purchase page specific styles */
+.pricing-card {
+    border-radius: 12px;
+    border: 1px solid #eee;
+    padding: 2rem;
+    margin: 2rem 0;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+}
+.pricing-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+}
+.price-tag {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #4D6BFE;
+    margin: 1rem 0;
+}
+.per-unit {
+    font-size: 1rem;
+    color: #666;
+    font-weight: normal;
+}
+.promotion-badge {
+    display: inline-block;
+    background-color: #FF6B6B;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+.promotion-details {
+    background-color: rgba(255, 107, 107, 0.1);
+    border-left: 4px solid #FF6B6B;
+    padding: 1rem;
+    margin: 1.5rem 0;
+}
+.purchase-form {
+    margin-top: 2rem;
+}
+.form-group {
+    margin-bottom: 1.5rem;
+}
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+.form-group input {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+.amount-options {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin: 1rem 0;
+}
+.amount-option {
+    background: white;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.amount-option:hover {
+    border-color: #4D6BFE;
+}
+.amount-option.selected {
+    border-color: #4D6BFE;
+    background: rgba(77, 107, 254, 0.05);
+}
+.amount-value {
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+.conversions {
+    color: #666;
+    font-size: 0.9rem;
+    margin-top: 0.3rem;
+}
+.bonus {
+    color: #FF6B6B;
+    font-weight: bold;
+    font-size: 0.9rem;
+    margin-top: 0.3rem;
+}
+.purchase-btn {
+    background: #4D6BFE;
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    width: 100%;
+    transition: all 0.2s ease;
+}
+.purchase-btn:hover {
+    background: #3D5BEE;
+    transform: translateY(-2px);
+}
+.api-instructions {
+    margin-top: 3rem;
+    padding: 1.5rem;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+.step-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background-color: #4D6BFE;
+    color: white;
+    border-radius: 50%;
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin-right: 0.5rem;
+}
+code {
+    background: rgba(77, 107, 254, 0.1);
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-family: monospace;
+}
+
+/* Custom amount styles */
+.custom-amount-input-group {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.currency-symbol {
+    background-color: #f5f5f5;
+    padding: 0.8rem;
+    border-right: 1px solid #ddd;
+    font-weight: bold;
+}
+
+.custom-amount-input-group input {
+    border: none;
+    border-radius: 0;
+    flex: 1;
+}
+
+.custom-amount-input-group input:focus {
+    outline: none;
+}
+
+.custom-amount-details {
+    margin-top: 1rem;
+    padding: 1rem;
+    background-color: #f9f9f9;
+    border-radius: 6px;
+}
+
+.bonus-text {
+    font-weight: bold;
+    color: #FF6B6B;
+}
+
+input[type="number"] {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+input[type="number"]::-webkit-inner-spin-button, 
+input[type="number"]::-webkit-outer-spin-button { 
+    opacity: 1;
+}
+
+/* Responsive adjustments for amount options */
+@media (max-width: 768px) {
+    .amount-options {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Purchase page specific styles */
+.feature-description {
+    font-size: 1.2rem;
+    font-weight: 500;
+    line-height: 1.6;
+    margin: 1.5rem 0;
+    color: #333;
+    border-left: 4px solid #4D6BFE;
+    padding-left: 1rem;
+}
+
+/* Content layout styles */
+.content {
+    max-width: 1200px;
+    margin: 100px auto;
+    padding: 0 20px;
+}
+
+/* Two-column layout for desktop */
+@media (min-width: 992px) {
+    .content > h1 {
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+    
+    /* Create a two-column layout */
+    .content {
+        display: grid;
+        grid-template-columns: 5fr 7fr;
+        grid-template-areas: 
+            "heading heading"
+            "left-col right-col";
+        gap: 2rem;
+    }
+    
+    .content > h1 {
+        grid-area: heading;
+        width: 100%;
+    }
+    
+    /* Left column with free features and API instructions */
+    .left-column-wrapper {
+        grid-area: left-col;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .free-features-section {
+        margin: 0;
+    }
+    
+    .api-instructions {
+        margin: 0;
+        width: auto;
+    }
+    
+    /* Right column with pricing card */
+    .pricing-card {
+        grid-area: right-col;
+        margin: 0;
+        align-self: start;
+        padding-top: 1rem;
+    }
+}
+
+/* Free features section */
+.free-features-section {
+    background-color: #f5f8ff;
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    border-left: 4px solid #4D6BFE;
+}
+.free-features-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-top: 1rem;
+}
+.free-feature-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+}
+.free-feature-item:before {
+    content: "✓";
+    color: #4D6BFE;
+    font-weight: bold;
+}
+.paid-feature-explanation {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(77, 107, 254, 0.2);
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+    .pricing-card {
+        border-color: #333;
+        background-color: #2d2d2d;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    .amount-option {
+        background: #2d2d2d;
+        border-color: #444;
+    }
+    .amount-option.selected {
+        background: rgba(77, 107, 254, 0.2);
+    }
+    .api-instructions {
+        background-color: #2d2d2d;
+        border-color: #333;
+    }
+    .form-group input {
+        background-color: #2d2d2d;
+        border-color: #444;
+        color: #fff;
+    }
+    .currency-symbol {
+        background-color: #333;
+        border-color: #444;
+    }
+    .custom-amount-details {
+        background-color: #2d2d2d;
+    }
+    input[type="number"] {
+        background-color: #2d2d2d;
+        border-color: #444;
+        color: #fff;
+    }
+    .feature-description {
+        color: #eee;
+    }
+    .free-features-section {
+        background-color: #2a2d3a;
+        border-left-color: #4D6BFE;
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 991px) {
+    /* On mobile and tablets, stack the elements in the original order */
+    .free-features-section,
+    .pricing-card,
+    .api-instructions {
+        margin: 2rem 0;
+    }
+}
+
+/* Responsive adjustments for free features list */
+@media (max-width: 768px) {
+    .free-features-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* WeChat Payment Modal Styles */
+.payment-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.payment-modal-content {
+    background-color: white;
+    border-radius: 12px;
+    padding: 2rem;
+    max-width: 500px;
+    width: 90%;
+    position: relative;
+    text-align: center;
+}
+
+.close-modal {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #888;
+}
+
+.close-modal:hover {
+    color: #333;
+}
+
+.payment-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin: 1.5rem 0;
+    text-align: left;
+    padding-left: 1rem;
+}
+
+.payment-step {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.payment-step .step-number {
+    min-width: 24px;
+    height: 24px;
+    background-color: #4D6BFE;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    font-weight: bold;
+    flex-shrink: 0;
+    margin: 0;
+}
+
+.payment-step p {
+    margin: 0;
+    line-height: 1.5;
+    text-align: left;
+    flex-grow: 1;
+    font-size: 1.1rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    min-height: 24px;
+}
+
+.wechat-qrcode {
+    margin: 2rem auto;
+    max-width: 200px;
+}
+
+.wechat-qrcode img {
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.wechat-id {
+    margin-top: 0.5rem;
+    text-align: center;
+    font-weight: 500;
+    font-size: 1rem;
+    color: #333;
+}
+
+.payment-note {
+    margin: 1.5rem 0;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.copy-again-btn {
+    background: #4D6BFE;
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.copy-again-btn:hover {
+    background: #3D5BEE;
+}
+
+.copy-confirmation {
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    animation: fadeInOut 2s ease;
+}
+
+@keyframes fadeInOut {
+    0% { opacity: 0; }
+    20% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+/* Dark mode styles for modal */
+@media (prefers-color-scheme: dark) {
+    .payment-modal-content {
+        background-color: #2d2d2d;
+        color: #fff;
+    }
+    
+    .close-modal {
+        color: #aaa;
+    }
+    
+    .close-modal:hover {
+        color: #fff;
+    }
+    
+    .payment-note {
+        color: #aaa;
+    }
+    
+    .wechat-id {
+        color: #eee;
+    }
+}
+
+/* Responsive adjustments for modal */
+@media (max-width: 480px) {
+    .payment-modal-content {
+        padding: 1.5rem;
+    }
+}
+
+/* Quota Checker styles */
+.quota-checker {
+    background-color: #f5f8ff;
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    border-left: 4px solid #4D6BFE;
+}
+
+.quota-form {
+    margin: 1.5rem 0;
+}
+
+.check-quota-btn {
+    background: #4D6BFE;
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.2s ease;
+    width: 100%;
+}
+
+.check-quota-btn:hover {
+    background: #3D5BEE;
+    transform: translateY(-2px);
+}
+
+.quota-result-card {
+    background-color: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    margin-top: 1.5rem;
+}
+
+.quota-stats {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+}
+
+.quota-stat-item {
+    text-align: center;
+    flex: 1;
+}
+
+.quota-stat-label {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 0.5rem;
+}
+
+.quota-stat-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.quota-stat-value.highlight {
+    color: #4D6BFE;
+}
+
+.quota-progress-wrapper {
+    padding: 0.5rem 0;
+}
+
+.quota-progress-bg {
+    height: 8px;
+    background-color: #eee;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.quota-progress-fill {
+    height: 100%;
+    background-color: #4D6BFE;
+    border-radius: 4px;
+    width: 0%;
+    transition: width 0.6s ease;
+}
+
+/* Add styles for expiration date display */
+.quota-expiration {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.quota-expiration-label {
+    font-size: 0.9rem;
+    color: #666;
+    margin-right: 0.5rem;
+}
+
+.quota-expiration-value {
+    font-weight: 500;
+    color: #666;
+}
+
+/* Dark mode styles */
+@media (prefers-color-scheme: dark) {
+    .quota-expiration {
+        border-top-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .quota-expiration-label {
+        color: #aaa;
+    }
+}
+
+/* Dark mode styles for quota checker */
+@media (prefers-color-scheme: dark) {
+    .quota-checker {
+        background-color: #2a2d3a;
+    }
+    
+    .quota-result-card {
+        background-color: #2d2d2d;
+    }
+    
+    .quota-progress-bg {
+        background-color: #444;
+    }
+    
+    .quota-stat-label {
+        color: #aaa;
+    }
+}
+
+/* API Key Input Styles */
+.api-key-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.api-key-input-wrapper input {
+    padding-right: 70px; /* Make room for both buttons */
+}
+
+/* Hide browser's default password reveal icon */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear,
+input[type="password"]::-webkit-contacts-auto-fill-button,
+input[type="password"]::-webkit-credentials-auto-fill-button {
+    display: none !important;
+    visibility: hidden;
+    pointer-events: none;
+    opacity: 0;
+}
+
+.toggle-visibility-btn,
+.copy-api-key-btn {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #666;
+    padding: 4px;
+    height: 32px;
+    width: 32px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.toggle-visibility-btn:hover,
+.copy-api-key-btn:hover {
+    background: rgba(77, 107, 254, 0.1);
+    color: #4D6BFE;
+}
+
+.toggle-visibility-btn {
+    right: 36px;
+}
+
+.copy-api-key-btn {
+    right: 4px;
+}
+
+/* Tooltip for copy success */
+.copy-tooltip {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 12px;
+    top: -30px;
+    right: 0;
+    white-space: nowrap;
+    opacity: 0;
+    animation: fadeInOut 1.5s ease;
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+    .toggle-visibility-btn,
+    .copy-api-key-btn {
+        color: #aaa;
+    }
+    
+    .toggle-visibility-btn:hover,
+    .copy-api-key-btn:hover {
+        color: #fff;
+    }
+}
+
+/* FAQ Section Styles */
+.faq-section {
+    background-color: #f5f8ff;
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    border-left: 4px solid #4D6BFE;
+}
+
+.faq-section h2 {
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+    font-size: 1.5rem;
+}
+
+.faq-card {
+    border-bottom: 1px solid rgba(77, 107, 254, 0.2);
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+}
+
+.faq-card:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.faq-question {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    font-size: 1.05rem;
+    color: var(--text-color);
+}
+
+.faq-answer {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+/* Dark mode styles for FAQ section */
+@media (prefers-color-scheme: dark) {
+    .faq-section {
+        background-color: #2a2d3a;
+    }
+    
+    .faq-card {
+        border-bottom-color: rgba(77, 107, 254, 0.3);
+    }
+}
+
+/* FAQ styles that work with the api-instructions class */
+.api-instructions .faq-card {
+    border-bottom: 1px solid rgba(77, 107, 254, 0.2);
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+}
+
+.api-instructions .faq-card:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.api-instructions .faq-question {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    font-size: 1.05rem;
+    color: var(--text-color);
+}
+
+.api-instructions .faq-answer {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+    .api-instructions .faq-card {
+        border-bottom-color: rgba(77, 107, 254, 0.3);
+    }
+}
+
+/* Alipay Payment Modal Styles */
+.alipay-qrcode {
+    margin: 2rem auto;
+    max-width: 200px;
+    text-align: center;
+}
+
+.alipay-qrcode img {
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.payment-status {
+    font-size: 1rem;
+    font-weight: 500;
+    margin-top: 1rem;
+    color: #666;
+}
+
+.payment-status.success {
+    color: #4CAF50;
+}
+
+.payment-status.error {
+    color: #FF5252;
+}
+
+.payment-progress-spinner {
+    margin: 1rem auto;
+    width: 30px;
+    height: 30px;
+    border: 3px solid rgba(77, 107, 254, 0.3);
+    border-top-color: #4D6BFE;
+    border-radius: 50%;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.order-summary {
+    margin: 1.5rem auto;
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    padding: 1.5rem;
+    max-width: 300px;
+    text-align: left;
+}
+
+.order-detail {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+    width: 100%;
+}
+
+.order-detail span:first-child {
+    text-align: left;
+}
+
+.order-detail span:last-child {
+    text-align: right;
+}
+
+.order-detail.total {
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid #ddd;
+    font-weight: bold;
+}
+
+.order-id {
+    margin-top: 1.5rem;
+    font-size: 0.85rem;
+    color: #888;
+}
+
+.open-alipay-btn {
+    display: inline-block;
+    background-color: #00a0e9; /* Alipay blue color */
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    text-decoration: none;
+    margin: 1rem 0;
+    transition: all 0.2s ease;
+}
+
+.open-alipay-btn:hover {
+    background-color: #0092d2;
+}
+
+/* Success screen after payment */
+.success-icon {
+    width: 64px;
+    height: 64px;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    margin: 0 auto 1rem auto;
+}
+
+.api-key-section {
+    margin: 1.5rem 0;
+    padding: 1rem;
+    border-radius: 8px;
+    background-color: #f8f8f8;
+}
+
+.api-key-display-wrapper {
+    position: relative;
+    display: flex;
+    margin: 1rem 0;
+}
+
+.api-key-display-wrapper input {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-family: monospace;
+    letter-spacing: 1px;
+}
+
+.api-key-instruction {
+    font-size: 0.9rem;
+    color: #666;
+    margin-top: 0.5rem;
+}
+
+.quota-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    margin: 1rem 0;
+}
+
+.quota-stat-item {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+    min-width: 100px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.quota-stat-label {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 0.5rem;
+}
+
+.quota-stat-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.quota-stat-value.highlight {
+    color: #FF6B6B;
+}
+
+.success-close-btn {
+    background: #4D6BFE;
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.2s ease;
+    margin-top: 1.5rem;
+}
+
+.success-close-btn:hover {
+    background: #3D5BEE;
+}
+
+.next-steps {
+    text-align: left;
+    margin: 1.5rem 0;
+    padding: 1rem;
+    background-color: #f0f4ff;
+    border-radius: 8px;
+}
+
+.next-steps h3 {
+    margin-bottom: 0.8rem;
+}
+
+.next-steps ol {
+    margin-left: 1.5rem;
+    padding: 0;
+}
+
+.next-steps li {
+    margin-bottom: 0.5rem;
+}
+
+/* Dark mode adjustments for Alipay payment modal */
+@media (prefers-color-scheme: dark) {
+    .order-summary {
+        background-color: #333;
+        color: #e0e0e0; /* Adding text color for dark mode */
+    }
+    
+    .order-detail.total {
+        border-top-color: #555;
+    }
+    
+    .order-id {
+        color: #aaa; /* Lighter color for order ID in dark mode */
+    }
+    
+    .api-key-section {
+        background-color: #333;
+    }
+    
+    .api-key-display-wrapper input {
+        background-color: #2d2d2d;
+        border-color: #444;
+        color: #fff;
+    }
+    
+    .quota-stat-item {
+        background-color: #2d2d2d;
+    }
+    
+    .api-key-instruction,
+    .payment-status {
+        color: #aaa;
+    }
+    
+    .next-steps {
+        background-color: #2a2d3a;
+    }
+}
+
+/* Optimized payment modal layout */
+.payment-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 100%;
+}
+
+.payment-qrcode-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.payment-info-area {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.payment-steps-compact {
+    padding: 0;
+    margin: 0 0 0 1.5rem;
+}
+
+.payment-steps-compact li {
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.payment-instructions {
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    padding: 0.8rem 1rem;
+}
+
+/* Desktop layout - side by side */
+@media (min-width: 640px) {
+    .payment-container {
+        flex-direction: row;
+        align-items: flex-start;
+    }
+    
+    .payment-qrcode-area {
+        width: 40%;
+        padding-right: 1rem;
+        border-right: 1px solid #eee;
+    }
+    
+    .payment-info-area {
+        width: 60%;
+        padding-left: 1rem;
+    }
+    
+    .payment-modal-content {
+        max-width: 600px;
+    }
+    
+    .order-summary {
+        margin-top: 0;
+    }
+}
+
+/* Dark mode adjustments for optimized modal */
+@media (prefers-color-scheme: dark) {
+    .payment-instructions {
+        background-color: #333;
+    }
+    
+    @media (min-width: 640px) {
+        .payment-qrcode-area {
+            border-right-color: #444;
+        }
+    }
+}
+
+/* Optimized success modal layout */
+.success-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.success-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.success-header h2 {
+    margin-top: 0.5rem;
+    margin-bottom: 0;
+}
+
+.success-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem; /* 减小gap从1rem到0.8rem */
+    margin-top: 0.5rem; /* 减小上边距 */
+}
+
+.quota-summary-compact {
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+.quota-stat-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+    padding: 0.25rem 0;
+}
+
+.quota-stat-row:last-child {
+    margin-bottom: 0;
+}
+
+.quota-label {
+    font-weight: 500;
+    color: #666;
+}
+
+.quota-value {
+    font-weight: 600;
+}
+
+.quota-value.highlight {
+    color: #FF6B6B;
+}
+
+.next-steps-compact {
+    background-color: #f0f4ff;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 0;
+}
+
+.next-steps-compact h4 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+}
+
+.next-steps-compact ol {
+    margin: 0.5rem 0 0 1.5rem;
+    padding: 0;
+}
+
+.next-steps-compact li {
+    margin-bottom: 0.25rem;
+    font-size: 0.9rem;
+}
+
+.next-steps-compact li:last-child {
+    margin-bottom: 0;
+}
+
+.next-steps-compact code {
+    font-size: 0.85rem;
+    padding: 0.15rem 0.3rem;
+}
+
+/* Dark mode adjustments for success modal */
+@media (prefers-color-scheme: dark) {
+    .quota-summary-compact {
+        background-color: #333;
+    }
+    
+    .quota-label {
+        color: #aaa;
+    }
+    
+    .next-steps-compact {
+        background-color: #2a2d3a;
+    }
+}
+
+/* Modified Payment Modal Styles */
+.payment-modal-content {
+    max-width: 400px; /* Reduced from 500px to 400px for a slimmer modal */
+}
+
+.payment-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    gap: 0.5rem;
+}
+
+.alipay-logo {
+    width: 36px;
+    height: 36px;
+}
+
+.payment-header h2 {
+    margin: 0;
+    font-size: 1.6rem;
+}
+
+.payment-container-single {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem; /* Reduced gap from 1.5rem to 1rem */
+}
+
+.alipay-qrcode-large {
+    width: 220px; /* Slightly smaller QR code that fits better in the narrower modal */
+    margin: 0 auto;
+    text-align: center;
+}
+
+.alipay-qrcode-large img {
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.payment-status-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 0.8rem; /* Reduced from 1rem */
+    gap: 0.8rem;
+}
+
+.payment-progress-spinner {
+    margin: 0;
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(77, 107, 254, 0.3);
+    border-top-color: #4D6BFE;
+    border-radius: 50%;
+    animation: spin 1s ease-in-out infinite;
+}
+
+.payment-status {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #666;
+}
+
+.order-summary {
+    margin: 0.5rem auto; /* Reduced top/bottom margin from 1.5rem to 0.5rem */
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    padding: 1rem;
+    width: 220px; /* Make it the same width as the QR code */
+    text-align: left;
+}
+
+.order-id {
+    margin-top: 0.5rem; /* Reduced from 1.5rem to 0.5rem */
+    font-size: 0.85rem;
+    color: #888;
+}
+
+/* Dark mode adjustments for modified payment modal */
+@media (prefers-color-scheme: dark) {
+    .payment-status {
+        color: #aaa;
+    }
+    
+    .order-summary {
+        background-color: #333 !important;
+        color: #e0e0e0;
+    }
+    
+    .order-detail {
+        color: #e0e0e0;
+    }
+}
+
+/* API key display and button styles */
+.api-key-display-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-top: 0.5rem;
+}
+
+.api-key-instruction {
+    font-size: 0.9rem;
+    color: #666;
+    margin: 0.3rem 0 0 0;
+}
+
+.api-key-display-wrapper input {
+    padding-right: 70px; /* Make room for both buttons */
+    width: 100%;
+    font-family: monospace;
+}
+
+.copy-api-key-btn,
+.download-api-key-btn {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #666;
+    padding: 4px;
+    height: 32px;
+    width: 32px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.copy-api-key-btn:hover,
+.download-api-key-btn:hover {
+    background: rgba(77, 107, 254, 0.1);
+    color: #4D6BFE;
+}
+
+.copy-api-key-btn {
+    right: 4px;
+}
+
+.download-api-key-btn {
+    right: 38px;
+}
+
+/* 使用说明样式 */
+.usage-instructions {
+    margin-top: 0.5rem;
+    background-color: #f5f8ff;
+    border-radius: 8px;
+    padding: 0.8rem 1rem;
+}
+
+.usage-instructions h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1rem;
+}
+
+.usage-steps {
+    list-style-type: decimal;
+    padding-left: 1.5rem;
+    margin: 0.5rem 0 0 0;
+}
+
+.usage-steps li {
+    margin-bottom: 0.4rem;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+}
+
+.usage-steps li:last-child {
+    margin-bottom: 0;
+}
+
+.inline-icon {
+    height: 1em;
+    width: auto;
+    vertical-align: middle;
+    margin: 0 0.25rem;
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+    .usage-instructions {
+        background-color: #2a2d3a;
+    }
+    
+    .api-key-instruction {
+        color: #aaa;
+    }
+}
+
+/* 成功模态框整体布局调整 */
+.success-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem; /* 减小整体间距 */
+}
+
+.success-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 0; /* 从0.6rem减小到0.4rem - 减少支付成功与下面元素的距离 */
+}
+
+.success-header h2 {
+    margin-top: 0.3rem; /* 从0.4rem减小到0.3rem */
+    margin-bottom: 0;
+}
+
+.success-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem; /* 从0.8rem减小到0.6rem */
+    margin-top: 0.3rem; /* 从0.4rem减小到0.3rem */
+}
+
+/* API Key 区域调整 */
+.api-key-section {
+    margin: 0.4rem 0; /* 从0.6rem 0减小到0.4rem 0 */
+    padding: 0.7rem; /* 从0.8rem减小到0.7rem */
+}
+
+.api-key-instruction {
+    margin: 0.2rem 0 0 0; 
+    font-size: 0.85rem; /* 缩小说明文字 */
+    color: #666;
+}
+
+.api-key-display-wrapper {
+    margin-top: 0.4rem;
+    margin-bottom: 0;
+}
+
+.api-key-display-wrapper input {
+    padding-right: 80px; /* 适应两个按钮 */
+    width: 100%;
+    font-family: monospace;
+    font-size: 0.9rem; /* 减小API Key字体大小 */
+}
+
+/* 使用说明调整 */
+.usage-instructions {
+    margin-top: 0.4rem;
+    background-color: #f5f8ff;
+    border-radius: 8px;
+    padding: 0.7rem; /* 与quota-summary-compact内边距保持一致 */
+}
+
+.usage-title {
+    margin: 0;
+    font-size: 1rem;
+    padding-left: 0; /* 移除左内边距 */
+    text-align: left;
+}
+
+.usage-steps {
+    list-style-position: inside; /* 确保列表符号在容器内 */
+    padding-left: 0; /* 移除默认的左内边距 */
+    margin: 0.3rem 0 0 0;
+    text-align: left;
+}
+
+.usage-steps li {
+    margin-bottom: 0.3rem;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    padding-left: 0; /* 移除左内边距 */
+}
+
+/* 调整quota-summary-compact的样式使其与usage-instructions保持一致 */
+.quota-summary-compact {
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    padding: 0.7rem; /* 从1rem减小到0.7rem */
+}
+
+/* 使用说明调整 */
+.usage-instructions {
+    margin-top: 0.4rem;
+    background-color: #f5f8ff;
+    border-radius: 8px;
+    padding: 0.7rem; /* 与quota-summary-compact内边距保持一致 */
+}
+
+.usage-title {
+    margin: 0;
+    font-size: 1rem;
+    padding-left: 0; /* 移除左内边距 */
+    text-align: left;
+}
+
+.usage-steps {
+    list-style-position: inside; /* 确保列表符号在容器内 */
+    padding-left: 0; /* 移除默认的左内边距 */
+    margin: 0.3rem 0 0 0;
+    text-align: left;
+}
+
+.usage-steps li {
+    margin-bottom: 0.3rem;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    padding-left: 0; /* 移除左内边距 */
+}
+
+/* 调整quota-summary-compact的样式使其与usage-instructions保持一致 */
+.quota-summary-compact {
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    padding: 0.7rem; /* 从1rem减小到0.7rem */
+}
+
+/* 使用说明调整 */
+.usage-instructions {
+    margin-top: 0.4rem;
+    background-color: #f5f8ff;
+    border-radius: 8px;
+    padding: 0.7rem; /* 与quota-summary-compact内边距保持一致 */
+}
+
+.usage-title {
+    margin: 0;
+    font-size: 1rem;
+    padding-left: 0; /* 移除左内边距 */
+    text-align: left;
+}
+
+.usage-steps {
+    list-style-position: inside; /* 确保列表符号在容器内 */
+    padding-left: 0; /* 移除默认的左内边距 */
+    margin: 0.3rem 0 0 0;
+    text-align: left;
+}
+
+.usage-steps li {
+    margin-bottom: 0.3rem;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    padding-left: 0; /* 移除左内边距 */
+}
+
+/* 调整quota-summary-compact的样式使其与usage-instructions保持一致 */
+.quota-summary-compact {
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    padding: 0.7rem; /* 从1rem减小到0.7rem */
+}
+
+/* 使用说明调整 */
+.usage-instructions {
+    margin-top: 0.4rem;
+    background-color: #f5f8ff;
+    border-radius: 8px;
+    padding: 0.7rem; /* 与quota-summary-compact内边距保持一致 */
+}
+
+.usage-title {
+    margin: 0;
+    font-size: 1rem;
+    padding-left: 0; /* 移除左内边距 */
+    text-align: left;
+}
+
+.usage-steps {
+    list-style-position: inside; /* 确保列表符号在容器内 */
+    padding-left: 0; /* 移除默认的左内边距 */
+    margin: 0.3rem 0 0 0;
+    text-align: left;
+}
+
+.usage-steps li {
+    margin-bottom: 0.3rem;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    padding-left: 0; /* 移除左内边距 */
+}
+
+/* 调整quota-summary-compact的样式使其与usage-instructions保持一致 */
+.quota-summary-compact {
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    padding: 0.7rem; /* 从1rem减小到0.7rem */
+}
+
+/* Dark mode adjustments for success modal */
+@media (prefers-color-scheme: dark) {
+    .quota-summary-compact {
+        background-color: #333 !important;
+        color: #e0e0e0;
+    }
+    
+    .quota-label {
+        color: #aaa;
+    }
+    
+    .next-steps-compact {
+        background-color: #2a2d3a;
+    }
+    
+    .usage-instructions {
+        background-color: #2a2d3a !important;
+        color: #e0e0e0;
+    }
+}

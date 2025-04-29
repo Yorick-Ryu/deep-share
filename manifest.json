@@ -1,8 +1,9 @@
 {
     "manifest_version": 3,
-    "name": "DeepShare(DeepSeek对话截图分享)",
-    "version": "1.0",
-    "description": "分享 DeepSeek AI 对话的浏览器插件",
+    "default_locale": "zh_CN",
+    "name": "__MSG_extensionName__",
+    "version": "1.0.8",
+    "description": "__MSG_extensionDescription__",
     "icons": {
         "16": "icons/icon16.png",
         "32": "icons/icon32.png",
@@ -19,7 +20,21 @@
         "storage"
     ],
     "host_permissions": [
-        "https://chat.deepseek.com/*"
+        "https://chat.deepseek.com/*",
+        "https://yuanbao.tencent.com/chat/*",
+        "https://www.doubao.com/chat/*",
+        "https://chatgpt.com/c/*",
+        "https://grok.com/chat/*",
+        "https://www.tongyi.com/*",
+        "https://xinghuo.xfyun.cn/desk*",
+        "https://chatglm.cn/main/*",
+        "https://poe.com/chat/*",
+        "https://openrouter.ai/chat?*",
+        "https://askmanyai.cn/chat/*",
+        "https://bot.n.cn/chat/*",
+        "https://chat.yixiaai.com/chat/?*",
+        "https://www.wanzhi.com/chat/*",
+        "https://www.zhihu.com/*"
     ],
     "background": {
         "scripts": ["background.js"]
@@ -34,10 +49,65 @@
             ],
             "js": [
                 "lib/html2canvas.min.js",
+                "lib/katex.min.js",
+                "scripts/notifications.js",
                 "scripts/captureMessages.js",
                 "scripts/getMessages.js",
                 "scripts/injectShare.js",
+                "scripts/copyKatex.js",
+                "scripts/docxConverter.js",
+                "scripts/injectDocxButton.js",
                 "scripts/main.js"
+            ]
+        },
+        {
+            "matches": [
+                "https://yuanbao.tencent.com/chat/*",
+                "https://chatgpt.com/c/*",
+                "https://grok.com/chat/*",
+                "https://www.tongyi.com/*",
+                "https://xinghuo.xfyun.cn/desk*",
+                "https://chatglm.cn/main/*",
+                "https://poe.com/chat/*",
+                "https://openrouter.ai/chat?*",
+                "https://askmanyai.cn/chat/*",
+                "https://bot.n.cn/chat/*",
+                "https://chat.yixiaai.com/chat?*",
+                "https://www.wanzhi.com/chat/*"
+            ],
+            "css": [
+                "scripts/style.css"
+            ],
+            "js": [
+                "lib/katex.min.js",
+                "scripts/notifications.js",
+                "scripts/copyKatex.js"
+            ]
+        },
+        {
+            "matches": [
+                "https://www.doubao.com/chat/*"
+            ],
+            "css": [
+                "scripts/style.css"
+            ],
+            "js": [
+                "lib/katex.min.js",
+                "scripts/notifications.js",
+                "scripts/copyKatex4Doubao.js"
+            ]
+        },
+        {
+            "matches": [
+                "https://www.zhihu.com/*"
+            ],
+            "css": [
+                "scripts/style.css"
+            ],
+            "js": [
+                "lib/katex.min.js",
+                "scripts/notifications.js",
+                "scripts/copyKatex4Zhihu.js"
             ]
         }
     ],

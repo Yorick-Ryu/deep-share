@@ -1,0 +1,185 @@
+{
+    "extensionName": {
+        "message": "DeepShare（DeepSeek对话分享）"
+    },
+    "extensionDescription": {
+        "message": "一键分享 DeepSeek AI 对话为图片或文字。"
+    },
+    "shareButton": {
+        "message": "分享对话"
+    },
+    "modalTitle": {
+        "message": "分享对话"
+    },
+    "imageTab": {
+        "message": "截图"
+    },
+    "textTab": {
+        "message": "文本"
+    },
+    "downloadButton": {
+        "message": "下载"
+    },
+    "copyButton": {
+        "message": "复制"
+    },
+    "docxButton": {
+        "message": "保存为Word"
+    },
+    "docxFeatureComingSoon": {
+        "message": "Word文档导出功能即将推出！"
+    },
+    "docxFeatureExplanation": {
+        "message": "用于配置AI对话转Word文档功能，其他功能如对话截图和LaTeX公式复制都是免费的，无需配置即可使用。"
+    },
+    "docxConversionSuccess": {
+        "message": "成功转换为Word文档！"
+    },
+    "docxConverting": {
+        "message": "正在转换为文档，请不要关闭此界面！"
+    },
+    "docxConversionError": {
+        "message": "转换Word文档失败。请确保转换服务正在运行。"
+    },
+    "watermarkSettings": {
+        "message": "水印设置"
+    },
+    "docxSettings": {
+        "message": "文档转换设置"
+    },
+    "docxServerUrlLabel": {
+        "message": "服务器地址"
+    },
+    "docxApiKeyLabel": {
+        "message": "API密钥"
+    },
+    "docxModeLabel": {
+        "message": "转换模式"
+    },
+    "modeLocalLabel": {
+        "message": "本地转换 (Pandoc)"
+    },
+    "modeApiLabel": {
+        "message": "API转换"
+    },
+    "copied": {
+        "message": "已复制！"
+    },
+    "copyFailed": {
+        "message": "复制失败！"
+    },
+    "formulaCopied": {
+        "message": "公式复制成功！"
+    },
+    "clickToCopyLatex": {
+        "message": "点击复制 LaTeX 代码"
+    },
+    "generatingImage": {
+        "message": "正在生成截图..."
+    },
+    "generateFailed": {
+        "message": "截图生成失败，建议刷新网页后重试！"
+    },
+    "defaultWatermark": {
+        "message": "内容由 DeepSeek AI 生成，图片由 DeepShare 插件截取"
+    },
+    "settingsButton": {
+        "message": "水印设置"
+    },
+    "hideDefaultWatermarkLabel": {
+        "message": "隐藏默认水印"
+    },
+    "customWatermarkLabel": {
+        "message": "自定义水印文字（可选）"
+    },
+    "customWatermarkPlaceholder": {
+        "message": "在此输入自定义水印"
+    },
+    "saveSettings": {
+        "message": "保存设置"
+    },
+    "settingsSaved": {
+        "message": "已保存"
+    },
+    "sponsorTitle": {
+        "message": "感谢使用！如果觉得好用，欢迎微信扫码赞助😊"
+    },
+    "selectButton": {
+        "message": "选择对话"
+    },
+    "selectAllButton": {
+        "message": "全选"
+    },
+    "unselectAllButton": {
+        "message": "取消全选"
+    },
+    "noMessageSelected": {
+        "message": "请至少选择一条对话"
+    },
+    "sponsorTabLabel": {
+        "message": "赞助"
+    },
+    "totalQuotaLabel": {
+        "message": "总计:"
+    },
+    "usedQuotaLabel": {
+        "message": "已用:"
+    },
+    "remainingQuotaLabel": {
+        "message": "剩余:"
+    },
+    "quotaTitle": {
+        "message": "您的转换次数"
+    },
+    "apiKeyHint": {
+        "message": "购买 API Key? <a href=\"../docs/purchase.html\" target=\"_blank\">点击此处</a>"
+    },
+    "apiKeyMissing": {
+        "message": "请购买或填写API-Key以使用文档转换功能"
+    },
+    "manualConversionExplanation": {
+        "message": "支持ChatGPT、豆包、元宝等，复制需要转换的对话到Markdown输入框，点击\"转换为文档\"按钮立即下载Word格式，排版精美，支持公式！"
+    },
+    "manualConversionTitle": {
+        "message": "手动转换文档"
+    },
+    "markdownInputLabel": {
+        "message": "Markdown 文本"
+    },
+    "markdownInputPlaceholder": {
+        "message": "在此粘贴 Markdown 格式文本..."
+    },
+    "convertToDocx": {
+        "message": "转换为文档"
+    },
+    "clearMarkdown": {
+        "message": "清空"
+    },
+    "emptyMarkdownError": {
+        "message": "请输入Markdown文本"
+    },
+    "manualDocxSettings": {
+        "message": "手动转换文档"
+    },
+    "formulaTabLabel": {
+        "message": "公式复制设置"
+    },
+    "formulaSettingsTitle": {
+        "message": "公式复制设置"
+    },
+    "enableFormulaCopyLabel": {
+        "message": "启用公式复制功能"
+    },
+    "formulaFormatLabel": {
+        "message": "公式复制格式"
+    },
+    "formatMathMLLabel": {
+        "message": "MathML"
+    },
+    "formatLaTeXLabel": {
+        "message": "LaTeX"
+    },
+    "formulaFormatHint": {
+        "message": "MathML 格式兼容更多编辑器，LaTeX 适合专业排版"
+    }
+}

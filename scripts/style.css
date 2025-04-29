@@ -13,7 +13,7 @@
     --modal-bg: #1e1e1e;
     --modal-text: #e0e0e0;
     --modal-border: #333333;
-    --button-color: rgb(180, 180, 180);
+    --button-color: rgb(205, 212, 223);
     --button-hover-bg: rgba(77, 107, 254, 0.2);
     --button-hover-color: rgb(107, 137, 254);
     --modal-overlay: rgba(0, 0, 0, 0.7);
@@ -24,15 +24,20 @@
 .deepseek-share-btn {
   display: flex;
   align-items: center;
-  margin-right: 8px;  /* 添加右边距 */
+  gap: 10px;
+  /* 增加按钮之间的间距 */
+  margin-right: 8px;
+  /* 添加右边距 */
 }
 
-.deepseek-share-btn .share-button {
+/* 按钮通用样式 */
+.deepseek-share-btn .share-button,
+.deepseek-share-btn .select-button {
   background: none;
   border: none;
   cursor: pointer;
   padding: 6px;
-  color: rgb(139, 139, 139);  /* 浅色模式下的颜色 */
+  color: rgb(139, 139, 139);
   border-radius: 6px;
   display: flex;
   align-items: center;
@@ -42,26 +47,41 @@
   transition: all 0.2s ease;
 }
 
-.deepseek-share-btn .share-button:hover {
-  background: rgba(139, 139, 139, 0.1);  /* 浅色模式下的悬停背景色 */
-  color: rgb(139, 139, 139);  /* 保持原色 */
+.deepseek-share-btn .share-button:hover,
+.deepseek-share-btn .select-button:hover {
+  background: rgba(139, 139, 139, 0.1);
+  color: rgb(139, 139, 139);
   transform: scale(1.05);
-}
-
-/* 深色模式覆盖 */
-@media (prefers-color-scheme: dark) {
-  .deepseek-share-btn .share-button {
-    color: rgb(205, 212, 223);  /* 深色模式下的颜色 */
-  }
-  
-  .deepseek-share-btn .share-button:hover {
-    background: rgba(205, 212, 223, 0.1);  /* 深色模式下的悬停背景色 */
-    color: rgb(205, 212, 223);
-  }
 }
 
 .deepseek-share-btn .share-button:active {
   transform: scale(0.95);
+}
+
+/* 深色模式覆盖 */
+@media (prefers-color-scheme: dark) {
+
+  .deepseek-share-btn .share-button,
+  .deepseek-share-btn .select-button {
+    color: rgb(205, 212, 223);
+    /* 深色模式下的颜色 */
+  }
+
+  .deepseek-share-btn .share-button:hover,
+  .deepseek-share-btn .select-button:hover {
+    background: rgba(205, 212, 223, 0.1);
+    /* 深色模式下的悬停背景色 */
+    color: rgb(205, 212, 223);
+  }
+}
+
+.select-button svg {
+  width: 23px;
+  /* 增加SVG图标大小 */
+  height: 23px;
+  min-width: 23px;
+  /* 确保最小尺寸 */
+  min-height: 23px;
 }
 
 .f8d1e4c0 {
@@ -84,8 +104,10 @@
   color: var(--modal-text);
   width: 90%;
   max-width: 600px;
-  margin: 30px auto;  /* 减小顶部边距 */
-  border-radius: 12px;  /* 增加圆角 */
+  margin: 30px auto;
+  /* 减小顶部边距 */
+  border-radius: 12px;
+  /* 增加圆角 */
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -130,7 +152,8 @@
 
 .modal-body {
   padding: 20px;
-  max-height: 80vh;  /* 增加最大高度 */
+  max-height: 80vh;
+  /* 增加最大高度 */
   overflow-y: auto;
 }
 
@@ -142,118 +165,289 @@
 
 /* 标签页样式 */
 .tab-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    border-bottom: 1px solid var(--modal-border);
-    padding-bottom: 1px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--modal-border);
+  padding-bottom: 1px;
 }
 
 .tab-container {
-    display: flex;
-    gap: 20px;
+  display: flex;
+  gap: 20px;
 }
 
 .tab-btn {
-    padding: 10px 0;
-    background: none;
-    border: none;
-    color: var(--modal-text);
-    cursor: pointer;
-    opacity: 0.7;
-    transition: all 0.2s;
-    min-width: 60px;
-    text-align: center;
+  padding: 10px 0;
+  background: none;
+  border: none;
+  color: var(--modal-text);
+  cursor: pointer;
+  opacity: 0.7;
+  transition: all 0.2s;
+  min-width: 60px;
+  text-align: center;
 }
 
 .tab-btn.active {
-    opacity: 1;
-    border-bottom: 2px solid var(--button-hover-color);
+  opacity: 1;
+  border-bottom: 2px solid var(--button-hover-color);
 }
 
 .copy-btn {
-    padding: 6px 12px;
-    font-size: 13px;
-    background: var(--button-hover-bg);
-    color: var(--button-hover-color);
-    border: 1px solid var(--button-hover-color);
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.2s;
+  padding: 6px 12px;
+  font-size: 13px;
+  background: var(--button-hover-bg);
+  color: var(--button-hover-color);
+  border: 1px solid var(--button-hover-color);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
 }
 
 .copy-btn:hover {
-    background: var(--button-hover-color);
-    color: white;
+  background: var(--button-hover-color);
+  color: white;
 }
 
 /* 面板样式 */
 .tab-panel {
-    display: none;
+  display: none;
 }
 
 .tab-panel.active {
-    display: block;
+  display: block;
 }
 
 /* 图片容器样式 */
 .image-container {
-    min-height: 200px;
-    max-height: 70vh;  /* 增加图片容器最大高度 */
-    overflow-y: auto;
-    margin-bottom: 0;  /* 移除底部间距 */
-    border: 1px solid var(--modal-border);
-    border-radius: 8px;  /* 增加图片容器圆角 */
-    background: var(--modal-bg);
-    position: relative;
+  min-height: 200px;
+  max-height: 70vh;
+  /* 增加图片容器最大高度 */
+  overflow-y: auto;
+  margin-bottom: 0;
+  /* 移除底部间距 */
+  border: 1px solid var(--modal-border);
+  border-radius: 8px;
+  /* 增加图片容器圆角 */
+  background: var(--modal-bg);
+  position: relative;
 }
 
 #conversation-image {
-    width: 100%;
-    height: auto;
-    display: block;
+  width: 100%;
+  height: auto;
+  display: block;
 }
 
 .image-loading {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: var(--modal-text);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--modal-text);
 }
 
 .download-btn {
-    background: var(--button-hover-color);
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.2s;
+  background: var(--button-hover-color);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
 }
 
 .download-btn:hover {
-    opacity: 0.9;
+  opacity: 0.9;
 }
 
 .action-buttons {
-    display: flex;
-    gap: 8px;
+  display: flex;
+  gap: 8px;
 }
 
-.download-btn, .copy-btn {
-    padding: 6px 12px;
-    font-size: 13px;
+.download-btn,
+.copy-btn {
+  padding: 6px 12px;
+  font-size: 13px;
+  background: var(--button-hover-bg);
+  color: var(--button-hover-color);
+  border: 1px solid var(--button-hover-color);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.download-btn:hover,
+.copy-btn:hover {
+  background: var(--button-hover-color);
+  color: white;
+}
+
+/* 对话选择复选框样式 */
+.message-checkbox-wrapper {
+  position: absolute;
+  top: 8px;
+  right: -30px;
+}
+
+.message-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--button-color);
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.message-checkbox:checked {
+  background-color: var(--button-hover-color);
+  border-color: var(--button-hover-color);
+}
+
+.message-checkbox:checked::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: white;
+}
+
+.message-checkbox:hover {
+  border-color: var(--button-hover-color);
+}
+
+.select-all-btn {
+  margin-right: 8px;
+  padding: 4px 12px;
+  background: none;
+  border: 1px solid var(--button-color);
+  cursor: pointer;
+  color: var(--button-color);
+  border-radius: 4px;
+  font-size: 13px;
+  height: 28px;
+  transition: all 0.2s ease;
+}
+
+.select-all-btn:hover {
+  background: var(--button-hover-bg);
+  color: var(--button-hover-color);
+  border-color: var(--button-hover-color);
+}
+
+@media (prefers-color-scheme: dark) {
+  .select-all-btn {
+    color: rgb(205, 212, 223);
+    border-color: rgb(205, 212, 223);
+  }
+
+  .select-all-btn:hover {
     background: var(--button-hover-bg);
     color: var(--button-hover-color);
-    border: 1px solid var(--button-hover-color);
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.2s;
+    border-color: var(--button-hover-color);
+  }
 }
 
-.download-btn:hover, .copy-btn:hover {
-    background: var(--button-hover-color);
-    color: white;
+/* KaTeX copy functionality styles */
+.katex {
+  position: relative;
+  transition: background-color 0.2s ease;
+}
+
+.katex:hover {
+  background-color: rgba(77, 107, 254, 0.1);
+  border-radius: 4px;
+}
+
+/* Add pulsing animation for KaTeX on click */
+@keyframes katex-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(77, 107, 254, 0.4);
+  }
+
+  70% {
+    box-shadow: 0 0 0 6px rgba(77, 107, 254, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(77, 107, 254, 0);
+  }
+}
+
+.katex:active {
+  animation: katex-pulse 0.5s;
+}
+
+/* KaTeX copy notification styles */
+.katex-copy-notification {
+  animation: notification-appear 0.3s ease forwards;
+  white-space: nowrap;
+}
+
+@keyframes notification-appear {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* DOCX button in message panel */
+.deepseek-docx-btn {
+  position: relative;
+  transition: all 0.2s ease;
+  color: var(--button-color) !important;
+}
+
+.deepseek-docx-btn:hover {
+  background-color: var(--button-hover-bg);
+  border-radius: 4px;
+}
+
+.deepseek-docx-btn:active {
+  transform: scale(0.95);
+}
+
+@media (prefers-color-scheme: dark) {
+  .deepseek-docx-btn {
+    color: var(--button-color) !important;
+  }
+}
+
+/* Notification styles */
+.deepseek-notification {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 10px 20px;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 9999;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  max-width: 300px;
+}
+
+.deepseek-notification.success {
+  background-color: #4caf50;
+  color: white;
+}
+
+.deepseek-notification.error {
+  background-color: #f44336;
+  color: white;
 }

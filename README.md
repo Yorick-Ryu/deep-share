@@ -4,61 +4,98 @@
   <img src="icons/deepshare-icon.svg" alt="deepshare-icon" width="128"/>
 </p>
 
-一个用来分享 DeepSeek 对话的浏览器插件，可以将对话内容以图片或文本的形式保存，便于分享。
+A lightweight browser extension designed for AI users to easily share, save, and export AI conversations with special optimization for mathematical formulas. Supports DeepSeek, DoubaoAI, Yuanbao, ChatGPT and more.
 
-## 功能特点
+[简体中文](README.zh-CN.md)
 
-- 一键截取 DeepSeek 对话内容
-- 支持分享图片或纯文本
-- 支持自定义水印
-- 简洁的操作界面
+## Features
 
-## 安装方式
+- One-click screenshot of AI conversations (DeepSeek only currently)
+- Share as image or plain text
+- One-click LaTeX formula copying (click any math formula to copy its LaTeX code)
+- Export to Word document (DOCX) with formula formatting preserved (one-click export supported in DeepSeek only)
+- Custom watermark support
+- Selective sharing of conversation content
+  - Choose single or multiple conversation turns
+  - One-click select all/deselect all functionality
+- Clean and simple interface
+- Open source with no ads
 
-1. 从 Edge\Chrome 网上应用商店安装
-2. 下载源码本地安装:
-   - 下载并解压源码
-   - 打开 Edge\Chrome 扩展程序页面
-   - 启用开发者模式
-   - 点击"加载已解压的扩展程序"
-   - 选择解压后的文件夹
+## Supported Platforms
 
-## 使用方法
+| AI Platform | Formula Copy | Word Export | Conversation Screenshot |
+|-------------|-------------|-------------|------------------------|
+| DeepSeek | ✓ | ✓ | ✓ |
+| Doubao | ✓ | Manual copy | ✗ |
+| Yuanbao | ✓ | Manual copy | ✗ |
+| ChatGPT | ✓ | Manual copy | ✗ |
+| Grok | ✓ | Manual copy | ✗ |
+| Tongyi | ✓ | Manual copy | ✗ |
+| Xunfei Xinghuo | ✓ | Manual copy | ✗ |
+| ChatGLM | ✓ | Manual copy | ✗ |
+| OpenRouter | ✓ | Manual copy | ✗ |
+| Poe | ✓ | Manual copy | ✗ |
+| AskManyAI | ✓ | Manual copy | ✗ |
+| Wanzhi | ✓ | Manual copy | ✗ |
+| Yi Xiao | ✓ | Manual copy | ✗ |
+| Bot.n | ✓ | Manual copy | ✗ |
+| Zhihu | ✓ | Manual copy | ✗ |
 
-前提：安装插件
+## Installation
 
-1. 访问 https://chat.deepseek.com/
-2. 点击开始新对话
-3. 在右上角点击分享按钮
-4. 选择分享格式:
-   - 截图模式：生成一张包含对话内容的长图
-   - 文本模式：包含对话内容的纯文本
-5. 复制或者下载生成的图片和文本
+1. Install from Edge/Chrome Web Store
+   - [Microsoft Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/deepshare/pdccjnppfegekpnhfljbngammgfbcofm)
+   - [Chrome Web Store](https://chromewebstore.google.com/detail/omnaecaamcabmnbjnpjpecoaalfgidop)
+2. Install from source code:
+   - Download and extract the source code
+   - Open Edge\Chrome extensions page
+   - Enable developer mode
+   - Click "Load unpacked"
+   - Select the extracted folder
+3. **Important Note:** After installation, please refresh any open AI chat pages for the extension to take effect.
 
-## 水印设置
+## Usage
 
-点击分享对话框右上角的设置界面，支持：
+Prerequisites: Install the extension
 
-- 隐藏默认截图水印
-- 自定义水印内容
+1. Visit a supported AI platform (e.g., https://chat.deepseek.com/)
+2. Start a new conversation
+3. Look for two buttons in the top-right corner:
+   - Select button: Enables selection mode to choose conversations
+   - Share button: Directly share all conversations
+4. In selection mode:
+   - Check the conversations you want to share
+   - Use "Select All"/"Deselect All" buttons for quick operations
+   - Click the share button to generate content for selected conversations
+5. Choose sharing format:
+   - Screenshot mode: Generates a long image with conversation content (DeepSeek only)
+   - Text mode: Plain text containing conversation content
+6. Copy or download the generated image and text
 
-## 贡献指南
+## Watermark Settings
 
-欢迎提交Issue和Pull Request来帮助改进项目。
+Click the settings icon in the top-right corner of the share dialog to:
 
-## 许可证
+- Hide the default screenshot watermark
+- Customize watermark content
 
-本项目基于 [MIT License](LICENSE) 开源，请自由地使用、修改和分发。
+## Contributing
 
-## 支持项目
+Contributions via Issues and Pull Requests are welcome.
 
-如果您觉得这个项目对您有帮助，欢迎支持项目的发展:
+## License
 
-- 🌟Star 本项目
-- 分享给更多的人
-- 提交 Bug 反馈或功能建议
-- 😊赞助项目发展（微信扫码赞助）
+This project is open-sourced under the [CC BY-NC 4.0 License](LICENSE). This means you are free to use and modify the code for non-commercial purposes, but commercial use is prohibited.
+
+## Support the Project
+
+If you find this project helpful, please consider supporting its development:
+
+- ⭐ Star this project
+- 📢 Share it with others
+- 🐛 Submit bug reports or feature suggestions
+- 🧧 Sponsor the project (scan QR code with WeChat)
 
 <img src="icons/sponsor-code.png" alt="donate" width="200"/>
 
-感谢您的支持！
+Thank you for your support!
