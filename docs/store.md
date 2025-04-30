@@ -56,3 +56,25 @@ DeepSeek：完全支持公式复制、Word导出、对话截图
 干净专业的分享效果
 全面的导出选项满足不同场景需求
 立即安装，体验更智能的 AI 对话分享方式！
+
+
+
+# Notes for Extension Certification Reviewers
+
+### Basic Features
+
+1. Install the extension and navigate to any supported AI platform (DeepSeek, ChatGPT, DoubaoAI, Yuanbao)
+2. Test the conversation capture functionality (Only Support DeepSeek)
+3. Verify formula handling by clicking on any mathematical formula to copy its LaTeX code or MathML code
+
+### Premium Feature Testing (Markdown to DOCX Conversion)
+
+To test the Word document export functionality:
+   - Enter the provided API key: 85149f2e-7930-4b29-ad49-7f3eec0e9306
+   - Go to the manual conversion section of the extension
+   - Paste any markdown content into the input field
+   - Click the "Convert" button
+
+Thank you for installing and testing our DeepShare browser extension. Designed specifically for AI users, we strive to provide the best conversation sharing and export experience, especially for handling mathematical formulas.
+
+Email us at: yoricker@foxmail.com
