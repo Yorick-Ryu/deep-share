@@ -1,7 +1,130 @@
 let messages = [];
+// 创建一个全局变量来跟踪是否需要屏蔽复制成功通知
+let shouldBlockCopyNotifications = false;
+
+// 创建一个函数来检查和移除所有"复制成功"通知
+function removeAllCopySuccessNotifications() {
+    if (!shouldBlockCopyNotifications) return;
+    
+    // 方法1：直接查找所有已存在的复制成功通知
+    document.querySelectorAll('.ds-toast.ds-toast--success').forEach(toast => {
+        const contentEl = toast.querySelector('.ds-toast__content');
+        if (contentEl && (
+            contentEl.textContent === '复制成功' || 
+            contentEl.textContent === 'Copied' || 
+            contentEl.textContent === chrome.i18n.getMessage('copied')
+        )) {
+            if (toast.parentNode) {
+                console.log('移除已存在的复制成功通知');
+                toast.parentNode.removeChild(toast);
+            }
+        }
+    });
+    
+    // 方法2：查找可能的toast容器
+    document.querySelectorAll('.ds-toast-container, [class*="toast"]').forEach(container => {
+        if (container) {
+            container.querySelectorAll('.ds-toast--success, [class*="success"]').forEach(toast => {
+                const contentEl = toast.querySelector('.ds-toast__content, [class*="content"]');
+                if (contentEl && (
+                    contentEl.textContent === '复制成功' || 
+                    contentEl.textContent === 'Copied' || 
+                    contentEl.textContent.includes('copy') || 
+                    contentEl.textContent.includes('复制') || 
+                    contentEl.textContent === chrome.i18n.getMessage('copied')
+                )) {
+                    if (toast.parentNode) {
+                        console.log('移除容器中的复制成功通知');
+                        toast.parentNode.removeChild(toast);
+                    }
+                }
+            });
+        }
+    });
+}
+
+// 创建一个MutationObserver来监听并移除复制成功toast
+const toastObserver = new MutationObserver((mutations) => {
+    // 只有当shouldBlockCopyNotifications为true时才执行移除操作
+    if (!shouldBlockCopyNotifications) return;
+    
+    // 先处理变化的节点
+    let hasToastAdded = false;
+    
+    for (const mutation of mutations) {
+        if (mutation.addedNodes.length) {
+            hasToastAdded = true;
+            mutation.addedNodes.forEach(node => {
+                // 检查是否是复制成功的toast通知
+                if (node.nodeType === Node.ELEMENT_NODE) {
+                    // 直接检查这个节点
+                    if (node.classList && 
+                        node.classList.contains('ds-toast') &&
+                        node.classList.contains('ds-toast--success')) {
+                        
+                        const contentEl = node.querySelector('.ds-toast__content');
+                        if (contentEl && (
+                            contentEl.textContent === '复制成功' || 
+                            contentEl.textContent === 'Copied' || 
+                            contentEl.textContent === chrome.i18n.getMessage('copied')
+                        )) {
+                            if (node.parentNode) {
+                                console.log('拦截到了复制成功通知，已移除');
+                                node.parentNode.removeChild(node);
+                            }
+                        }
+                    }
+                    
+                    // 检查它的子元素
+                    if (node.querySelector) {
+                        const toasts = node.querySelectorAll('.ds-toast--success, [class*="toast"][class*="success"]');
+                        toasts.forEach(toast => {
+                            const contentEl = toast.querySelector('.ds-toast__content, [class*="content"]');
+                            if (contentEl && (
+                                contentEl.textContent === '复制成功' || 
+                                contentEl.textContent === 'Copied' || 
+                                contentEl.textContent.includes('copy') || 
+                                contentEl.textContent.includes('复制') || 
+                                contentEl.textContent === chrome.i18n.getMessage('copied')
+                            )) {
+                                if (toast.parentNode) {
+                                    console.log('拦截到子元素中的复制成功通知，已移除');
+                                    toast.parentNode.removeChild(toast);
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+        }
+    }
+    
+    // 如果有节点添加，执行全面检查，以防有些通知是分步骤添加的
+    if (hasToastAdded) {
+        // 延迟一小段时间确保DOM更新完成
+        setTimeout(removeAllCopySuccessNotifications, 10);
+    }
+});
+
+// 开始监听整个文档以捕获toast通知
+toastObserver.observe(document.body, {
+    childList: true,
+    subtree: true
+});
 
 const handleShareClick = async () => {
     try {
+        // 设置标记，启用拦截"复制成功"通知
+        shouldBlockCopyNotifications = true;
+        
+        // 立即执行一次检查，移除可能已存在的通知
+        removeAllCopySuccessNotifications();
+        
+        // 5秒后恢复允许显示通知
+        setTimeout(() => {
+            shouldBlockCopyNotifications = false;
+        }, 3000);
+
         // 先获取容器并执行滚动
         const container = document.querySelector('.dad65929');
         if (container) {
@@ -122,3 +245,10 @@ if (document.readyState === 'loading') {
 } else {
     injectShare(handleShareClick);
 }
+
+// 在页面卸载时清理observer
+window.addEventListener('beforeunload', () => {
+    toastObserver.disconnect();
+    observer.disconnect();
+    urlObserver.disconnect();
+});
