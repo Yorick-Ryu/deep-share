@@ -362,12 +362,29 @@ function injectShare(onClickHandler) {
 }
 
 function formatAsText(messages) {
-    return messages.map(msg => {
-        const role = msg.role === 'user' ? '我' : 'AI';
-        let text = `${role}: ${msg.content}`;
-        if (msg.reasoning_content) {
-            text += `\n思考过程 (${msg.reasoning_time}s):\n${msg.reasoning_content}`;
-        }
-        return text;
-    }).join('\n\n');
+    // 分组用户问题和AI回答
+    const userMessages = messages.filter(msg => msg.role === 'user');
+    const aiMessages = messages.filter(msg => msg.role === 'assistant');
+    
+    // 合并用户问题
+    let userText = '';
+    if (userMessages.length > 0) {
+        userText = '用户：\n' + userMessages.map(msg => msg.content).join('\n');
+    }
+    
+    // 合并AI回答
+    let aiText = '';
+    if (aiMessages.length > 0) {
+        aiText = 'AI：\n' + aiMessages.map(msg => {
+            let content = msg.content;
+            // 如果有思考过程，添加到内容中
+            if (msg.reasoning_content) {
+                content += `\n思考过程 (${msg.reasoning_time}s):\n${msg.reasoning_content}`;
+            }
+            return content;
+        }).join('\n');
+    }
+    
+    // 拼接用户问题和AI回答
+    return userText + (userText && aiText ? '\n\n' : '') + aiText;
 }
