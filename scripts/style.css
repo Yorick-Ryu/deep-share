@@ -326,7 +326,8 @@
   border-color: var(--button-hover-color);
 }
 
-.select-all-btn {
+.select-all-btn,
+.select-all-responses-btn {
   margin-right: 8px;
   padding: 4px 12px;
   background: none;
@@ -339,19 +340,22 @@
   transition: all 0.2s ease;
 }
 
-.select-all-btn:hover {
+.select-all-btn:hover,
+.select-all-responses-btn:hover {
   background: var(--button-hover-bg);
   color: var(--button-hover-color);
   border-color: var(--button-hover-color);
 }
 
 @media (prefers-color-scheme: dark) {
-  .select-all-btn {
+  .select-all-btn,
+  .select-all-responses-btn {
     color: rgb(205, 212, 223);
     border-color: rgb(205, 212, 223);
   }
 
-  .select-all-btn:hover {
+  .select-all-btn:hover,
+  .select-all-responses-btn:hover {
     background: var(--button-hover-bg);
     color: var(--button-hover-color);
     border-color: var(--button-hover-color);

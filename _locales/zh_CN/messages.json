@@ -110,6 +110,9 @@
     "selectAllButton": {
         "message": "全选"
     },
+    "selectAllResponsesButton": {
+        "message": "选择全部回答"
+    },
     "unselectAllButton": {
         "message": "取消全选"
     },

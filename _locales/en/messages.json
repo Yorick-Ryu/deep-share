@@ -110,6 +110,9 @@
     "selectAllButton": {
         "message": "Select All"
     },
+    "selectAllResponsesButton": {
+        "message": "Select All Responses"
+    },
     "unselectAllButton": {
         "message": "Unselect All"
     },

@@ -191,6 +191,9 @@ function injectShare(onClickHandler) {
             <button class="select-all-btn" style="display: none;">
                 ${chrome.i18n.getMessage('selectAllButton')}
             </button>
+            <button class="select-all-responses-btn" style="display: none;">
+                ${chrome.i18n.getMessage('selectAllResponsesButton')}
+            </button>
             <button title="${chrome.i18n.getMessage('selectButton')}" class="select-button">
                 <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
                     <path d="M855.9 63.5H171.7c-54.8 0-99.8 43.3-102.5 97.4v694.5c2.7 54.1 47.7 97.4 102.5 97.4h684.2c56.5 0 102.6-46.1 102.6-102.6V166.1c0-56.5-46-102.6-102.6-102.6z m34.2 786.8c0 18.9-15.3 34.1-34.2 34.2H171.7c-18.8 0-34.2-15.3-34.2-34.2V166.1c0.1-18.8 15.3-34.1 34.2-34.2h684.2c18.9 0 34.1 15.3 34.2 34.2v684.2z" fill="currentColor"/>
@@ -240,12 +243,14 @@ function injectShare(onClickHandler) {
 
     function toggleSelectionMode(buttonContainer) {
         const selectAllBtn = buttonContainer.querySelector('.select-all-btn');
+        const selectAllResponsesBtn = buttonContainer.querySelector('.select-all-responses-btn');
         const existingCheckboxes = document.querySelectorAll('.message-checkbox-wrapper');
 
         if (existingCheckboxes.length > 0) {
-            // 如果存在复选框，清除它们并隐藏全选按钮
+            // 如果存在复选框，清除它们并隐藏按钮
             existingCheckboxes.forEach(el => el.remove());
             selectAllBtn.style.display = 'none';
+            selectAllResponsesBtn.style.display = 'none';
             isAllSelected = false; // 重置状态
             return;
         }
@@ -271,6 +276,8 @@ function injectShare(onClickHandler) {
         // 显示全选按钮并重置选中状态
         selectAllBtn.style.display = '';
         selectAllBtn.textContent = chrome.i18n.getMessage('selectAllButton');
+        selectAllResponsesBtn.style.display = '';
+        selectAllResponsesBtn.textContent = chrome.i18n.getMessage('selectAllResponsesButton');
         isAllSelected = false; // 重置状态
 
         // 为每个消息添加复选框，使用与getMessages.js相同的选择器
@@ -282,6 +289,13 @@ function injectShare(onClickHandler) {
             checkbox.type = 'checkbox';
             checkbox.className = 'message-checkbox';
             checkbox.checked = false;
+            
+            // 标记AI回答的消息
+            if (messageDiv.classList.contains('_4f9bf79') || 
+                messageDiv.classList.contains('_43c05b5') || 
+                messageDiv.classList.contains('d7dc56a8')) {
+                checkbox.dataset.isAiResponse = 'true';
+            }
 
             checkboxWrapper.appendChild(checkbox);
             messageDiv.appendChild(checkboxWrapper);
@@ -306,6 +320,27 @@ function injectShare(onClickHandler) {
             newSelectAllBtn.textContent = chrome.i18n.getMessage(
                 isAllSelected ? 'unselectAllButton' : 'selectAllButton'
             );
+        });
+        
+        // 移除旧的事件监听器
+        const newSelectAllResponsesBtn = selectAllResponsesBtn.cloneNode(true);
+        selectAllResponsesBtn.parentNode.replaceChild(newSelectAllResponsesBtn, selectAllResponsesBtn);
+        
+        // 添加选择全部AI回答按钮的点击事件处理
+        newSelectAllResponsesBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const checkboxes = document.querySelectorAll('.message-checkbox');
+            const aiResponseCheckboxes = Array.from(checkboxes).filter(
+                checkbox => checkbox.dataset.isAiResponse === 'true'
+            );
+            
+            // 检查当前是否所有AI回答均已选中
+            const allAiResponsesSelected = aiResponseCheckboxes.every(checkbox => checkbox.checked);
+            
+            // 切换选择状态
+            aiResponseCheckboxes.forEach(checkbox => {
+                checkbox.checked = !allAiResponsesSelected;
+            });
         });
     }
 
