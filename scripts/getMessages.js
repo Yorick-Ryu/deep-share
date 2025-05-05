@@ -39,15 +39,6 @@ function getMessages() {
                         if (buttonGroup) {
                             const copyButton = buttonGroup.querySelector('.ds-icon-button:first-child');
                             if (copyButton) {
-                                // 使用思考内容和时间（保持原有逻辑）
-                                const thinkingContent = Array.from(messageDiv.querySelectorAll('.e1675d8b .ba94db8a'))
-                                    .map(p => p.textContent.trim())
-                                    .filter(Boolean)
-                                    .join('\n');
-
-                                const thinkTime = messageDiv.querySelector('._58a6d71._19db599')?.textContent.trim() || '';
-                                const timeNumber = parseInt(thinkTime.match(/\d+/)?.[0] || '0');
-
                                 // 创建一个临时元素用于存储复制按钮点击后的文本
                                 const tempTextarea = document.createElement('textarea');
                                 tempTextarea.style.position = 'fixed';
@@ -78,11 +69,6 @@ function getMessages() {
                                                 content: clipboardContent
                                             };
 
-                                            if (thinkingContent) {
-                                                assistantMessage.reasoning_content = thinkingContent;
-                                                assistantMessage.reasoning_time = timeNumber;
-                                            }
-
                                             messages.push(assistantMessage);
                                         }
                                         
@@ -100,11 +86,6 @@ function getMessages() {
                                                 role: "assistant",
                                                 content: response
                                             };
-
-                                            if (thinkingContent) {
-                                                assistantMessage.reasoning_content = thinkingContent;
-                                                assistantMessage.reasoning_time = timeNumber;
-                                            }
 
                                             messages.push(assistantMessage);
                                         }
@@ -128,14 +109,6 @@ function getMessages() {
                     
                     // 回退到旧方法的辅助函数
                     function fallbackToOldMethod() {
-                        const thinkingContent = Array.from(messageDiv.querySelectorAll('.e1675d8b .ba94db8a'))
-                            .map(p => p.textContent.trim())
-                            .filter(Boolean)
-                            .join('\n');
-
-                        const thinkTime = messageDiv.querySelector('._58a6d71._19db599')?.textContent.trim() || '';
-                        const timeNumber = parseInt(thinkTime.match(/\d+/)?.[0] || '0');
-
                         const response = messageDiv.querySelector('.ds-markdown--block')?.textContent.trim() || '';
 
                         if (response) {
@@ -143,11 +116,6 @@ function getMessages() {
                                 role: "assistant",
                                 content: response
                             };
-
-                            if (thinkingContent) {
-                                assistantMessage.reasoning_content = thinkingContent;
-                                assistantMessage.reasoning_time = timeNumber;
-                            }
 
                             messages.push(assistantMessage);
                         }
@@ -190,15 +158,6 @@ function getAllMessages() {
                 if (buttonGroup) {
                     const copyButton = buttonGroup.querySelector('.ds-icon-button:first-child');
                     if (copyButton) {
-                        // 使用思考内容和时间（保持原有逻辑）
-                        const thinkingContent = Array.from(aiContainer.querySelectorAll('.e1675d8b .ba94db8a'))
-                            .map(p => p.textContent.trim())
-                            .filter(Boolean)
-                            .join('\n');
-
-                        const thinkTime = aiContainer.querySelector('._58a6d71._19db599')?.textContent.trim() || '';
-                        const timeNumber = parseInt(thinkTime.match(/\d+/)?.[0] || '0');
-
                         // 创建一个临时元素用于存储复制按钮点击后的文本
                         const tempTextarea = document.createElement('textarea');
                         tempTextarea.style.position = 'fixed';
@@ -228,11 +187,6 @@ function getAllMessages() {
                                         role: "assistant",
                                         content: clipboardContent
                                     };
-
-                                    if (thinkingContent) {
-                                        assistantMessage.reasoning_content = thinkingContent;
-                                        assistantMessage.reasoning_time = timeNumber;
-                                    }
 
                                     messages.push(assistantMessage);
                                 }
@@ -266,16 +220,6 @@ function getAllMessages() {
             
             // 回退到旧方法的辅助函数
             function fallbackToOldMethod() {
-                // 思考内容和时间
-                const thinkingContent = Array.from(aiContainer.querySelectorAll('.e1675d8b .ba94db8a'))
-                    .map(p => p.textContent.trim())
-                    .filter(Boolean)
-                    .join('\n');
-
-                // 解析思考时间，只保留数字
-                const thinkTime = aiContainer.querySelector('._58a6d71._19db599')?.textContent.trim() || '';
-                const timeNumber = parseInt(thinkTime.match(/\d+/)?.[0] || '0');
-
                 // 最终回复
                 const response = aiContainer.querySelector('.ds-markdown--block')?.textContent.trim() || '';
 
@@ -284,12 +228,6 @@ function getAllMessages() {
                         role: "assistant",
                         content: response
                     };
-
-                    // 如果有思考内容，添加相应字段
-                    if (thinkingContent) {
-                        assistantMessage.reasoning_content = thinkingContent;
-                        assistantMessage.reasoning_time = timeNumber;
-                    }
 
                     messages.push(assistantMessage);
                 }
