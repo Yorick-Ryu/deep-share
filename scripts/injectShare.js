@@ -37,9 +37,15 @@ function injectShare(onClickHandler) {
                     <div class="tab-container">
                         <button class="tab-btn active" data-tab="image">${chrome.i18n.getMessage('imageTab')}</button>
                         <button class="tab-btn" data-tab="text">${chrome.i18n.getMessage('textTab')}</button>
-                        <button class="tab-btn" data-tab="word">${chrome.i18n.getMessage('wordTab') || 'Word'}</button>
                     </div>
                     <div class="action-buttons">
+                        <div class="format-dropdown-container">
+                            <select class="format-select" title="${chrome.i18n.getMessage('formatSelect') || '选择格式'}">
+                                <option value="docx" selected>Word(Docx)</option>
+                                <option value="md">Markdown</option>
+                                <option value="txt">TXT</option>
+                            </select>
+                        </div>
                         <button class="download-btn">${chrome.i18n.getMessage('downloadButton')}</button>
                         <button class="copy-btn">${chrome.i18n.getMessage('copyButton')}</button>
                     </div>
@@ -91,34 +97,42 @@ function injectShare(onClickHandler) {
             const targetPanel = modal.querySelector(`#${tab.dataset.tab}-panel`);
             targetPanel.classList.add('active');
 
+            // 控制格式选择器的显示/隐藏
+            const formatDropdown = modal.querySelector('.format-dropdown-container');
             if (tab.dataset.tab === 'text') {
-                // 切换到文本标签时渲染文本内容
+                // 切换到文本标签时渲染文本内容和显示格式选择器
+                formatDropdown.style.display = 'inline-block';
                 const contentArea = modal.querySelector('#conversation-content');
                 contentArea.textContent = formatAsText(messages);
-            } else if (tab.dataset.tab === 'image') {
-                const img = modal.querySelector('#conversation-image');
-                const loadingEl = modal.querySelector('.image-loading');
-                img.style.display = 'none';
-                loadingEl.style.display = 'block';
+            } else {
+                // 其它标签隐藏格式选择器
+                formatDropdown.style.display = 'none';
 
-                try {
-                    if (typeof window.captureMessages !== 'function') {
-                        throw new Error('Screenshot function not available');
-                    }
+                if (tab.dataset.tab === 'image') {
+                    const img = modal.querySelector('#conversation-image');
+                    const loadingEl = modal.querySelector('.image-loading');
+                    img.style.display = 'none';
+                    loadingEl.style.display = 'block';
 
-                    const imageUrl = await window.captureMessages();
-                    if (imageUrl) {
-                        img.onload = () => {
-                            img.style.display = 'block';
-                            loadingEl.style.display = 'none';
-                        };
-                        img.src = imageUrl;
-                    } else {
-                        throw new Error('Failed to generate image');
+                    try {
+                        if (typeof window.captureMessages !== 'function') {
+                            throw new Error('Screenshot function not available');
+                        }
+
+                        const imageUrl = await window.captureMessages();
+                        if (imageUrl) {
+                            img.onload = () => {
+                                img.style.display = 'block';
+                                loadingEl.style.display = 'none';
+                            };
+                            img.src = imageUrl;
+                        } else {
+                            throw new Error('Failed to generate image');
+                        }
+                    } catch (error) {
+                        console.error('Screenshot failed:', error);
+                        loadingEl.textContent = chrome.i18n.getMessage('generateFailed');
                     }
-                } catch (error) {
-                    console.error('Screenshot failed:', error);
-                    loadingEl.textContent = chrome.i18n.getMessage('generateFailed');
                 }
             }
         });
@@ -132,39 +146,54 @@ function injectShare(onClickHandler) {
 
         if (activeTab === 'image') {
             const img = modal.querySelector('#conversation-image');
-            link.download = 'deepseek-chat.png';
+            // 对于图片也使用一致的命名规则，从消息内容生成文件名
+            const messageText = formatAsText(messages);
+            link.download = generateConsistentFilename(messageText, '.png');
             link.href = img.src;
             link.click();
         } else if (activeTab === 'text') {
+            const formatSelect = modal.querySelector('.format-select');
+            const selectedFormat = formatSelect.value;
             const text = formatAsText(messages);
-            const blob = new Blob([text], { type: 'text/plain' });
-            link.download = 'deepseek-chat.txt';
-            link.href = URL.createObjectURL(blob);
-            link.click();
-            // Clean up
-            URL.revokeObjectURL(link.href);
-        } else if (activeTab === 'word') {
-            // Extract only assistant responses
-            const aiResponses = messages.filter(msg => msg.role === 'assistant');
-            if (aiResponses.length === 0) {
-                window.showToastNotification(chrome.i18n.getMessage('noAiResponses') || '没有找到AI回答内容', 'error');
-                return;
-            }
-            
-            // Combine AI responses into a single text
-            const aiText = aiResponses.map(msg => msg.content).join('\n\n');
-            
-            // Trigger Word conversion
-            const event = new CustomEvent('deepshare:convertToDocx', {
-                detail: {
-                    messages: {
-                        role: 'assistant',
-                        content: aiText
-                    },
-                    sourceButton: downloadBtn // Pass button reference for loading state
+
+            if (selectedFormat === 'docx') {
+                // 提取AI回答内容用于Word导出
+                const aiResponses = messages.filter(msg => msg.role === 'assistant');
+                if (aiResponses.length === 0) {
+                    window.showToastNotification(chrome.i18n.getMessage('noAiResponses') || '没有找到AI回答内容', 'error');
+                    return;
                 }
-            });
-            document.dispatchEvent(event);
+
+                // 合并AI回答内容
+                const aiText = aiResponses.map(msg => msg.content).join('\n\n');
+
+                // 触发Word转换
+                const event = new CustomEvent('deepshare:convertToDocx', {
+                    detail: {
+                        messages: {
+                            role: 'assistant',
+                            content: aiText
+                        },
+                        sourceButton: downloadBtn // 传递按钮引用以处理加载状态
+                    }
+                });
+                document.dispatchEvent(event);
+            } else if (selectedFormat === 'md') {
+                // 导出为Markdown格式
+                const blob = new Blob([text], { type: 'text/markdown' });
+                link.download = generateConsistentFilename(text, '.md');
+                link.href = URL.createObjectURL(blob);
+                link.click();
+                // 清理
+                URL.revokeObjectURL(link.href);
+            } else { // txt或默认格式
+                const blob = new Blob([text], { type: 'text/plain' });
+                link.download = generateConsistentFilename(text, '.txt');
+                link.href = URL.createObjectURL(blob);
+                link.click();
+                // 清理
+                URL.revokeObjectURL(link.href);
+            }
         }
     });
 
@@ -177,7 +206,9 @@ function injectShare(onClickHandler) {
         try {
             if (activeTab === 'text') {
                 const text = formatAsText(messages);
+                // 对于markdown和txt格式，直接复制文本
                 await navigator.clipboard.writeText(text);
+                
             } else if (activeTab === 'image') {
                 const img = modal.querySelector('#conversation-image');
                 if (img.src) {
@@ -188,31 +219,6 @@ function injectShare(onClickHandler) {
                 } else {
                     throw new Error('Image not ready');
                 }
-            } else if (activeTab === 'word') {
-                // Extract only assistant responses
-                const aiResponses = messages.filter(msg => msg.role === 'assistant');
-                if (aiResponses.length === 0) {
-                    window.showToastNotification(chrome.i18n.getMessage('noAiResponses') || '没有找到AI回答内容', 'error');
-                    return;
-                }
-                
-                // Combine AI responses into a single text
-                const aiText = aiResponses.map(msg => msg.content).join('\n\n');
-                
-                // Trigger Word conversion
-                const event = new CustomEvent('deepshare:convertToDocx', {
-                    detail: {
-                        messages: {
-                            role: 'assistant',
-                            content: aiText
-                        },
-                        sourceButton: copyBtn // Pass button reference for loading state
-                    }
-                });
-                document.dispatchEvent(event);
-                
-                // No need to update copy button text here since DOCX converter will handle UI feedback
-                return;
             }
 
             copyBtn.textContent = chrome.i18n.getMessage('copied');
@@ -344,10 +350,10 @@ function injectShare(onClickHandler) {
             checkbox.type = 'checkbox';
             checkbox.className = 'message-checkbox';
             checkbox.checked = false;
-            
+
             // 标记AI回答的消息
-            if (messageDiv.classList.contains('_4f9bf79') || 
-                messageDiv.classList.contains('_43c05b5') || 
+            if (messageDiv.classList.contains('_4f9bf79') ||
+                messageDiv.classList.contains('_43c05b5') ||
                 messageDiv.classList.contains('d7dc56a8')) {
                 checkbox.dataset.isAiResponse = 'true';
             }
@@ -376,11 +382,11 @@ function injectShare(onClickHandler) {
                 isAllSelected ? 'unselectAllButton' : 'selectAllButton'
             );
         });
-        
+
         // 移除旧的事件监听器
         const newSelectAllResponsesBtn = selectAllResponsesBtn.cloneNode(true);
         selectAllResponsesBtn.parentNode.replaceChild(newSelectAllResponsesBtn, selectAllResponsesBtn);
-        
+
         // 添加选择全部AI回答按钮的点击事件处理
         newSelectAllResponsesBtn.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -388,10 +394,10 @@ function injectShare(onClickHandler) {
             const aiResponseCheckboxes = Array.from(checkboxes).filter(
                 checkbox => checkbox.dataset.isAiResponse === 'true'
             );
-            
+
             // 检查当前是否所有AI回答均已选中
             const allAiResponsesSelected = aiResponseCheckboxes.every(checkbox => checkbox.checked);
-            
+
             // 切换选择状态
             aiResponseCheckboxes.forEach(checkbox => {
                 checkbox.checked = !allAiResponsesSelected;
@@ -422,17 +428,17 @@ function formatAsText(messages) {
         console.warn('Invalid messages format:', messages);
         return messages?.content || messages?.toString() || 'No content available';
     }
-    
+
     // 分组用户问题和AI回答
     const userMessages = messages.filter(msg => msg.role === 'user');
     const aiMessages = messages.filter(msg => msg.role === 'assistant');
-    
+
     // 合并用户问题
     let userText = '';
     if (userMessages.length > 0) {
         userText = '用户：\n' + userMessages.map(msg => msg.content).join('\n');
     }
-    
+
     // 合并AI回答
     let aiText = '';
     if (aiMessages.length > 0) {
@@ -445,7 +451,77 @@ function formatAsText(messages) {
             return content;
         }).join('\n');
     }
-    
+
     // 拼接用户问题和AI回答
     return userText + (userText && aiText ? '\n\n' : '') + aiText;
 }
+
+// Helper function to generate a consistent filename across formats
+function generateConsistentFilename(content, extension) {
+    // Helper function to get China time zone timestamp
+    function getChinaTimestamp() {
+        const now = new Date();
+        // Format date in China timezone (UTC+8)
+        const options = {
+            timeZone: 'Asia/Shanghai',
+            year: 'numeric', month: '2-digit', day: '2-digit',
+            hour: '2-digit', minute: '2-digit', second: '2-digit',
+            hour12: false
+        };
+        const chinaTime = now.toLocaleString('zh-CN', options)
+            .replace(/[\/\s:]/g, '-')
+            .replace(',', '');
+        return chinaTime;
+    }
+
+    // Default filename generation
+    if (!content || typeof content !== 'string') {
+        // Fallback if no valid content
+        const timestamp = getChinaTimestamp();
+        return `document_${timestamp}${extension}`;
+    }
+
+    // Extract the first line or first few words for the filename
+    const firstLine = content.split('\n')[0] || '';
+    let filename = firstLine.trim();
+
+    // If first line is too long, truncate it
+    filename = filename.substring(0, 10).trim();
+
+    // Remove special characters that aren't allowed in filenames
+    filename = filename.replace(/[^a-zA-Z0-9_\u4e00-\u9fa5]/g, '');
+
+    // If filename is still empty after cleaning, use a default
+    if (!filename) {
+        filename = 'document';
+    }
+
+    // Add timestamp with China timezone
+    const timestamp = getChinaTimestamp();
+    return `${filename}_${timestamp}${extension}`;
+}
+
+// 添加样式
+const style = document.createElement('style');
+style.textContent = `
+    .format-dropdown-container {
+        display: inline-block;
+        margin-right: 5px;
+    }
+    .format-select {
+        padding: 3px 5px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+        background-color: #fff;
+        font-size: 14px;
+        cursor: pointer;
+    }
+    /* 只在文本标签激活时显示格式选择器 */
+    .format-dropdown-container {
+        display: none;
+    }
+    .text-active .format-dropdown-container {
+        display: inline-block;
+    }
+`;
+document.head.appendChild(style);
