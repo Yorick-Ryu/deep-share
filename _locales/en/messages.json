@@ -36,7 +36,7 @@
         "message": "Save as DOCX"
     },
     "docxFeatureExplanation": {
-        "message": "Used to configure AI conversation to Word document conversion. Other features like conversation screenshots, LaTeX formula copying are free and ready to use."
+        "message": "Only used to configure AI conversation to Word document conversion. Other features like conversation screenshots, formula copying are free and ready to use."
     },
     "docxFeatureComingSoon": {
         "message": "DOCX export feature coming soon!"
