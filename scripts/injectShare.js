@@ -37,6 +37,7 @@ function injectShare(onClickHandler) {
                     <div class="tab-container">
                         <button class="tab-btn active" data-tab="image">${chrome.i18n.getMessage('imageTab')}</button>
                         <button class="tab-btn" data-tab="text">${chrome.i18n.getMessage('textTab')}</button>
+                        <button class="tab-btn" data-tab="word">${chrome.i18n.getMessage('wordTab') || 'Word'}</button>
                     </div>
                     <div class="action-buttons">
                         <button class="download-btn">${chrome.i18n.getMessage('downloadButton')}</button>
@@ -52,6 +53,11 @@ function injectShare(onClickHandler) {
                     </div>
                     <div class="tab-panel" id="text-panel">
                         <pre id="conversation-content"></pre>
+                    </div>
+                    <div class="tab-panel" id="word-panel">
+                        <div class="word-info">
+                            <p>${chrome.i18n.getMessage('wordExportInfo') || '点击下载或复制按钮将仅导出AI回答内容为Word文档'}</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -128,14 +134,38 @@ function injectShare(onClickHandler) {
             const img = modal.querySelector('#conversation-image');
             link.download = 'deepseek-chat.png';
             link.href = img.src;
-        } else {
+            link.click();
+        } else if (activeTab === 'text') {
             const text = formatAsText(messages);
             const blob = new Blob([text], { type: 'text/plain' });
             link.download = 'deepseek-chat.txt';
             link.href = URL.createObjectURL(blob);
+            link.click();
+            // Clean up
+            URL.revokeObjectURL(link.href);
+        } else if (activeTab === 'word') {
+            // Extract only assistant responses
+            const aiResponses = messages.filter(msg => msg.role === 'assistant');
+            if (aiResponses.length === 0) {
+                window.showToastNotification(chrome.i18n.getMessage('noAiResponses') || '没有找到AI回答内容', 'error');
+                return;
+            }
+            
+            // Combine AI responses into a single text
+            const aiText = aiResponses.map(msg => msg.content).join('\n\n');
+            
+            // Trigger Word conversion
+            const event = new CustomEvent('deepshare:convertToDocx', {
+                detail: {
+                    messages: {
+                        role: 'assistant',
+                        content: aiText
+                    },
+                    sourceButton: downloadBtn // Pass button reference for loading state
+                }
+            });
+            document.dispatchEvent(event);
         }
-
-        link.click();
     });
 
     // 复制按钮事件
@@ -158,6 +188,31 @@ function injectShare(onClickHandler) {
                 } else {
                     throw new Error('Image not ready');
                 }
+            } else if (activeTab === 'word') {
+                // Extract only assistant responses
+                const aiResponses = messages.filter(msg => msg.role === 'assistant');
+                if (aiResponses.length === 0) {
+                    window.showToastNotification(chrome.i18n.getMessage('noAiResponses') || '没有找到AI回答内容', 'error');
+                    return;
+                }
+                
+                // Combine AI responses into a single text
+                const aiText = aiResponses.map(msg => msg.content).join('\n\n');
+                
+                // Trigger Word conversion
+                const event = new CustomEvent('deepshare:convertToDocx', {
+                    detail: {
+                        messages: {
+                            role: 'assistant',
+                            content: aiText
+                        },
+                        sourceButton: copyBtn // Pass button reference for loading state
+                    }
+                });
+                document.dispatchEvent(event);
+                
+                // No need to update copy button text here since DOCX converter will handle UI feedback
+                return;
             }
 
             copyBtn.textContent = chrome.i18n.getMessage('copied');
@@ -362,6 +417,12 @@ function injectShare(onClickHandler) {
 }
 
 function formatAsText(messages) {
+    // Check if messages is valid and an array
+    if (!messages || !Array.isArray(messages)) {
+        console.warn('Invalid messages format:', messages);
+        return messages?.content || messages?.toString() || 'No content available';
+    }
+    
     // 分组用户问题和AI回答
     const userMessages = messages.filter(msg => msg.role === 'user');
     const aiMessages = messages.filter(msg => msg.role === 'assistant');

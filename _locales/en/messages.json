@@ -17,6 +17,15 @@
     "textTab": {
         "message": "Text"
     },
+    "wordTab": {
+        "message": "Word"
+    },
+    "wordExportInfo": {
+        "message": "Click the download or copy button to export only AI responses to a Word document"
+    },
+    "noAiResponses": {
+        "message": "No AI responses found"
+    },
     "downloadButton": {
         "message": "Download"
     },

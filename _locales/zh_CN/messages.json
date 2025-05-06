@@ -12,10 +12,19 @@
         "message": "分享对话"
     },
     "imageTab": {
-        "message": "截图"
+        "message": "图片"
     },
     "textTab": {
         "message": "文本"
+    },
+    "wordTab": {
+        "message": "Word"
+    },
+    "wordExportInfo": {
+        "message": "点击下载或复制按钮将仅导出AI回答内容为Word文档"
+    },
+    "noAiResponses": {
+        "message": "没有找到AI回答内容"
     },
     "downloadButton": {
         "message": "下载"

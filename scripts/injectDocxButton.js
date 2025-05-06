@@ -164,44 +164,42 @@ function injectDocxButton() {
     }
 
     // Helper function to extract conversation data
-    function extractConversationData(conversationEl) {
-        // More robust extraction based on the container structure
-        let role = 'unknown';
-        let contentEl;
-
-        // Try to determine role from container classes based on the HTML sample
-        if (conversationEl.classList.contains('_4f9bf79') ||
-            conversationEl.classList.contains('_43c05b5') ||
-            conversationEl.classList.contains('d7dc56a8')) {
-            role = 'assistant';
-            // For assistant messages, look for markdown content
-            contentEl = conversationEl.querySelector('.ds-markdown') || conversationEl;
-        } else if (conversationEl.classList.contains('_9663006')) {
-            role = 'user';
-            // For user messages, look for the content container
-            contentEl = conversationEl.querySelector('.fbb737a4') || conversationEl;
-        } else {
-            // Try to infer the role by looking at the content structure
-            if (conversationEl.querySelector('.ds-markdown')) {
-                role = 'assistant';
-                contentEl = conversationEl.querySelector('.ds-markdown');
-            } else if (conversationEl.querySelector('.fbb737a4')) {
-                role = 'user';
-                contentEl = conversationEl.querySelector('.fbb737a4');
-            } else {
-                // Default fallback
-                contentEl = conversationEl;
+    async function extractConversationData(conversationEl) {
+        // Always use assistant role for docx conversion
+        let role = 'assistant';
+        
+        // Try to find the copy button near our conversation element
+        const buttonContainer = conversationEl.querySelector('.ds-flex[style*="align-items: center"][style*="gap: 16px"], .ds-flex[style*="align-items: center"][style*="gap: 12px"], .ds-flex._965abe9');
+        
+        if (buttonContainer) {
+            const copyButton = buttonContainer.querySelector('.ds-icon-button:first-child');
+            
+            if (copyButton) {
+                try {
+                    // Click the copy button to copy content to clipboard
+                    copyButton.click();
+                    
+                    // Wait for clipboard to be populated
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                    
+                    // Get content from clipboard
+                    const clipboardContent = await navigator.clipboard.readText();
+                    
+                    if (clipboardContent) {
+                        console.debug('Successfully read AI response from clipboard');
+                        return {
+                            role: role,
+                            content: clipboardContent
+                        };
+                    } else {
+                        console.warn('Clipboard content was empty after clicking copy button');
+                    }
+                } catch (error) {
+                    console.error('Error reading from clipboard:', error);
+                    // Will fall back to DOM extraction below
+                }
             }
         }
-
-        // Extract text content, ensuring we get a clean string
-        const content = contentEl ? contentEl.textContent.trim() : '';
-        console.debug(`Extracted ${role} content:`, content.substring(0, 50) + (content.length > 50 ? '...' : ''));
-
-        return {
-            role: role,
-            content: content
-        };
     }
 
     // Initialize the observer

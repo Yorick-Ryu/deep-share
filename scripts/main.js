@@ -150,8 +150,6 @@ const handleShareClick = async () => {
             await new Promise(resolve => setTimeout(resolve, 200));
         }
 
-        // 然后再处理对话框和截图
-        messages = getMessages();
         const modal = document.querySelector('.deepseek-share-modal');
         if (!modal) {
             injectShare(handleShareClick);
@@ -169,6 +167,9 @@ const handleShareClick = async () => {
 
         imageTab.classList.add('active');
         imagePanel.classList.add('active');
+
+        // 获取消息数据（移动到这里，避免延迟显示模态框）
+        messages = await getMessages();
 
         // 立即开始生成截图
         const img = modal.querySelector('#conversation-image');
