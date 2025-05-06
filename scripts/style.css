@@ -103,6 +103,7 @@
   background: var(--modal-bg);
   color: var(--modal-text);
   width: 40%;
+  min-width: 400px;
   max-width: 1200px;
   margin: 30px auto;
   /* 减小顶部边距 */
@@ -471,7 +472,7 @@
   cursor: pointer;
   transition: all 0.2s ease;
   height: 30px;
-  width: 120px; /* Added width property to increase the dropdown width */
+  width: 100px; /* Added width property to increase the dropdown width */
   appearance: none;
   -webkit-appearance: none;
   padding-right: 25px;

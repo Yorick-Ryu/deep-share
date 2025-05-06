@@ -144,11 +144,13 @@ function injectShare(onClickHandler) {
         const activeTab = modal.querySelector('.tab-btn.active').dataset.tab;
         const link = document.createElement('a');
 
+        const aiResponses = messages.filter(msg => msg.role === 'assistant');
+        const firstAiResponse = aiResponses[0].content
+
         if (activeTab === 'image') {
             const img = modal.querySelector('#conversation-image');
             // 对于图片也使用一致的命名规则，从消息内容生成文件名
-            const messageText = formatAsText(messages);
-            link.download = generateConsistentFilename(messageText, '.png');
+            link.download = generateConsistentFilename(firstAiResponse, '.png');
             link.href = img.src;
             link.click();
         } else if (activeTab === 'text') {
@@ -157,8 +159,7 @@ function injectShare(onClickHandler) {
             const text = formatAsText(messages);
 
             if (selectedFormat === 'docx') {
-                // 提取AI回答内容用于Word导出
-                const aiResponses = messages.filter(msg => msg.role === 'assistant');
+                
                 if (aiResponses.length === 0) {
                     window.showToastNotification(chrome.i18n.getMessage('noAiResponses') || '没有找到AI回答内容', 'error');
                     return;
@@ -181,14 +182,14 @@ function injectShare(onClickHandler) {
             } else if (selectedFormat === 'md') {
                 // 导出为Markdown格式
                 const blob = new Blob([text], { type: 'text/markdown' });
-                link.download = generateConsistentFilename(text, '.md');
+                link.download = generateConsistentFilename(firstAiResponse, '.md');
                 link.href = URL.createObjectURL(blob);
                 link.click();
                 // 清理
                 URL.revokeObjectURL(link.href);
             } else { // txt或默认格式
                 const blob = new Blob([text], { type: 'text/plain' });
-                link.download = generateConsistentFilename(text, '.txt');
+                link.download = generateConsistentFilename(firstAiResponse, '.txt');
                 link.href = URL.createObjectURL(blob);
                 link.click();
                 // 清理
