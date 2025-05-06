@@ -49,6 +49,7 @@
             ],
             "js": [
                 "lib/html2canvas.min.js",
+                "lib/dom-to-image.min.js",
                 "lib/katex.min.js",
                 "scripts/notifications.js",
                 "scripts/captureMessages.js",

@@ -14,8 +14,8 @@ window.captureMessages = async function (customWatermark) {
         });
     }
 
-    // 获取水印设置
-    const { hideDefaultWatermark } = await chrome.storage.sync.get('hideDefaultWatermark');
+    // 获取水印设置和截图方法设置
+    const { hideDefaultWatermark, screenshotMethod } = await chrome.storage.sync.get(['hideDefaultWatermark', 'screenshotMethod']);
 
     // 设置容器为相对定位以支持水印的绝对定位
     const originalPosition = container.style.position;
@@ -67,10 +67,6 @@ window.captureMessages = async function (customWatermark) {
     }
 
     try {
-        if (typeof html2canvas === 'undefined') {
-            throw new Error('html2canvas not loaded');
-        }
-
         // 获取实际背景色，优先从对话容器获取，然后是body
         let backgroundColor = getComputedStyle(container).backgroundColor;
 
@@ -98,16 +94,45 @@ window.captureMessages = async function (customWatermark) {
         // 等待一小段时间确保水印渲染完成
         await new Promise(resolve => setTimeout(resolve, 100));
 
-        const canvas = await html2canvas(container, {
-            backgroundColor: backgroundColor,
-            useCORS: true,
-            scale: window.devicePixelRatio,
-            allowTaint: true,
-            ignoreElements: (element) => {
-                return element.classList.contains('deepseek-share-btn') ||
-                    element.classList.contains('message-checkbox-wrapper');
+        let dataUrl;
+
+        console.log(screenshotMethod)
+        
+        // 根据设置选择截图方法
+        if (screenshotMethod === 'html2canvas' && typeof html2canvas !== 'undefined') {
+            // 使用html2canvas
+            const canvas = await html2canvas(container, {
+                backgroundColor: backgroundColor,
+                useCORS: true,
+                scale: window.devicePixelRatio,
+                allowTaint: true,
+                ignoreElements: (element) => {
+                    return element.classList.contains('deepseek-share-btn') ||
+                        element.classList.contains('message-checkbox-wrapper');
+                }
+            });
+            dataUrl = canvas.toDataURL('image/png');
+        } else {
+            // 使用domtoimage（默认或fallback）
+            if (typeof domtoimage === 'undefined') {
+                throw new Error('domtoimage not loaded');
             }
-        });
+            
+            dataUrl = await domtoimage.toPng(container, {
+                bgcolor: backgroundColor,
+                style: {
+                    'margin': '0',
+                    'padding': '0',
+                    'transform': 'none'
+                },
+                filter: (node) => {
+                    // 过滤掉不需要的元素
+                    return !(node.classList && 
+                            (node.classList.contains('deepseek-share-btn') || 
+                             node.classList.contains('message-checkbox-wrapper')));
+                }
+            });
+        }
 
         // 恢复被隐藏的对话
         if (checkboxes.length > 0) {
@@ -123,7 +148,7 @@ window.captureMessages = async function (customWatermark) {
         container.removeChild(watermarkContainer);
         container.style.position = originalPosition;
 
-        return canvas.toDataURL('image/png');
+        return dataUrl;
     } catch (error) {
         // 确保发生错误时也清理现场
         if (watermarkContainer.parentNode) {

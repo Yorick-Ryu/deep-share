@@ -53,6 +53,9 @@
     "watermarkSettings": {
         "message": "水印设置"
     },
+    "screenshotSettings": {
+        "message": "对话截图设置"
+    },
     "docxSettings": {
         "message": "文档转换设置"
     },
@@ -193,5 +196,17 @@
     },
     "formulaFormatHint": {
         "message": "MathML 格式兼容更多编辑器，LaTeX 适合专业排版"
+    },
+    "screenshotMethodLabel": {
+        "message": "截图方式"
+    },
+    "methodDomToImageLabel": {
+        "message": "dom-to-image"
+    },
+    "methodHtml2CanvasLabel": {
+        "message": "html2canvas"
+    },
+    "screenshotMethodHint": {
+        "message": "选择用于截图的方法，如果一种方法不工作，请尝试另一种"
     }
 }

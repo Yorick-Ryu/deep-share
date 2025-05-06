@@ -53,6 +53,9 @@
     "watermarkSettings": {
         "message": "Watermark Settings"
     },
+    "screenshotSettings": {
+        "message": "Screenshot Settings"
+    },
     "docxSettings": {
         "message": "Document Conversion Settings"
     },
@@ -193,5 +196,17 @@
     },
     "formulaFormatHint": {
         "message": "MathML is compatible with more editors, LaTeX is for professional typesetting"
+    },
+    "screenshotMethodLabel": {
+        "message": "Screenshot Method"
+    },
+    "methodDomToImageLabel": {
+        "message": "dom-to-image"
+    },
+    "methodHtml2CanvasLabel": {
+        "message": "html2canvas"
+    },
+    "screenshotMethodHint": {
+        "message": "Select the method used for screenshots. If one method doesn't work, try the other"
     }
 }
