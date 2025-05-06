@@ -102,8 +102,8 @@
 .deepseek-share-modal .modal-content {
   background: var(--modal-bg);
   color: var(--modal-text);
-  width: 90%;
-  max-width: 600px;
+  width: 40%;
+  max-width: 1200px;
   margin: 30px auto;
   /* 减小顶部边距 */
   border-radius: 12px;
