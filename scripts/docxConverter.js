@@ -17,6 +17,22 @@ function initDocxConverter() {
 
 // Function to handle the conversion process
 async function convertToDocx(message, sourceButton) {
+    console.log('Starting DOCX conversion');
+    
+    // Check if message is a Promise and await it
+    if (message instanceof Promise) {
+        try {
+            message = await message;
+            console.log('Message resolved:', message);
+        } catch (error) {
+            console.error('Error resolving message Promise:', error);
+            window.showToastNotification('Error preparing content for conversion', 'error');
+            return;
+        }
+    } else {
+        console.log('Message:', message);
+    }
+    
     // Check for API key first
     try {
         const settings = await chrome.storage.sync.get({
@@ -58,55 +74,17 @@ async function convertToDocx(message, sourceButton) {
     }
 
     try {
-        // Step 1: Find the correct copy button that's next to the clicked DOCX button
-        let copyBtn;
-
-        // If we have the sourceButton reference, use it to find the adjacent copy button
-        if (sourceButton && sourceButton instanceof Element) {
-            // The copy button should be the previous sibling of the DOCX button
-            copyBtn = sourceButton.previousElementSibling;
-            if (!copyBtn || !copyBtn.classList.contains('ds-icon-button')) {
-                throw new Error('Copy button not found next to the DOCX button');
-            }
-        } else {
-            // Fallback to the old method if somehow sourceButton is not available
-            const docxBtn = document.querySelector('.deepseek-docx-btn');
-            if (!docxBtn) {
-                throw new Error('DOCX button not found');
-            }
-
-            copyBtn = docxBtn.previousElementSibling;
-            if (!copyBtn || !copyBtn.classList.contains('ds-icon-button')) {
-                throw new Error('Copy button not found');
-            }
-        }
-
-        // Show the converting notification with loading spinner
-        convertingNotificationId = window.showToastNotification(chrome.i18n.getMessage('docxConverting'), 'loading', 30000); // 30s timeout as max
-
-        // Click the copy button to copy content to clipboard
-        copyBtn.click();
-
-        // Wait for clipboard to be populated
-        await new Promise(resolve => setTimeout(resolve, 500));
-
-        // Step 2: Get content from clipboard
-        const clipboardContent = await navigator.clipboard.readText();
-        if (!clipboardContent) {
-            throw new Error('Failed to get content from clipboard');
-        }
-
         // Get settings from storage
         const settings = await chrome.storage.sync.get({
             docxServerUrl: 'https://api.ds.rick216.cn',
-            docxMode: 'local'
+            docxMode: 'api'
         });
 
         // Use the appropriate conversion method based on mode
         if (settings.docxMode === 'local') {
-            await convertToDocxLocally(clipboardContent);
+            await convertToDocxLocally(message.content);
         } else {
-            await convertToDocxViaApi(clipboardContent, settings.docxServerUrl);
+            await convertToDocxViaApi(message.content, settings.docxServerUrl);
         }
 
         // Hide converting notification
@@ -205,6 +183,13 @@ async function convertToDocxViaApi(content, serverUrl) {
         if (!apiKey) {
             throw new Error('API Key not set. Please configure your API key in the extension settings.');
         }
+
+        // Ensure content is a string
+        if (!content || typeof content !== 'string') {
+            throw new Error('Invalid content for conversion. Content must be text.');
+        }
+
+        console.log('Sending content to API:', content.substring(0, 100) + '...');
 
         // Call the conversion API
         const response = await fetch(`${url}/convert-text`, {

@@ -36,11 +36,17 @@ function loadSettings(highlightApiKey = false) {
     'docxApiKey',
     'docxMode',
     'enableFormulaCopy',
-    'formulaFormat'
+    'formulaFormat',
+    'screenshotMethod' // Added screenshot method
   ], (data) => {
     // Watermark settings
     document.getElementById('watermark').value = data.customWatermark || '';
     document.getElementById('hideDefaultWatermark').checked = !!data.hideDefaultWatermark;
+
+    // Screenshot method settings
+    const screenshotMethod = data.screenshotMethod || 'domtoimage'; // Default to dom-to-image
+    document.getElementById('methodDomToImage').checked = screenshotMethod === 'domtoimage';
+    document.getElementById('methodHtml2Canvas').checked = screenshotMethod === 'html2canvas';
 
     // DOCX conversion settings
     document.getElementById('docxServerUrl').value = data.docxServerUrl || 'https://api.ds.rick216.cn';
@@ -143,7 +149,10 @@ function setupAutoSave() {
     // 添加公式复制相关的设置元素
     document.getElementById('enableFormulaCopy'),
     document.getElementById('formatMathML'),
-    document.getElementById('formatLaTeX')
+    document.getElementById('formatLaTeX'),
+    // 添加截图方法相关的设置元素
+    document.getElementById('methodDomToImage'),
+    document.getElementById('methodHtml2Canvas')
   ];
 
   // Add change event listeners to each input
@@ -226,7 +235,7 @@ function loadI18nText() {
   document.getElementById('docxTabLabel').textContent = chrome.i18n.getMessage('docxSettings') || 'Document Conversion';
   document.getElementById('manualDocxTabLabel').textContent = chrome.i18n.getMessage('manualDocxSettings') || '手动转换文档';
   document.getElementById('formulaTabLabel').textContent = chrome.i18n.getMessage('formulaTabLabel') || 'Formula Settings';
-  document.getElementById('watermarkTabLabel').textContent = chrome.i18n.getMessage('watermarkSettings') || 'Watermark';
+  document.getElementById('screenshotTabLabel').textContent = chrome.i18n.getMessage('screenshotSettings') || 'Screenshot Settings';
   document.getElementById('sponsorTabLabel').textContent = chrome.i18n.getMessage('sponsorTabLabel') || 'Sponsor';
   document.getElementById('sponsorTabTitle').textContent = chrome.i18n.getMessage('sponsorTabLabel') || 'Sponsor';
 
@@ -264,11 +273,17 @@ function loadI18nText() {
   document.getElementById('clearMarkdownBtn').textContent = chrome.i18n.getMessage('clearMarkdown') || '清空';
   document.getElementById('markdownInput').placeholder = chrome.i18n.getMessage('markdownInputPlaceholder') || '在此粘贴 Markdown 格式文本...';
 
-  // Watermark tab
-  document.getElementById('watermarkSettingsTitle').textContent = chrome.i18n.getMessage('watermarkSettings') || 'Watermark Settings';
+  // Screenshot settings tab (previously Watermark tab)
+  document.getElementById('screenshotSettingsTitle').textContent = chrome.i18n.getMessage('screenshotSettings') || 'Screenshot Settings';
   document.getElementById('hideDefaultWatermarkLabel').textContent = chrome.i18n.getMessage('hideDefaultWatermarkLabel') || 'Hide Default Watermark';
   document.getElementById('customWatermarkLabel').textContent = chrome.i18n.getMessage('customWatermarkLabel') || 'Custom Watermark Text (Optional)';
   document.getElementById('watermark').placeholder = chrome.i18n.getMessage('customWatermarkPlaceholder') || 'Enter custom watermark here';
+  
+  // Screenshot method labels
+  document.getElementById('screenshotMethodLabel').textContent = chrome.i18n.getMessage('screenshotMethodLabel') || 'Screenshot Method';
+  document.getElementById('methodDomToImageLabel').textContent = chrome.i18n.getMessage('methodDomToImageLabel') || 'dom-to-image';
+  document.getElementById('methodHtml2CanvasLabel').textContent = chrome.i18n.getMessage('methodHtml2CanvasLabel') || 'html2canvas';
+  document.getElementById('screenshotMethodHint').textContent = chrome.i18n.getMessage('screenshotMethodHint') || '选择用于截图的方法，如果一种方法不工作，请尝试另一种';
 
   // Sponsor tab
   document.getElementById('sponsorTitle').textContent = chrome.i18n.getMessage('sponsorTitle');
@@ -284,12 +299,21 @@ function saveSettings() {
   if (document.getElementById('formatLaTeX').checked) {
     formulaFormat = 'latex';
   }
+  
+  // Get screenshot method from radio buttons
+  let screenshotMethod = 'domtoimage'; // 默认为 dom-to-image
+  if (document.getElementById('methodHtml2Canvas').checked) {
+    screenshotMethod = 'html2canvas';
+  }
 
   // Collect all settings
   const settings = {
     // Watermark settings
     customWatermark: document.getElementById('watermark').value,
     hideDefaultWatermark: document.getElementById('hideDefaultWatermark').checked,
+    
+    // Screenshot method
+    screenshotMethod: screenshotMethod,
 
     // DOCX settings
     docxServerUrl: document.getElementById('docxServerUrl').value,

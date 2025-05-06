@@ -17,6 +17,15 @@
     "textTab": {
         "message": "Text"
     },
+    "wordTab": {
+        "message": "Word"
+    },
+    "wordExportInfo": {
+        "message": "Click the download or copy button to export only AI responses to a Word document"
+    },
+    "noAiResponses": {
+        "message": "No AI responses found"
+    },
     "downloadButton": {
         "message": "Download"
     },
@@ -27,7 +36,7 @@
         "message": "Save as DOCX"
     },
     "docxFeatureExplanation": {
-        "message": "Used to configure AI conversation to Word document conversion. Other features like conversation screenshots, LaTeX formula copying are free and ready to use."
+        "message": "Only used to configure AI conversation to Word document conversion. Other features like conversation screenshots, formula copying are free and ready to use."
     },
     "docxFeatureComingSoon": {
         "message": "DOCX export feature coming soon!"
@@ -43,6 +52,9 @@
     },
     "watermarkSettings": {
         "message": "Watermark Settings"
+    },
+    "screenshotSettings": {
+        "message": "Screenshot Settings"
     },
     "docxSettings": {
         "message": "Document Conversion Settings"
@@ -109,6 +121,9 @@
     },
     "selectAllButton": {
         "message": "Select All"
+    },
+    "selectAllResponsesButton": {
+        "message": "Select All Responses"
     },
     "unselectAllButton": {
         "message": "Unselect All"
@@ -181,5 +196,17 @@
     },
     "formulaFormatHint": {
         "message": "MathML is compatible with more editors, LaTeX is for professional typesetting"
+    },
+    "screenshotMethodLabel": {
+        "message": "Screenshot Method"
+    },
+    "methodDomToImageLabel": {
+        "message": "dom-to-image"
+    },
+    "methodHtml2CanvasLabel": {
+        "message": "html2canvas"
+    },
+    "screenshotMethodHint": {
+        "message": "Select the method used for screenshots. If one method doesn't work, try the other"
     }
 }

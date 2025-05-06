@@ -12,10 +12,19 @@
         "message": "分享对话"
     },
     "imageTab": {
-        "message": "截图"
+        "message": "图片"
     },
     "textTab": {
         "message": "文本"
+    },
+    "wordTab": {
+        "message": "Word"
+    },
+    "wordExportInfo": {
+        "message": "点击下载或复制按钮将仅导出AI回答内容为Word文档"
+    },
+    "noAiResponses": {
+        "message": "没有找到AI回答内容"
     },
     "downloadButton": {
         "message": "下载"
@@ -30,7 +39,7 @@
         "message": "Word文档导出功能即将推出！"
     },
     "docxFeatureExplanation": {
-        "message": "用于配置AI对话转Word文档功能，其他功能如对话截图和LaTeX公式复制都是免费的，无需配置即可使用。"
+        "message": "仅用于配置AI对话转Word文档功能，其他功能如对话截图和公式复制都是免费的，无需配置即可使用。"
     },
     "docxConversionSuccess": {
         "message": "成功转换为Word文档！"
@@ -43,6 +52,9 @@
     },
     "watermarkSettings": {
         "message": "水印设置"
+    },
+    "screenshotSettings": {
+        "message": "对话截图设置"
     },
     "docxSettings": {
         "message": "文档转换设置"
@@ -109,6 +121,9 @@
     },
     "selectAllButton": {
         "message": "全选"
+    },
+    "selectAllResponsesButton": {
+        "message": "选择全部回答"
     },
     "unselectAllButton": {
         "message": "取消全选"
@@ -181,5 +196,17 @@
     },
     "formulaFormatHint": {
         "message": "MathML 格式兼容更多编辑器，LaTeX 适合专业排版"
+    },
+    "screenshotMethodLabel": {
+        "message": "截图方式"
+    },
+    "methodDomToImageLabel": {
+        "message": "dom-to-image"
+    },
+    "methodHtml2CanvasLabel": {
+        "message": "html2canvas"
+    },
+    "screenshotMethodHint": {
+        "message": "选择用于截图的方法，如果一种方法不工作，请尝试另一种"
     }
 }

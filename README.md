@@ -39,7 +39,7 @@ A lightweight browser extension designed for AI users to easily share, save, and
 | Wanzhi | ✓ | Manual copy | ✗ |
 | Yi Xiao | ✓ | Manual copy | ✗ |
 | Bot.n | ✓ | Manual copy | ✗ |
-| Zhihu | ✓ | Manual copy | ✗ |
+| Zhihu | ✓ | ✗ | ✗ |
 
 ## Installation
 
