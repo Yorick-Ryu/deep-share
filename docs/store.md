@@ -70,7 +70,7 @@ DeepSeek：完全支持公式复制、Word导出、对话截图
 ### Premium Feature Testing (Markdown to DOCX Conversion)
 
 To test the Word document export functionality:
-   - Enter the provided API key: 85149f2e-7930-4b29-ad49-7f3eec0e9306
+   - Enter the provided API key: xxxxxxxxxxxxxxxxxxxx
    - Go to the manual conversion section of the extension
    - Paste any markdown content into the input field
    - Click the "Convert" button
