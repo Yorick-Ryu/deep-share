@@ -28,7 +28,7 @@ function removeAllCopySuccessNotifications() {
                 const contentEl = toast.querySelector('.ds-toast__content, [class*="content"]');
                 if (contentEl && (
                     contentEl.textContent === '复制成功' || 
-                    contentEl.textContent === 'Copied' || 
+                    contentEl.textContent === 'Copied!' || 
                     contentEl.textContent.includes('copy') || 
                     contentEl.textContent.includes('复制') || 
                     contentEl.textContent === chrome.i18n.getMessage('copied')
