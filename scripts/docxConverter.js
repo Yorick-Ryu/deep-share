@@ -23,7 +23,6 @@ async function convertToDocx(message, sourceButton) {
     if (message instanceof Promise) {
         try {
             message = await message;
-            console.log('Message resolved:', message);
         } catch (error) {
             console.error('Error resolving message Promise:', error);
             window.showToastNotification('Error preparing content for conversion', 'error');
