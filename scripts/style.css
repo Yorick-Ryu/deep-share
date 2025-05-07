@@ -203,6 +203,25 @@
   display: block;
 }
 
+/* 文本容器样式 */
+#text-panel {
+  min-height: 200px;
+  max-height: 70vh;
+  overflow-y: auto;
+  border: 1px solid var(--modal-border);
+  border-radius: 8px;
+  background: var(--modal-bg);
+  position: relative;
+}
+
+#conversation-content {
+  white-space: pre-wrap;
+  word-break: break-all;
+  color: var(--modal-text);
+  padding: 16px;
+  margin: 0;
+}
+
 /* 图片容器样式 */
 .image-container {
   min-height: 200px;
