@@ -276,8 +276,7 @@
 
 /* 按钮样式 */
 .download-btn,
-.copy-btn,
-.format-select {
+.copy-btn {
   padding: 4px 10px;
   font-size: 12px;
   background: var(--button-hover-bg);
@@ -289,8 +288,7 @@
 }
 
 .download-btn:hover,
-.copy-btn:hover,
-.format-select:hover {
+.copy-btn:hover {
   background: var(--button-hover-color);
   color: white;
   opacity: 0.9;
@@ -470,4 +468,75 @@
 /* Show format selector when text tab is active */
 .tab-btn[data-tab="text"].active~.action-buttons .format-dropdown-container {
   display: inline-block;
+}
+
+/* Format select dropdown styles */
+.format-dropdown-container {
+    position: relative;
+    display: inline-block;
+}
+
+.format-select {
+    appearance: none;
+    -webkit-appearance: none;
+    background: var(--modal-bg);
+    color: var(--modal-text);
+    border: 1px solid var(--modal-border);
+    border-radius: 4px;
+    padding: 4px 24px 4px 8px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    outline: none;
+}
+
+.format-select:hover {
+    border-color: var(--button-hover-color);
+    background: var(--button-hover-bg);
+}
+
+.format-select:focus {
+    border-color: var(--button-hover-color);
+    box-shadow: 0 0 0 2px rgba(77, 107, 254, 0.1);
+}
+
+/* Custom dropdown arrow */
+.format-dropdown-container::after {
+    content: '';
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 4px solid var(--button-color);
+    pointer-events: none;
+    transition: all 0.2s ease;
+}
+
+.format-dropdown-container:hover::after {
+    border-top-color: var(--button-hover-color);
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+    .format-select {
+        background: var(--modal-bg);
+        color: var(--modal-text);
+        border-color: var(--modal-border);
+    }
+
+    .format-select:hover {
+        background: var(--button-hover-bg);
+    }
+
+    .format-dropdown-container::after {
+        border-top-color: var(--button-color);
+    }
+
+    .format-dropdown-container:hover::after {
+        border-top-color: var(--button-hover-color);
+    }
 }
