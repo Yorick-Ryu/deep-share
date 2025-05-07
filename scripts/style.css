@@ -458,7 +458,7 @@
 }
 
 .format-dropdown-container {
-  display: inline-block;
+  display: none;  /* Default state is hidden */
   margin-right: 8px;
 }
 
@@ -472,7 +472,7 @@
   cursor: pointer;
   transition: all 0.2s ease;
   height: 30px;
-  width: 100px; /* Added width property to increase the dropdown width */
+  width: 110px;
   appearance: none;
   -webkit-appearance: none;
   padding-right: 25px;
@@ -486,11 +486,21 @@
   background-color: var(--button-hover-bg);
 }
 
-/* Only show format selector when text tab is active */
-.format-dropdown-container {
-  display: none;
-}
-
+/* Show format selector when text tab is active */
 .tab-btn[data-tab="text"].active ~ .action-buttons .format-dropdown-container {
   display: inline-block;
+}
+
+/* Dark mode styles for format select */
+@media (prefers-color-scheme: dark) {
+  .format-select {
+    border-color: var(--button-color);
+    background-color: var(--modal-bg);
+    color: var(--modal-text);
+  }
+  
+  .format-select:hover {
+    border-color: var(--button-hover-color);
+    background-color: var(--button-hover-bg);
+  }
 }

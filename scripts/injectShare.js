@@ -501,28 +501,3 @@ function generateConsistentFilename(content, extension) {
     const timestamp = getChinaTimestamp();
     return `${filename}_${timestamp}${extension}`;
 }
-
-// 添加样式
-const style = document.createElement('style');
-style.textContent = `
-    .format-dropdown-container {
-        display: inline-block;
-        margin-right: 5px;
-    }
-    .format-select {
-        padding: 3px 5px;
-        border-radius: 4px;
-        border: 1px solid #ccc;
-        background-color: #fff;
-        font-size: 14px;
-        cursor: pointer;
-    }
-    /* 只在文本标签激活时显示格式选择器 */
-    .format-dropdown-container {
-        display: none;
-    }
-    .text-active .format-dropdown-container {
-        display: inline-block;
-    }
-`;
-document.head.appendChild(style);
