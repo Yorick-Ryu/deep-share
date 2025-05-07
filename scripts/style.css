@@ -175,6 +175,7 @@
   display: flex;
   gap: 2px;
   border-bottom: 1px solid var(--modal-border);
+  position: relative;
 }
 
 .tab-btn {
@@ -187,11 +188,29 @@
   transition: all 0.2s;
   min-width: 60px;
   text-align: center;
+  position: relative;
 }
 
 .tab-btn.active {
   opacity: 1;
-  border-bottom: 2px solid var(--button-hover-color);
+}
+
+.tab-indicator {
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  height: 2px;
+  background-color: var(--button-hover-color);
+  transition: transform 0.3s ease;
+  width: 60px;
+}
+
+.tab-btn[data-tab="text"].active ~ .tab-indicator {
+  transform: translateX(calc(100% + 2px));
+}
+
+.tab-btn[data-tab="image"].active ~ .tab-indicator {
+  transform: translateX(0);
 }
 
 /* 面板样式 */

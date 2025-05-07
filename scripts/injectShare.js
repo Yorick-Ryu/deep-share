@@ -41,6 +41,7 @@ function injectShare(onClickHandler) {
                     <div class="tab-container">
                         <button class="tab-btn active" data-tab="image">${chrome.i18n.getMessage('imageTab')}</button>
                         <button class="tab-btn" data-tab="text">${chrome.i18n.getMessage('textTab')}</button>
+                        <div class="tab-indicator"></div>
                     </div>
                     <div class="action-buttons">
                         <div class="format-dropdown-container">
