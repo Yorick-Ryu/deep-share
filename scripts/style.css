@@ -126,7 +126,6 @@
   gap: 4px;
 }
 
-/* Replace old button styles with unified header button style */
 .header-btn {
   width: 32px;
   height: 32px;
@@ -152,7 +151,7 @@
 }
 
 .modal-body {
-  padding: 20px;
+  padding: 17px 20px 20px 20px;
   max-height: 80vh;
   /* 增加最大高度 */
   overflow-y: auto;
@@ -170,17 +169,16 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
-  border-bottom: 1px solid var(--modal-border);
-  padding-bottom: 1px;
 }
 
 .tab-container {
   display: flex;
-  gap: 20px;
+  gap: 2px;
+  border-bottom: 1px solid var(--modal-border);
 }
 
 .tab-btn {
-  padding: 10px 0;
+  padding: 6px;
   background: none;
   border: none;
   color: var(--modal-text);
@@ -194,22 +192,6 @@
 .tab-btn.active {
   opacity: 1;
   border-bottom: 2px solid var(--button-hover-color);
-}
-
-.copy-btn {
-  padding: 6px 12px;
-  font-size: 13px;
-  background: var(--button-hover-bg);
-  color: var(--button-hover-color);
-  border: 1px solid var(--button-hover-color);
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.copy-btn:hover {
-  background: var(--button-hover-color);
-  color: white;
 }
 
 /* 面板样式 */
@@ -227,7 +209,6 @@
   max-height: 70vh;
   /* 增加图片容器最大高度 */
   overflow-y: auto;
-  margin-bottom: 0;
   /* 移除底部间距 */
   border: 1px solid var(--modal-border);
   border-radius: 8px;
@@ -250,29 +231,17 @@
   color: var(--modal-text);
 }
 
-.download-btn {
-  background: var(--button-hover-color);
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.download-btn:hover {
-  opacity: 0.9;
-}
-
 .action-buttons {
   display: flex;
   gap: 8px;
 }
 
+/* 按钮样式 */
 .download-btn,
-.copy-btn {
-  padding: 6px 12px;
-  font-size: 13px;
+.copy-btn,
+.format-select {
+  padding: 4px 10px;
+  font-size: 12px;
   background: var(--button-hover-bg);
   color: var(--button-hover-color);
   border: 1px solid var(--button-hover-color);
@@ -282,9 +251,11 @@
 }
 
 .download-btn:hover,
-.copy-btn:hover {
+.copy-btn:hover,
+.format-select:hover {
   background: var(--button-hover-color);
   color: white;
+  opacity: 0.9;
 }
 
 /* 对话选择复选框样式 */
@@ -349,6 +320,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
+
   .select-all-btn,
   .select-all-responses-btn {
     color: rgb(205, 212, 223);
@@ -457,50 +429,7 @@
   color: white;
 }
 
-.format-dropdown-container {
-  display: none;  /* Default state is hidden */
-  margin-right: 8px;
-}
-
-.format-select {
-  padding: 6px 10px;
-  border-radius: 4px;
-  border: 1px solid var(--button-hover-color);
-  color: var(--button-hover-color);
-  background-color: var(--modal-bg);
-  font-size: 13px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  height: 30px;
-  width: 110px;
-  appearance: none;
-  -webkit-appearance: none;
-  padding-right: 25px;
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-  background-repeat: no-repeat;
-  background-position: right 6px top 50%;
-  background-size: 12px;
-}
-
-.format-select:hover {
-  background-color: var(--button-hover-bg);
-}
-
 /* Show format selector when text tab is active */
-.tab-btn[data-tab="text"].active ~ .action-buttons .format-dropdown-container {
+.tab-btn[data-tab="text"].active~.action-buttons .format-dropdown-container {
   display: inline-block;
-}
-
-/* Dark mode styles for format select */
-@media (prefers-color-scheme: dark) {
-  .format-select {
-    border-color: var(--button-color);
-    background-color: var(--modal-bg);
-    color: var(--modal-text);
-  }
-  
-  .format-select:hover {
-    border-color: var(--button-hover-color);
-    background-color: var(--button-hover-bg);
-  }
 }
