@@ -9,7 +9,11 @@ function injectShare(onClickHandler) {
     if (existingBtn) {
         existingBtn.remove();
     }
-
+    
+    // 用于缓存消息内容的变量
+    let cachedText = '';
+    let cachedMessagesHash = '';
+    
     // 更新modal内容 - 在 modal-header 中添加设置按钮
     const modal = document.createElement('div');
     modal.className = 'deepseek-share-modal';
@@ -103,37 +107,21 @@ function injectShare(onClickHandler) {
                 // 切换到文本标签时渲染文本内容和显示格式选择器
                 formatDropdown.style.display = 'inline-block';
                 const contentArea = modal.querySelector('#conversation-content');
-                contentArea.textContent = formatAsText(messages);
+                
+                // 计算消息的哈希值
+                const messagesHash = JSON.stringify(messages);
+                
+                // 检查是否有缓存的文本内容
+                if (cachedMessagesHash === messagesHash) {
+                    contentArea.textContent = cachedText;
+                } else {
+                    cachedText = formatAsText(messages);
+                    cachedMessagesHash = messagesHash;
+                    contentArea.textContent = cachedText;
+                }
             } else {
                 // 其它标签隐藏格式选择器
                 formatDropdown.style.display = 'none';
-
-                if (tab.dataset.tab === 'image') {
-                    const img = modal.querySelector('#conversation-image');
-                    const loadingEl = modal.querySelector('.image-loading');
-                    img.style.display = 'none';
-                    loadingEl.style.display = 'block';
-
-                    try {
-                        if (typeof window.captureMessages !== 'function') {
-                            throw new Error('Screenshot function not available');
-                        }
-
-                        const imageUrl = await window.captureMessages();
-                        if (imageUrl) {
-                            img.onload = () => {
-                                img.style.display = 'block';
-                                loadingEl.style.display = 'none';
-                            };
-                            img.src = imageUrl;
-                        } else {
-                            throw new Error('Failed to generate image');
-                        }
-                    } catch (error) {
-                        console.error('Screenshot failed:', error);
-                        loadingEl.textContent = chrome.i18n.getMessage('generateFailed');
-                    }
-                }
             }
         });
     });
