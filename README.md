@@ -35,6 +35,8 @@ A lightweight browser extension designed for AI users to easily share, save, and
 | ChatGLM | ✓ | Manual copy | ✗ |
 | OpenRouter | ✓ | Manual copy | ✗ |
 | Poe | ✓ | Manual copy | ✗ |
+| Monica | ✓ | Manual copy | ✗ |
+| Wen Xiaobai | ✓ | Manual copy | ✗ |
 | AskManyAI | ✓ | Manual copy | ✗ |
 | Wanzhi | ✓ | Manual copy | ✗ |
 | Yi Xiao | ✓ | Manual copy | ✗ |
