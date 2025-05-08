@@ -52,7 +52,7 @@ function removeAllCopySuccessNotifications() {
                 if (contentEl && (
                     contentEl.textContent === '复制成功' || 
                     contentEl.textContent === 'Copied!' || 
-                    contentEl.textContent.includes('copy') || 
+                    contentEl.textContent.includes('Copied') || 
                     contentEl.textContent.includes('复制') || 
                     contentEl.textContent === chrome.i18n.getMessage('copied')
                 )) {
