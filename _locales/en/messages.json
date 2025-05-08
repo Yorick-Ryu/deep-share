@@ -83,8 +83,8 @@
     "formulaCopied": {
         "message": "Formula copied!"
     },
-    "clickToCopyLatex": {
-        "message": "Click to copy LaTeX code"
+    "clickToCopyFormula": {
+        "message": "Click to copy formula"
     },
     "generatingImage": {
         "message": "Generating screenshot..."

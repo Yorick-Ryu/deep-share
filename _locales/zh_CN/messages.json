@@ -83,8 +83,8 @@
     "formulaCopied": {
         "message": "公式复制成功！"
     },
-    "clickToCopyLatex": {
-        "message": "点击复制 LaTeX 代码"
+    "clickToCopyFormula": {
+        "message": "点击复制公式"
     },
     "generatingImage": {
         "message": "正在生成截图..."

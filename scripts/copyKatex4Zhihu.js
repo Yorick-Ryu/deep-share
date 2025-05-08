@@ -90,7 +90,7 @@ async function handleFormulaClick(e) {
 function updateElementStyle(element) {
     if (formulaSettings.enableFormulaCopy) {
         element.style.cursor = 'pointer';
-        element.title = chrome.i18n.getMessage('clickToCopyLatex');
+        element.title = chrome.i18n.getMessage('clickToCopyFormula');
         
         // 创建并应用悬停样式
         // 使用CSS类来处理悬停效果，统一只对SVG应用背景色
