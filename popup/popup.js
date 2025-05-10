@@ -37,7 +37,8 @@ function loadSettings(highlightApiKey = false) {
     'docxMode',
     'enableFormulaCopy',
     'formulaFormat',
-    'screenshotMethod' // Added screenshot method
+    'screenshotMethod',
+    'convertMermaid'
   ], (data) => {
     // Watermark settings
     document.getElementById('watermark').value = data.customWatermark || '';
@@ -62,6 +63,9 @@ function loadSettings(highlightApiKey = false) {
     const formulaFormat = data.formulaFormat || 'mathml'; // Default to MathML
     document.getElementById('formatMathML').checked = formulaFormat === 'mathml';
     document.getElementById('formatLaTeX').checked = formulaFormat === 'latex';
+
+    // Mermaid conversion setting
+    document.getElementById('convertMermaid').checked = data.convertMermaid !== false; // Default to true
 
     // If API key is set, check quota
     if (data.docxApiKey) {
@@ -152,7 +156,9 @@ function setupAutoSave() {
     document.getElementById('formatLaTeX'),
     // 添加截图方法相关的设置元素
     document.getElementById('methodDomToImage'),
-    document.getElementById('methodHtml2Canvas')
+    document.getElementById('methodHtml2Canvas'),
+    // 添加Mermaid转换设置
+    document.getElementById('convertMermaid')
   ];
 
   // Add change event listeners to each input
@@ -247,6 +253,7 @@ function loadI18nText() {
   document.getElementById('modeApiLabel').textContent = chrome.i18n.getMessage('modeApiLabel') || 'API';
   document.getElementById('docxServerUrlLabel').textContent = chrome.i18n.getMessage('docxServerUrlLabel') || 'Server URL';
   document.getElementById('docxApiKeyLabel').textContent = chrome.i18n.getMessage('docxApiKeyLabel') || 'API Key';
+  document.getElementById('convertMermaidLabel').textContent = chrome.i18n.getMessage('convertMermaidLabel') || '启用Mermaid图表转换';
 
   // Formula Copy Settings tab
   document.getElementById('formulaSettingsTitle').textContent = chrome.i18n.getMessage('formulaSettingsTitle') || 'Formula Copy Settings';
@@ -322,7 +329,10 @@ function saveSettings() {
 
     // Formula copy settings
     enableFormulaCopy: document.getElementById('enableFormulaCopy').checked,
-    formulaFormat: formulaFormat
+    formulaFormat: formulaFormat,
+
+    // Mermaid diagram conversion
+    convertMermaid: document.getElementById('convertMermaid').checked
   };
 
   // Save all settings at once
@@ -469,7 +479,8 @@ function setupManualConversion() {
     const settings = await chrome.storage.sync.get({
       docxServerUrl: 'https://api.ds.rick216.cn',
       docxApiKey: '',
-      docxMode: 'api'
+      docxMode: 'api',
+      convertMermaid: false
     });
 
     // Check if API key is provided
@@ -508,7 +519,7 @@ function setupManualConversion() {
       `;
 
       // Call the conversion function with markdown text
-      await convertMarkdownToDocx(markdownText, settings.docxServerUrl, settings.docxApiKey);
+      await convertMarkdownToDocx(markdownText, settings.docxServerUrl, settings.docxApiKey, settings.convertMermaid);
 
       // Update button to show success message briefly
       convertBtn.innerHTML = `
@@ -554,7 +565,7 @@ function setupManualConversion() {
 }
 
 // Function to convert markdown text to DOCX
-async function convertMarkdownToDocx(markdownText, serverUrl, apiKey) {
+async function convertMarkdownToDocx(markdownText, serverUrl, apiKey, convertMermaid = false) {
   try {
     const url = serverUrl || 'https://api.ds.rick216.cn';
 
@@ -576,7 +587,6 @@ async function convertMarkdownToDocx(markdownText, serverUrl, apiKey) {
 
     filename = `${filename}_${timestamp}`;
 
-    // Call the conversion API
     const response = await fetch(`${url}/convert-text`, {
       method: 'POST',
       headers: {
@@ -585,7 +595,8 @@ async function convertMarkdownToDocx(markdownText, serverUrl, apiKey) {
       },
       body: JSON.stringify({
         content: markdownText,
-        filename: filename
+        filename: filename,
+        convert_mermaid: convertMermaid
       })
     });
 

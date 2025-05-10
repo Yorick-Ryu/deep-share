@@ -172,7 +172,8 @@ async function convertToDocxViaApi(content, serverUrl) {
         // Get API settings from storage
         const settings = await chrome.storage.sync.get({
             docxServerUrl: 'https://api.ds.rick216.cn',
-            docxApiKey: ''
+            docxApiKey: '',
+            convertMermaid: false
         });
 
         const url = serverUrl || settings.docxServerUrl || 'https://api.ds.rick216.cn';
@@ -189,6 +190,7 @@ async function convertToDocxViaApi(content, serverUrl) {
         }
 
         console.log('Sending content to API:', content.substring(0, 100) + '...');
+        console.log('Convert Mermaid:', settings.convertMermaid);
 
         // Call the conversion API
         const response = await fetch(`${url}/convert-text`, {
@@ -199,7 +201,8 @@ async function convertToDocxViaApi(content, serverUrl) {
             },
             body: JSON.stringify({
                 content: content,
-                filename: generateFilename(content)
+                filename: generateFilename(content),
+                convert_mermaid: settings.convertMermaid
             })
         });
 

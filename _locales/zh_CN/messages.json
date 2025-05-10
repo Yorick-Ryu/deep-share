@@ -208,5 +208,8 @@
     },
     "screenshotMethodHint": {
         "message": "选择用于截图的方法，如果一种方法不工作，请尝试另一种，切换后请刷新网页。"
+    },
+    "convertMermaidLabel": {
+        "message": "启用Mermaid图表转换"
     }
 }
