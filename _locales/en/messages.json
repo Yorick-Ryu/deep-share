@@ -210,6 +210,6 @@
         "message": "Select the method used for screenshots. If one method doesn't work, try the other. Please refresh the page after switching."
     },
     "convertMermaidLabel": {
-        "message": "Enable Mermaid Diagram Conversion"
+        "message": "Enable Mermaid Diagram Conversion (Beta)"
     }
 }

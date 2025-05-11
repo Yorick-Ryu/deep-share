@@ -65,7 +65,7 @@ function loadSettings(highlightApiKey = false) {
     document.getElementById('formatLaTeX').checked = formulaFormat === 'latex';
 
     // Mermaid conversion setting
-    document.getElementById('convertMermaid').checked = data.convertMermaid !== false; // Default to true
+    document.getElementById('convertMermaid').checked = !!data.convertMermaid; // Default to false
 
     // If API key is set, check quota
     if (data.docxApiKey) {

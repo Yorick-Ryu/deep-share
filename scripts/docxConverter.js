@@ -175,7 +175,7 @@ async function convertToDocxViaApi(content, serverUrl) {
         const settings = await chrome.storage.sync.get({
             docxServerUrl: 'https://api.ds.rick216.cn',
             docxApiKey: '',
-            convertMermaid: false
+            convertMermaid: false  // Default to false for Mermaid conversion
         });
 
         const url = serverUrl || settings.docxServerUrl || 'https://api.ds.rick216.cn';
