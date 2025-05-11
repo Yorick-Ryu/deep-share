@@ -73,6 +73,8 @@ async function convertToDocx(message, sourceButton) {
     }
 
     try {
+        convertingNotificationId = window.showToastNotification(chrome.i18n.getMessage('docxConverting'), 'loading', 30000); // 30s timeout as max
+
         // Get settings from storage
         const settings = await chrome.storage.sync.get({
             docxServerUrl: 'https://api.ds.rick216.cn',
