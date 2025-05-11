@@ -10,7 +10,7 @@ Clean Experience: Intuitive interface with no ads
 Fully Open Source: Transparent code, safe and reliable
 
 💎 Premium Features
-Word Document Export: Convert conversations to DOCX format with perfectly preserved mathematical formulas
+Word Document Export: Convert conversations to DOCX format with perfectly preserved mathematical formulas and Mermaid diagrams
 Flexible Pricing:
 Standard price: ¥0.2/conversion
 Limited-time offer: Buy 25 or more conversions, get an equal number free!
@@ -40,7 +40,7 @@ Install now and experience a smarter way to share your AI conversations!
 完全开源：代码透明，安全可靠
 
 💎 高级功能
-Word文档导出：将对话转换为DOCX格式，完美保留数学公式格式
+Word文档导出：将对话转换为DOCX格式，完美保留数学公式格式和Mermaid图表
 灵活定价：
 标准价格：￥0.2/次
 限时优惠：购买25次及以上，赠送等量次数！
@@ -70,7 +70,7 @@ DeepSeek：完全支持公式复制、Word导出、对话截图
 ### Premium Feature Testing (Markdown to DOCX Conversion)
 
 To test the Word document export functionality:
-   - Enter the provided API key: xxxxxxxxxxxxxxxxxxxx
+   - Enter the provided API key: f4e8fe6f-e39e-486f-b7e7-e037d2ec216f
    - Go to the manual conversion section of the extension
    - Paste any markdown content into the input field
    - Click the "Convert" button
