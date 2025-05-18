@@ -359,8 +359,8 @@ function showPaymentModal(orderData, email, amount, conversions, bonus) {
 // Poll the API for payment status
 function pollPaymentStatus(orderNo, apiKey, modal) {
     let pollCount = 0;
-    const maxPolls = 80; // Poll for maximum 6.67 minutes (80 * 5 seconds)
-    const pollInterval = 5000; // Poll every 5 seconds
+    const maxPolls = 60; // Poll for maximum 3 minutes (60 * 3 seconds)
+    const pollInterval = 3000; // Poll every 3 seconds
     
     // Create an AbortController to allow stopping the polling
     const abortController = new AbortController();
