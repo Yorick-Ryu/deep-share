@@ -134,12 +134,18 @@ function injectShare(onClickHandler) {
         const link = document.createElement('a');
 
         const aiResponses = messages.filter(msg => msg.role === 'assistant');
-        const firstAiResponse = aiResponses[0].content
+        const firstAiResponse = aiResponses[0]?.content;
 
         if (activeTab === 'image') {
             const img = modal.querySelector('#conversation-image');
             // 对于图片也使用一致的命名规则，从消息内容生成文件名
-            link.download = generateConsistentFilename(firstAiResponse, '.png');
+            let filename;
+            if (firstAiResponse) {
+                filename = generateConsistentFilename(firstAiResponse, '.png');
+            } else {
+                filename = generateConsistentFilename('deepshare', '.png');
+            }
+            link.download = filename;
             link.href = img.src;
             link.click();
         } else if (activeTab === 'text') {
