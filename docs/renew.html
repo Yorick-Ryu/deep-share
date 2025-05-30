@@ -66,7 +66,7 @@
                     <div class="form-group">
                         <label for="check-api-key">您的 API Key</label>
                         <div class="api-key-input-wrapper">
-                            <input type="password" id="check-api-key" placeholder="输入您的 API Key">
+                            <input type="password" id="check-api-key" placeholder="输入您的 API Key" autocomplete="off">
                             <button type="button" class="toggle-visibility-btn" id="toggleQuotaApiKeyVisibility" title="显示/隐藏">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon">
                                     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
@@ -166,7 +166,7 @@
                         </a>
                     </div>
                     <div class="api-key-input-wrapper">
-                        <input type="password" id="renew-api-key" placeholder="输入您的 API Key" required>
+                        <input type="password" id="renew-api-key" placeholder="输入您的 API Key" required autocomplete="off">
                         <button type="button" class="toggle-visibility-btn" id="toggleRenewApiKeyVisibility" title="显示/隐藏">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon">
                                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
@@ -234,7 +234,7 @@
                         <label for="custom-amount">输入自定义金额（整数）</label>
                         <div class="custom-amount-input-group">
                             <span class="currency-symbol">¥</span>
-                            <input type="number" id="custom-amount" min="1" step="1" placeholder="请输入金额（最小 1 元）">
+                            <input type="number" id="custom-amount" min="1" step="1" placeholder="请输入金额（最小 1 元）" autocomplete="off">
                         </div>
                         <div id="custom-amount-details" class="custom-amount-details">
                             <p>充值金额: <span id="custom-amount-value">--</span> 元</p>
