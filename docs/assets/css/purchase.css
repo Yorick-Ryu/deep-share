@@ -15,7 +15,6 @@
     font-size: 2.5rem;
     font-weight: bold;
     color: #4D6BFE;
-    margin: 1rem 0;
 }
 .per-unit {
     font-size: 1rem;
@@ -39,7 +38,7 @@
     margin: 1.5rem 0;
 }
 .purchase-form {
-    margin-top: 2rem;
+    margin-top: 1rem;
 }
 .form-group {
     margin-bottom: 1.5rem;
@@ -219,7 +218,7 @@ input[type="number"]::-webkit-outer-spin-button {
     font-size: 1.2rem;
     font-weight: 500;
     line-height: 1.6;
-    margin: 1.5rem 0;
+    margin: 1rem 0;
     color: #333;
     border-left: 4px solid #4D6BFE;
     padding-left: 1rem;
