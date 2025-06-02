@@ -158,13 +158,6 @@
             <p class="feature-description">将您的 DeepSeek 对话一键导出为精美排版的 Word 文档，轻松分享和保存！</p>
             
             <div class="price-tag">¥0.2 <span class="per-unit">/ 次</span></div>
-
-            <div class="promotion-details">
-                <span class="promotion-badge">限时活动：充多少送多少</span>
-                <p>即日起至 2025 年 6 月 1 日 12:00，充值 5 元以上，充多少送多少！</p>
-                <p>例如：充值 10 元，获得价值 20 元的 100 次转换</p>
-                <p><small>* 赠送上限为 200 元</small></p>
-            </div>
             
             <div class="purchase-form">
                 <div class="form-group">
@@ -189,36 +182,49 @@
                         <div class="amount-option" data-value="1">
                             <div class="amount-value">¥1</div>
                             <div class="conversions">5 次转换</div>
+                            <div class="total-conversions">总计 5 次</div>
                         </div>
                         <div class="amount-option" data-value="5">
+                            <div class="discount-badge">6.6折</div>
                             <div class="amount-value">¥5</div>
                             <div class="conversions">25 次转换</div>
-                            <div class="bonus">+25 次赠送</div>
+                            <div class="bonus">+13 次赠送</div>
+                            <div class="total-conversions">总计 38 次</div>
                         </div>
                         <div class="amount-option selected" data-value="10">
+                            <div class="discount-badge">6.3折</div>
                             <div class="amount-value">¥10</div>
                             <div class="conversions">50 次转换</div>
-                            <div class="bonus">+50 次赠送</div>
+                            <div class="bonus">+30 次赠送</div>
+                            <div class="total-conversions">总计 80 次</div>
                         </div>
                         <div class="amount-option" data-value="20">
+                            <div class="discount-badge">5.6折</div>
                             <div class="amount-value">¥20</div>
                             <div class="conversions">100 次转换</div>
-                            <div class="bonus">+100 次赠送</div>
+                            <div class="bonus">+80 次赠送</div>
+                            <div class="total-conversions">总计 180 次</div>
                         </div>
                         <div class="amount-option" data-value="60">
+                            <div class="discount-badge">5.0折</div>
                             <div class="amount-value">¥60</div>
                             <div class="conversions">300 次转换</div>
                             <div class="bonus">+300 次赠送</div>
+                            <div class="total-conversions">总计 600 次</div>
                         </div>
                         <div class="amount-option" data-value="100">
+                            <div class="discount-badge">4.5折</div>
                             <div class="amount-value">¥100</div>
                             <div class="conversions">500 次转换</div>
-                            <div class="bonus">+500 次赠送</div>
+                            <div class="bonus">+600 次赠送</div>
+                            <div class="total-conversions">总计 1100 次</div>
                         </div>
                         <div class="amount-option" data-value="200">
+                            <div class="discount-badge">4.0折</div>
                             <div class="amount-value">¥200</div>
                             <div class="conversions">1000 次转换</div>
-                            <div class="bonus">+1000 次赠送</div>
+                            <div class="bonus">+1500 次赠送</div>
+                            <div class="total-conversions">总计 2500 次</div>
                         </div>
                         <div class="amount-option" data-value="custom">
                             <div class="amount-value">自定义</div>
@@ -237,6 +243,8 @@
                             <p>充值金额: <span id="custom-amount-value">--</span> 元</p>
                             <p>可获得 <span id="custom-conversions">--</span> 次转换</p>
                             <p class="bonus-text" id="custom-bonus-text" style="display: none;">赠送 <span id="custom-bonus">--</span> 次转换</p>
+                            <p>总计获得 <span id="custom-total-conversions">--</span> 次转换</p>
+                            <p id="custom-discount-text" class="discount-text" style="display: none;"></p>
                         </div>
                     </div>
                 </div>

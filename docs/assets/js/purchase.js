@@ -182,26 +182,59 @@ function updateCustomAmountDetails() {
     const customConversions = document.getElementById('custom-conversions');
     const customBonus = document.getElementById('custom-bonus');
     const customBonusText = document.getElementById('custom-bonus-text');
+    const customTotalConversions = document.getElementById('custom-total-conversions');
+    const customDiscountText = document.getElementById('custom-discount-text');
     
     // Default values
     customAmountValue.textContent = '--';
     customConversions.textContent = '--';
     customBonus.textContent = '--';
     customBonusText.style.display = 'none';
+    customTotalConversions.textContent = '--';
+    customDiscountText.style.display = 'none';
     
     // If we have a valid amount
     if (customAmount && !isNaN(customAmount) && parseInt(customAmount) >= 1) {
         const amount = parseInt(customAmount);
-        const conversions = amount * 5; // 0.2元/次 = 5次/元
+        const conversions = amount * 5;
+        let bonus = 0;
+
+        if (amount >= 200) {
+            bonus = Math.ceil(conversions * 1.5);
+        } else if (amount >= 100) {
+            bonus = Math.ceil(conversions * 1.2);
+        } else if (amount >= 60) {
+            bonus = Math.ceil(conversions * 1.0);
+        } else if (amount >= 20) {
+            bonus = Math.ceil(conversions * 0.8);
+        } else if (amount >= 10) {
+            bonus = Math.ceil(conversions * 0.6);
+        } else if (amount >= 5) {
+            bonus = Math.ceil(conversions * 0.5);
+        }
         
+        const totalConversions = conversions + bonus;
+        let discountDisplay = '-';
+
         customAmountValue.textContent = amount;
         customConversions.textContent = conversions;
+        customTotalConversions.textContent = totalConversions;
         
-        // Check if eligible for bonus (amount ≥ 5)
-        if (amount >= 5) {
-            const bonus = Math.min(amount, 200) * 5; // Cap bonus at 200元
+        if (bonus > 0 && totalConversions > 0) {
+            const discount = (50 * amount) / totalConversions;
+            // Display discount like "X.X折", or "X折" if it's a whole number
+            discountDisplay = (discount % 1 === 0) ? `${discount.toFixed(0)}折` : `${discount.toFixed(1)}折`;
+            customDiscountText.innerHTML = `相当于 <span class="highlight">${discountDisplay}</span>`;
+            customDiscountText.style.display = 'block';
+        } else {
+            customDiscountText.style.display = 'none';
+        }
+
+        if (bonus > 0) {
             customBonus.textContent = bonus;
             customBonusText.style.display = 'block';
+        } else {
+            customBonusText.style.display = 'none';
         }
     }
 }
@@ -211,8 +244,18 @@ async function processPayment(email, amount) {
     // Calculate conversions and bonus (still needed for display)
     const conversions = amount * 5;
     let bonus = 0;
-    if (amount >= 5) {
-        bonus = Math.min(amount, 200) * 5;
+    if (amount >= 200) {
+        bonus = Math.ceil(conversions * 1.5);
+    } else if (amount >= 100) {
+        bonus = Math.ceil(conversions * 1.2);
+    } else if (amount >= 60) {
+        bonus = Math.ceil(conversions * 1.0);
+    } else if (amount >= 20) {
+        bonus = Math.ceil(conversions * 0.8);
+    } else if (amount >= 10) {
+        bonus = Math.ceil(conversions * 0.6);
+    } else if (amount >= 5) {
+        bonus = Math.ceil(conversions * 0.5);
     }
     
     // Show loading state on the purchase button

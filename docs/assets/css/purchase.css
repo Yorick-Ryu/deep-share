@@ -70,6 +70,7 @@
     text-align: center;
     cursor: pointer;
     transition: all 0.2s ease;
+    position: relative;
 }
 .amount-option:hover {
     border-color: #4D6BFE;
@@ -83,15 +84,34 @@
     font-size: 1.2rem;
 }
 .conversions {
-    color: #666;
     font-size: 0.9rem;
+    color: #666;
     margin-top: 0.3rem;
 }
 .bonus {
+    font-size: 0.9rem;
     color: #FF6B6B;
     font-weight: bold;
-    font-size: 0.9rem;
     margin-top: 0.3rem;
+}
+.total-conversions {
+    font-size: 0.9rem;
+    color: #333;
+    font-weight: bold;
+    margin-top: 0.3rem;
+}
+.discount-badge {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background-color: #E74C3C;
+    color: white;
+    padding: 4px 8px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    border-radius: 12px 4px 12px 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    transform: rotate(15deg);
 }
 .purchase-btn {
     background: #4D6BFE;
@@ -303,6 +323,9 @@ input[type="number"]::-webkit-outer-spin-button {
     }
     .amount-option.selected {
         background: rgba(77, 107, 254, 0.2);
+    }
+    .total-conversions {
+        color: #ccc;
     }
     .api-instructions {
         background-color: #2d2d2d;
@@ -1503,80 +1526,6 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
     width: 100%;
     font-family: monospace;
     font-size: 0.9rem; /* 减小API Key字体大小 */
-}
-
-/* 使用说明调整 */
-.usage-instructions {
-    margin-top: 0.4rem;
-    background-color: #f5f8ff;
-    border-radius: 8px;
-    padding: 0.7rem; /* 与quota-summary-compact内边距保持一致 */
-}
-
-.usage-title {
-    margin: 0;
-    font-size: 1rem;
-    padding-left: 0; /* 移除左内边距 */
-    text-align: left;
-}
-
-.usage-steps {
-    list-style-position: inside; /* 确保列表符号在容器内 */
-    padding-left: 0; /* 移除默认的左内边距 */
-    margin: 0.3rem 0 0 0;
-    text-align: left;
-}
-
-.usage-steps li {
-    margin-bottom: 0.3rem;
-    font-size: 0.9rem;
-    display: flex;
-    align-items: center;
-    padding-left: 0; /* 移除左内边距 */
-}
-
-/* 调整quota-summary-compact的样式使其与usage-instructions保持一致 */
-.quota-summary-compact {
-    background-color: #f8f8f8;
-    border-radius: 8px;
-    padding: 0.7rem; /* 从1rem减小到0.7rem */
-}
-
-/* 使用说明调整 */
-.usage-instructions {
-    margin-top: 0.4rem;
-    background-color: #f5f8ff;
-    border-radius: 8px;
-    padding: 0.7rem; /* 与quota-summary-compact内边距保持一致 */
-}
-
-.usage-title {
-    margin: 0;
-    font-size: 1rem;
-    padding-left: 0; /* 移除左内边距 */
-    text-align: left;
-}
-
-.usage-steps {
-    list-style-position: inside; /* 确保列表符号在容器内 */
-    padding-left: 0; /* 移除默认的左内边距 */
-    margin: 0.3rem 0 0 0;
-    text-align: left;
-}
-
-.usage-steps li {
-    margin-bottom: 0.3rem;
-    font-size: 0.9rem;
-    display: flex;
-    align-items: center;
-    padding-left: 0; /* 移除左内边距 */
-}
-
-/* 调整quota-summary-compact的样式使其与usage-instructions保持一致 */
-.quota-summary-compact {
-    background-color: #f8f8f8;
-    border-radius: 8px;
-    padding: 0.7rem; /* 从1rem减小到0.7rem */
 }
 
 /* 使用说明调整 */
