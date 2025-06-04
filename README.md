@@ -27,7 +27,7 @@ A lightweight browser extension designed for AI users to easily share, save, and
 |-------------|-------------|-------------|------------------------|
 | DeepSeek | ✓ | ✓ | ✓ |
 | Doubao | ✓ | Manual copy | ✗ |
-| Yuanbao | ✓ | Manual copy | ✗ |
+| Yuanbao | ✗ | Manual copy | ✗ |
 | ChatGPT | ✓ | Manual copy | ✗ |
 | Grok | ✓ | Manual copy | ✗ |
 | Tongyi | ✓ | Manual copy | ✗ |

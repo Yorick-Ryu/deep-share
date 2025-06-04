@@ -13,12 +13,12 @@ Fully Open Source: Transparent code, safe and reliable
 Word Document Export: Convert conversations to DOCX format with perfectly preserved mathematical formulas and Mermaid diagrams
 Flexible Pricing:
 Standard price: ¥0.2/conversion
-Limited-time offer: Buy 25 or more conversions, get an equal number free!
-Effective price as low as ¥0.1/conversion
+Limited-time offer: Multi-buy, multi-get! Effective price as low as ¥0.1/conversion
 
 📱 Platform Compatibility
 DeepSeek: Full support for formula copying, Word export, conversation screenshots
-DoubaoAI, Yuanbao, ChatGPT: Support for formula copying, manual Word export
+DoubaoAI, ChatGPT: Support for formula copying, manual Word export
+Yuanbao: Support for manual Word export
 
 🚀 Why Choose DeepShare?
 Optimized formula handling for mathematics and research professionals
@@ -43,12 +43,12 @@ Install now and experience a smarter way to share your AI conversations!
 Word文档导出：将对话转换为DOCX格式，完美保留数学公式格式和Mermaid图表
 灵活定价：
 标准价格：￥0.2/次
-限时优惠：购买25次及以上，赠送等量次数！
-实际均价低至￥0.1/次
+限时优惠：多买多送，实际均价低至￥0.1/次
 
 📱 平台兼容性
 DeepSeek：完全支持公式复制、Word导出、对话截图
-豆包、元宝、ChatGPT：支持公式复制、手动Word导出
+豆包、ChatGPT：支持公式复制、手动Word导出
+元宝：支持手动Word导出
 
 🚀 为什么选择 DeepShare？
 为数学、科研工作者优化的公式处理
