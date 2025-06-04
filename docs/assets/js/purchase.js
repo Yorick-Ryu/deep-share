@@ -380,7 +380,7 @@ function showPaymentModal(orderData, email, amount, conversions, bonus) {
     const closeBtn = modal.querySelector('.close-modal');
     closeBtn.addEventListener('click', () => {
         // Confirm before closing if payment hasn't been confirmed
-        if (confirm('确定要关闭支付页面吗？如果您已经付款，关闭后将接收不到支付结果通知！')) {
+        if (confirm('确定要关闭支付页面吗？如果您已经付款，关闭后将接收不到支付结果通知！付款后没收到API Key请加微信：yorick_cn')) {
             closeModal(modal);
         }
     });
@@ -389,7 +389,7 @@ function showPaymentModal(orderData, email, amount, conversions, bonus) {
     modal.addEventListener('click', (e) => {
         if (e.target === modal) {
             // Same confirmation as close button
-            if (confirm('确定要关闭支付页面吗？如果您已经付款，关闭后将接收不到支付结果通知！')) {
+            if (confirm('确定要关闭支付页面吗？如果您已经付款，关闭后将接收不到支付结果通知！付款后没收到API Key请加微信：yorick_cn')) {
                 closeModal(modal);
             }
         }
