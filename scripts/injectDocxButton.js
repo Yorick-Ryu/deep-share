@@ -60,8 +60,52 @@ function injectDocxButton() {
                             // Insert after the copy button
                             copyBtn.parentNode.insertBefore(docxButton, copyBtn.nextSibling);
 
+                            // Add tooltip listeners
+                            let tooltip = null;
+
+                            docxButton.addEventListener('mouseenter', () => {
+                                // Use the button's title for the tooltip text
+                                const tooltipText = docxButton.title;
+                                if (!tooltipText) return;
+
+                                tooltip = document.createElement('div');
+                                tooltip.className = 'deepseek-tooltip';
+                                tooltip.textContent = tooltipText;
+                                document.body.appendChild(tooltip);
+
+                                const btnRect = docxButton.getBoundingClientRect();
+                                const tooltipRect = tooltip.getBoundingClientRect();
+
+                                // Position above the button
+                                let top = btnRect.top - tooltipRect.height - 10;
+                                let left = btnRect.left + (btnRect.width / 2) - (tooltipRect.width / 2);
+
+                                // Adjust if it goes off-screen top
+                                if (top < 5) {
+                                    top = btnRect.bottom + 8; // move below if not enough space on top
+                                }
+
+                                // Adjust if it goes off-screen left/right
+                                if (left < 5) {
+                                    left = 5;
+                                }
+                                if ((left + tooltipRect.width) > (window.innerWidth - 5)) {
+                                    left = window.innerWidth - tooltipRect.width - 5;
+                                }
+
+                                tooltip.style.top = `${top}px`;
+                                tooltip.style.left = `${left}px`;
+                            });
+
+                            docxButton.addEventListener('mouseleave', () => {
+                                if (tooltip) {
+                                    tooltip.remove();
+                                    tooltip = null;
+                                }
+                            });
+
                             // Add click handler
-                            docxButton.addEventListener('click', (e) => {
+                            docxButton.addEventListener('click', async (e) => {
                                 e.stopPropagation();
 
                                 // Find the conversation container
@@ -72,16 +116,18 @@ function injectDocxButton() {
                                 }
 
                                 // Extract conversation data
-                                const conversationData = extractConversationData(conversationEl);
+                                const conversationData = await extractConversationData(conversationEl);
 
                                 // Trigger the docx conversion and pass the button reference
-                                const event = new CustomEvent('deepshare:convertToDocx', {
-                                    detail: {
-                                        messages: conversationData,
-                                        sourceButton: docxButton // Pass the button reference
-                                    }
-                                });
-                                document.dispatchEvent(event);
+                                if (conversationData) {
+                                    const event = new CustomEvent('deepshare:convertToDocx', {
+                                        detail: {
+                                            messages: conversationData,
+                                            sourceButton: docxButton // Pass the button reference
+                                        }
+                                    });
+                                    document.dispatchEvent(event);
+                                }
                             });
                         });
                     });
@@ -193,13 +239,20 @@ function injectDocxButton() {
                         };
                     } else {
                         console.warn('Clipboard content was empty after clicking copy button');
+                        window.showToastNotification(chrome.i18n.getMessage('getClipboardError'), 'error');
+                        return null;
                     }
                 } catch (error) {
                     console.error('Error reading from clipboard:', error);
-                    // Will fall back to DOM extraction below
+                    window.showToastNotification(`${chrome.i18n.getMessage('getClipboardError')}: ${error.message}`, 'error');
+                    return null;
                 }
             }
         }
+        
+        // Fallback error message if copy button isn't found
+        window.showToastNotification(chrome.i18n.getMessage('getClipboardError'), 'error');
+        return null;
     }
 
     // Initialize the observer

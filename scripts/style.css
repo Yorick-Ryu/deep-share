@@ -541,9 +541,9 @@
     }
 }
 
-/* ChatGPT DOCX button tooltip (JS-controlled) */
+/* Tooltips for injected buttons (JS-controlled) */
 .deepshare-gpt-tooltip {
-    position: fixed; /* Use fixed to position relative to viewport */
+    position: fixed;
     background-color: #171717;
     color: #f5f5f5;
     padding: 4px 8px;
@@ -552,6 +552,30 @@
     font-weight: 600;
     line-height: 1.4;
     white-space: nowrap;
-    pointer-events: none; /* The tooltip should not be interactive */
-    opacity: 1; /* Initially visible when created */
+    pointer-events: none;
+    opacity: 1;
+}
+
+.deepseek-tooltip {
+    position: fixed;
+    background-color: #333;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: normal;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 1;
+    z-index: 10000;
+}
+
+.deepseek-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: #333;
 }
