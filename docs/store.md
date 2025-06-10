@@ -1,4 +1,4 @@
-A lightweight browser extension designed for AI users to easily share, save, and export AI conversations with special optimization for mathematical formulas. Supports DeepSeek, DoubaoAI, Yuanbao, ChatGPT and more.
+A lightweight browser extension designed for AI users to easily copy formulas from DeepSeek, ChatGPT, Doubao and other AI conversations, export beautifully formatted Word documents, and support long conversation screenshot sharing for DeepSeek.
 
 🆓 Free Features
 One-click Conversation Capture: Quickly capture DeepSeek conversation content
@@ -18,7 +18,7 @@ Limited-time offer: Multi-buy, multi-get! Effective price as low as ¥0.1/conver
 📱 Platform Compatibility
 DeepSeek: Full support for formula copying, Word export, conversation screenshots
 DoubaoAI, ChatGPT: Support for formula copying, manual Word export
-Yuanbao: Support for manual Word export
+Yuanbao, Kimi: Support for manual Word export
 
 🚀 Why Choose DeepShare?
 Optimized formula handling for mathematics and research professionals
@@ -28,7 +28,7 @@ Comprehensive export options for different scenarios
 Install now and experience a smarter way to share your AI conversations!
 
 
-一款专为 AI 用户设计的轻量级浏览器插件，轻松分享、保存和导出 AI 对话内容，特别优化数学公式处理。支持 DeepSeek、豆包、元宝、ChatGPT 等多个平台。
+一款专为 AI 用户设计的轻量级浏览器插件，一键复制DeepSeek、ChatGPT、豆包等AI对话的公式，导出排版精美的Word文档，支持DeepSeek长对话截图分享。
 
 🆓 免费功能
 一键截取对话：快速捕获 DeepSeek 对话内容
@@ -47,8 +47,9 @@ Word文档导出：将对话转换为DOCX格式，完美保留数学公式格式
 
 📱 平台兼容性
 DeepSeek：完全支持公式复制、Word导出、对话截图
+ChatGPT：支持公式复制、Word导出
 豆包、ChatGPT：支持公式复制、手动Word导出
-元宝：支持手动Word导出
+元宝、Kimi：支持手动Word导出
 
 🚀 为什么选择 DeepShare？
 为数学、科研工作者优化的公式处理

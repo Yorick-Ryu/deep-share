@@ -1,9 +1,9 @@
 {
     "extensionName": {
-        "message": "DeepShare (Share DeepSeek Chat)"
+        "message": "DeepShare (Share DeepSeek Chat | Formula Copy | Convert to Word)"
     },
     "extensionDescription": {
-        "message": "One-click sharing of DeepSeek AI conversations as images or text."
+        "message": "One-click copy formulas from DeepSeek, ChatGPT, Doubao and other AI conversations, export beautifully formatted Word documents, and support long conversation screenshot sharing for DeepSeek."
     },
     "shareButton": {
         "message": "Share Conversation"
