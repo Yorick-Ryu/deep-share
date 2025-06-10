@@ -580,6 +580,30 @@
     border-top-color: #222222;
 }
 
+.deepseek-tooltip-bottom {
+  position: fixed;
+  background-color: #222222;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: normal;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 1;
+  z-index: 10000;
+}
+
+.deepseek-tooltip-bottom::after {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-bottom-color: #222222;
+}
+
 @media (prefers-color-scheme: dark) {
     .deepseek-tooltip {
         background-color: #000000;
@@ -587,5 +611,13 @@
     
     .deepseek-tooltip::after {
         border-top-color: #000000;
+    }
+
+    .deepseek-tooltip-bottom {
+      background-color: #000000;
+  }
+
+    .deepseek-tooltip-bottom::after {
+      border-bottom-color: #000000;
     }
 }

@@ -1,4 +1,3 @@
-// Inject share
 function injectShare(onClickHandler) {
     // 检查是否在对话页面
     if (!location.pathname.includes('/chat/')) return;
@@ -280,6 +279,47 @@ function injectShare(onClickHandler) {
             selectBtn.addEventListener('click', (e) => {
                 e.stopPropagation(); // 阻止事件冒泡，防止触发父元素的click
                 toggleSelectionMode(buttonContainer);
+            });
+
+            // 添加 tooltip 功能
+            const buttons = buttonContainer.querySelectorAll('.select-button, .share-button');
+            buttons.forEach(button => {
+                let tooltip = null;
+
+                button.addEventListener('mouseenter', () => {
+                    const tooltipText = button.title;
+                    if (!tooltipText) return;
+
+                    tooltip = document.createElement('div');
+                    tooltip.className = 'deepseek-tooltip-bottom';
+                    tooltip.textContent = tooltipText;
+                    document.body.appendChild(tooltip);
+
+                    const btnRect = button.getBoundingClientRect();
+                    const tooltipRect = tooltip.getBoundingClientRect();
+
+                    // Position below the button
+                    let top = btnRect.bottom + 8;
+                    let left = btnRect.left + (btnRect.width / 2) - (tooltipRect.width / 2);
+
+                    // Adjust if it goes off-screen left/right
+                    if (left < 5) {
+                        left = 5;
+                    }
+                    if ((left + tooltipRect.width) > (window.innerWidth - 5)) {
+                        left = window.innerWidth - tooltipRect.width - 5;
+                    }
+
+                    tooltip.style.top = `${top}px`;
+                    tooltip.style.left = `${left}px`;
+                });
+
+                button.addEventListener('mouseleave', () => {
+                    if (tooltip) {
+                        tooltip.remove();
+                        tooltip = null;
+                    }
+                });
             });
 
             // 修改全选按钮的点击事件处理
