@@ -297,8 +297,8 @@
 /* 对话选择复选框样式 */
 .message-checkbox-wrapper {
   position: absolute;
-  top: 8px;
-  right: -30px;
+  top: 3px;
+  right: 3px;
 }
 
 .message-checkbox {
