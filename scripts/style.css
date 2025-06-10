@@ -540,3 +540,18 @@
         border-top-color: var(--button-hover-color);
     }
 }
+
+/* ChatGPT DOCX button tooltip (JS-controlled) */
+.deepshare-gpt-tooltip {
+    position: fixed; /* Use fixed to position relative to viewport */
+    background-color: #171717;
+    color: #f5f5f5;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.4;
+    white-space: nowrap;
+    pointer-events: none; /* The tooltip should not be interactive */
+    opacity: 1; /* Initially visible when created */
+}

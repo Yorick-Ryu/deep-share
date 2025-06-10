@@ -211,5 +211,8 @@
     },
     "convertMermaidLabel": {
         "message": "Enable Mermaid Diagram Conversion (Beta)"
+    },
+    "getClipboardError": {
+        "message": "Failed to get content from clipboard"
     }
 }

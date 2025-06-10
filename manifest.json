@@ -66,7 +66,6 @@
         {
             "matches": [
                 "https://yuanbao.tencent.com/chat/*",
-                "https://chatgpt.com/c/*",
                 "https://grok.com/chat/*",
                 "https://www.tongyi.com/*",
                 "https://xinghuo.xfyun.cn/desk*",
@@ -87,6 +86,21 @@
                 "lib/katex.min.js",
                 "scripts/notifications.js",
                 "scripts/copyKatex.js"
+            ]
+        },
+        {
+            "matches": [
+                "https://chatgpt.com/c/*"
+            ],
+            "css": [
+                "scripts/style.css"
+            ],
+            "js": [
+                "lib/katex.min.js",
+                "scripts/notifications.js",
+                "scripts/copyKatex.js",
+                "scripts/docxConverter.js",
+                "scripts/injectGptButton.js"
             ]
         },
         {
