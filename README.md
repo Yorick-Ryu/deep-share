@@ -26,10 +26,10 @@ A lightweight browser extension designed for AI users to easily copy formulas fr
 | AI Platform | Formula Copy | Word Export | Conversation Screenshot |
 |-------------|-------------|-------------|------------------------|
 | DeepSeek | ✓ | ✓ | ✓ |
+| ChatGPT | ✓ | ✓ | ✗ |
 | Doubao | ✓ | Manual paste | ✗ |
 | Yuanbao | ✗ | Manual paste | ✗ |
 | Kimi | ✗ | Manual paste | ✗ |
-| ChatGPT | ✓ | Manual paste | ✗ |
 | Grok | ✓ | Manual paste | ✗ |
 | Tongyi | ✓ | Manual paste | ✗ |
 | Xunfei Xinghuo | ✓ | Manual paste | ✗ |
