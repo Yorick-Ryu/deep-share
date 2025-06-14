@@ -27,16 +27,16 @@ A lightweight browser extension designed for AI users to easily copy formulas fr
 |-------------|-------------|-------------|------------------------|
 | DeepSeek | ✓ | ✓ | ✓ |
 | ChatGPT | ✓ | ✓ | ✗ |
-| Cici | ✗ | Manual paste | ✗ |
-| Yuanbao | ✗ | Manual paste | ✗ |
-| Kimi | ✗ | Manual paste | ✗ |
 | Grok | ✓ | Manual paste | ✗ |
-| Tongyi | ✓ | Manual paste | ✗ |
-| Xunfei Xinghuo | ✓ | Manual paste | ✗ |
 | ChatGLM | ✓ | Manual paste | ✗ |
 | OpenRouter | ✓ | Manual paste | ✗ |
 | Poe | ✓ | Manual paste | ✗ |
 | Monica | ✓ | Manual paste | ✗ |
+| Cici | ✗ | Manual paste | ✗ |
+| Yuanbao | ✗ | Manual paste | ✗ |
+| Kimi | ✗ | Manual paste | ✗ |
+| Tongyi | ✓ | Manual paste | ✗ |
+| Xunfei Xinghuo | ✓ | Manual paste | ✗ |
 | Wen Xiaobai | ✓ | Manual paste | ✗ |
 | AskManyAI | ✓ | Manual paste | ✗ |
 | Wanzhi | ✓ | Manual paste | ✗ |
