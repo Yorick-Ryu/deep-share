@@ -237,6 +237,15 @@ function setupUIElements() {
 
 // Load all i18n text
 function loadI18nText() {
+  // Get current UI language
+  const currentLang = chrome.i18n.getUILanguage();
+  
+  // Show sponsor tab only for Chinese language
+  const sponsorTabBtn = document.querySelector('.sponsor-tab-btn');
+  if (sponsorTabBtn) {
+    sponsorTabBtn.style.display = currentLang.startsWith('zh') ? 'flex' : 'none';
+  }
+
   // Tab labels
   document.getElementById('docxTabLabel').textContent = chrome.i18n.getMessage('docxSettings') || 'Document Conversion';
   document.getElementById('manualDocxTabLabel').textContent = chrome.i18n.getMessage('manualDocxSettings') || '手动转换文档';
