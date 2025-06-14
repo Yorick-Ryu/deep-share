@@ -4,7 +4,7 @@
   <img src="icons/deepshare-icon.svg" alt="deepshare-icon" width="128"/>
 </p>
 
-A lightweight browser extension designed for AI users to easily copy formulas from DeepSeek, ChatGPT, Cici and other AI conversations, export beautifully formatted Word documents, and support long conversation screenshot sharing for DeepSeek.
+A lightweight browser extension designed for AI users to easily copy formulas from ChatGPT, DeepSeek, Grok and 10+ other AI conversations, export beautifully formatted Word documents, and support long conversation screenshot sharing for DeepSeek.
 
 [简体中文](README.zh-CN.md)
 
