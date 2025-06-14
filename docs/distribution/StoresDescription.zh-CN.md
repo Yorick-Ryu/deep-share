@@ -18,8 +18,8 @@ Word文档导出：将对话转换为DOCX格式，完美保留数学公式格式
 📱 平台兼容性
 DeepSeek：完全支持公式复制、Word导出、对话截图
 ChatGPT：支持公式复制、Word导出
-豆包、ChatGPT：支持公式复制、手动Word导出
-元宝、Kimi：支持手动Word导出
+豆包：支持公式复制、手动Word导出
+元宝、Kimi等10+AI平台：支持手动Word导出
 
 🚀 为什么选择 DeepShare？
 为数学、科研工作者优化的公式处理

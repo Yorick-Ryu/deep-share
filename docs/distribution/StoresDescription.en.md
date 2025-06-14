@@ -1,4 +1,4 @@
-A lightweight browser extension designed for AI users to easily copy formulas from ChatGPT, DeepSeek, Cici and other AI conversations, export beautifully formatted Word documents, and support long conversation screenshot sharing for DeepSeek.
+A lightweight browser extension designed for AI users to easily copy formulas from ChatGPT, DeepSeek, Grok and 10+ other AI conversations, export beautifully formatted Word documents, and support long conversation screenshot sharing for DeepSeek.
 
 🆓 Free Features
 One-click Conversation Capture: Quickly capture DeepSeek conversation content
@@ -17,8 +17,9 @@ Limited-time offer: Multi-buy, multi-get! Effective price as low as ¥0.1/conver
 
 📱 Platform Compatibility
 DeepSeek: Full support for formula copying, Word export, conversation screenshots
-ChatGPT: Support for formula copying, manual Word export
-Cici, Yuanbao, Kimi: Support for manual Word export
+ChatGPT: Support for formula copying, Word export
+Grok: Support for formula copying, manual Word export
+Cici, Kimi and 10+ other AI platforms: Support for manual Word export
 
 🚀 Why Choose DeepShare?
 Optimized formula handling for mathematics and research professionals

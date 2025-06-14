@@ -1,4 +1,4 @@
-一款專為 AI 用戶設計的輕量級瀏覽器插件，一鍵複製ChatGPT、DeepSeek、豆包等AI對話的公式，導出排版精美的Word文檔，支持DeepSeek長對話截圖分享。
+一款專為 AI 用戶設計的輕量級瀏覽器插件，一鍵複製ChatGPT、DeepSeek、Grok等AI對話的公式，導出排版精美的Word文檔，支持DeepSeek長對話截圖分享。
 
 🆓 免費功能
 一鍵截取對話：快速捕獲 DeepSeek 對話內容
@@ -18,8 +18,8 @@ Word文檔導出：將對話轉換為DOCX格式，完美保留數學公式格式
 📱 平台兼容性
 DeepSeek：完全支持公式複製、Word導出、對話截圖
 ChatGPT：支持公式複製、Word導出
-豆包、ChatGPT：支持公式複製、手動Word導出
-元寶、Kimi：支持手動Word導出
+Grok：支持公式複製、手動Word導出
+Cici、Kimi等10+AI平台：支持手動Word導出
 
 🚀 為什麼選擇 DeepShare？
 為數學、科研工作者優化的公式處理
