@@ -54,10 +54,10 @@
         "message": "Watermark Settings"
     },
     "screenshotSettings": {
-        "message": "Screenshot Settings"
+        "message": "Chat screenshot"
     },
     "docxSettings": {
-        "message": "Document Conversion Settings"
+        "message": "AI Chat to Word"
     },
     "docxServerUrlLabel": {
         "message": "Server URL"
@@ -156,7 +156,7 @@
         "message": "Supports ChatGPT, Doubao, Yuanbao, etc. Copy your conversation to the Markdown input box, click \"Convert to Document\" to download a beautifully formatted Word document with formula support!"
     },
     "manualConversionTitle": {
-        "message": "Manual Document Conversion"
+        "message": "Paste AI Chat"
     },
     "markdownInputLabel": {
         "message": "Markdown Text"
@@ -174,10 +174,10 @@
         "message": "Please enter Markdown text"
     },
     "manualDocxSettings": {
-        "message": "Manual Document Conversion"
+        "message": "Paste AI Chat"
     },
     "formulaTabLabel": {
-        "message": "Formula Copy Settings"
+        "message": "Formula Copy"
     },
     "formulaSettingsTitle": {
         "message": "Formula Copy Settings"
