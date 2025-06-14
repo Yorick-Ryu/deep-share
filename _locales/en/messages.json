@@ -214,5 +214,17 @@
     },
     "getClipboardError": {
         "message": "Failed to get content from clipboard"
+    },
+    "refreshButton": {
+        "message": "Refresh"
+    },
+    "purchaseQuota": {
+        "message": "Purchase Quota"
+    },
+    "expirationLabel": {
+        "message": "Valid until:"
+    },
+    "unknown": {
+        "message": "Unknown"
     }
 }

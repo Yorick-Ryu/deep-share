@@ -214,5 +214,17 @@
     },
     "getClipboardError": {
         "message": "从剪贴板获取内容失败"
+    },
+    "refreshButton": {
+        "message": "刷新"
+    },
+    "purchaseQuota": {
+        "message": "购买次数"
+    },
+    "expirationLabel": {
+        "message": "有效期至:"
+    },
+    "unknown": {
+        "message": "未知"
     }
 }

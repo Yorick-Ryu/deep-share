@@ -294,6 +294,31 @@ function loadI18nText() {
 
   // Sponsor tab
   document.getElementById('sponsorTitle').textContent = chrome.i18n.getMessage('sponsorTitle');
+
+  // Quota section labels
+  document.getElementById('quotaTitle').textContent = chrome.i18n.getMessage('quotaTitle') || '您的转换次数';
+  document.getElementById('totalQuotaLabel').textContent = chrome.i18n.getMessage('totalQuotaLabel') || '总计:';
+  document.getElementById('usedQuotaLabel').textContent = chrome.i18n.getMessage('usedQuotaLabel') || '已用:';
+  document.getElementById('remainingQuotaLabel').textContent = chrome.i18n.getMessage('remainingQuotaLabel') || '剩余:';
+  
+  // API key hint with proper HTML handling
+  const apiKeyHint = document.getElementById('apiKeyHint');
+  const apiKeyHintMessage = chrome.i18n.getMessage('apiKeyHint');
+  if (apiKeyHintMessage) {
+    apiKeyHint.innerHTML = apiKeyHintMessage;
+  }
+
+  // Quota action buttons
+  const refreshBtn = document.getElementById('refreshQuota');
+  if (refreshBtn) {
+    refreshBtn.textContent = chrome.i18n.getMessage('refreshButton') || '刷新';
+  }
+  
+  // Update purchase link text
+  const purchaseLink = document.querySelector('.purchase-link');
+  if (purchaseLink) {
+    purchaseLink.textContent = chrome.i18n.getMessage('purchaseQuota') || '购买次数';
+  }
 }
 
 // Function to save settings
@@ -432,7 +457,14 @@ function displayQuotaData(data) {
     const expirationDate = new Date(data.expiresAt);
     document.getElementById('expirationDate').textContent = formatDate(expirationDate);
   } else {
-    document.getElementById('expirationDate').textContent = '未知';
+    const unknownText = chrome.i18n.getMessage('unknown') || 'Unknown';
+    document.getElementById('expirationDate').textContent = unknownText;
+  }
+
+  // Update expiration label if needed
+  const expirationLabel = document.getElementById('expirationLabel');
+  if (expirationLabel) {
+    expirationLabel.textContent = chrome.i18n.getMessage('expirationLabel') || '有效期至:';
   }
 
   // Update progress bar to show remaining quota percentage instead of used
@@ -450,10 +482,23 @@ function displayQuotaData(data) {
 
 // Helper function to format date in a user-friendly way
 function formatDate(date) {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  return `${year}年${month}月${day}日`;
+  // Get the current UI language
+  const currentLang = chrome.i18n.getUILanguage();
+  
+  if (currentLang.startsWith('zh')) {
+    // Chinese format
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}年${month}月${day}日`;
+  } else {
+    // English format
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  }
 }
 
 // Function to set up manual markdown conversion
