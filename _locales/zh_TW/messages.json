@@ -147,7 +147,7 @@
         "message": "您的轉換次數"
     },
     "apiKeyHint": {
-        "message": "購買 API Key? <a href=\"../docs/purchase.html\" target=\"_blank\">點擊此處</a>"
+        "message": "購買 API Key? <a href=\"https://ds.rick216.cn/purchase-en.html\" target=\"_blank\">點擊此處</a>"
     },
     "apiKeyMissing": {
         "message": "請購買或填寫API-Key以使用文件轉換功能"
