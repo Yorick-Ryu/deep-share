@@ -85,7 +85,7 @@ function initThemeSystem() {
 }
 
 // Set up global API base URL
-const baseUrl = 'http://127.0.0.1:8000';
+const baseUrl = 'https://api.ds.rick216.cn';
 
 // Initialize purchase form elements and event handlers
 function initPurchaseForm() {
