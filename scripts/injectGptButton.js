@@ -3,29 +3,45 @@
  * Injects a DOCX conversion button into the ChatGPT interface.
  */
 
-function injectGptDocxButton() {
-    console.log('Initializing DOCX button injection for ChatGPT');
+(function() {
+    'use strict';
 
-    const observer = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-            if (mutation.addedNodes.length) {
-                // More specific selector for the button group
-                const buttonGroups = document.querySelectorAll('div[class*="group-hover/turn-messages"]');
+    let lastUrl = location.href;
+    console.log('DeepShare: Initializing DOCX button injection for ChatGPT');
 
-                buttonGroups.forEach(group => {
-                    const copyButton = group.querySelector('button[data-testid="copy-turn-action-button"]');
-                    if (copyButton && !group.querySelector('.deepshare-docx-btn')) {
-                        injectButton(copyButton);
-                    }
-                });
+    function findAndInjectButtons() {
+        // More specific selector for the button group
+        const buttonGroups = document.querySelectorAll('div[class*="group-hover/turn-messages"]');
+
+        buttonGroups.forEach(group => {
+            const copyButton = group.querySelector('button[data-testid="copy-turn-action-button"]');
+            if (copyButton && !group.querySelector('.deepshare-docx-btn')) {
+                injectButton(copyButton);
             }
         });
+    }
+
+    const observer = new MutationObserver(() => {
+        // On any DOM change, re-check for buttons
+        findAndInjectButtons();
+
+        // Also check if URL has changed for SPA navigation
+        const currentUrl = location.href;
+        if (currentUrl !== lastUrl) {
+            console.log(`DeepShare: URL changed to ${currentUrl}. Re-checking for buttons.`);
+            lastUrl = currentUrl;
+            // A small delay can help ensure the new content is loaded
+            setTimeout(findAndInjectButtons, 500);
+        }
     });
 
     observer.observe(document.body, {
         childList: true,
         subtree: true,
     });
+
+    // Initial injection check after a small delay
+    setTimeout(findAndInjectButtons, 500);
 
     function injectButton(copyBtn) {
         // Create the DOCX button
@@ -127,8 +143,4 @@ function injectGptDocxButton() {
             }
         });
     }
-}
-
-// The script is injected by manifest.json only on matching URLs,
-// so no need to check hostname here.
-injectGptDocxButton(); 
+})(); 

@@ -90,7 +90,7 @@
         },
         {
             "matches": [
-                "https://chatgpt.com/c/*"
+                "https://chatgpt.com/*"
             ],
             "css": [
                 "scripts/style.css"
