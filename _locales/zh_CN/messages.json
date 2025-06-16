@@ -226,5 +226,11 @@
     },
     "unknown": {
         "message": "未知"
+    },
+    "templateLabel": {
+        "message": "Word 模板"
+    },
+    "universalTemplate": {
+        "message": "通用"
     }
 }

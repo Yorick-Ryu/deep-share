@@ -175,7 +175,8 @@ async function convertToDocxViaApi(content, serverUrl) {
         const settings = await chrome.storage.sync.get({
             docxServerUrl: 'https://api.ds.rick216.cn',
             docxApiKey: '',
-            convertMermaid: false  // Default to false for Mermaid conversion
+            convertMermaid: false,  // Default to false for Mermaid conversion
+            lastUsedTemplate: null
         });
 
         const url = serverUrl || settings.docxServerUrl || 'https://api.ds.rick216.cn';
@@ -194,6 +195,21 @@ async function convertToDocxViaApi(content, serverUrl) {
         console.log('Sending content to API:', content.substring(0, 100) + '...');
         console.log('Convert Mermaid:', settings.convertMermaid);
 
+        const currentLang = chrome.i18n.getUILanguage();
+        const language = currentLang.startsWith('zh') ? 'zh' : 'en';
+
+        const body = {
+            content: content,
+            filename: generateFilename(content),
+            convert_mermaid: settings.convertMermaid,
+            language: language
+        };
+
+        if (settings.lastUsedTemplate) {
+            body.template_name = settings.lastUsedTemplate;
+            console.log('Using template:', settings.lastUsedTemplate);
+        }
+
         // Call the conversion API
         const response = await fetch(`${url}/convert-text`, {
             method: 'POST',
@@ -201,11 +217,7 @@ async function convertToDocxViaApi(content, serverUrl) {
                 'Content-Type': 'application/json',
                 'X-API-Key': apiKey
             },
-            body: JSON.stringify({
-                content: content,
-                filename: generateFilename(content),
-                convert_mermaid: settings.convertMermaid
-            })
+            body: JSON.stringify(body)
         });
 
         if (!response.ok) {

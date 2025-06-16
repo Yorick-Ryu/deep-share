@@ -226,5 +226,11 @@
     },
     "unknown": {
         "message": "Unknown"
+    },
+    "templateLabel": {
+        "message": "Word Template"
+    },
+    "universalTemplate": {
+        "message": "Universal"
     }
 }

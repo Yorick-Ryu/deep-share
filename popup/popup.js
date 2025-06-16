@@ -23,6 +23,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // Set up manual markdown conversion functionality
   setupManualConversion();
 
+  // Set up template selector
+  setupTemplateSelector();
+
   // Set all i18n text
   loadI18nText();
 });
@@ -38,7 +41,8 @@ function loadSettings(highlightApiKey = false) {
     'enableFormulaCopy',
     'formulaFormat',
     'screenshotMethod',
-    'convertMermaid'
+    'convertMermaid',
+    'wordTemplateSelect'
   ], (data) => {
     // Watermark settings
     document.getElementById('watermark').value = data.customWatermark || '';
@@ -158,7 +162,8 @@ function setupAutoSave() {
     document.getElementById('methodDomToImage'),
     document.getElementById('methodHtml2Canvas'),
     // 添加Mermaid转换设置
-    document.getElementById('convertMermaid')
+    document.getElementById('convertMermaid'),
+    document.getElementById('wordTemplateSelect')
   ];
 
   // Add change event listeners to each input
@@ -276,6 +281,7 @@ function loadI18nText() {
   document.getElementById('manualConversionTitle').textContent = chrome.i18n.getMessage('manualConversionTitle') || '手动转换';
   document.getElementById('manualConversionExplanation').textContent = chrome.i18n.getMessage('manualConversionExplanation') || '支持ChatGPT、豆包、元宝等，复制需要转换的对话到Markdown输入框，点击"转换为文档"按钮立即下载Word格式，排版精美，支持公式！';
   document.getElementById('markdownInputLabel').textContent = chrome.i18n.getMessage('markdownInputLabel') || 'Markdown 文本';
+  document.getElementById('templateLabel').textContent = chrome.i18n.getMessage('templateLabel') || 'Word Template';
   document.getElementById('convertMarkdownBtn').innerHTML = `
     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;">
       <path d="M14 3v4a1 1 0 0 0 1 1h4"></path>
@@ -366,7 +372,8 @@ function saveSettings() {
     formulaFormat: formulaFormat,
 
     // Mermaid diagram conversion
-    convertMermaid: document.getElementById('convertMermaid').checked
+    convertMermaid: document.getElementById('convertMermaid').checked,
+    lastUsedTemplate: document.getElementById('wordTemplateSelect').value
   };
 
   // Save all settings at once
@@ -573,7 +580,7 @@ function setupManualConversion() {
       `;
 
       // Call the conversion function with markdown text
-      await convertMarkdownToDocx(markdownText, settings.docxServerUrl, settings.docxApiKey, settings.convertMermaid);
+      await convertMarkdownToDocx(markdownText, settings.docxServerUrl, settings.docxApiKey, settings.convertMermaid, document.getElementById('wordTemplateSelect').value);
 
       // Update button to show success message briefly
       convertBtn.innerHTML = `
@@ -619,7 +626,7 @@ function setupManualConversion() {
 }
 
 // Function to convert markdown text to DOCX
-async function convertMarkdownToDocx(markdownText, serverUrl, apiKey, convertMermaid = false) {
+async function convertMarkdownToDocx(markdownText, serverUrl, apiKey, convertMermaid = false, template) {
   try {
     const url = serverUrl || 'https://api.ds.rick216.cn';
 
@@ -641,17 +648,27 @@ async function convertMarkdownToDocx(markdownText, serverUrl, apiKey, convertMer
 
     filename = `${filename}_${timestamp}`;
 
+    const currentLang = chrome.i18n.getUILanguage();
+    const language = currentLang.startsWith('zh') ? 'zh' : 'en';
+
+    const body = {
+      content: markdownText,
+      filename: filename,
+      convert_mermaid: convertMermaid,
+      language: language
+    };
+
+    if (template) {
+      body.template_name = template;
+    }
+
     const response = await fetch(`${url}/convert-text`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'X-API-Key': apiKey
       },
-      body: JSON.stringify({
-        content: markdownText,
-        filename: filename,
-        convert_mermaid: convertMermaid
-      })
+      body: JSON.stringify(body)
     });
 
     if (!response.ok) {
@@ -674,5 +691,62 @@ async function convertMarkdownToDocx(markdownText, serverUrl, apiKey, convertMer
   } catch (error) {
     console.error('Error in convertMarkdownToDocx:', error);
     throw error;
+  }
+}
+
+async function setupTemplateSelector() {
+  const selectElement = document.getElementById('wordTemplateSelect');
+  if (!selectElement) return;
+
+  // Set default option first
+  const defaultOption = document.createElement('option');
+  defaultOption.value = 'templates';
+  defaultOption.textContent = chrome.i18n.getMessage('universalTemplate') || 'Universal';
+  selectElement.appendChild(defaultOption);
+
+  try {
+    const { docxServerUrl } = await chrome.storage.sync.get({ docxServerUrl: 'https://api.ds.rick216.cn' });
+
+    if (!docxServerUrl) {
+      console.warn('Server URL is not set. Cannot fetch templates.');
+      return;
+    }
+
+    const response = await fetch(`${docxServerUrl}/templates`);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch templates: ${response.status}`);
+    }
+
+    const templatesByLang = await response.json();
+    const currentLang = chrome.i18n.getUILanguage();
+    
+    let templates = [];
+    if (currentLang.startsWith('zh')) {
+      templates = templatesByLang.zh || [];
+    } else {
+      templates = templatesByLang.en || [];
+    }
+    
+    // remove 'templates' from the list as it is already added as 'Universal'
+    templates.filter(t => t !== 'templates').forEach(templateName => {
+      const option = document.createElement('option');
+      option.value = templateName;
+      option.textContent = templateName;
+      selectElement.appendChild(option);
+    });
+
+  } catch (error) {
+    console.error('Error setting up template selector:', error);
+    // The default "Universal" option will be available.
+  } finally {
+    // Load and apply the last used template
+    chrome.storage.sync.get(['lastUsedTemplate'], (data) => {
+      if (data.lastUsedTemplate) {
+        // Check if the option actually exists before setting it to prevent errors
+        if (selectElement.querySelector(`option[value="${data.lastUsedTemplate}"]`)) {
+          selectElement.value = data.lastUsedTemplate;
+        }
+      }
+    });
   }
 }
