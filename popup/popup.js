@@ -705,14 +705,10 @@ async function setupTemplateSelector() {
   selectElement.appendChild(defaultOption);
 
   try {
-    const { docxServerUrl } = await chrome.storage.sync.get({ docxServerUrl: 'https://api.ds.rick216.cn' });
+    const settings = await chrome.storage.sync.get({ docxServerUrl: 'https://api.ds.rick216.cn' });
+    const serverUrl = settings.docxServerUrl || 'https://api.ds.rick216.cn';
 
-    if (!docxServerUrl) {
-      console.warn('Server URL is not set. Cannot fetch templates.');
-      return;
-    }
-
-    const response = await fetch(`${docxServerUrl}/templates`);
+    const response = await fetch(`${serverUrl}/templates`);
     if (!response.ok) {
       throw new Error(`Failed to fetch templates: ${response.status}`);
     }
