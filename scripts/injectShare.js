@@ -465,26 +465,24 @@ function formatAsText(messages) {
         return messages?.content || messages?.toString() || 'No content available';
     }
 
-    // 分组用户问题和AI回答
-    const userMessages = messages.filter(msg => msg.role === 'user');
-    const aiMessages = messages.filter(msg => msg.role === 'assistant');
+    // 过滤掉空的用户消息
+    const validMessages = messages.filter(msg => 
+        msg.content && msg.content.trim() !== ''
+    );
 
-    // 合并用户问题
-    let userText = '';
-    if (userMessages.length > 0) {
-        userText = userMessages.map(msg => msg.content).join('\n');
-    }
+    // 检查是否有用户消息
+    const hasUserMessages = validMessages.some(msg => msg.role === 'user');
 
-    // 合并AI回答
-    let aiText = '';
-    if (aiMessages.length > 0) {
-        aiText = aiMessages.map(msg => {
+    // 保持对话的原始顺序，用户问题和AI回答交替显示
+    return validMessages.map(msg => {
+        if (hasUserMessages) {
+            const roleLabel = msg.role === 'user' ? '用户' : 'AI';
+            return `${roleLabel}: ${msg.content}`;
+        } else {
+            // 如果没有用户问题，直接显示AI回答内容，不添加前缀
             return msg.content;
-        }).join('\n\n');
-    }
-
-    // 拼接用户问题和AI回答
-    return userText + (userText && aiText ? '\n\n' : '') + aiText;
+        }
+    }).join('\n\n');
 } 
 
 // Helper function to generate a consistent filename across formats
