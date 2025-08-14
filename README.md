@@ -48,9 +48,10 @@ Note: Manual paste functionality means you can copy the Markdown text from AI re
 
 ## Installation
 
-1. Install from Edge/Chrome Web Store
+1. Install from Edge/Chrome/Firefox Web Store
    - [Microsoft Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/deepshare/pdccjnppfegekpnhfljbngammgfbcofm)
    - [Chrome Web Store](https://chromewebstore.google.com/detail/omnaecaamcabmnbjnpjpecoaalfgidop)
+   - [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/deepshare/)
 2. Install from source code:
    - Download and extract the source code
    - Open Edge\Chrome extensions page
