@@ -1,6 +1,29 @@
 let messages = [];
+// 添加一个变量用于缓存上一次处理的消息，以便比较消息是否变化
+let previousMessagesHash = '';
 // 创建一个全局变量来跟踪是否需要屏蔽复制成功通知
 let shouldBlockCopyNotifications = false;
+
+// 用于生成消息数组的哈希值，以便比较消息是否发生变化
+function generateMessagesHash(msgArray) {
+    if (!msgArray || !Array.isArray(msgArray) || msgArray.length === 0) {
+        return '';
+    }
+    
+    // 提取关键数据以生成一个代表消息内容的字符串
+    const contentStr = msgArray.map(msg => {
+        return `${msg.role}:${msg.content}${msg.reasoning_content || ''}`;
+    }).join('|');
+    
+    // 返回一个简单的哈希值
+    let hash = 0;
+    for (let i = 0; i < contentStr.length; i++) {
+        const char = contentStr.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash; // Convert to 32bit integer
+    }
+    return hash.toString();
+}
 
 // 创建一个函数来检查和移除所有"复制成功"通知
 function removeAllCopySuccessNotifications() {
@@ -29,7 +52,7 @@ function removeAllCopySuccessNotifications() {
                 if (contentEl && (
                     contentEl.textContent === '复制成功' || 
                     contentEl.textContent === 'Copied!' || 
-                    contentEl.textContent.includes('copy') || 
+                    contentEl.textContent.includes('Copied') || 
                     contentEl.textContent.includes('复制') || 
                     contentEl.textContent === chrome.i18n.getMessage('copied')
                 )) {
@@ -170,6 +193,18 @@ const handleShareClick = async () => {
 
         // 获取消息数据（移动到这里，避免延迟显示模态框）
         messages = await getMessages();
+
+        // 生成当前消息的哈希值
+        const currentMessagesHash = generateMessagesHash(messages);
+
+        // 如果消息没有变化，则不重新生成截图
+        if (currentMessagesHash === previousMessagesHash) {
+            console.log('消息没有变化，使用缓存的截图');
+            return;
+        }
+
+        // 更新缓存的哈希值
+        previousMessagesHash = currentMessagesHash;
 
         // 立即开始生成截图
         const img = modal.querySelector('#conversation-image');

@@ -1,4 +1,3 @@
-// Inject share
 function injectShare(onClickHandler) {
     // 检查是否在对话页面
     if (!location.pathname.includes('/chat/')) return;
@@ -9,7 +8,11 @@ function injectShare(onClickHandler) {
     if (existingBtn) {
         existingBtn.remove();
     }
-
+    
+    // 用于缓存消息内容的变量
+    let cachedText = '';
+    let cachedMessagesHash = '';
+    
     // 更新modal内容 - 在 modal-header 中添加设置按钮
     const modal = document.createElement('div');
     modal.className = 'deepseek-share-modal';
@@ -37,6 +40,7 @@ function injectShare(onClickHandler) {
                     <div class="tab-container">
                         <button class="tab-btn active" data-tab="image">${chrome.i18n.getMessage('imageTab')}</button>
                         <button class="tab-btn" data-tab="text">${chrome.i18n.getMessage('textTab')}</button>
+                        <div class="tab-indicator"></div>
                     </div>
                     <div class="action-buttons">
                         <div class="format-dropdown-container">
@@ -103,37 +107,21 @@ function injectShare(onClickHandler) {
                 // 切换到文本标签时渲染文本内容和显示格式选择器
                 formatDropdown.style.display = 'inline-block';
                 const contentArea = modal.querySelector('#conversation-content');
-                contentArea.textContent = formatAsText(messages);
+                
+                // 计算消息的哈希值
+                const messagesHash = JSON.stringify(messages);
+                
+                // 检查是否有缓存的文本内容
+                if (cachedMessagesHash === messagesHash) {
+                    contentArea.textContent = cachedText;
+                } else {
+                    cachedText = formatAsText(messages);
+                    cachedMessagesHash = messagesHash;
+                    contentArea.textContent = cachedText;
+                }
             } else {
                 // 其它标签隐藏格式选择器
                 formatDropdown.style.display = 'none';
-
-                if (tab.dataset.tab === 'image') {
-                    const img = modal.querySelector('#conversation-image');
-                    const loadingEl = modal.querySelector('.image-loading');
-                    img.style.display = 'none';
-                    loadingEl.style.display = 'block';
-
-                    try {
-                        if (typeof window.captureMessages !== 'function') {
-                            throw new Error('Screenshot function not available');
-                        }
-
-                        const imageUrl = await window.captureMessages();
-                        if (imageUrl) {
-                            img.onload = () => {
-                                img.style.display = 'block';
-                                loadingEl.style.display = 'none';
-                            };
-                            img.src = imageUrl;
-                        } else {
-                            throw new Error('Failed to generate image');
-                        }
-                    } catch (error) {
-                        console.error('Screenshot failed:', error);
-                        loadingEl.textContent = chrome.i18n.getMessage('generateFailed');
-                    }
-                }
             }
         });
     });
@@ -145,12 +133,18 @@ function injectShare(onClickHandler) {
         const link = document.createElement('a');
 
         const aiResponses = messages.filter(msg => msg.role === 'assistant');
-        const firstAiResponse = aiResponses[0].content
+        const firstAiResponse = aiResponses[0]?.content;
 
         if (activeTab === 'image') {
             const img = modal.querySelector('#conversation-image');
             // 对于图片也使用一致的命名规则，从消息内容生成文件名
-            link.download = generateConsistentFilename(firstAiResponse, '.png');
+            let filename;
+            if (firstAiResponse) {
+                filename = generateConsistentFilename(firstAiResponse, '.png');
+            } else {
+                filename = generateConsistentFilename('deepshare', '.png');
+            }
+            link.download = filename;
             link.href = img.src;
             link.click();
         } else if (activeTab === 'text') {
@@ -285,6 +279,47 @@ function injectShare(onClickHandler) {
             selectBtn.addEventListener('click', (e) => {
                 e.stopPropagation(); // 阻止事件冒泡，防止触发父元素的click
                 toggleSelectionMode(buttonContainer);
+            });
+
+            // 添加 tooltip 功能
+            const buttons = buttonContainer.querySelectorAll('.select-button, .share-button');
+            buttons.forEach(button => {
+                let tooltip = null;
+
+                button.addEventListener('mouseenter', () => {
+                    const tooltipText = button.title;
+                    if (!tooltipText) return;
+
+                    tooltip = document.createElement('div');
+                    tooltip.className = 'deepseek-tooltip-bottom';
+                    tooltip.textContent = tooltipText;
+                    document.body.appendChild(tooltip);
+
+                    const btnRect = button.getBoundingClientRect();
+                    const tooltipRect = tooltip.getBoundingClientRect();
+
+                    // Position below the button
+                    let top = btnRect.bottom + 8;
+                    let left = btnRect.left + (btnRect.width / 2) - (tooltipRect.width / 2);
+
+                    // Adjust if it goes off-screen left/right
+                    if (left < 5) {
+                        left = 5;
+                    }
+                    if ((left + tooltipRect.width) > (window.innerWidth - 5)) {
+                        left = window.innerWidth - tooltipRect.width - 5;
+                    }
+
+                    tooltip.style.top = `${top}px`;
+                    tooltip.style.left = `${left}px`;
+                });
+
+                button.addEventListener('mouseleave', () => {
+                    if (tooltip) {
+                        tooltip.remove();
+                        tooltip = null;
+                    }
+                });
             });
 
             // 修改全选按钮的点击事件处理
@@ -430,32 +465,25 @@ function formatAsText(messages) {
         return messages?.content || messages?.toString() || 'No content available';
     }
 
-    // 分组用户问题和AI回答
-    const userMessages = messages.filter(msg => msg.role === 'user');
-    const aiMessages = messages.filter(msg => msg.role === 'assistant');
+    // 过滤掉空的用户消息
+    const validMessages = messages.filter(msg => 
+        msg.content && msg.content.trim() !== ''
+    );
 
-    // 合并用户问题
-    let userText = '';
-    if (userMessages.length > 0) {
-        userText = '用户：\n' + userMessages.map(msg => msg.content).join('\n');
-    }
+    // 检查是否有用户消息
+    const hasUserMessages = validMessages.some(msg => msg.role === 'user');
 
-    // 合并AI回答
-    let aiText = '';
-    if (aiMessages.length > 0) {
-        aiText = 'AI：\n' + aiMessages.map(msg => {
-            let content = msg.content;
-            // 如果有思考过程，添加到内容中
-            if (msg.reasoning_content) {
-                content += `\n思考过程 (${msg.reasoning_time}s):\n${msg.reasoning_content}`;
-            }
-            return content;
-        }).join('\n');
-    }
-
-    // 拼接用户问题和AI回答
-    return userText + (userText && aiText ? '\n\n' : '') + aiText;
-}
+    // 保持对话的原始顺序，用户问题和AI回答交替显示
+    return validMessages.map(msg => {
+        if (hasUserMessages) {
+            const roleLabel = msg.role === 'user' ? '用户' : 'AI';
+            return `${roleLabel}: ${msg.content}`;
+        } else {
+            // 如果没有用户问题，直接显示AI回答内容，不添加前缀
+            return msg.content;
+        }
+    }).join('\n\n');
+} 
 
 // Helper function to generate a consistent filename across formats
 function generateConsistentFilename(content, extension) {
@@ -501,28 +529,3 @@ function generateConsistentFilename(content, extension) {
     const timestamp = getChinaTimestamp();
     return `${filename}_${timestamp}${extension}`;
 }
-
-// 添加样式
-const style = document.createElement('style');
-style.textContent = `
-    .format-dropdown-container {
-        display: inline-block;
-        margin-right: 5px;
-    }
-    .format-select {
-        padding: 3px 5px;
-        border-radius: 4px;
-        border: 1px solid #ccc;
-        background-color: #fff;
-        font-size: 14px;
-        cursor: pointer;
-    }
-    /* 只在文本标签激活时显示格式选择器 */
-    .format-dropdown-container {
-        display: none;
-    }
-    .text-active .format-dropdown-container {
-        display: inline-block;
-    }
-`;
-document.head.appendChild(style);

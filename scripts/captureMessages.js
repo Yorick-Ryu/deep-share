@@ -97,9 +97,29 @@ window.captureMessages = async function (customWatermark) {
         let dataUrl;
 
         console.log(screenshotMethod)
-        
+
         // 根据设置选择截图方法
-        if (screenshotMethod === 'html2canvas' && typeof html2canvas !== 'undefined') {
+        if (screenshotMethod === 'domtoimage' && typeof domtoimage !== 'undefined') {
+            dataUrl = await domtoimage.toPng(container, {
+                bgcolor: backgroundColor,
+                style: {
+                    'margin': '0',
+                    'padding': '0',
+                    'transform': 'none'
+                },
+                filter: (node) => {
+                    // 过滤掉不需要的元素
+                    return !(node.classList &&
+                        (node.classList.contains('deepseek-share-btn') ||
+                            node.classList.contains('message-checkbox-wrapper')));
+                }
+            });
+        } else {
+            // 使用html2canvas（默认或fallback）
+            if (typeof html2canvas === 'undefined') {
+                throw new Error('html2canvas not loaded');
+            }
+            
             // 使用html2canvas
             const canvas = await html2canvas(container, {
                 backgroundColor: backgroundColor,
@@ -112,26 +132,6 @@ window.captureMessages = async function (customWatermark) {
                 }
             });
             dataUrl = canvas.toDataURL('image/png');
-        } else {
-            // 使用domtoimage（默认或fallback）
-            if (typeof domtoimage === 'undefined') {
-                throw new Error('domtoimage not loaded');
-            }
-            
-            dataUrl = await domtoimage.toPng(container, {
-                bgcolor: backgroundColor,
-                style: {
-                    'margin': '0',
-                    'padding': '0',
-                    'transform': 'none'
-                },
-                filter: (node) => {
-                    // 过滤掉不需要的元素
-                    return !(node.classList && 
-                            (node.classList.contains('deepseek-share-btn') || 
-                             node.classList.contains('message-checkbox-wrapper')));
-                }
-            });
         }
 
         // 恢复被隐藏的对话

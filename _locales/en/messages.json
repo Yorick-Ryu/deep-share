@@ -1,9 +1,9 @@
 {
     "extensionName": {
-        "message": "DeepShare (Share DeepSeek Chat)"
+        "message": "DeepShare: AI Chat Share & Export"
     },
     "extensionDescription": {
-        "message": "One-click sharing of DeepSeek AI conversations as images or text."
+        "message": "Copy formulas from AI chats (DeepSeek, ChatGPT, etc.), export to Word, and take long conversation screenshots on DeepSeek."
     },
     "shareButton": {
         "message": "Share Conversation"
@@ -54,10 +54,10 @@
         "message": "Watermark Settings"
     },
     "screenshotSettings": {
-        "message": "Screenshot Settings"
+        "message": "Chat screenshot"
     },
     "docxSettings": {
-        "message": "Document Conversion Settings"
+        "message": "AI Chat to Word"
     },
     "docxServerUrlLabel": {
         "message": "Server URL"
@@ -83,8 +83,8 @@
     "formulaCopied": {
         "message": "Formula copied!"
     },
-    "clickToCopyLatex": {
-        "message": "Click to copy LaTeX code"
+    "clickToCopyFormula": {
+        "message": "Click to copy formula"
     },
     "generatingImage": {
         "message": "Generating screenshot..."
@@ -132,7 +132,7 @@
         "message": "Please select at least one message"
     },
     "sponsorTabLabel": {
-        "message": "Sponsor"
+        "message": "Support Us"
     },
     "totalQuotaLabel": {
         "message": "Total:"
@@ -147,16 +147,16 @@
         "message": "Your Conversion Quota"
     },
     "apiKeyHint": {
-        "message": "Purchase API Key? <a href=\"../docs/purchase.html\" target=\"_blank\">Click here</a>"
+        "message": "Purchase API Key? <a href=\"https://ds.rick216.cn/purchase-en.html\" target=\"_blank\">Click here</a>"
     },
     "apiKeyMissing": {
         "message": "Please purchase or enter an API Key to use the document conversion feature"
     },
     "manualConversionExplanation": {
-        "message": "Supports ChatGPT, Doubao, Yuanbao, etc. Copy your conversation to the Markdown input box, click \"Convert to Document\" to download a beautifully formatted Word document with formula support!"
+        "message": "Supports ChatGPT, Cici, Yuanbao, etc. Copy your conversation to the Markdown input box, click \"Convert to Document\" to download a beautifully formatted Word document with formula support!"
     },
     "manualConversionTitle": {
-        "message": "Manual Document Conversion"
+        "message": "Paste AI Chat"
     },
     "markdownInputLabel": {
         "message": "Markdown Text"
@@ -174,10 +174,10 @@
         "message": "Please enter Markdown text"
     },
     "manualDocxSettings": {
-        "message": "Manual Document Conversion"
+        "message": "Paste AI Chat"
     },
     "formulaTabLabel": {
-        "message": "Formula Copy Settings"
+        "message": "Formula Copy"
     },
     "formulaSettingsTitle": {
         "message": "Formula Copy Settings"
@@ -207,6 +207,30 @@
         "message": "html2canvas"
     },
     "screenshotMethodHint": {
-        "message": "Select the method used for screenshots. If one method doesn't work, try the other"
+        "message": "Select the method used for screenshots. If one method doesn't work, try the other. Please refresh the page after switching."
+    },
+    "convertMermaidLabel": {
+        "message": "Enable Mermaid Diagram Conversion (Beta)"
+    },
+    "getClipboardError": {
+        "message": "Failed to get content from clipboard"
+    },
+    "refreshButton": {
+        "message": "Refresh"
+    },
+    "purchaseQuota": {
+        "message": "Purchase Quota"
+    },
+    "expirationLabel": {
+        "message": "Valid until:"
+    },
+    "unknown": {
+        "message": "Unknown"
+    },
+    "templateLabel": {
+        "message": "Word Template"
+    },
+    "universalTemplate": {
+        "message": "Universal"
     }
 }

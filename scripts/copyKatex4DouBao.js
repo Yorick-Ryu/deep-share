@@ -71,7 +71,7 @@ async function handleLatexClick(e) {
 function updateElementStyle(element) {
     if (formulaSettings.enableFormulaCopy) {
         element.style.cursor = 'pointer';
-        element.title = chrome.i18n.getMessage('clickToCopyLatex');
+        element.title = chrome.i18n.getMessage('clickToCopyFormula');
     } else {
         element.style.cursor = '';
         element.title = '';

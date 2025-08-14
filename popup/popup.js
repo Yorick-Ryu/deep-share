@@ -23,6 +23,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // Set up manual markdown conversion functionality
   setupManualConversion();
 
+  // Set up template selector
+  setupTemplateSelector();
+
   // Set all i18n text
   loadI18nText();
 });
@@ -37,14 +40,16 @@ function loadSettings(highlightApiKey = false) {
     'docxMode',
     'enableFormulaCopy',
     'formulaFormat',
-    'screenshotMethod' // Added screenshot method
+    'screenshotMethod',
+    'convertMermaid',
+    'wordTemplateSelect'
   ], (data) => {
     // Watermark settings
     document.getElementById('watermark').value = data.customWatermark || '';
     document.getElementById('hideDefaultWatermark').checked = !!data.hideDefaultWatermark;
 
     // Screenshot method settings
-    const screenshotMethod = data.screenshotMethod || 'domtoimage'; // Default to dom-to-image
+    const screenshotMethod = data.screenshotMethod || 'html2canvas'; // Default to html2canvas
     document.getElementById('methodDomToImage').checked = screenshotMethod === 'domtoimage';
     document.getElementById('methodHtml2Canvas').checked = screenshotMethod === 'html2canvas';
 
@@ -62,6 +67,9 @@ function loadSettings(highlightApiKey = false) {
     const formulaFormat = data.formulaFormat || 'mathml'; // Default to MathML
     document.getElementById('formatMathML').checked = formulaFormat === 'mathml';
     document.getElementById('formatLaTeX').checked = formulaFormat === 'latex';
+
+    // Mermaid conversion setting
+    document.getElementById('convertMermaid').checked = !!data.convertMermaid; // Default to false
 
     // If API key is set, check quota
     if (data.docxApiKey) {
@@ -152,7 +160,10 @@ function setupAutoSave() {
     document.getElementById('formatLaTeX'),
     // 添加截图方法相关的设置元素
     document.getElementById('methodDomToImage'),
-    document.getElementById('methodHtml2Canvas')
+    document.getElementById('methodHtml2Canvas'),
+    // 添加Mermaid转换设置
+    document.getElementById('convertMermaid'),
+    document.getElementById('wordTemplateSelect')
   ];
 
   // Add change event listeners to each input
@@ -231,6 +242,15 @@ function setupUIElements() {
 
 // Load all i18n text
 function loadI18nText() {
+  // Get current UI language
+  const currentLang = chrome.i18n.getUILanguage();
+  
+  // Show sponsor tab only for Chinese language
+  const sponsorTabBtn = document.querySelector('.sponsor-tab-btn');
+  if (sponsorTabBtn) {
+    sponsorTabBtn.style.display = currentLang.startsWith('zh') ? 'flex' : 'none';
+  }
+
   // Tab labels
   document.getElementById('docxTabLabel').textContent = chrome.i18n.getMessage('docxSettings') || 'Document Conversion';
   document.getElementById('manualDocxTabLabel').textContent = chrome.i18n.getMessage('manualDocxSettings') || '手动转换文档';
@@ -247,6 +267,7 @@ function loadI18nText() {
   document.getElementById('modeApiLabel').textContent = chrome.i18n.getMessage('modeApiLabel') || 'API';
   document.getElementById('docxServerUrlLabel').textContent = chrome.i18n.getMessage('docxServerUrlLabel') || 'Server URL';
   document.getElementById('docxApiKeyLabel').textContent = chrome.i18n.getMessage('docxApiKeyLabel') || 'API Key';
+  document.getElementById('convertMermaidLabel').textContent = chrome.i18n.getMessage('convertMermaidLabel') || '启用Mermaid图表转换';
 
   // Formula Copy Settings tab
   document.getElementById('formulaSettingsTitle').textContent = chrome.i18n.getMessage('formulaSettingsTitle') || 'Formula Copy Settings';
@@ -260,6 +281,7 @@ function loadI18nText() {
   document.getElementById('manualConversionTitle').textContent = chrome.i18n.getMessage('manualConversionTitle') || '手动转换';
   document.getElementById('manualConversionExplanation').textContent = chrome.i18n.getMessage('manualConversionExplanation') || '支持ChatGPT、豆包、元宝等，复制需要转换的对话到Markdown输入框，点击"转换为文档"按钮立即下载Word格式，排版精美，支持公式！';
   document.getElementById('markdownInputLabel').textContent = chrome.i18n.getMessage('markdownInputLabel') || 'Markdown 文本';
+  document.getElementById('templateLabel').textContent = chrome.i18n.getMessage('templateLabel') || 'Word Template';
   document.getElementById('convertMarkdownBtn').innerHTML = `
     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;">
       <path d="M14 3v4a1 1 0 0 0 1 1h4"></path>
@@ -287,6 +309,31 @@ function loadI18nText() {
 
   // Sponsor tab
   document.getElementById('sponsorTitle').textContent = chrome.i18n.getMessage('sponsorTitle');
+
+  // Quota section labels
+  document.getElementById('quotaTitle').textContent = chrome.i18n.getMessage('quotaTitle') || '您的转换次数';
+  document.getElementById('totalQuotaLabel').textContent = chrome.i18n.getMessage('totalQuotaLabel') || '总计:';
+  document.getElementById('usedQuotaLabel').textContent = chrome.i18n.getMessage('usedQuotaLabel') || '已用:';
+  document.getElementById('remainingQuotaLabel').textContent = chrome.i18n.getMessage('remainingQuotaLabel') || '剩余:';
+  
+  // API key hint with proper HTML handling
+  const apiKeyHint = document.getElementById('apiKeyHint');
+  const apiKeyHintMessage = chrome.i18n.getMessage('apiKeyHint');
+  if (apiKeyHintMessage) {
+    apiKeyHint.innerHTML = apiKeyHintMessage;
+  }
+
+  // Quota action buttons
+  const refreshBtn = document.getElementById('refreshQuota');
+  if (refreshBtn) {
+    refreshBtn.textContent = chrome.i18n.getMessage('refreshButton') || '刷新';
+  }
+  
+  // Update purchase link text
+  const purchaseLink = document.querySelector('.purchase-link');
+  if (purchaseLink) {
+    purchaseLink.textContent = chrome.i18n.getMessage('purchaseQuota') || '购买次数';
+  }
 }
 
 // Function to save settings
@@ -322,7 +369,11 @@ function saveSettings() {
 
     // Formula copy settings
     enableFormulaCopy: document.getElementById('enableFormulaCopy').checked,
-    formulaFormat: formulaFormat
+    formulaFormat: formulaFormat,
+
+    // Mermaid diagram conversion
+    convertMermaid: document.getElementById('convertMermaid').checked,
+    lastUsedTemplate: document.getElementById('wordTemplateSelect').value
   };
 
   // Save all settings at once
@@ -422,7 +473,14 @@ function displayQuotaData(data) {
     const expirationDate = new Date(data.expiresAt);
     document.getElementById('expirationDate').textContent = formatDate(expirationDate);
   } else {
-    document.getElementById('expirationDate').textContent = '未知';
+    const unknownText = chrome.i18n.getMessage('unknown') || 'Unknown';
+    document.getElementById('expirationDate').textContent = unknownText;
+  }
+
+  // Update expiration label if needed
+  const expirationLabel = document.getElementById('expirationLabel');
+  if (expirationLabel) {
+    expirationLabel.textContent = chrome.i18n.getMessage('expirationLabel') || '有效期至:';
   }
 
   // Update progress bar to show remaining quota percentage instead of used
@@ -440,10 +498,23 @@ function displayQuotaData(data) {
 
 // Helper function to format date in a user-friendly way
 function formatDate(date) {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  return `${year}年${month}月${day}日`;
+  // Get the current UI language
+  const currentLang = chrome.i18n.getUILanguage();
+  
+  if (currentLang.startsWith('zh')) {
+    // Chinese format
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}年${month}月${day}日`;
+  } else {
+    // English format
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  }
 }
 
 // Function to set up manual markdown conversion
@@ -469,7 +540,8 @@ function setupManualConversion() {
     const settings = await chrome.storage.sync.get({
       docxServerUrl: 'https://api.ds.rick216.cn',
       docxApiKey: '',
-      docxMode: 'api'
+      docxMode: 'api',
+      convertMermaid: false
     });
 
     // Check if API key is provided
@@ -508,7 +580,7 @@ function setupManualConversion() {
       `;
 
       // Call the conversion function with markdown text
-      await convertMarkdownToDocx(markdownText, settings.docxServerUrl, settings.docxApiKey);
+      await convertMarkdownToDocx(markdownText, settings.docxServerUrl, settings.docxApiKey, settings.convertMermaid, document.getElementById('wordTemplateSelect').value);
 
       // Update button to show success message briefly
       convertBtn.innerHTML = `
@@ -554,7 +626,7 @@ function setupManualConversion() {
 }
 
 // Function to convert markdown text to DOCX
-async function convertMarkdownToDocx(markdownText, serverUrl, apiKey) {
+async function convertMarkdownToDocx(markdownText, serverUrl, apiKey, convertMermaid = false, template) {
   try {
     const url = serverUrl || 'https://api.ds.rick216.cn';
 
@@ -576,17 +648,27 @@ async function convertMarkdownToDocx(markdownText, serverUrl, apiKey) {
 
     filename = `${filename}_${timestamp}`;
 
-    // Call the conversion API
+    const currentLang = chrome.i18n.getUILanguage();
+    const language = currentLang.startsWith('zh') ? 'zh' : 'en';
+
+    const body = {
+      content: markdownText,
+      filename: filename,
+      convert_mermaid: convertMermaid,
+      language: language
+    };
+
+    if (template) {
+      body.template_name = template;
+    }
+
     const response = await fetch(`${url}/convert-text`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'X-API-Key': apiKey
       },
-      body: JSON.stringify({
-        content: markdownText,
-        filename: filename
-      })
+      body: JSON.stringify(body)
     });
 
     if (!response.ok) {
@@ -609,5 +691,58 @@ async function convertMarkdownToDocx(markdownText, serverUrl, apiKey) {
   } catch (error) {
     console.error('Error in convertMarkdownToDocx:', error);
     throw error;
+  }
+}
+
+async function setupTemplateSelector() {
+  const selectElement = document.getElementById('wordTemplateSelect');
+  if (!selectElement) return;
+
+  // Set default option first
+  const defaultOption = document.createElement('option');
+  defaultOption.value = 'templates';
+  defaultOption.textContent = chrome.i18n.getMessage('universalTemplate') || 'Universal';
+  selectElement.appendChild(defaultOption);
+
+  try {
+    const settings = await chrome.storage.sync.get({ docxServerUrl: 'https://api.ds.rick216.cn' });
+    const serverUrl = settings.docxServerUrl || 'https://api.ds.rick216.cn';
+
+    const response = await fetch(`${serverUrl}/templates`);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch templates: ${response.status}`);
+    }
+
+    const templatesByLang = await response.json();
+    const currentLang = chrome.i18n.getUILanguage();
+    
+    let templates = [];
+    if (currentLang.startsWith('zh')) {
+      templates = templatesByLang.zh || [];
+    } else {
+      templates = templatesByLang.en || [];
+    }
+    
+    // remove 'templates' from the list as it is already added as 'Universal'
+    templates.filter(t => t !== 'templates').forEach(templateName => {
+      const option = document.createElement('option');
+      option.value = templateName;
+      option.textContent = templateName;
+      selectElement.appendChild(option);
+    });
+
+  } catch (error) {
+    console.error('Error setting up template selector:', error);
+    // The default "Universal" option will be available.
+  } finally {
+    // Load and apply the last used template
+    chrome.storage.sync.get(['lastUsedTemplate'], (data) => {
+      if (data.lastUsedTemplate) {
+        // Check if the option actually exists before setting it to prevent errors
+        if (selectElement.querySelector(`option[value="${data.lastUsedTemplate}"]`)) {
+          selectElement.value = data.lastUsedTemplate;
+        }
+      }
+    });
   }
 }

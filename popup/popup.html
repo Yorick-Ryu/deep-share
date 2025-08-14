@@ -66,7 +66,7 @@
           <span id="screenshotTabLabel">对话截图设置</span>
         </button>
 
-        <button class="tab-btn" data-tab="sponsor-tab" id="sponsorTabBtn">
+        <button class="tab-btn sponsor-tab-btn" data-tab="sponsor-tab" id="sponsorTabBtn" style="display: none;">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path
@@ -118,8 +118,8 @@
                 <circle cx="12" cy="12" r="3"></circle>
               </svg>
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                class="eye-off-icon" style="display: none;">
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="eye-off-icon"
+                style="display: none;">
                 <path
                   d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24">
                 </path>
@@ -136,6 +136,12 @@
           </div>
           <span class="form-hint" id="apiKeyHint">购买 API Key? <a href="https://ds.rick216.cn/purchase.html"
               target="_blank">点击此处</a></span>
+        </div>
+
+        <!-- Mermaid diagram conversion -->
+        <div class="checkbox-group">
+          <input type="checkbox" id="convertMermaid">
+          <label for="convertMermaid" id="convertMermaidLabel"></label>
         </div>
 
         <!-- Quota information section -->
@@ -177,6 +183,10 @@
         <p class="feature-explanation" id="manualConversionExplanation">
           支持ChatGPT、豆包、元宝等，复制需要转换的对话到Markdown输入框，点击"转换为文档"按钮立即下载Word格式，排版精美，支持公式！</p>
         <div class="form-group">
+          <label for="wordTemplateSelect" id="templateLabel">Word Template</label>
+          <select id="wordTemplateSelect"></select>
+        </div>
+        <div class="form-group">
           <label for="markdownInput" id="markdownInputLabel">Markdown 文本</label>
           <textarea id="markdownInput" placeholder="在此粘贴 Markdown 格式文本..." rows="6"></textarea>
         </div>
@@ -212,12 +222,12 @@
           <label id="screenshotMethodLabel">Screenshot Method</label>
           <div class="radio-group">
             <div class="radio-option">
-              <input type="radio" id="methodDomToImage" name="screenshotMethod" value="domtoimage" checked>
-              <label for="methodDomToImage" id="methodDomToImageLabel">dom-to-image</label>
+              <input type="radio" id="methodHtml2Canvas" name="screenshotMethod" value="html2canvas" checked>
+              <label for="methodHtml2Canvas" id="methodHtml2CanvasLabel">html2canvas</label>
             </div>
             <div class="radio-option">
-              <input type="radio" id="methodHtml2Canvas" name="screenshotMethod" value="html2canvas">
-              <label for="methodHtml2Canvas" id="methodHtml2CanvasLabel">html2canvas</label>
+              <input type="radio" id="methodDomToImage" name="screenshotMethod" value="domtoimage">
+              <label for="methodDomToImage" id="methodDomToImageLabel">dom-to-image</label>
             </div>
           </div>
           <span class="form-hint" id="screenshotMethodHint">选择用于截图的方法，如果一种方法不工作，请尝试另一种</span>

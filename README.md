@@ -4,7 +4,7 @@
   <img src="icons/deepshare-icon.svg" alt="deepshare-icon" width="128"/>
 </p>
 
-A lightweight browser extension designed for AI users to easily share, save, and export AI conversations with special optimization for mathematical formulas. Supports DeepSeek, DoubaoAI, Yuanbao, ChatGPT and more.
+A lightweight browser extension designed for AI users to easily copy formulas from ChatGPT, DeepSeek, Grok and 10+ other AI conversations, export beautifully formatted Word documents, and support long conversation screenshot sharing for DeepSeek.
 
 [简体中文](README.zh-CN.md)
 
@@ -26,20 +26,25 @@ A lightweight browser extension designed for AI users to easily share, save, and
 | AI Platform | Formula Copy | Word Export | Conversation Screenshot |
 |-------------|-------------|-------------|------------------------|
 | DeepSeek | ✓ | ✓ | ✓ |
-| Doubao | ✓ | Manual copy | ✗ |
-| Yuanbao | ✓ | Manual copy | ✗ |
-| ChatGPT | ✓ | Manual copy | ✗ |
-| Grok | ✓ | Manual copy | ✗ |
-| Tongyi | ✓ | Manual copy | ✗ |
-| Xunfei Xinghuo | ✓ | Manual copy | ✗ |
-| ChatGLM | ✓ | Manual copy | ✗ |
-| OpenRouter | ✓ | Manual copy | ✗ |
-| Poe | ✓ | Manual copy | ✗ |
-| AskManyAI | ✓ | Manual copy | ✗ |
-| Wanzhi | ✓ | Manual copy | ✗ |
-| Yi Xiao | ✓ | Manual copy | ✗ |
-| Bot.n | ✓ | Manual copy | ✗ |
+| ChatGPT | ✓ | ✓ | ✗ |
+| Grok | ✓ | Manual paste | ✗ |
+| ChatGLM | ✓ | Manual paste | ✗ |
+| OpenRouter | ✓ | Manual paste | ✗ |
+| Poe | ✓ | Manual paste | ✗ |
+| Monica | ✓ | Manual paste | ✗ |
+| Cici | ✗ | Manual paste | ✗ |
+| Yuanbao | ✗ | Manual paste | ✗ |
+| Kimi | ✗ | Manual paste | ✗ |
+| Tongyi | ✓ | Manual paste | ✗ |
+| Xunfei Xinghuo | ✓ | Manual paste | ✗ |
+| Wen Xiaobai | ✓ | Manual paste | ✗ |
+| AskManyAI | ✓ | Manual paste | ✗ |
+| Wanzhi | ✓ | Manual paste | ✗ |
+| Yi Xiao | ✓ | Manual paste | ✗ |
+| Bot.n | ✓ | Manual paste | ✗ |
 | Zhihu | ✓ | ✗ | ✗ |
+
+Note: Manual paste functionality means you can copy the Markdown text from AI responses into the extension to convert it to a Word document.
 
 ## Installation
 

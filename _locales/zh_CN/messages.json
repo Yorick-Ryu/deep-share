@@ -1,9 +1,9 @@
 {
     "extensionName": {
-        "message": "DeepShare（DeepSeek对话分享）"
+        "message": "DeepShare：AI对话分享与导出"
     },
     "extensionDescription": {
-        "message": "一键分享 DeepSeek AI 对话为图片或文字。"
+        "message": "一键复制DeepSeek、ChatGPT、豆包等AI对话的公式，导出排版精美的Word文档，支持DeepSeek长对话截图分享。"
     },
     "shareButton": {
         "message": "分享对话"
@@ -83,8 +83,8 @@
     "formulaCopied": {
         "message": "公式复制成功！"
     },
-    "clickToCopyLatex": {
-        "message": "点击复制 LaTeX 代码"
+    "clickToCopyFormula": {
+        "message": "点击复制公式"
     },
     "generatingImage": {
         "message": "正在生成截图..."
@@ -147,7 +147,7 @@
         "message": "您的转换次数"
     },
     "apiKeyHint": {
-        "message": "购买 API Key? <a href=\"../docs/purchase.html\" target=\"_blank\">点击此处</a>"
+        "message": "购买 API Key? <a href=\"https://ds.rick216.cn/purchase.html\" target=\"_blank\">点击此处</a>"
     },
     "apiKeyMissing": {
         "message": "请购买或填写API-Key以使用文档转换功能"
@@ -207,6 +207,30 @@
         "message": "html2canvas"
     },
     "screenshotMethodHint": {
-        "message": "选择用于截图的方法，如果一种方法不工作，请尝试另一种"
+        "message": "选择用于截图的方法，如果一种方法不工作，请尝试另一种，切换后请刷新网页。"
+    },
+    "convertMermaidLabel": {
+        "message": "启用Mermaid图表转换（实验性功能）"
+    },
+    "getClipboardError": {
+        "message": "从剪贴板获取内容失败"
+    },
+    "refreshButton": {
+        "message": "刷新"
+    },
+    "purchaseQuota": {
+        "message": "购买次数"
+    },
+    "expirationLabel": {
+        "message": "有效期至:"
+    },
+    "unknown": {
+        "message": "未知"
+    },
+    "templateLabel": {
+        "message": "Word 模板"
+    },
+    "universalTemplate": {
+        "message": "通用"
     }
 }

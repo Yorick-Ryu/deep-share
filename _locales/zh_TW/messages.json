@@ -1,0 +1,236 @@
+{
+    "extensionName": {
+        "message": "DeepShare：AI對話分享與匯出"
+    },
+    "extensionDescription": {
+        "message": "一鍵複製DeepSeek、ChatGPT、豆包等AI對話的公式，匯出排版精美的Word文件，支援DeepSeek長對話截圖分享。"
+    },
+    "shareButton": {
+        "message": "分享對話"
+    },
+    "modalTitle": {
+        "message": "分享對話"
+    },
+    "imageTab": {
+        "message": "圖片"
+    },
+    "textTab": {
+        "message": "文字"
+    },
+    "wordTab": {
+        "message": "Word"
+    },
+    "wordExportInfo": {
+        "message": "點擊下載或複製按鈕將僅匯出AI回答內容為Word文件"
+    },
+    "noAiResponses": {
+        "message": "沒有找到AI回答內容"
+    },
+    "downloadButton": {
+        "message": "下載"
+    },
+    "copyButton": {
+        "message": "複製"
+    },
+    "docxButton": {
+        "message": "另存為Word"
+    },
+    "docxFeatureComingSoon": {
+        "message": "Word文件匯出功能即將推出！"
+    },
+    "docxFeatureExplanation": {
+        "message": "僅用於設定AI對話轉Word文件功能，其他功能如對話截圖和公式複製都是免費的，無需設定即可使用。"
+    },
+    "docxConversionSuccess": {
+        "message": "成功轉換為Word文件！"
+    },
+    "docxConverting": {
+        "message": "正在轉換為文件，請不要關閉此介面！"
+    },
+    "docxConversionError": {
+        "message": "轉換Word文件失敗。請確保轉換服務正在運行。"
+    },
+    "watermarkSettings": {
+        "message": "浮水印設定"
+    },
+    "screenshotSettings": {
+        "message": "對話截圖設定"
+    },
+    "docxSettings": {
+        "message": "文件轉換設定"
+    },
+    "docxServerUrlLabel": {
+        "message": "伺服器位址"
+    },
+    "docxApiKeyLabel": {
+        "message": "API金鑰"
+    },
+    "docxModeLabel": {
+        "message": "轉換模式"
+    },
+    "modeLocalLabel": {
+        "message": "本地轉換 (Pandoc)"
+    },
+    "modeApiLabel": {
+        "message": "API轉換"
+    },
+    "copied": {
+        "message": "已複製！"
+    },
+    "copyFailed": {
+        "message": "複製失敗！"
+    },
+    "formulaCopied": {
+        "message": "公式複製成功！"
+    },
+    "clickToCopyFormula": {
+        "message": "點擊複製公式"
+    },
+    "generatingImage": {
+        "message": "正在產生截圖..."
+    },
+    "generateFailed": {
+        "message": "截圖產生失敗，建議刷新網頁後重試！"
+    },
+    "defaultWatermark": {
+        "message": "內容由 DeepSeek AI 產生，圖片由 DeepShare 擴充功能截取"
+    },
+    "settingsButton": {
+        "message": "浮水印設定"
+    },
+    "hideDefaultWatermarkLabel": {
+        "message": "隱藏預設浮水印"
+    },
+    "customWatermarkLabel": {
+        "message": "自訂浮水印文字（可選）"
+    },
+    "customWatermarkPlaceholder": {
+        "message": "在此輸入自訂浮水印"
+    },
+    "saveSettings": {
+        "message": "儲存設定"
+    },
+    "settingsSaved": {
+        "message": "已儲存"
+    },
+    "sponsorTitle": {
+        "message": "感謝您的使用！如果覺得這個擴充功能有幫助，歡迎掃描微信QR Code贊助我們😊"
+    },
+    "selectButton": {
+        "message": "選擇對話"
+    },
+    "selectAllButton": {
+        "message": "全選"
+    },
+    "selectAllResponsesButton": {
+        "message": "選擇全部回答"
+    },
+    "unselectAllButton": {
+        "message": "取消全選"
+    },
+    "noMessageSelected": {
+        "message": "請至少選擇一則對話"
+    },
+    "sponsorTabLabel": {
+        "message": "贊助"
+    },
+    "totalQuotaLabel": {
+        "message": "總計:"
+    },
+    "usedQuotaLabel": {
+        "message": "已用:"
+    },
+    "remainingQuotaLabel": {
+        "message": "剩餘:"
+    },
+    "quotaTitle": {
+        "message": "您的轉換次數"
+    },
+    "apiKeyHint": {
+        "message": "購買 API Key? <a href=\"https://ds.rick216.cn/purchase-en.html\" target=\"_blank\">點擊此處</a>"
+    },
+    "apiKeyMissing": {
+        "message": "請購買或填寫API-Key以使用文件轉換功能"
+    },
+    "manualConversionExplanation": {
+        "message": "支援ChatGPT、豆包、元寶等，複製需要轉換的對話到Markdown輸入框，點擊「轉換為文件」按鈕立即下載Word格式，排版精美，支援公式！"
+    },
+    "manualConversionTitle": {
+        "message": "手動轉換文件"
+    },
+    "markdownInputLabel": {
+        "message": "Markdown 文字"
+    },
+    "markdownInputPlaceholder": {
+        "message": "在此貼上 Markdown 格式文字..."
+    },
+    "convertToDocx": {
+        "message": "轉換為文件"
+    },
+    "clearMarkdown": {
+        "message": "清除"
+    },
+    "emptyMarkdownError": {
+        "message": "請輸入Markdown文字"
+    },
+    "manualDocxSettings": {
+        "message": "手動轉換文件"
+    },
+    "formulaTabLabel": {
+        "message": "公式複製設定"
+    },
+    "formulaSettingsTitle": {
+        "message": "公式複製設定"
+    },
+    "enableFormulaCopyLabel": {
+        "message": "啟用公式複製功能"
+    },
+    "formulaFormatLabel": {
+        "message": "公式複製格式"
+    },
+    "formatMathMLLabel": {
+        "message": "MathML"
+    },
+    "formatLaTeXLabel": {
+        "message": "LaTeX"
+    },
+    "formulaFormatHint": {
+        "message": "MathML 格式相容更多編輯器，LaTeX 適合專業排版"
+    },
+    "screenshotMethodLabel": {
+        "message": "截圖方式"
+    },
+    "methodDomToImageLabel": {
+        "message": "dom-to-image"
+    },
+    "methodHtml2CanvasLabel": {
+        "message": "html2canvas"
+    },
+    "screenshotMethodHint": {
+        "message": "選擇用於截圖的方法，如果一種方法不工作，請嘗試另一種，切換後請刷新網頁。"
+    },
+    "convertMermaidLabel": {
+        "message": "啟用Mermaid圖表轉換（實驗性功能）"
+    },
+    "getClipboardError": {
+        "message": "從剪貼簿獲取內容失敗"
+    },
+    "refreshButton": {
+        "message": "刷新"
+    },
+    "purchaseQuota": {
+        "message": "購買次數"
+    },
+    "expirationLabel": {
+        "message": "有效期至:"
+    },
+    "unknown": {
+        "message": "未知"
+    },
+    "templateLabel": {
+        "message": "Word 範本"
+    },
+    "universalTemplate": {
+        "message": "通用"
+    }
+}

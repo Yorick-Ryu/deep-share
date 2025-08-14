@@ -132,8 +132,8 @@ function initPurchaseForm() {
                 amount = customAmountInput.value;
                 
                 // Validate custom amount
-                if (!amount || isNaN(amount) || parseInt(amount) < 1 || amount.includes('.')) {
-                    alert('请输入有效的整数金额（最小 1 元）');
+                if (!amount || isNaN(amount) || parseInt(amount) < 1 || parseInt(amount) > 10000 || amount.includes('.')) {
+                    alert('请输入有效的整数金额（1 - 10000 元）');
                     customAmountInput.focus();
                     return;
                 }
@@ -182,26 +182,59 @@ function updateCustomAmountDetails() {
     const customConversions = document.getElementById('custom-conversions');
     const customBonus = document.getElementById('custom-bonus');
     const customBonusText = document.getElementById('custom-bonus-text');
+    const customTotalConversions = document.getElementById('custom-total-conversions');
+    const customDiscountText = document.getElementById('custom-discount-text');
     
     // Default values
     customAmountValue.textContent = '--';
     customConversions.textContent = '--';
     customBonus.textContent = '--';
     customBonusText.style.display = 'none';
+    customTotalConversions.textContent = '--';
+    customDiscountText.style.display = 'none';
     
     // If we have a valid amount
     if (customAmount && !isNaN(customAmount) && parseInt(customAmount) >= 1) {
         const amount = parseInt(customAmount);
-        const conversions = amount * 5; // 0.2元/次 = 5次/元
+        const conversions = amount * 5;
+        let bonus = 0;
+
+        if (amount >= 200) {
+            bonus = Math.ceil(conversions * 1.5);
+        } else if (amount >= 100) {
+            bonus = Math.ceil(conversions * 1.2);
+        } else if (amount >= 60) {
+            bonus = Math.ceil(conversions * 1.0);
+        } else if (amount >= 20) {
+            bonus = Math.ceil(conversions * 0.8);
+        } else if (amount >= 10) {
+            bonus = Math.ceil(conversions * 0.6);
+        } else if (amount >= 5) {
+            bonus = Math.ceil(conversions * 0.5);
+        }
         
+        const totalConversions = conversions + bonus;
+        let discountDisplay = '-';
+
         customAmountValue.textContent = amount;
         customConversions.textContent = conversions;
+        customTotalConversions.textContent = totalConversions;
         
-        // Check if eligible for bonus (amount ≥ 5)
-        if (amount >= 5) {
-            const bonus = Math.min(amount, 200) * 5; // Cap bonus at 200元
+        if (bonus > 0 && totalConversions > 0) {
+            const discount = (50 * amount) / totalConversions;
+            // Display discount like "X.X折", or "X折" if it's a whole number
+            discountDisplay = (discount % 1 === 0) ? `${discount.toFixed(0)}折` : `${discount.toFixed(1)}折`;
+            customDiscountText.innerHTML = `相当于 <span class="highlight">${discountDisplay}</span>`;
+            customDiscountText.style.display = 'block';
+        } else {
+            customDiscountText.style.display = 'none';
+        }
+
+        if (bonus > 0) {
             customBonus.textContent = bonus;
             customBonusText.style.display = 'block';
+        } else {
+            customBonusText.style.display = 'none';
         }
     }
 }
@@ -211,8 +244,18 @@ async function processPayment(email, amount) {
     // Calculate conversions and bonus (still needed for display)
     const conversions = amount * 5;
     let bonus = 0;
-    if (amount >= 5) {
-        bonus = Math.min(amount, 200) * 5;
+    if (amount >= 200) {
+        bonus = Math.ceil(conversions * 1.5);
+    } else if (amount >= 100) {
+        bonus = Math.ceil(conversions * 1.2);
+    } else if (amount >= 60) {
+        bonus = Math.ceil(conversions * 1.0);
+    } else if (amount >= 20) {
+        bonus = Math.ceil(conversions * 0.8);
+    } else if (amount >= 10) {
+        bonus = Math.ceil(conversions * 0.6);
+    } else if (amount >= 5) {
+        bonus = Math.ceil(conversions * 0.5);
     }
     
     // Show loading state on the purchase button
@@ -337,7 +380,7 @@ function showPaymentModal(orderData, email, amount, conversions, bonus) {
     const closeBtn = modal.querySelector('.close-modal');
     closeBtn.addEventListener('click', () => {
         // Confirm before closing if payment hasn't been confirmed
-        if (confirm('确定要关闭支付页面吗？如果您已经付款，关闭后将接收不到支付结果通知！')) {
+        if (confirm('确定要关闭支付页面吗？如果您已经付款，关闭后将接收不到支付结果通知！付款后没收到API Key请加微信：yorick_cn')) {
             closeModal(modal);
         }
     });
@@ -346,7 +389,7 @@ function showPaymentModal(orderData, email, amount, conversions, bonus) {
     modal.addEventListener('click', (e) => {
         if (e.target === modal) {
             // Same confirmation as close button
-            if (confirm('确定要关闭支付页面吗？如果您已经付款，关闭后将接收不到支付结果通知！')) {
+            if (confirm('确定要关闭支付页面吗？如果您已经付款，关闭后将接收不到支付结果通知！付款后没收到API Key请加微信：yorick_cn')) {
                 closeModal(modal);
             }
         }
@@ -359,8 +402,8 @@ function showPaymentModal(orderData, email, amount, conversions, bonus) {
 // Poll the API for payment status
 function pollPaymentStatus(orderNo, apiKey, modal) {
     let pollCount = 0;
-    const maxPolls = 80; // Poll for maximum 6.67 minutes (80 * 5 seconds)
-    const pollInterval = 5000; // Poll every 5 seconds
+    const maxPolls = 60; // Poll for maximum 3 minutes (60 * 3 seconds)
+    const pollInterval = 3000; // Poll every 3 seconds
     
     // Create an AbortController to allow stopping the polling
     const abortController = new AbortController();
