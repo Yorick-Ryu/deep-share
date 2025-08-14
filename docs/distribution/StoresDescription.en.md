@@ -12,8 +12,8 @@ Fully Open Source: Transparent code, safe and reliable
 💎 Premium Features
 Word Document Export: Convert conversations to DOCX format with perfectly preserved mathematical formulas and Mermaid diagrams
 Flexible Pricing:
-Standard price: ¥0.2/conversion
-Limited-time offer: Multi-buy, multi-get! Effective price as low as ¥0.1/conversion
+Standard price: $0.05/conversion
+Limited-time offer: Multi-buy, multi-get! Effective price as low as $0.02/conversion
 
 📱 Platform Compatibility
 DeepSeek: Full support for formula copying, Word export, conversation screenshots
