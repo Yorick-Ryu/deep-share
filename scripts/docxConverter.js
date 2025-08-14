@@ -198,7 +198,7 @@ async function convertToDocxViaApi(content, serverUrl) {
         const currentLang = chrome.i18n.getUILanguage();
         const language = currentLang.startsWith('zh') ? 'zh' : 'en';
 
-        const body = {
+        const requestBody = {
             content: content,
             filename: generateFilename(content),
             convert_mermaid: settings.convertMermaid,
@@ -206,27 +206,30 @@ async function convertToDocxViaApi(content, serverUrl) {
         };
 
         if (settings.lastUsedTemplate) {
-            body.template_name = settings.lastUsedTemplate;
+            requestBody.template_name = settings.lastUsedTemplate;
             console.log('Using template:', settings.lastUsedTemplate);
         }
 
         // Call the conversion API
-        const response = await fetch(`${url}/convert-text`, {
+        const result = await chrome.runtime.sendMessage({
+            action: 'fetchDocxConversion',
+            url: `${url}/convert-text`,
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'X-API-Key': apiKey
             },
-            body: JSON.stringify(body)
+            body: JSON.stringify(requestBody)
         });
 
-        if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(`API error: ${response.status} ${errorText}`);
+        if (result.error) {
+            throw new Error(result.error);
         }
 
-        // Download the file
-        const blob = await response.blob();
+        // Create blob from the response data
+        const blob = new Blob([new Uint8Array(result.data)], { 
+            type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' 
+        });
         const filename = generateFilename(content) + '.docx';
 
         const downloadUrl = URL.createObjectURL(blob);
@@ -263,19 +266,21 @@ async function checkQuota() {
         }
 
         // Call the quota API
-        const response = await fetch(`${url}/auth/quota`, {
+        const result = await chrome.runtime.sendMessage({
+            action: 'fetchQuota',
+            url: `${url}/auth/quota`,
             method: 'GET',
             headers: {
                 'X-API-Key': apiKey
             }
         });
 
-        if (!response.ok) {
-            console.error('Failed to check quota');
+        if (result.error) {
+            console.error('Failed to check quota:', result.error);
             return;
         }
 
-        const quotaData = await response.json();
+        const quotaData = result.data;
 
         // Store quota information in local storage for access by popup
         chrome.storage.local.set({

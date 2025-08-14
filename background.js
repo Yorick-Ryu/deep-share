@@ -20,4 +20,53 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
     return true;
   }
+
+  if (message.action === 'fetchDocxConversion') {
+        handleDocxConversion(message, sendResponse);
+        return true; // Keep message channel open for async response
+    } else if (message.action === 'fetchQuota') {
+        handleQuotaCheck(message, sendResponse);
+        return true; // Keep message channel open for async response
+    }
 });
+
+async function handleDocxConversion(request, sendResponse) {
+    try {
+        const response = await fetch(request.url, {
+            method: request.method,
+            headers: request.headers,
+            body: request.body
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            sendResponse({ error: `API error: ${response.status} ${errorText}` });
+            return;
+        }
+
+        const arrayBuffer = await response.arrayBuffer();
+        const data = Array.from(new Uint8Array(arrayBuffer));
+        sendResponse({ data: data });
+    } catch (error) {
+        sendResponse({ error: error.message });
+    }
+}
+
+async function handleQuotaCheck(request, sendResponse) {
+    try {
+        const response = await fetch(request.url, {
+            method: request.method,
+            headers: request.headers
+        });
+
+        if (!response.ok) {
+            sendResponse({ error: `Failed to check quota: ${response.status}` });
+            return;
+        }
+
+        const data = await response.json();
+        sendResponse({ data: data });
+    } catch (error) {
+        sendResponse({ error: error.message });
+    }
+}
