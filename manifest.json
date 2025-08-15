@@ -129,18 +129,5 @@
                 "scripts/copyKatex4Zhihu.js"
             ]
         }
-    ],
-    "web_accessible_resources": [
-        {
-            "resources": [
-                "lib/html2canvas.min.js",
-                "icons/deepshare-icon.svg",
-                "icons/sponsor-code.png",
-                "popup/popup.css"
-            ],
-            "matches": [
-                "https://chat.deepseek.com/*"
-            ]
-        }
     ]
 }
