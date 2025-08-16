@@ -36,7 +36,8 @@
         "https://bot.n.cn/chat/*",
         "https://chat.yixiaai.com/chat/?*",
         "https://www.wanzhi.com/chat/*",
-        "https://www.zhihu.com/*"
+        "https://www.zhihu.com/*",
+        "https://gemini.google.com/*"
     ],
     "background": {
         "service_worker": "background.js"
@@ -127,6 +128,21 @@
                 "lib/katex.min.js",
                 "scripts/notifications.js",
                 "scripts/copyKatex4Zhihu.js"
+            ]
+        },
+        {
+            "matches": [
+                "https://gemini.google.com/*"
+            ],
+            "css": [
+                "scripts/style.css"
+            ],
+            "js": [
+                "lib/katex.min.js",
+                "scripts/notifications.js",
+                "scripts/copyKatex.js",
+                "scripts/docxConverter.js",
+                "scripts/injectGeminiButton.js"
             ]
         }
     ]
