@@ -7,7 +7,7 @@
     'use strict';
 
     let lastUrl = location.href;
-    console.log('DeepShare: Initializing DOCX button injection for Gemini');
+    console.debug('DeepShare: Initializing DOCX button injection for Gemini');
 
     function findAndInjectButtons() {
         // Find button containers with the Gemini structure
@@ -30,7 +30,7 @@
         // Also check if URL has changed for SPA navigation
         const currentUrl = location.href;
         if (currentUrl !== lastUrl) {
-            console.log(`DeepShare: URL changed to ${currentUrl}. Re-checking for buttons.`);
+            console.debug(`DeepShare: URL changed to ${currentUrl}. Re-checking for buttons.`);
             lastUrl = currentUrl;
             // A small delay can help ensure the new content is loaded
             setTimeout(findAndInjectButtons, 500);
@@ -46,7 +46,7 @@
     setTimeout(findAndInjectButtons, 1000);
 
     function injectButton(copyBtn, container) {
-        console.log('Injecting DOCX button for Gemini');
+        console.debug('Injecting DOCX button for Gemini');
 
         // Create the wrapper component (following Gemini's Angular component structure)
         const buttonWrapper = document.createElement('deepshare-docx-button');
@@ -109,7 +109,7 @@
             const sourceButton = e.currentTarget;
 
             try {
-                console.log('DOCX button clicked for Gemini');
+                console.debug('DOCX button clicked for Gemini');
 
                 // Disable button during processing
                 sourceButton.setAttribute('disabled', 'true');
@@ -124,7 +124,7 @@
                 const clipboardContent = await navigator.clipboard.readText();
 
                 if (clipboardContent && clipboardContent.trim()) {
-                    console.log('Successfully read AI response from clipboard for Gemini');
+                    console.debug('Successfully read AI response from clipboard for Gemini');
                     const conversationData = {
                         role: 'assistant',
                         content: clipboardContent,
@@ -151,6 +151,6 @@
             }
         });
 
-        console.log('DOCX button successfully injected for Gemini');
+        console.debug('DOCX button successfully injected for Gemini');
     }
 })();

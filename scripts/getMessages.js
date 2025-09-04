@@ -76,7 +76,7 @@ function getContentViaCopyButton(copyButton) {
             try {
                 originalClipboard = await navigator.clipboard.readText();
             } catch (clipError) {
-                console.log('无法读取当前剪贴板内容:', clipError);
+                console.error('无法读取当前剪贴板内容:', clipError);
             }
             
             // 点击复制按钮

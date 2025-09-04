@@ -38,7 +38,7 @@ function removeAllCopySuccessNotifications() {
             contentEl.textContent === chrome.i18n.getMessage('copied')
         )) {
             if (toast.parentNode) {
-                console.log('移除已存在的复制成功通知');
+                console.debug('移除已存在的复制成功通知');
                 toast.parentNode.removeChild(toast);
             }
         }
@@ -57,7 +57,7 @@ function removeAllCopySuccessNotifications() {
                     contentEl.textContent === chrome.i18n.getMessage('copied')
                 )) {
                     if (toast.parentNode) {
-                        console.log('移除容器中的复制成功通知');
+                        console.debug('移除容器中的复制成功通知');
                         toast.parentNode.removeChild(toast);
                     }
                 }
@@ -92,7 +92,7 @@ const toastObserver = new MutationObserver((mutations) => {
                             contentEl.textContent === chrome.i18n.getMessage('copied')
                         )) {
                             if (node.parentNode) {
-                                console.log('拦截到了复制成功通知，已移除');
+                                console.debug('拦截到了复制成功通知，已移除');
                                 node.parentNode.removeChild(node);
                             }
                         }
@@ -111,7 +111,7 @@ const toastObserver = new MutationObserver((mutations) => {
                                 contentEl.textContent === chrome.i18n.getMessage('copied')
                             )) {
                                 if (toast.parentNode) {
-                                    console.log('拦截到子元素中的复制成功通知，已移除');
+                                    console.debug('拦截到子元素中的复制成功通知，已移除');
                                     toast.parentNode.removeChild(toast);
                                 }
                             }
@@ -199,7 +199,7 @@ const handleShareClick = async () => {
 
         // 如果消息没有变化，则不重新生成截图
         if (currentMessagesHash === previousMessagesHash) {
-            console.log('消息没有变化，使用缓存的截图');
+            console.debug('消息没有变化，使用缓存的截图');
             return;
         }
 

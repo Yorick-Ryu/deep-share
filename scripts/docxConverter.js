@@ -5,7 +5,7 @@
 
 // Function to initialize the DOCX conversion feature
 function initDocxConverter() {
-    console.log('DOCX converter initialized');
+    console.debug('DOCX converter initialized');
 
     // Listen for messages from the main content script
     document.addEventListener('deepshare:convertToDocx', async (event) => {
@@ -17,7 +17,7 @@ function initDocxConverter() {
 
 // Function to handle the conversion process
 async function convertToDocx(message, sourceButton) {
-    console.log('Starting DOCX conversion');
+    console.debug('Starting DOCX conversion');
     
     // Check if message is a Promise and await it
     if (message instanceof Promise) {
@@ -29,7 +29,7 @@ async function convertToDocx(message, sourceButton) {
             return;
         }
     } else {
-        console.log('Message:', message);
+        console.debug('Message:', message);
     }
     
     // Check for API key first
@@ -52,7 +52,7 @@ async function convertToDocx(message, sourceButton) {
             try {
                 chrome.runtime.sendMessage({ action: 'openPopup' });
             } catch (err) {
-                console.log('Failed to send message to open popup:', err);
+                console.error('Failed to send message to open popup:', err);
             }
             return;
         }
@@ -192,8 +192,8 @@ async function convertToDocxViaApi(content, serverUrl) {
             throw new Error('Invalid content for conversion. Content must be text.');
         }
 
-        console.log('Sending content to API:', content.substring(0, 100) + '...');
-        console.log('Convert Mermaid:', settings.convertMermaid);
+        console.debug('Sending content to API:', content.substring(0, 100) + '...');
+        console.debug('Convert Mermaid:', settings.convertMermaid);
 
         const currentLang = chrome.i18n.getUILanguage();
         const language = currentLang.startsWith('zh') ? 'zh' : 'en';
@@ -207,7 +207,7 @@ async function convertToDocxViaApi(content, serverUrl) {
 
         if (settings.lastUsedTemplate) {
             body.template_name = settings.lastUsedTemplate;
-            console.log('Using template:', settings.lastUsedTemplate);
+            console.debug('Using template:', settings.lastUsedTemplate);
         }
 
         // Call the conversion API

@@ -4,7 +4,7 @@
  */
 
 function injectDocxButton() {
-    console.log('Initializing DOCX button injection');
+    console.debug('Initializing DOCX button injection');
     let floatingContainer = null;
 
     // Function to observe and inject the button

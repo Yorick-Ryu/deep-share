@@ -7,7 +7,7 @@
     'use strict';
 
     let lastUrl = location.href;
-    console.log('DeepShare: Initializing DOCX button injection for ChatGPT');
+    console.debug('DeepShare: Initializing DOCX button injection for ChatGPT');
 
     function findAndInjectButtons() {
         // More specific selector for the button group
@@ -28,7 +28,7 @@
         // Also check if URL has changed for SPA navigation
         const currentUrl = location.href;
         if (currentUrl !== lastUrl) {
-            console.log(`DeepShare: URL changed to ${currentUrl}. Re-checking for buttons.`);
+            console.debug(`DeepShare: URL changed to ${currentUrl}. Re-checking for buttons.`);
             lastUrl = currentUrl;
             // A small delay can help ensure the new content is loaded
             setTimeout(findAndInjectButtons, 500);
@@ -121,7 +121,7 @@
                 const clipboardContent = await navigator.clipboard.readText();
 
                 if (clipboardContent) {
-                    console.log('Successfully read AI response from clipboard for ChatGPT.');
+                    console.debug('Successfully read AI response from clipboard for ChatGPT.');
                     const conversationData = {
                         role: 'assistant',
                         content: clipboardContent,
