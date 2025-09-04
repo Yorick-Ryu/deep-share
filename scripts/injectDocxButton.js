@@ -12,20 +12,32 @@ function injectDocxButton() {
         const observer = new MutationObserver((mutations) => {
             for (const mutation of mutations) {
                 if (mutation.type === 'childList') {
-                    // Updated selector to match new DOM structure
-                    const buttonContainers = document.querySelectorAll('.ds-flex[style*="margin-top: 12px"][style*="height: 20px"][style*="align-items: center"]');
+                    // More robust selector targeting button containers and groups
+                    const buttonContainers = document.querySelectorAll('.ds-flex[style*="align-items"][style*="gap"], div[class*="ds-flex"][style*="align-items: center"]');
 
                     buttonContainers.forEach(container => {
-                        // Find the button container within this container - updated to support both gap values
-                        const buttonGroup = container.querySelector('.ds-flex[style*="align-items: center"][style*="gap: 16px"], .ds-flex[style*="align-items: center"][style*="gap: 12px"], .ds-flex._965abe9');
-                        if (!buttonGroup) return;
-
-                        // Look for copy buttons
-                        const copyButtons = buttonGroup.querySelectorAll('.ds-icon-button');
+                        // Find button groups more flexibly - look for containers with gap and align-items
+                        const buttonGroup = container.querySelector('.ds-flex[style*="align-items"][style*="gap"], div[class*="ds-flex"][style*="align-items"]') || container;
+                        
+                        // Look for copy buttons using multiple strategies
+                        let copyButtons = buttonGroup.querySelectorAll('[role="button"][tabindex]');
+                        
+                        // Fallback: look for clickable divs that might be buttons
+                        if (copyButtons.length === 0) {
+                            copyButtons = buttonGroup.querySelectorAll('div[tabindex][role], div[style*="cursor"][role]');
+                        }
+                        
+                        // Further fallback: look for elements with button-like characteristics
+                        if (copyButtons.length === 0) {
+                            copyButtons = buttonGroup.querySelectorAll('div[class*="button"], div[class*="btn"], div[style*="cursor: pointer"]');
+                        }
 
                         copyButtons.forEach(copyBtn => {
-                            // Check if this is a copy button (first button in the new structure)
-                            const isCopyButton = copyBtn === buttonGroup.querySelector('.ds-icon-button:first-child');
+                            // More flexible check for copy button - look for SVG with copy-like paths or first button
+                            const isCopyButton = copyBtn === buttonGroup.querySelector('[role="button"]') || 
+                                               copyBtn.querySelector('svg path[d*="M6.14926"]') || // Copy icon path signature
+                                               copyBtn === Array.from(buttonGroup.children).find(child => 
+                                                   child.hasAttribute('role') && child.getAttribute('role') === 'button');
 
                             if (!isCopyButton) return;
 
@@ -35,27 +47,68 @@ function injectDocxButton() {
                                 return; // Button already exists
                             }
 
-                            // Create the DOCX button
+                            // Create the DOCX button with flexible styling to match existing buttons
                             const docxButton = document.createElement('div');
-                            docxButton.className = 'ds-icon-button deepseek-docx-btn';
-                            docxButton.tabIndex = 0;
+                            
+                            // Copy classes from the copy button to match styling
+                            const copyButtonClasses = copyBtn.className;
+                            docxButton.className = copyButtonClasses + ' deepseek-docx-btn';
+                            
+                            // Copy attributes from copy button for consistency
+                            docxButton.tabIndex = copyBtn.tabIndex || -1;
+                            docxButton.setAttribute('role', 'button');
+                            docxButton.setAttribute('aria-disabled', 'false');
                             docxButton.title = chrome.i18n.getMessage('docxButton');
-                            docxButton.style = '--ds-icon-button-text-color: #909090; --ds-icon-button-size: 20px;';
+                            
+                            // Copy styling from copy button
+                            const copyButtonStyle = copyBtn.getAttribute('style') || '';
+                            docxButton.style.cssText = copyButtonStyle;
 
-                            // Create button inner content with outline icon (not filled)
-                            docxButton.innerHTML = `
-                                <div class="ds-icon" style="font-size: 20px; width: 20px; height: 20px;">
-                                    <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M16 18H4C3.45 18 3 17.55 3 17V3C3 2.45 3.45 2 4 2H12L17 7V17C17 17.55 16.55 18 16 18Z" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                                        <path d="M12 2V7H17" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                                        <path d="M6 10.5H14" stroke="currentColor" stroke-width="1.5"/>
-                                        <path d="M6 14H12" stroke="currentColor" stroke-width="1.5"/>
-                                        <path d="M8.5 6.5L7.5 7.5L8.5 8.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-                                        <path d="M11.5 6.5L12.5 7.5L11.5 8.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-                                        <path d="M10 5.5L10 9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-                                    </svg>
-                                </div>
-                            `;
+                            // Create button inner content that matches existing icon structure
+                            const copyIcon = copyBtn.querySelector('.ds-icon, svg, [class*="icon"]');
+                            let iconHTML = '';
+                            
+                            if (copyIcon) {
+                                // Get icon sizing from existing icon
+                                const iconStyle = copyIcon.getAttribute('style') || '';
+                                const iconClass = copyIcon.className || 'ds-icon';
+                                
+                                // Enhance icon size for better visibility
+                                const enhancedIconStyle = iconStyle.replace(/font-size:\s*\d+px/g, 'font-size: 20px')
+                                                                   .replace(/width:\s*\d+px/g, 'width: 20px')
+                                                                   .replace(/height:\s*\d+px/g, 'height: 20px');
+                                
+                                iconHTML = `
+                                    <div class="${iconClass}" style="${enhancedIconStyle || 'font-size: 20px; width: 20px; height: 20px;'}">
+                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M16 18H4C3.45 18 3 17.55 3 17V3C3 2.45 3.45 2 4 2H12L17 7V17C17 17.55 16.55 18 16 18Z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                                            <path d="M12 2V7H17" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                                            <path d="M6 10.5H14" stroke="currentColor" stroke-width="1.5"/>
+                                            <path d="M6 14H12" stroke="currentColor" stroke-width="1.5"/>
+                                            <path d="M8.5 6.5L7.5 7.5L8.5 8.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <path d="M11.5 6.5L12.5 7.5L11.5 8.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <path d="M10 5.5L10 9.5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </div>
+                                `;
+                            } else {
+                                // Fallback icon structure
+                                iconHTML = `
+                                    <div class="ds-icon" style="font-size: 16px; width: 16px; height: 16px;">
+                                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M12.8 14.4H3.2C2.76 14.4 2.4 14.04 2.4 13.6V2.4C2.4 1.96 2.76 1.6 3.2 1.6H9.6L13.6 5.6V13.6C13.6 14.04 13.24 14.4 12.8 14.4Z" stroke="currentColor" stroke-width="1.2" fill="none"/>
+                                            <path d="M9.6 1.6V5.6H13.6" stroke="currentColor" stroke-width="1.2" fill="none"/>
+                                            <path d="M4.8 8.4H11.2" stroke="currentColor" stroke-width="1.2"/>
+                                            <path d="M4.8 11.2H9.6" stroke="currentColor" stroke-width="1.2"/>
+                                            <path d="M6.8 5.2L6 6L6.8 6.8" stroke="currentColor" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <path d="M9.2 5.2L10 6L9.2 6.8" stroke="currentColor" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <path d="M8 4.4L8 7.6" stroke="currentColor" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </div>
+                                `;
+                            }
+                            
+                            docxButton.innerHTML = iconHTML;
 
                             // Insert after the copy button
                             copyBtn.parentNode.insertBefore(docxButton, copyBtn.nextSibling);
@@ -179,7 +232,7 @@ function injectDocxButton() {
 
         // Fallback: Check if we're inside a message container by looking at parent structure
         element = buttonEl;
-        let buttonContainer = buttonEl.closest('.ds-flex[style*="align-items: center"][style*="gap: 16px"], .ds-flex[style*="align-items: center"][style*="gap: 12px"], .ds-flex._965abe9');
+        let buttonContainer = buttonEl.closest('.ds-flex[style*="align-items"][style*="gap"], div[class*="ds-flex"][style*="align-items"]');
 
         if (buttonContainer) {
             // Try to find the closest message container by walking up a few levels
@@ -214,11 +267,15 @@ function injectDocxButton() {
         // Always use assistant role for docx conversion
         let role = 'assistant';
         
-        // Try to find the copy button near our conversation element
-        const buttonContainer = conversationEl.querySelector('.ds-flex[style*="align-items: center"][style*="gap: 16px"], .ds-flex[style*="align-items: center"][style*="gap: 12px"], .ds-flex._965abe9');
+        // Try to find the copy button near our conversation element with more robust selectors
+        const buttonContainer = conversationEl.querySelector('.ds-flex[style*="align-items"][style*="gap"], div[class*="ds-flex"][style*="align-items"]');
         
         if (buttonContainer) {
-            const copyButton = buttonContainer.querySelector('.ds-icon-button:first-child');
+            // More flexible copy button detection
+            const copyButton = buttonContainer.querySelector('[role="button"]') || 
+                              buttonContainer.querySelector('div[tabindex][role]') ||
+                              buttonContainer.querySelector('div[class*="button"]:first-child') ||
+                              buttonContainer.children[0]; // Last resort - first child
             
             if (copyButton) {
                 try {

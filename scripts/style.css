@@ -424,15 +424,23 @@
   position: relative;
   transition: all 0.2s ease;
   color: var(--button-color) !important;
+  cursor: pointer;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .deepseek-docx-btn:hover {
   background-color: var(--button-hover-bg);
-  border-radius: 4px;
 }
 
 .deepseek-docx-btn:active {
   transform: scale(0.95);
+}
+
+.deepseek-docx-btn .ds-icon {
+  color: currentColor;
 }
 
 @media (prefers-color-scheme: dark) {
