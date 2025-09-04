@@ -2,6 +2,8 @@ function injectShare(onClickHandler) {
     // 检查是否在对话页面
     if (!location.pathname.includes('/chat/')) return;
 
+    let floatingContainer = null;
+
     // 清理旧的元素
     document.querySelector('.deepseek-share-modal')?.remove();
     const existingBtn = document.querySelector('.deepseek-share-btn');
@@ -284,40 +286,62 @@ function injectShare(onClickHandler) {
             // 添加 tooltip 功能
             const buttons = buttonContainer.querySelectorAll('.select-button, .share-button');
             buttons.forEach(button => {
-                let tooltip = null;
+                let tooltipWrapper = null;
 
                 button.addEventListener('mouseenter', () => {
                     const tooltipText = button.title;
                     if (!tooltipText) return;
 
-                    tooltip = document.createElement('div');
-                    tooltip.className = 'deepseek-tooltip-bottom';
-                    tooltip.textContent = tooltipText;
-                    document.body.appendChild(tooltip);
+                    // Find or create the global floating container
+                    if (!floatingContainer) {
+                        floatingContainer = document.querySelector('.ds-floating-container');
+                        if (!floatingContainer) {
+                            floatingContainer = document.createElement('div');
+                            floatingContainer.className = 'ds-floating-container';
+                            floatingContainer.style.zIndex = '9999'; // Ensure it's on top
+                            document.body.appendChild(floatingContainer);
+                        }
+                    }
 
+                    // Create tooltip elements
+                    tooltipWrapper = document.createElement('div');
+                    tooltipWrapper.className = 'ds-floating-position-wrapper ds-theme';
+                    tooltipWrapper.style.zIndex = '10000'; // Higher z-index for the tooltip itself
+
+                    const tooltipElement = document.createElement('div');
+                    tooltipElement.className = 'ds-tooltip ds-tooltip--s ds-elevated ds-theme';
+                    tooltipElement.textContent = tooltipText;
+
+                    tooltipWrapper.appendChild(tooltipElement);
+                    floatingContainer.appendChild(tooltipWrapper);
+
+                    // Position the tooltip
                     const btnRect = button.getBoundingClientRect();
-                    const tooltipRect = tooltip.getBoundingClientRect();
 
-                    // Position below the button
-                    let top = btnRect.bottom + 8;
+                    // Temporarily set opacity to 0 to measure without flashing
+                    tooltipWrapper.style.opacity = '0';
+                    const tooltipRect = tooltipWrapper.getBoundingClientRect();
+                    tooltipWrapper.style.opacity = '1';
+
+                    // Position below the button, centered
+                    let top = btnRect.bottom + 4;
                     let left = btnRect.left + (btnRect.width / 2) - (tooltipRect.width / 2);
+                    tooltipWrapper.setAttribute('data-transform-origin', 'bottom');
 
                     // Adjust if it goes off-screen left/right
-                    if (left < 5) {
-                        left = 5;
-                    }
+                    if (left < 5) left = 5;
                     if ((left + tooltipRect.width) > (window.innerWidth - 5)) {
                         left = window.innerWidth - tooltipRect.width - 5;
                     }
 
-                    tooltip.style.top = `${top}px`;
-                    tooltip.style.left = `${left}px`;
+                    tooltipWrapper.style.top = `${top}px`;
+                    tooltipWrapper.style.left = `${left}px`;
                 });
 
                 button.addEventListener('mouseleave', () => {
-                    if (tooltip) {
-                        tooltip.remove();
-                        tooltip = null;
+                    if (tooltipWrapper) {
+                        tooltipWrapper.remove();
+                        tooltipWrapper = null;
                     }
                 });
             });

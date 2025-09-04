@@ -5,6 +5,7 @@
 
 function injectDocxButton() {
     console.log('Initializing DOCX button injection');
+    let floatingContainer = null;
 
     // Function to observe and inject the button
     function observeAndInjectButton() {
@@ -112,47 +113,63 @@ function injectDocxButton() {
                             // Insert after the copy button
                             copyBtn.parentNode.insertBefore(docxButton, copyBtn.nextSibling);
 
-                            // Add tooltip listeners
-                            let tooltip = null;
+                            // Add tooltip listeners to match DeepSeek's UI
+                            let tooltipWrapper = null;
 
                             docxButton.addEventListener('mouseenter', () => {
-                                // Use the button's title for the tooltip text
                                 const tooltipText = docxButton.title;
                                 if (!tooltipText) return;
 
-                                tooltip = document.createElement('div');
-                                tooltip.className = 'deepseek-tooltip';
-                                tooltip.textContent = tooltipText;
-                                document.body.appendChild(tooltip);
-
-                                const btnRect = docxButton.getBoundingClientRect();
-                                const tooltipRect = tooltip.getBoundingClientRect();
-
-                                // Position above the button
-                                let top = btnRect.top - tooltipRect.height - 10;
-                                let left = btnRect.left + (btnRect.width / 2) - (tooltipRect.width / 2);
-
-                                // Adjust if it goes off-screen top
-                                if (top < 5) {
-                                    top = btnRect.bottom + 8; // move below if not enough space on top
+                                // Find or create the global floating container
+                                if (!floatingContainer) {
+                                    floatingContainer = document.querySelector('.ds-floating-container');
+                                    if (!floatingContainer) {
+                                        floatingContainer = document.createElement('div');
+                                        floatingContainer.className = 'ds-floating-container';
+                                        floatingContainer.style.zIndex = '9999'; // Ensure it's on top
+                                        document.body.appendChild(floatingContainer);
+                                    }
                                 }
+
+                                // Create tooltip elements
+                                tooltipWrapper = document.createElement('div');
+                                tooltipWrapper.className = 'ds-floating-position-wrapper ds-theme';
+                                tooltipWrapper.style.zIndex = '10000'; // Higher z-index for the tooltip itself
+
+                                const tooltipElement = document.createElement('div');
+                                tooltipElement.className = 'ds-tooltip ds-tooltip--s ds-elevated ds-theme';
+                                tooltipElement.textContent = tooltipText;
+
+                                tooltipWrapper.appendChild(tooltipElement);
+                                floatingContainer.appendChild(tooltipWrapper);
+
+                                // Position the tooltip
+                                const btnRect = docxButton.getBoundingClientRect();
+
+                                // Temporarily set opacity to 0 to measure without flashing
+                                tooltipWrapper.style.opacity = '0';
+                                const tooltipRect = tooltipWrapper.getBoundingClientRect();
+                                tooltipWrapper.style.opacity = '1';
+
+                                // Position below the button, centered
+                                let top = btnRect.bottom + 4;
+                                let left = btnRect.left + (btnRect.width / 2) - (tooltipRect.width / 2);
+                                tooltipWrapper.setAttribute('data-transform-origin', 'bottom');
 
                                 // Adjust if it goes off-screen left/right
-                                if (left < 5) {
-                                    left = 5;
-                                }
+                                if (left < 5) left = 5;
                                 if ((left + tooltipRect.width) > (window.innerWidth - 5)) {
                                     left = window.innerWidth - tooltipRect.width - 5;
                                 }
 
-                                tooltip.style.top = `${top}px`;
-                                tooltip.style.left = `${left}px`;
+                                tooltipWrapper.style.top = `${top}px`;
+                                tooltipWrapper.style.left = `${left}px`;
                             });
 
                             docxButton.addEventListener('mouseleave', () => {
-                                if (tooltip) {
-                                    tooltip.remove();
-                                    tooltip = null;
+                                if (tooltipWrapper) {
+                                    tooltipWrapper.remove();
+                                    tooltipWrapper = null;
                                 }
                             });
 
