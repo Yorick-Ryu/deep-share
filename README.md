@@ -27,6 +27,7 @@ A lightweight browser extension designed for AI users to easily copy formulas fr
 |-------------|-------------|-------------|------------------------|
 | DeepSeek | ✓ | ✓ | ✓ |
 | ChatGPT | ✓ | ✓ | ✗ |
+| Gemini | ✗ | ✓ | ✗ |
 | Grok | ✓ | Manual paste | ✗ |
 | ChatGLM | ✓ | Manual paste | ✗ |
 | OpenRouter | ✓ | Manual paste | ✗ |
