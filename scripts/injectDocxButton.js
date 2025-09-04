@@ -91,8 +91,6 @@ function injectDocxButton() {
                             // Create button inner content that matches existing icon structure
                             const copyIcon = copyBtn.querySelector('.ds-icon, svg, [class*="icon"]');
 
-                            console.log(copyIcon);
-
                             const iconClass = copyIcon.className || 'ds-icon';
                             
                             const iconHTML = `
