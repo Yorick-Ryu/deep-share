@@ -41,6 +41,30 @@ function injectDocxButton() {
 
                             if (!isCopyButton) return;
 
+                            // Check if this is an AI response (not a user message)
+                            // Strategy: Look for distinctive patterns between user messages and AI responses
+                            
+                            // 1. User messages have the "d29f3d7d" class in their ds-message container
+                            const isUserMessage = copyBtn.closest('.d29f3d7d, [class*="d29f3d7d"]');
+                            
+                            // 2. AI responses are in containers with "_4f9bf79" class
+                            const isAIContainer = copyBtn.closest('._4f9bf79, [class*="_4f9bf79"]');
+                            
+                            // 3. AI responses typically have markdown content nearby
+                            const nearbyMarkdown = copyBtn.closest('div').querySelector('.ds-markdown') ||
+                                                 copyBtn.parentElement?.parentElement?.querySelector('.ds-markdown');
+                            
+                            // 4. Check if button is in an AI response context
+                            const isAIResponse = isAIContainer || (nearbyMarkdown && !isUserMessage);
+                            
+                            // Only inject button for AI responses
+                            if (isUserMessage || !isAIResponse) {
+                                console.debug('Skipping injection - detected user message or not AI response context');
+                                return;
+                            }
+                            
+                            console.debug('Detected AI response - proceeding with button injection');
+
                             // Check if we've already added our button next to this copy button
                             const nextSibling = copyBtn.nextElementSibling;
                             if (nextSibling && nextSibling.classList.contains('deepseek-docx-btn')) {
@@ -176,7 +200,7 @@ function injectDocxButton() {
         // Always use assistant role for docx conversion
         let role = 'assistant';
         
-        console.log('Using copy button for data extraction:', copyButton);
+        console.debug('Using copy button for data extraction:', copyButton);
         
         if (copyButton) {
             try {
