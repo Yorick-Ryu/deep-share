@@ -68,7 +68,7 @@ function injectShare(onClickHandler) {
                     </div>
                     <div class="tab-panel" id="word-panel">
                         <div class="word-info">
-                            <p>${chrome.i18n.getMessage('wordExportInfo') || '点击下载或复制按钮将仅导出AI回答内容为Word文档'}</p>
+                            <p>${chrome.i18n.getMessage('wordExportInfo') || '点击下载或复制按钮将导出用户问题和AI回答内容为Word文档'}</p>
                         </div>
                     </div>
                 </div>
@@ -161,15 +161,15 @@ function injectShare(onClickHandler) {
                     return;
                 }
 
-                // 合并AI回答内容
-                const aiText = aiResponses.map(msg => msg.content).join('\n\n');
+                // 获取用户和AI消息，保持对话格式
+                const formattedText = formatAsText(messages);
 
                 // 触发Word转换
                 const event = new CustomEvent('deepshare:convertToDocx', {
                     detail: {
                         messages: {
                             role: 'assistant',
-                            content: aiText
+                            content: formattedText
                         },
                         sourceButton: downloadBtn // 传递按钮引用以处理加载状态
                     }

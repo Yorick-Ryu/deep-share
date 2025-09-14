@@ -21,7 +21,7 @@
         "message": "Word"
     },
     "wordExportInfo": {
-        "message": "Click the download or copy button to export only AI responses to a Word document"
+        "message": "Click the download or copy button to export both user questions and AI responses to a Word document"
     },
     "noAiResponses": {
         "message": "No AI responses found"

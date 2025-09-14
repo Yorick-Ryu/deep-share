@@ -21,7 +21,7 @@
         "message": "Word"
     },
     "wordExportInfo": {
-        "message": "点击下载或复制按钮将仅导出AI回答内容为Word文档"
+        "message": "点击下载或复制按钮将导出用户问题和AI回答内容为Word文档"
     },
     "noAiResponses": {
         "message": "没有找到AI回答内容"
