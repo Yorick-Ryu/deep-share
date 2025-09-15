@@ -1,4 +1,4 @@
-一款專為 AI 用戶設計的輕量級瀏覽器插件，一鍵複製ChatGPT、DeepSeek、Grok等AI對話的公式，導出排版精美的Word文檔，支持DeepSeek長對話截圖分享。
+一款專為 AI 用戶設計的輕量級瀏覽器插件，一鍵複製ChatGPT、Grok、DeepSeek等AI對話的公式，導出排版精美的Word文檔，支持DeepSeek長對話截圖分享。
 
 🆓 免費功能
 一鍵截取對話：快速捕獲 DeepSeek 對話內容
