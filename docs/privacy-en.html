@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - DeepShare</title>
+    <link rel="icon" type="image/svg+xml" href="./assets/images/deepshare-icon.svg">
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <style>
+        .content {
+            max-width: 800px;
+            margin: 100px auto;
+            padding: 0 20px;
+        }
+        .content h1 { margin-bottom: 2rem; }
+        .content h2 { margin: 2rem 0 1rem; }
+        .content ul { margin-left: 2rem; }
+        .content li { margin: 0.5rem 0; }
+        .logo a {
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="./index-en.html">
+                    <img src="./assets/images/deepshare-icon.svg" alt="DeepShare Logo">
+                    <span>DeepShare</span>
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="content">
+        <h1>Privacy Policy</h1>
+        <p>Last updated: April 23, 2025</p>
+
+        <h2>1. Data Collection and Processing Principles</h2>
+        <p>DeepShare is an open-source browser extension with user privacy protection at its core. We adhere to the following principles:</p>
+        <ul>
+            <li><strong>Zero Data Collection</strong>: We do not collect or store any of your personal information</li>
+            <li><strong>Local Processing</strong>: All content processing is completed locally on your device</li>
+            <li><strong>No Behavioral Tracking</strong>: We do not track your browsing behavior or use any analytics tools</li>
+            <li><strong>No Third-Party Sharing</strong>: Your data is not shared with any third parties</li>
+        </ul>
+
+        <h2>2. Feature Privacy Explanation</h2>
+        
+        <h3>2.1 Clipboard Data Processing</h3>
+        <p>When using this tool:</p>
+        <ul>
+            <li>DeepShare will only read clipboard content when you <strong>explicitly authorize</strong> it</li>
+            <li>Clipboard content is only used for format conversion</li>
+            <li>We <strong>will not</strong> store any of your clipboard data on any server</li>
+        </ul>
+
+        <h3>2.2 Conversation Screenshot and Formula Copy Features</h3>
+        <p>All operations are performed locally in your browser:</p>
+        <ul>
+            <li>The screenshot feature is executed only within your browser and does not involve data upload</li>
+            <li>Conversation content is only temporarily stored in browser memory and is not persistently stored</li>
+            <li>Exported images and text are saved directly to your device without passing through any third-party servers</li>
+        </ul>
+
+        <h3>2.3 Word Document Conversion Feature</h3>
+        <p>When using the document conversion service:</p>
+        <ul>
+            <li>We <strong>only process</strong> the content you select, and only for providing document conversion services</li>
+            <li>Data is <strong>immediately deleted</strong> after conversion is complete, and no copies are retained</li>
+            <li>Data transmission uses <strong>encryption</strong> to ensure security</li>
+            <li>We <strong>will never</strong> use your data for training models or other purposes</li>
+        </ul>
+
+        <h2>3. User Data Rights</h2>
+        <p>As a DeepShare user, you have the following rights:</p>
+        <ul>
+            <li><strong>Transparency</strong>: Know how we process your data at any time</li>
+            <li><strong>Not Being Tracked</strong>: Enjoy a tracking-free usage experience</li>
+            <li><strong>Data Control</strong>: All data operations are controlled by you, and we will not access any data without your consent</li>
+        </ul>
+
+        <h2>4. Privacy Protection Measures</h2>
+        <p>We take the following technical measures to protect your privacy:</p>
+        <ul>
+            <li><strong>Local Processing Priority</strong>: Process data locally on your device whenever possible</li>
+            <li><strong>Minimum Data Principle</strong>: Process only the minimum data necessary to complete the function</li>
+            <li><strong>Encrypted Transmission</strong>: Any necessary data transmission uses encryption</li>
+            <li><strong>Timely Cleanup</strong>: Clear all data immediately after processing is complete</li>
+        </ul>
+
+        <h2>5. Privacy Policy Updates</h2>
+        <p>If we make any changes to our privacy policy, we will post the updated version on this page and update the modification date.</p>
+
+        <h2>6. Contact Us</h2>
+        <p>If you have any questions or suggestions about our privacy policy, please contact us through <a href="https://github.com/Yorick-Ryu/deep-share/issues" target="_blank">GitHub Issues</a>.</p>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="https://github.com/Yorick-Ryu/deep-share">GitHub</a>
+                <a href="./privacy-en.html">Privacy Policy</a>
+                <a href="./terms-en.html">Terms of Service</a>
+                <a href="./purchase-en.html">Purchase Credits</a>
+            </div>
+            <p class="copyright">© 2025 DeepShare. All rights reserved.</p>
+        </div>
+    </footer>
+    <script>
+        // Theme switching functionality
+        const themeToggle = document.querySelector('.theme-toggle');
+        const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+        
+        const currentTheme = localStorage.getItem('theme');
+        if (currentTheme) {
+            document.documentElement.setAttribute('data-theme', currentTheme);
+        } else {
+            const theme = prefersDarkScheme.matches ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+        }
+        
+        if (themeToggle) {
+            themeToggle.addEventListener('click', () => {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+                
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+            });
+        }
+    </script>
+    
+    <!-- Vercel Web Analytics -->
+    <script>
+        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    </script>
+    <script defer src="/_vercel/insights/script.js"></script>
+</body>
+</html>
+
