@@ -23,8 +23,8 @@
             // Detect browser language
             const userLang = navigator.language || navigator.userLanguage;
             
-            // If browser language is English and no explicit language set, redirect to English version
-            if (userLang.startsWith('en') && !langParam) {
+            // Only Chinese users see Chinese version, all others see English version
+            if (!userLang.startsWith('zh') && !langParam) {
                 window.location.href = './index-en.html';
             }
         })();
