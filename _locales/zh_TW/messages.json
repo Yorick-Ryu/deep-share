@@ -243,7 +243,7 @@
         "message": "截圖已儲存"
     },
     "screenshotFailed": {
-        "message": "截圖失敗"
+        "message": "截圖失敗，刷新一下試試？"
     },
     "imageCopied": {
         "message": "圖片已複製到剪貼簿"

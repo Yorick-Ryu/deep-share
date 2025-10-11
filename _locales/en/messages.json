@@ -243,7 +243,7 @@
         "message": "Screenshot saved"
     },
     "screenshotFailed": {
-        "message": "Screenshot failed"
+        "message": "Screenshot failed, try refreshing?"
     },
     "imageCopied": {
         "message": "Image copied to clipboard"
