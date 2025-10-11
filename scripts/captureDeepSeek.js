@@ -75,10 +75,10 @@ async function captureDeepSeekMessages(customWatermark) {
         });
     }
 
-    // Click cancel button to hide selection UI
-    const cancelButton = Array.from(document.querySelectorAll('._43d222b button')).find(btn => btn.textContent.includes('取消') || btn.textContent.toLowerCase().includes('cancel'));
-    if (cancelButton) {
-        cancelButton.click();
+    // Click the "Select All" checkbox to unselect all messages and hide the selection UI
+    const selectAllCheckbox = document.querySelector('.ds-checkbox-wrapper .ds-checkbox');
+    if (selectAllCheckbox && selectAllCheckbox.classList.contains('ds-checkbox--active')) {
+        selectAllCheckbox.click();
         // Wait for UI to update
         await new Promise(resolve => setTimeout(resolve, 100));
     }
