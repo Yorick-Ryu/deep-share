@@ -235,5 +235,14 @@
     },
     "saveAsImageButton": {
         "message": "儲存長圖"
+    },
+    "screenshotInitiated": {
+        "message": "正在產生截圖..."
+    },
+    "screenshotSuccess": {
+        "message": "截圖已儲存"
+    },
+    "screenshotFailed": {
+        "message": "截圖失敗"
     }
 }

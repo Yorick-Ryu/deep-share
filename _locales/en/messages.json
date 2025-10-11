@@ -235,5 +235,14 @@
     },
     "saveAsImageButton": {
         "message": "Save as Image"
+    },
+    "screenshotInitiated": {
+        "message": "Generating screenshot..."
+    },
+    "screenshotSuccess": {
+        "message": "Screenshot saved"
+    },
+    "screenshotFailed": {
+        "message": "Screenshot failed"
     }
 }

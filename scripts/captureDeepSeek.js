@@ -2,15 +2,35 @@
 console.log("captureDeepSeek.js loaded");
 
 document.addEventListener('deepshare:saveAsImage', async () => {
-    console.log('Save as long image clicked');
-    const dataUrl = await captureDeepSeekMessages();
-    if (dataUrl) {
-        const link = document.createElement('a');
-        link.href = dataUrl;
-        const now = new Date();
-        const timestamp = `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')}-${now.getHours().toString().padStart(2, '0')}-${now.getMinutes().toString().padStart(2, '0')}-${now.getSeconds().toString().padStart(2, '0')}`;
-        link.download = `deepseek-chat-${timestamp}.png`;
-        link.click();
+    let notificationId = null;
+    try {
+        console.log('Save as long image clicked');
+        notificationId = window.showToastNotification(chrome.i18n.getMessage('screenshotInitiated'), 'loading', 30000);
+
+        const dataUrl = await captureDeepSeekMessages();
+
+        if (notificationId !== null) {
+            window.dismissToastNotification(notificationId);
+        }
+
+        if (dataUrl) {
+            const link = document.createElement('a');
+            link.href = dataUrl;
+            const now = new Date();
+            const timestamp = `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')}-${now.getHours().toString().padStart(2, '0')}-${now.getMinutes().toString().padStart(2, '0')}-${now.getSeconds().toString().padStart(2, '0')}`;
+            link.download = `deepseek-chat-${timestamp}.png`;
+            link.click();
+            window.showToastNotification(chrome.i18n.getMessage('screenshotSuccess'), 'success');
+        } else {
+            // The error is already logged in captureDeepSeekMessages, just show notification
+            window.showToastNotification(chrome.i18n.getMessage('screenshotFailed'), 'error');
+        }
+    } catch (error) {
+        console.error('Error during save as image:', error);
+        if (notificationId !== null) {
+            window.dismissToastNotification(notificationId);
+        }
+        window.showToastNotification(chrome.i18n.getMessage('screenshotFailed'), 'error');
     }
 });
 
