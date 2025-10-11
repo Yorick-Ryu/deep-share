@@ -1,50 +1,18 @@
 // Placeholder for captureDeepSeek.js
 console.log("captureDeepSeek.js loaded");
 
-function injectSaveAsImageButton() {
-    const targetNode = document.body;
-
-    const observer = new MutationObserver(mutationsList => {
-        for (const mutation of mutationsList) {
-            if (mutation.type === 'childList') {
-                const shareContainer = document.querySelector('._43d222b');
-                if (shareContainer && !document.getElementById('save-as-image-btn')) {
-                    const buttonContainer = shareContainer.querySelector('.fab07e97');
-                    const createLinkButton = buttonContainer.querySelector('.ds-basic-button--primary');
-
-                    if (buttonContainer && createLinkButton) {
-                        const saveAsImageButton = createLinkButton.cloneNode(true);
-                        saveAsImageButton.id = 'save-as-image-btn';
-                        saveAsImageButton.querySelector('span').textContent = chrome.i18n.getMessage('saveAsImageButton');
-                        
-                        // Remove existing icon
-                        const iconContainer = saveAsImageButton.querySelector('.ds-icon');
-                        if (iconContainer) {
-                            iconContainer.remove();
-                        }
-
-                        saveAsImageButton.addEventListener('click', async () => {
-                            console.log('Save as long image clicked');
-                            const dataUrl = await captureDeepSeekMessages();
-                            if (dataUrl) {
-                                const link = document.createElement('a');
-                                link.href = dataUrl;
-                                const now = new Date();
-                                const timestamp = `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')}-${now.getHours().toString().padStart(2, '0')}-${now.getMinutes().toString().padStart(2, '0')}-${now.getSeconds().toString().padStart(2, '0')}`;
-                                link.download = `deepseek-chat-${timestamp}.png`;
-                                link.click();
-                            }
-                        });
-
-                        buttonContainer.insertBefore(saveAsImageButton, createLinkButton);
-                    }
-                }
-            }
-        }
-    });
-
-    observer.observe(targetNode, { childList: true, subtree: true });
-}
+document.addEventListener('deepshare:saveAsImage', async () => {
+    console.log('Save as long image clicked');
+    const dataUrl = await captureDeepSeekMessages();
+    if (dataUrl) {
+        const link = document.createElement('a');
+        link.href = dataUrl;
+        const now = new Date();
+        const timestamp = `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')}-${now.getHours().toString().padStart(2, '0')}-${now.getMinutes().toString().padStart(2, '0')}-${now.getSeconds().toString().padStart(2, '0')}`;
+        link.download = `deepseek-chat-${timestamp}.png`;
+        link.click();
+    }
+});
 
 async function captureDeepSeekMessages(customWatermark) {
     const container = document.querySelector('.dad65929');
@@ -223,4 +191,6 @@ async function captureDeepSeekMessages(customWatermark) {
 }
 
 
-injectSaveAsImageButton();
+// This function is now standalone and not called directly by an event listener in this file.
+// It's called by the event listener for 'deepshare:saveAsImage'
+

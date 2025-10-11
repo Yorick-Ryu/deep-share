@@ -1,59 +1,33 @@
 // This script handles saving selected DeepSeek conversations as a DOCX file.
 console.log("saveDeepSeekAsDocx.js loaded");
 
-function injectSaveAsDocxButton() {
-    const targetNode = document.body;
-
-    const observer = new MutationObserver(mutationsList => {
-        for (const mutation of mutationsList) {
-            if (mutation.type === 'childList') {
-                const shareContainer = document.querySelector('._43d222b');
-                if (shareContainer && !document.getElementById('save-as-docx-btn')) {
-                    const buttonContainer = shareContainer.querySelector('.fab07e97');
-                    const saveAsImageButton = document.getElementById('save-as-image-btn');
-
-                    if (buttonContainer && saveAsImageButton) {
-                        const saveAsDocxButton = saveAsImageButton.cloneNode(true);
-                        saveAsDocxButton.id = 'save-as-docx-btn';
-                        saveAsDocxButton.querySelector('span').textContent = chrome.i18n.getMessage('docxButton');
-                        
-                        saveAsDocxButton.addEventListener('click', async () => {
-                            console.log('Save as DOCX clicked');
-                            try {
-                                const messages = await getSelectedDeepSeekMessages();
-                                if (messages.length === 0) {
-                                    window.showToastNotification(chrome.i18n.getMessage('noMessageSelected') || 'Please select at least one message', 'error');
-                                    return;
-                                }
-                                const content = messages.map(m => `**${m.role}**: \n${m.content}`).join('\n\n---\n\n');
-                                
-                                // Dispatch event for docxConverter to handle
-                                document.dispatchEvent(new CustomEvent('deepshare:convertToDocx', {
-                                    detail: {
-                                        messages: { content: content },
-                                        sourceButton: saveAsDocxButton
-                                    }
-                                }));
-
-                            } catch (error) {
-                                if (error.message === 'NO_SELECTION') {
-                                    window.showToastNotification(chrome.i18n.getMessage('noMessageSelected') || 'Please select at least one message', 'error');
-                                } else {
-                                    console.error('Error getting messages for DOCX conversion:', error);
-                                    window.showToastNotification('Error getting messages.', 'error');
-                                }
-                            }
-                        });
-
-                        buttonContainer.insertBefore(saveAsDocxButton, saveAsImageButton);
-                    }
-                }
-            }
+document.addEventListener('deepshare:saveAsDocx', async () => {
+    console.log('Save as DOCX clicked');
+    try {
+        const messages = await getSelectedDeepSeekMessages();
+        if (messages.length === 0) {
+            window.showToastNotification(chrome.i18n.getMessage('noMessageSelected') || 'Please select at least one message', 'error');
+            return;
         }
-    });
+        const content = messages.map(m => `**${m.role}**: \n${m.content}`).join('\n\n---\n\n');
+        
+        // Dispatch event for docxConverter to handle
+        document.dispatchEvent(new CustomEvent('deepshare:convertToDocx', {
+            detail: {
+                messages: { content: content },
+                sourceButton: document.getElementById('save-as-docx-btn')
+            }
+        }));
 
-    observer.observe(targetNode, { childList: true, subtree: true });
-}
+    } catch (error) {
+        if (error.message === 'NO_SELECTION') {
+            window.showToastNotification(chrome.i18n.getMessage('noMessageSelected') || 'Please select at least one message', 'error');
+        } else {
+            console.error('Error getting messages for DOCX conversion:', error);
+            window.showToastNotification('Error getting messages.', 'error');
+        }
+    }
+});
 
 async function getSelectedDeepSeekMessages() {
     const messages = [];
@@ -145,4 +119,6 @@ function getContentViaCopyButton(copyButton) {
 }
 
 
-injectSaveAsDocxButton();
+// This function is now standalone and not called directly by an event listener in this file.
+// It's called by the event listener for 'deepshare:saveAsDocx'
+

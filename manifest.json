@@ -59,7 +59,8 @@
                 "scripts/docxConverter.js",
                 "scripts/injectDocxButton.js",
                 "scripts/captureDeepSeek.js",
-                "scripts/saveDeepSeekAsDocx.js"
+                "scripts/saveDeepSeekAsDocx.js",
+                "scripts/injectDeepSeekButtons.js"
             ]
         },
         {
