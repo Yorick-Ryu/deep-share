@@ -5,30 +5,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DeepShare - AI对话截图分享｜公式复制｜转Word文档</title>
+    
+    <!-- SEO: Meta Description -->
+    <meta name="description" content="DeepShare - 一键复制DeepSeek、ChatGPT、豆包等AI对话的公式，导出排版精美的Word文档，支持DeepSeek长对话截图分享。免费开源浏览器插件。" />
+    <meta name="keywords" content="DeepShare,DeepSeek,ChatGPT,AI对话,公式复制,LaTeX,Word导出,截图分享,浏览器插件" />
+    <meta name="author" content="DeepShare" />
+    
+    <!-- SEO: Language and Regional Targeting -->
+    <link rel="canonical" href="https://ds.rick216.cn/" />
+    <link rel="alternate" hreflang="zh-CN" href="https://ds.rick216.cn/" />
+    <link rel="alternate" hreflang="zh-TW" href="https://ds.rick216.cn/" />
+    <link rel="alternate" hreflang="en" href="https://ds.rick216.cn/index-en.html" />
+    <link rel="alternate" hreflang="x-default" href="https://ds.rick216.cn/index-en.html" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://ds.rick216.cn/" />
+    <meta property="og:title" content="DeepShare - AI对话截图分享｜公式复制｜转Word文档" />
+    <meta property="og:description" content="一键复制DeepSeek、ChatGPT等AI对话的公式，导出排版精美的Word文档，支持长对话截图分享。" />
+    <meta property="og:image" content="https://ds.rick216.cn/assets/images/main.png" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:locale:alternate" content="en_US" />
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://ds.rick216.cn/" />
+    <meta name="twitter:title" content="DeepShare - AI对话截图分享｜公式复制｜转Word文档" />
+    <meta name="twitter:description" content="一键复制DeepSeek、ChatGPT等AI对话的公式，导出排版精美的Word文档" />
+    <meta name="twitter:image" content="https://ds.rick216.cn/assets/images/main.png" />
+    
     <link rel="icon" type="image/svg+xml" href="./assets/images/deepshare-icon.svg">
     <link rel="stylesheet" href="./assets/css/style.css">
-    
-    <!-- Language detection and auto-redirect -->
-    <script>
-        (function() {
-            // Check if language is explicitly set in URL
-            const urlParams = new URLSearchParams(window.location.search);
-            const langParam = urlParams.get('lang');
-            
-            // If language is explicitly set to zh-CN, stay on this page
-            if (langParam === 'zh-CN') {
-                return;
-            }
-            
-            // Detect browser language
-            const userLang = navigator.language || navigator.userLanguage;
-            
-            // Only Chinese users see Chinese version, all others see English version
-            if (!userLang.startsWith('zh') && !langParam) {
-                window.location.href = './index-en.html';
-            }
-        })();
-    </script>
 </head>
 
 <body>

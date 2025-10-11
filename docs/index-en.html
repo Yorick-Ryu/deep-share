@@ -5,30 +5,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DeepShare - AI Conversation Screenshot Sharing | Formula Copy | Convert to Word</title>
+    
+    <!-- SEO: Meta Description -->
+    <meta name="description" content="DeepShare - One-click copy formulas from DeepSeek, ChatGPT, and other AI conversations. Export to beautifully formatted Word documents with screenshot support. Free open-source browser extension." />
+    <meta name="keywords" content="DeepShare,DeepSeek,ChatGPT,AI conversation,formula copy,LaTeX,Word export,screenshot sharing,browser extension" />
+    <meta name="author" content="DeepShare" />
+    
+    <!-- SEO: Language and Regional Targeting -->
+    <link rel="canonical" href="https://ds.rick216.cn/index-en.html" />
+    <link rel="alternate" hreflang="zh-CN" href="https://ds.rick216.cn/" />
+    <link rel="alternate" hreflang="zh-TW" href="https://ds.rick216.cn/" />
+    <link rel="alternate" hreflang="en" href="https://ds.rick216.cn/index-en.html" />
+    <link rel="alternate" hreflang="x-default" href="https://ds.rick216.cn/index-en.html" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://ds.rick216.cn/index-en.html" />
+    <meta property="og:title" content="DeepShare - AI Conversation Screenshot Sharing | Formula Copy | Convert to Word" />
+    <meta property="og:description" content="One-click copy formulas from AI conversations and export to beautifully formatted Word documents with screenshot support." />
+    <meta property="og:image" content="https://ds.rick216.cn/assets/images/main.png" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale:alternate" content="zh_CN" />
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://ds.rick216.cn/index-en.html" />
+    <meta name="twitter:title" content="DeepShare - AI Conversation Screenshot Sharing" />
+    <meta name="twitter:description" content="One-click copy formulas and export AI conversations to Word documents" />
+    <meta name="twitter:image" content="https://ds.rick216.cn/assets/images/main.png" />
+    
     <link rel="icon" type="image/svg+xml" href="./assets/images/deepshare-icon.svg">
     <link rel="stylesheet" href="./assets/css/style.css">
-    
-    <!-- Language detection and auto-redirect -->
-    <script>
-        (function() {
-            // Check if language is explicitly set in URL
-            const urlParams = new URLSearchParams(window.location.search);
-            const langParam = urlParams.get('lang');
-            
-            // If language is explicitly set to en, stay on this page
-            if (langParam === 'en') {
-                return;
-            }
-            
-            // Detect browser language
-            const userLang = navigator.language || navigator.userLanguage;
-            
-            // If browser language is Chinese and no explicit language set, redirect to Chinese version
-            if ((userLang.startsWith('zh') || userLang === 'zh-CN' || userLang === 'zh-TW') && !langParam) {
-                window.location.href = './index.html';
-            }
-        })();
-    </script>
 </head>
 
 <body>
