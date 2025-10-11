@@ -232,5 +232,8 @@
     },
     "universalTemplate": {
         "message": "通用"
+    },
+    "saveAsImageButton": {
+        "message": "保存长图"
     }
 }

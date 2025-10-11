@@ -61,6 +61,7 @@
                 "scripts/copyKatex.js",
                 "scripts/docxConverter.js",
                 "scripts/injectDocxButton.js",
+                "scripts/captureDeepSeek.js",
                 "scripts/main.js"
             ]
         },

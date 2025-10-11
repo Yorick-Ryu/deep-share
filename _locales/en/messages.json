@@ -232,5 +232,8 @@
     },
     "universalTemplate": {
         "message": "Universal"
+    },
+    "saveAsImageButton": {
+        "message": "Save as Image"
     }
 }
