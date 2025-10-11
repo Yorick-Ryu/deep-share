@@ -86,7 +86,9 @@ async function captureDeepSeekMessages(customWatermark) {
     const { hideDefaultWatermark, screenshotMethod } = await chrome.storage.sync.get(['hideDefaultWatermark', 'screenshotMethod']);
     // ... rest of the function is the same
     const originalPosition = container.style.position;
+    const originalPadding = container.style.padding;
     container.style.position = 'relative';
+    container.style.padding = '20px';
 
     // Create watermark container
     const watermarkContainer = document.createElement('div');
@@ -178,6 +180,7 @@ async function captureDeepSeekMessages(customWatermark) {
 
         container.removeChild(watermarkContainer);
         container.style.position = originalPosition;
+        container.style.padding = originalPadding;
 
         return dataUrl;
     } catch (error) {
@@ -185,6 +188,7 @@ async function captureDeepSeekMessages(customWatermark) {
             container.removeChild(watermarkContainer);
         }
         container.style.position = originalPosition;
+        container.style.padding = originalPadding;
         console.error('Screenshot failed:', error);
         return null;
     }
