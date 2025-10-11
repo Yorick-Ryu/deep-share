@@ -419,12 +419,6 @@
   }
 }
 
-/* DOCX button in message panel - uses native DeepSeek button styles */
-.deepseek-docx-btn {
-  /* The button inherits all styles from DeepSeek's native button classes */
-  /* Only add marker class for identification, no custom styling needed */
-}
-
 /* Notification styles */
 .deepseek-notification {
   position: fixed;
