@@ -92,18 +92,26 @@ function injectDocxButton() {
                             // Create button inner content that matches existing icon structure
                             const copyIcon = copyBtn.querySelector('.ds-icon, svg, [class*="icon"]');
 
-                            const iconClass = copyIcon.className || 'ds-icon';
+                            // Get the icon wrapper style (font-size, width, height)
+                            let iconStyle = '';
+                            if (copyIcon) {
+                                const iconStyleAttr = copyIcon.getAttribute('style');
+                                iconStyle = iconStyleAttr || 'font-size: 16px; width: 16px; height: 16px;';
+                            } else {
+                                iconStyle = 'font-size: 16px; width: 16px; height: 16px;';
+                            }
                             
                             const iconHTML = `
-                                <div class="${iconClass}">
-                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M16 18H4C3.45 18 3 17.55 3 17V3C3 2.45 3.45 2 4 2H12L17 7V17C17 17.55 16.55 18 16 18Z" stroke="currentColor" stroke-width="1.2" fill="none"/>
-                                        <path d="M12 2V7H17" stroke="currentColor" stroke-width="1.2" fill="none"/>
-                                        <path d="M6 10.5H14" stroke="currentColor" stroke-width="1.2"/>
-                                        <path d="M6 14H12" stroke="currentColor" stroke-width="1.2"/>
-                                        <path d="M8.5 6.5L7.5 7.5L8.5 8.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-                                        <path d="M11.5 6.5L12.5 7.5L11.5 8.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-                                        <path d="M10 5.5L10 9.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <div class="ds-icon-button__hover-bg"></div>
+                                <div class="ds-icon" style="${iconStyle}">
+                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M13 15H3C2.45 15 2 14.55 2 14V2C2 1.45 2.45 1 3 1H10L15 6V14C15 14.55 14.55 15 13 15Z" stroke="currentColor" stroke-width="1.2" fill="none"/>
+                                        <path d="M10 1V6H15" stroke="currentColor" stroke-width="1.2" fill="none"/>
+                                        <path d="M4 8.5H12" stroke="currentColor" stroke-width="1.2"/>
+                                        <path d="M4 11.5H10" stroke="currentColor" stroke-width="1.2"/>
+                                        <path d="M7 4.5L6 5.5L7 6.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M9 4.5L10 5.5L9 6.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M8 3.5V7.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
                                     </svg>
                                 </div>
                             `;
