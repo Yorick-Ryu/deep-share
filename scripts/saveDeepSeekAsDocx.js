@@ -52,18 +52,18 @@ async function getSelectedDeepSeekMessages() {
                     .find(node => node.nodeType === Node.TEXT_NODE)?.textContent?.trim();
                 if (userText) {
                     messages.push({
-                        role: "user",
+                        role: "User",
                         content: userText
                     });
                 }
             } else {
-                const copyButton = messageDiv.querySelector('svg path[d*="M6.14926"]')?.closest('[role="button"]');
+                const copyButton = messageDiv.querySelector('.ds-icon-button svg path[d*="M6.14926"]')?.closest('[role="button"]');
                 if (copyButton) {
                     try {
                         const content = await getContentViaCopyButton(copyButton);
                         if (content) {
                             messages.push({
-                                role: "assistant",
+                                role: "Assistant",
                                 content: content
                             });
                         }
@@ -72,7 +72,7 @@ async function getSelectedDeepSeekMessages() {
                         const response = messageDiv.querySelector('.ds-markdown')?.textContent.trim() || '';
                         if (response) {
                             messages.push({
-                                role: "assistant",
+                                role: "Assistant",
                                 content: response
                             });
                         }
@@ -81,7 +81,7 @@ async function getSelectedDeepSeekMessages() {
                      const response = messageDiv.querySelector('.ds-markdown')?.textContent.trim() || '';
                     if (response) {
                         messages.push({
-                            role: "assistant",
+                            role: "Assistant",
                             content: response
                         });
                     }
