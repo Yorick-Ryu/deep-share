@@ -244,5 +244,11 @@
     },
     "screenshotFailed": {
         "message": "Screenshot failed"
+    },
+    "imageCopied": {
+        "message": "Image copied to clipboard"
+    },
+    "imageCopyFailed": {
+        "message": "Failed to copy image to clipboard"
     }
 }

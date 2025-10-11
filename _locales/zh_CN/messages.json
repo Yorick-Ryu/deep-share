@@ -244,5 +244,11 @@
     },
     "screenshotFailed": {
         "message": "截图失败"
+    },
+    "imageCopied": {
+        "message": "图片已复制到剪贴板"
+    },
+    "imageCopyFailed": {
+        "message": "复制图片到剪贴板失败"
     }
 }

@@ -21,6 +21,19 @@ document.addEventListener('deepshare:saveAsImage', async () => {
             link.download = `deepseek-chat-${timestamp}.png`;
             link.click();
             window.showToastNotification(chrome.i18n.getMessage('screenshotSuccess'), 'success');
+
+            try {
+                const blob = await (await fetch(dataUrl)).blob();
+                await navigator.clipboard.write([
+                    new ClipboardItem({
+                        [blob.type]: blob
+                    })
+                ]);
+                window.showToastNotification(chrome.i18n.getMessage('imageCopied'), 'success');
+            } catch (copyError) {
+                console.error('Failed to copy image to clipboard:', copyError);
+                window.showToastNotification(chrome.i18n.getMessage('imageCopyFailed'), 'error');
+            }
         } else {
             // The error is already logged in captureDeepSeekMessages, just show notification
             window.showToastNotification(chrome.i18n.getMessage('screenshotFailed'), 'error');
