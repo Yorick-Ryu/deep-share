@@ -43,6 +43,25 @@ function injectDeepSeekButtons() {
                             });
 
                             buttonContainer.insertBefore(saveAsDocxButton, saveAsImageButton);
+
+                            // Observe the createLinkButton for state changes
+                            const buttonObserver = new MutationObserver(() => {
+                                const isDisabled = createLinkButton.hasAttribute('aria-disabled') && createLinkButton.getAttribute('aria-disabled') === 'true';
+                                
+                                [saveAsImageButton, saveAsDocxButton].forEach(button => {
+                                    if (button) {
+                                        button.disabled = isDisabled;
+                                        button.setAttribute('aria-disabled', isDisabled.toString());
+                                        if (isDisabled) {
+                                            button.classList.add('ds-atom-button--disabled');
+                                        } else {
+                                            button.classList.remove('ds-atom-button--disabled');
+                                        }
+                                    }
+                                });
+                            });
+
+                            buttonObserver.observe(createLinkButton, { attributes: true, attributeFilter: ['aria-disabled', 'class'] });
                         }
                     }
                 }
