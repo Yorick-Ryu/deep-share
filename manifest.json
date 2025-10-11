@@ -55,14 +55,11 @@
                 "lib/dom-to-image.min.js",
                 "lib/katex.min.js",
                 "scripts/notifications.js",
-                "scripts/captureMessages.js",
-                "scripts/getMessages.js",
-                "scripts/injectShare.js",
                 "scripts/copyKatex.js",
                 "scripts/docxConverter.js",
                 "scripts/injectDocxButton.js",
                 "scripts/captureDeepSeek.js",
-                "scripts/main.js"
+                "scripts/saveDeepSeekAsDocx.js"
             ]
         },
         {
