@@ -119,7 +119,7 @@
                 copyBtn.click();
 
                 // Wait for clipboard to be populated
-                await new Promise(resolve => setTimeout(resolve, 300));
+                await new Promise(resolve => setTimeout(resolve, 2000));
 
                 const clipboardContent = await navigator.clipboard.readText();
 
