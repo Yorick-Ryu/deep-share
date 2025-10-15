@@ -49,7 +49,7 @@ function loadSettings(highlightApiKey = false) {
     document.getElementById('hideDefaultWatermark').checked = !!data.hideDefaultWatermark;
 
     // Screenshot method settings
-    const screenshotMethod = data.screenshotMethod || 'html2canvas'; // Default to html2canvas
+    const screenshotMethod = data.screenshotMethod || 'domtoimage'; // Default to dom-to-image
     document.getElementById('methodDomToImage').checked = screenshotMethod === 'domtoimage';
     document.getElementById('methodHtml2Canvas').checked = screenshotMethod === 'html2canvas';
 

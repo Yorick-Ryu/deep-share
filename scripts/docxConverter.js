@@ -198,7 +198,7 @@ async function convertToDocxViaApi(content, serverUrl) {
         const currentLang = chrome.i18n.getUILanguage();
         const language = currentLang.startsWith('zh') ? 'zh' : 'en';
 
-        const requestBody = {
+        const body = {
             content: content,
             filename: generateFilename(content),
             convert_mermaid: settings.convertMermaid,
@@ -219,7 +219,7 @@ async function convertToDocxViaApi(content, serverUrl) {
                 'Content-Type': 'application/json',
                 'X-API-Key': apiKey
             },
-            body: JSON.stringify(requestBody)
+            body: JSON.stringify(body)
         });
 
         if (result.error) {

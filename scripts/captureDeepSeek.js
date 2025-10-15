@@ -158,45 +158,45 @@ async function captureDeepSeekMessages(customWatermark) {
         console.debug(screenshotMethod)
 
         // 根据设置选择截图方法
-        if (screenshotMethod === 'domtoimage' && typeof domtoimage !== 'undefined') {
+        if (screenshotMethod === 'html2canvas' && typeof html2canvas !== 'undefined') {
             try {
-                dataUrl = await domtoimage.toPng(container, {
-                    bgcolor: backgroundColor,
-                    style: {
-                        'margin': '0',
-                        'transform': 'none'
-                    },
-                    filter: (node) => {
-                        // 过滤掉不需要的元素
-                        return !(node.classList &&
-                            (node.classList.contains('fab07e97') ||
-                                node.classList.contains('ds-checkbox-wrapper')));
-                    },
-                    skipAutoScale: true
+                const canvas = await html2canvas(container, {
+                    backgroundColor: backgroundColor,
+                    useCORS: true,
+                    scale: window.devicePixelRatio,
+                    allowTaint: true,
+                    ignoreElements: (element) => {
+                        return element.classList.contains('fab07e97') ||
+                            element.classList.contains('ds-checkbox-wrapper');
+                    }
                 });
+                dataUrl = canvas.toDataURL('image/png');
             } catch (e) {
-                console.error('dom-to-image failed, falling back to html2canvas', e);
-                // Fallback to html2canvas if dom-to-image fails
+                console.error('html2canvas failed, falling back to dom-to-image', e);
+                // Fallback to dom-to-image if html2canvas fails
             }
         }
         
-        // 如果 dom-to-image 失败或未选择，则使用 html2canvas
+        // 如果 html2canvas 失败或未选择，则使用 dom-to-image
         if (!dataUrl) {
-            if (typeof html2canvas === 'undefined') {
-                throw new Error('html2canvas not loaded');
+            if (typeof domtoimage === 'undefined') {
+                throw new Error('dom-to-image not loaded');
             }
             
-            const canvas = await html2canvas(container, {
-                backgroundColor: backgroundColor,
-                useCORS: true,
-                scale: window.devicePixelRatio,
-                allowTaint: true,
-                ignoreElements: (element) => {
-                    return element.classList.contains('fab07e97') ||
-                        element.classList.contains('ds-checkbox-wrapper');
-                }
+            dataUrl = await domtoimage.toPng(container, {
+                bgcolor: backgroundColor,
+                style: {
+                    'margin': '0',
+                    'transform': 'none'
+                },
+                filter: (node) => {
+                    // 过滤掉不需要的元素
+                    return !(node.classList &&
+                        (node.classList.contains('fab07e97') ||
+                            node.classList.contains('ds-checkbox-wrapper')));
+                },
+                skipAutoScale: true
             });
-            dataUrl = canvas.toDataURL('image/png');
         }
         
 
