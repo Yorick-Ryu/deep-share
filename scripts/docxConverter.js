@@ -302,26 +302,25 @@ async function checkQuota() {
 
 // Helper function to generate a filename based on the clipboard content
 function generateFilename(content) {
-    // Helper function to get China time zone timestamp
-    function getChinaTimestamp() {
+    // Helper function to get local time zone timestamp
+    function getLocalTimestamp() {
         const now = new Date();
-        // Format date in China timezone (UTC+8)
+        // Format date in local timezone
         const options = {
-            timeZone: 'Asia/Shanghai',
             year: 'numeric', month: '2-digit', day: '2-digit',
             hour: '2-digit', minute: '2-digit', second: '2-digit',
             hour12: false
         };
-        const chinaTime = now.toLocaleString('zh-CN', options)
+        const localTime = now.toLocaleString('zh-CN', options)
             .replace(/[\/\s:]/g, '-')
             .replace(',', '');
-        return chinaTime;
+        return localTime;
     }
 
     // Default filename generation
     if (!content || typeof content !== 'string') {
         // Fallback if no valid content
-        const timestamp = getChinaTimestamp();
+        const timestamp = getLocalTimestamp();
         return `document_${timestamp}`;
     }
 
@@ -340,8 +339,8 @@ function generateFilename(content) {
         filename = 'document';
     }
 
-    // Add timestamp with China timezone
-    const timestamp = getChinaTimestamp();
+    // Add timestamp with local timezone
+    const timestamp = getLocalTimestamp();
     return `${filename}_${timestamp}`;
 }
 
