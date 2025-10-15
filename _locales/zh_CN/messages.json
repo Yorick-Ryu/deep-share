@@ -150,7 +150,7 @@
         "message": "购买 API Key? <a href=\"https://ds.rick216.cn/purchase.html\" target=\"_blank\">点击此处</a>"
     },
     "apiKeyMissing": {
-        "message": "请购买或填写API-Key以使用文档转换功能"
+        "message": "请点击拓展图标购买或填写API-Key以使用文档转换功能"
     },
     "manualConversionExplanation": {
         "message": "支持ChatGPT、豆包、元宝等，复制需要转换的对话到Markdown输入框，点击\"转换为文档\"按钮立即下载Word格式，排版精美，支持公式！"
