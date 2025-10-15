@@ -104,7 +104,20 @@ async function convertToDocx(message, sourceButton) {
             window.dismissToastNotification(convertingNotificationId);
         }
 
-        window.showToastNotification(error.message, 'error');
+        // Check if it's an API key related error
+        let errorMessage = error.message;
+        if (error.message && (
+            error.message.includes('Failed to read') || 
+            error.message.includes('headers') || 
+            error.message.includes('ISO-8859-1') ||
+            error.message.includes('401') ||
+            error.message.includes('403') ||
+            error.message.includes('Unauthorized')
+        )) {
+            errorMessage = chrome.i18n.getMessage('apiKeyError') || 'API-KEY填写错误，请联系客服微信：yorick_cn';
+        }
+
+        window.showToastNotification(errorMessage, 'error');
     } finally {
         // Re-enable the DOCX button if provided
         if (sourceButton && sourceButton instanceof Element) {

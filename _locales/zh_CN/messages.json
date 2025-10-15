@@ -250,5 +250,8 @@
     },
     "imageCopyFailed": {
         "message": "复制图片到剪贴板失败"
+    },
+    "apiKeyError": {
+        "message": "API-KEY填写错误，请查看邮件或联系客服微信：yorick_cn"
     }
 }
