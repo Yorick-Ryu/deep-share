@@ -2,7 +2,7 @@
 
 # Read extension name and version from manifest.json
 name=$(grep '"name"' manifest.json | head -n 1 | cut -d '"' -f 4 | sed 's/__MSG_extensionName__//g')
-name="DeepShare"
+name="DeepShare-Firefox"
 version=$(grep '"version"' manifest.json | head -n 1 | cut -d '"' -f 4)
 zip_file="${name}-${version}.zip"
 build_dir="build"
