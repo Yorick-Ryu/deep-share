@@ -3,11 +3,11 @@
  * Injects a DOCX conversion button into the ChatGPT interface.
  */
 
-(function() {
+(function () {
     'use strict';
 
     let lastUrl = location.href;
-    console.log('DeepShare: Initializing DOCX button injection for ChatGPT');
+    console.debug('DeepShare: Initializing DOCX button injection for ChatGPT');
 
     function findAndInjectButtons() {
         // More specific selector for the button group
@@ -28,7 +28,7 @@
         // Also check if URL has changed for SPA navigation
         const currentUrl = location.href;
         if (currentUrl !== lastUrl) {
-            console.log(`DeepShare: URL changed to ${currentUrl}. Re-checking for buttons.`);
+            console.debug(`DeepShare: URL changed to ${currentUrl}. Re-checking for buttons.`);
             lastUrl = currentUrl;
             // A small delay can help ensure the new content is loaded
             setTimeout(findAndInjectButtons, 500);
@@ -48,10 +48,10 @@
         const docxButton = document.createElement('button');
         docxButton.className = 'text-token-text-secondary hover:bg-token-bg-secondary rounded-lg deepshare-docx-btn';
         docxButton.setAttribute('aria-label', chrome.i18n.getMessage('docxButton') || 'Save as Word document');
-        
+
         const span = document.createElement('span');
         span.className = 'touch:w-10 flex h-8 w-8 items-center justify-center';
-        
+
         // Re-use the SVG from injectDocxButton.js for style consistency
         span.innerHTML = `
             <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 20px; height: 20px;">
@@ -105,26 +105,25 @@
             const sourceButton = e.currentTarget;
 
             try {
-                // The copy button in ChatGPT might have a confirmation state.
-                // We'll look for the "Copy" label to be sure.
-                if (copyBtn.getAttribute('aria-label').includes(chrome.i18n.getMessage('copyButton')) || copyBtn.getAttribute('aria-label').includes('Copy')) {
-                    copyBtn.click();
-                } else {
-                    // It may already be in a "Copied" state, so we might not need to click.
-                    // Or we find the original button if the state changes the element.
-                    // For now, let's assume clicking it again won't hurt.
-                    copyBtn.click();
+                // Find the message content container
+                const messageContainer = docxButton.closest('.agent-turn');
+
+                if (!messageContainer) {
+                    console.error('DeepShare: Could not find message container (.agent-turn)');
+                    throw new Error('Could not find message container');
                 }
 
-                await new Promise(resolve => setTimeout(resolve, 150));
+                console.debug('DeepShare: Found message container');
 
-                const clipboardContent = await navigator.clipboard.readText();
 
-                if (clipboardContent) {
-                    console.log('Successfully read AI response from clipboard for ChatGPT.');
+                // Extract content with proper formula handling
+                let content = extractContentWithFormulas(messageContainer);
+
+                if (content) {
+                    console.debug('Successfully extracted AI response from ChatGPT DOM.');
                     const conversationData = {
                         role: 'assistant',
-                        content: clipboardContent,
+                        content: content,
                     };
 
                     const event = new CustomEvent('deepshare:convertToDocx', {
@@ -143,4 +142,244 @@
             }
         });
     }
-})(); 
+
+    /**
+     * Extract content from ChatGPT message with proper formula conversion
+     * Converts KaTeX formulas to standard Markdown format
+     */
+    function extractContentWithFormulas(container) {
+        const markdownDiv = container.querySelector('.markdown');
+        if (!markdownDiv) return '';
+
+        let result = '';
+
+        // Process all child nodes
+        const processNode = (node) => {
+            // Skip citation pills and other metadata elements
+            if (node.nodeType === Node.ELEMENT_NODE) {
+                if (node.hasAttribute('data-testid') && node.getAttribute('data-testid') === 'webpage-citation-pill') {
+                    return;
+                }
+                // Skip other common ChatGPT UI elements
+                if (node.classList && (
+                    node.classList.contains('citation-pill') ||
+                    node.classList.contains('browse-link')
+                )) {
+                    return;
+                }
+            }
+
+            // Handle display formulas (block level)
+            if (node.classList && node.classList.contains('katex-display')) {
+                const mathML = node.querySelector('annotation[encoding="application/x-tex"]');
+                if (mathML) {
+                    result += '\n$$\n' + mathML.textContent.trim() + '\n$$\n';
+                }
+                return;
+            }
+
+            // Handle inline formulas
+            if (node.classList && node.classList.contains('katex') && !node.closest('.katex-display')) {
+                const mathML = node.querySelector('annotation[encoding="application/x-tex"]');
+                if (mathML) {
+                    result += '$' + mathML.textContent.trim() + '$';
+                }
+                return;
+            }
+
+            // Handle headings
+            if (node.tagName && /^H[1-6]$/.test(node.tagName)) {
+                const level = node.tagName[1];
+                const headingMark = '#'.repeat(parseInt(level));
+                result += '\n' + headingMark + ' ';
+                node.childNodes.forEach(processNode);
+                result += '\n\n';
+                return;
+            }
+
+            // Handle paragraphs
+            if (node.tagName === 'P') {
+                node.childNodes.forEach(processNode);
+                result += '\n\n';
+                return;
+            }
+
+            // Handle line breaks
+            if (node.tagName === 'BR') {
+                result += '\n';
+                return;
+            }
+
+            // Handle horizontal rules
+            if (node.tagName === 'HR') {
+                result += '\n---\n\n';
+                return;
+            }
+
+            // Handle blockquotes
+            if (node.tagName === 'BLOCKQUOTE') {
+                const lines = [];
+                const tempResult = result;
+                result = '';
+                node.childNodes.forEach(processNode);
+                const quoteContent = result;
+                result = tempResult;
+                
+                // Split by lines and add > prefix
+                quoteContent.split('\n').forEach(line => {
+                    if (line.trim()) {
+                        lines.push('> ' + line.trim());
+                    }
+                });
+                result += '\n' + lines.join('\n') + '\n\n';
+                return;
+            }
+
+            // Handle tables
+            if (node.tagName === 'TABLE') {
+                result += '\n';
+                const thead = node.querySelector('thead');
+                const tbody = node.querySelector('tbody');
+
+                // Process header
+                if (thead) {
+                    const headerRow = thead.querySelector('tr');
+                    if (headerRow) {
+                        const headers = Array.from(headerRow.querySelectorAll('th'));
+                        const headerTexts = headers.map(th => {
+                            let text = '';
+                            th.childNodes.forEach(child => {
+                                if (child.nodeType === Node.TEXT_NODE) {
+                                    text += child.textContent;
+                                } else if (child.tagName === 'A') {
+                                    text += child.textContent;
+                                }
+                            });
+                            return text.trim();
+                        });
+                        result += '| ' + headerTexts.join(' | ') + ' |\n';
+                        result += '| ' + headerTexts.map(() => '---').join(' | ') + ' |\n';
+                    }
+                }
+
+                // Process body
+                if (tbody) {
+                    const rows = tbody.querySelectorAll('tr');
+                    rows.forEach(row => {
+                        const cells = Array.from(row.querySelectorAll('td'));
+                        const cellTexts = cells.map(td => {
+                            let text = '';
+                            const processCell = (n) => {
+                                if (n.nodeType === Node.TEXT_NODE) {
+                                    text += n.textContent;
+                                } else if (n.tagName === 'A') {
+                                    text += '[' + n.textContent + '](' + n.href + ')';
+                                } else if (n.tagName === 'CODE') {
+                                    text += '`' + n.textContent + '`';
+                                } else if (n.tagName === 'STRONG') {
+                                    text += '**';
+                                    n.childNodes.forEach(processCell);
+                                    text += '**';
+                                    return;
+                                } else if (n.childNodes) {
+                                    n.childNodes.forEach(processCell);
+                                }
+                            };
+                            td.childNodes.forEach(processCell);
+                            return text.trim();
+                        });
+                        result += '| ' + cellTexts.join(' | ') + ' |\n';
+                    });
+                }
+
+                result += '\n';
+                return;
+            }
+
+            // Handle lists
+            if (node.tagName === 'UL' || node.tagName === 'OL') {
+                const isOrdered = node.tagName === 'OL';
+                let index = 1;
+                node.querySelectorAll(':scope > li').forEach(li => {
+                    const prefix = isOrdered ? `${index}. ` : '* ';
+                    result += prefix;
+                    li.childNodes.forEach(processNode);
+                    result += '\n';
+                    index++;
+                });
+                result += '\n';
+                return;
+            }
+
+            // Handle list items (when not already processed by parent UL/OL)
+            if (node.tagName === 'LI') {
+                node.childNodes.forEach(processNode);
+                return;
+            }
+
+            // Handle strong/bold
+            if (node.tagName === 'STRONG') {
+                result += '**';
+                node.childNodes.forEach(processNode);
+                result += '**';
+                return;
+            }
+
+            // Handle emphasis/italic
+            if (node.tagName === 'EM') {
+                result += '*';
+                node.childNodes.forEach(processNode);
+                result += '*';
+                return;
+            }
+
+            // Handle code blocks
+            if (node.tagName === 'PRE') {
+                const code = node.querySelector('code');
+                if (code) {
+                    const language = code.className.match(/language-(\w+)/)?.[1] || '';
+                    result += '\n```' + language + '\n';
+                    result += code.textContent;
+                    result += '\n```\n\n';
+                }
+                return;
+            }
+
+            // Handle inline code
+            if (node.tagName === 'CODE' && !node.closest('pre')) {
+                result += '`' + node.textContent + '`';
+                return;
+            }
+
+            // Handle links
+            if (node.tagName === 'A') {
+                const href = node.getAttribute('href');
+                const text = node.textContent;
+                if (href && href !== text) {
+                    result += '[' + text + '](' + href + ')';
+                } else {
+                    result += text;
+                }
+                return;
+            }
+
+            // Handle text nodes
+            if (node.nodeType === Node.TEXT_NODE) {
+                result += node.textContent;
+                return;
+            }
+
+            // Handle other elements with children
+            if (node.childNodes && node.childNodes.length > 0) {
+                node.childNodes.forEach(processNode);
+            }
+        };
+
+        markdownDiv.childNodes.forEach(processNode);
+
+        // Clean up excessive newlines
+        result = result.replace(/\n{3,}/g, '\n\n').trim();
+
+        return result;
+    }
+})();

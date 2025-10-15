@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "default_locale": "en",
     "name": "__MSG_extensionName__",
-    "version": "1.1.3",
+    "version": "1.1.7",
     "description": "__MSG_extensionDescription__",
     "icons": {
         "16": "icons/icon16.png",
@@ -36,7 +36,8 @@
         "https://bot.n.cn/chat/*",
         "https://chat.yixiaai.com/chat/?*",
         "https://www.wanzhi.com/chat/*",
-        "https://www.zhihu.com/*"
+        "https://www.zhihu.com/*",
+        "https://gemini.google.com/*"
     ],
     "background": {
         "scripts": ["background.js"]
@@ -54,13 +55,12 @@
                 "lib/dom-to-image.min.js",
                 "lib/katex.min.js",
                 "scripts/notifications.js",
-                "scripts/captureMessages.js",
-                "scripts/getMessages.js",
-                "scripts/injectShare.js",
                 "scripts/copyKatex.js",
                 "scripts/docxConverter.js",
                 "scripts/injectDocxButton.js",
-                "scripts/main.js"
+                "scripts/captureDeepSeek.js",
+                "scripts/saveDeepSeekAsDocx.js",
+                "scripts/injectDeepSeekButtons.js"
             ]
         },
         {
@@ -128,18 +128,20 @@
                 "scripts/notifications.js",
                 "scripts/copyKatex4Zhihu.js"
             ]
-        }
-    ],
-    "web_accessible_resources": [
+        },
         {
-            "resources": [
-                "lib/html2canvas.min.js",
-                "icons/deepshare-icon.svg",
-                "icons/sponsor-code.png",
-                "popup/popup.css"
-            ],
             "matches": [
-                "https://chat.deepseek.com/*"
+                "https://gemini.google.com/*"
+            ],
+            "css": [
+                "scripts/style.css"
+            ],
+            "js": [
+                "lib/katex.min.js",
+                "scripts/notifications.js",
+                "scripts/copyKatex.js",
+                "scripts/docxConverter.js",
+                "scripts/injectGeminiButton.js"
             ]
         }
     ],

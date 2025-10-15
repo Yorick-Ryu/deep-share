@@ -126,7 +126,7 @@ function loadSettings() {
 // Initialize when DOM is loaded
 function initKatexCopy4Doubao() {
 
-    console.log('DeepShare Formula copy functionality initialized');
+    console.debug('DeepShare Formula copy functionality initialized');
 
     // 首先加载设置
     loadSettings();

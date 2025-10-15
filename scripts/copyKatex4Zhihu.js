@@ -172,7 +172,7 @@ function loadSettings() {
 
 // Initialize when DOM is loaded
 function initKatexCopy4Zhihu() {
-    console.log('DeepShare Formula copy functionality for Zhihu initialized');
+    console.debug('DeepShare Formula copy functionality for Zhihu initialized');
 
     // 首先加载设置
     loadSettings();

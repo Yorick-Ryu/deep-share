@@ -1,0 +1,66 @@
+{
+  "buildCommand": null,
+  "outputDirectory": "docs",
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        }
+      ]
+    },
+    {
+      "source": "/index.html",
+      "headers": [
+        {
+          "key": "Content-Language",
+          "value": "zh-CN"
+        },
+        {
+          "key": "Vary",
+          "value": "Accept-Language"
+        }
+      ]
+    },
+    {
+      "source": "/index-en.html",
+      "headers": [
+        {
+          "key": "Content-Language",
+          "value": "en"
+        },
+        {
+          "key": "Vary",
+          "value": "Accept-Language"
+        }
+      ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "header",
+          "key": "Accept-Language",
+          "value": "(?!.*zh).*"
+        }
+      ],
+      "destination": "/index-en.html",
+      "permanent": false
+    }
+  ]
+}
+

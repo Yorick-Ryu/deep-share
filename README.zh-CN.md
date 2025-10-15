@@ -27,6 +27,7 @@
 |--------|---------|-----------|---------|
 | DeepSeek | ✓ | ✓ | ✓ |
 | ChatGPT | ✓ | ✓ | ✗ |
+| Gemini | ✗ | ✓ | ✗ |
 | 豆包 | ✓ | 手动粘贴 | ✗ |
 | 元宝 | ✗ | 手动粘贴 | ✗ |
 | Kimi | ✗ | 手动粘贴 | ✗ |
@@ -48,9 +49,10 @@
 
 ## 安装方式
 
-1. 从 Edge/Chrome 网上应用商店安装
+1. 从 Edge/Chrome/Firefox 网上应用商店安装
    - [Edge 外接程序商店](https://microsoftedge.microsoft.com/addons/detail/deepshare/pdccjnppfegekpnhfljbngammgfbcofm)
    - [Chrome 网上应用商店](https://chromewebstore.google.com/detail/omnaecaamcabmnbjnpjpecoaalfgidop)
+   - [Firefox 附加组件](https://addons.mozilla.org/firefox/addon/deepshare/)
 2. 下载源码本地安装:
    - 下载并解压源码
    - 打开 Edge\Chrome 扩展程序页面

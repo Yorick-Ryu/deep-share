@@ -2,7 +2,7 @@
 
 ### Basic Features
 
-1. Install the extension and navigate to any supported AI platform (DeepSeek, ChatGPT, Cici, Yuanbao)
+1. Install the extension and navigate to any supported AI platform (DeepSeek, ChatGPT, Gemini, Grok)
 2. Test the conversation capture functionality (Only Support DeepSeek)
 3. Verify formula handling by clicking on any mathematical formula to copy its LaTeX code or MathML code
 

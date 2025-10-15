@@ -21,7 +21,7 @@
         "message": "Word"
     },
     "wordExportInfo": {
-        "message": "Click the download or copy button to export only AI responses to a Word document"
+        "message": "Click the download or copy button to export both user questions and AI responses to a Word document"
     },
     "noAiResponses": {
         "message": "No AI responses found"
@@ -232,5 +232,23 @@
     },
     "universalTemplate": {
         "message": "Universal"
+    },
+    "saveAsImageButton": {
+        "message": "Save as Image"
+    },
+    "screenshotInitiated": {
+        "message": "Generating screenshot..."
+    },
+    "screenshotSuccess": {
+        "message": "Screenshot saved"
+    },
+    "screenshotFailed": {
+        "message": "Screenshot failed, try refreshing?"
+    },
+    "imageCopied": {
+        "message": "Image copied to clipboard"
+    },
+    "imageCopyFailed": {
+        "message": "Failed to copy image to clipboard"
     }
 }

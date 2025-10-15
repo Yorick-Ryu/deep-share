@@ -21,7 +21,7 @@
         "message": "Word"
     },
     "wordExportInfo": {
-        "message": "点击下载或复制按钮将仅导出AI回答内容为Word文档"
+        "message": "点击下载或复制按钮将导出用户问题和AI回答内容为Word文档"
     },
     "noAiResponses": {
         "message": "没有找到AI回答内容"
@@ -232,5 +232,23 @@
     },
     "universalTemplate": {
         "message": "通用"
+    },
+    "saveAsImageButton": {
+        "message": "保存长图"
+    },
+    "screenshotInitiated": {
+        "message": "正在生成截图..."
+    },
+    "screenshotSuccess": {
+        "message": "截图已保存"
+    },
+    "screenshotFailed": {
+        "message": "截图失败，刷新一下试试？"
+    },
+    "imageCopied": {
+        "message": "图片已复制到剪贴板"
+    },
+    "imageCopyFailed": {
+        "message": "复制图片到剪贴板失败"
     }
 }
