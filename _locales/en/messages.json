@@ -147,7 +147,7 @@
         "message": "Your Conversion Quota"
     },
     "apiKeyHint": {
-        "message": "Purchase API Key? <a href=\"https://ds.rick216.cn/purchase-en.html\" target=\"_blank\">Click here</a>"
+        "message": "Purchase API Key? <a href=\"https://ds.rick216.cn/purchase-en\" target=\"_blank\">Click here</a>"
     },
     "apiKeyMissing": {
         "message": "Please purchase or enter an API Key to use the document conversion feature"
