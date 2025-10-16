@@ -31,6 +31,6 @@ document.addEventListener('DOMContentLoaded', () => {
         dot.addEventListener('click', () => updateSlide(index));
     });
 
-    // Auto advance slides every 5 seconds
-    setInterval(nextSlide, 5000);
+    // Auto advance slides every 3 seconds
+    setInterval(nextSlide, 3000);
 });
