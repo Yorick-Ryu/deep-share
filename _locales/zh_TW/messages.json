@@ -1,9 +1,9 @@
 {
     "extensionName": {
-        "message": "DeepShare：AI對話分享與匯出"
+        "message": "DeepShare：AI對話轉Word檔案"
     },
     "extensionDescription": {
-        "message": "一鍵複製DeepSeek、ChatGPT、豆包等AI對話的公式，匯出排版精美的Word文件，支援DeepSeek長對話截圖分享。"
+        "message": "一鍵將DeepSeek、ChatGPT、Gemini、Grok等AI對話匯出為Word文件、複製公式；DeepSeek對話長截圖分享。"
     },
     "shareButton": {
         "message": "分享對話"

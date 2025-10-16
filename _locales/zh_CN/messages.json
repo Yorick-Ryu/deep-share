@@ -1,9 +1,9 @@
 {
     "extensionName": {
-        "message": "DeepShare：AI对话分享与导出"
+        "message": "DeepShare：DeepSeek转Word"
     },
     "extensionDescription": {
-        "message": "一键复制DeepSeek、ChatGPT、豆包等AI对话的公式，导出排版精美的Word文档，支持DeepSeek长对话截图分享。"
+        "message": "一键将DeepSeek、ChatGPT、Gemini、豆包等AI对话导出为Word文档、复制公式；DeepSeek对话长截图分享。"
     },
     "shareButton": {
         "message": "分享对话"

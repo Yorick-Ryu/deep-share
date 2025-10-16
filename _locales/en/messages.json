@@ -1,9 +1,9 @@
 {
     "extensionName": {
-        "message": "DeepShare: AI Chat Share & Export"
+        "message": "DeepShare: Export AI Chats as Word Files"
     },
     "extensionDescription": {
-        "message": "Copy formulas from AI chats (DeepSeek, ChatGPT, etc.), export to Word, and take long conversation screenshots on DeepSeek."
+        "message": "Export AI Chats from DeepSeek, ChatGPT, Gemini, Grok, etc. to Word documents with one click, copy formulas; take long screenshots of DeepSeek conversations for sharing."
     },
     "shareButton": {
         "message": "Share Conversation"
