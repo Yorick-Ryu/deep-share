@@ -153,7 +153,7 @@
         "message": "請點擊拓展圖標購買或填寫API-Key以使用文件轉換功能"
     },
     "manualConversionExplanation": {
-        "message": "支援ChatGPT、豆包、元寶等，複製需要轉換的對話到Markdown輸入框，點擊「轉換為文件」按鈕立即下載Word格式，排版精美，支援公式！"
+        "message": "支援ChatGPT、豆包、Claude等，複製需要轉換的對話到Markdown輸入框，點擊「轉換為文件」按鈕立即下載Word格式，排版精美，支援公式！"
     },
     "manualConversionTitle": {
         "message": "手動轉換文件"

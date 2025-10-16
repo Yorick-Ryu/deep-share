@@ -153,7 +153,7 @@
         "message": "Please click the extension icon to purchase or enter an API Key to use the document conversion"
     },
     "manualConversionExplanation": {
-        "message": "Supports ChatGPT, Cici, Yuanbao, etc. Copy your conversation to the Markdown input box, click \"Convert to Document\" to download a beautifully formatted Word document with formula support!"
+        "message": "Supports Grok, Claude, Meta AI, etc. Copy your conversation to the Markdown input box, click \"Convert to Document\" to download a beautifully formatted Word document with formula support!"
     },
     "manualConversionTitle": {
         "message": "Paste AI Chat"
