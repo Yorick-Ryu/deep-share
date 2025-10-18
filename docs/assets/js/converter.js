@@ -9,6 +9,7 @@ const i18n = {
   zh: {
     emptyMarkdownError: '请输入Markdown文本',
     apiKeyMissing: '请购买或填写API-Key以使用文档转换功能',
+    apiKeyInvalid: 'API Key输入错误',
     converting: '正在转换...',
     conversionSuccess: '转换成功!',
     conversionFailed: '转换失败',
@@ -27,6 +28,7 @@ const i18n = {
   en: {
     emptyMarkdownError: 'Please enter Markdown text',
     apiKeyMissing: 'Please purchase or enter an API Key to use the document conversion feature',
+    apiKeyInvalid: 'Invalid API Key',
     converting: 'Converting...',
     conversionSuccess: 'Conversion successful!',
     conversionFailed: 'Conversion failed',
@@ -50,6 +52,86 @@ const t = (key, ...args) => {
   const text = i18n[lang]?.[key] || i18n.zh[key];
   return typeof text === 'function' ? text(...args) : text;
 };
+
+// Notification system
+function showNotification(message, type = 'error') {
+  // Remove existing notification if any
+  const existingNotification = document.querySelector('.notification');
+  if (existingNotification) {
+    existingNotification.remove();
+  }
+
+  // Create notification element
+  const notification = document.createElement('div');
+  notification.className = `notification ${type}`;
+  
+  // Create icon based on type
+  let iconSVG = '';
+  if (type === 'error') {
+    iconSVG = `
+      <svg class="notification-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="15" y1="9" x2="9" y2="15"></line>
+        <line x1="9" y1="9" x2="15" y2="15"></line>
+      </svg>
+    `;
+  } else if (type === 'success') {
+    iconSVG = `
+      <svg class="notification-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+      </svg>
+    `;
+  } else if (type === 'warning') {
+    iconSVG = `
+      <svg class="notification-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+        <line x1="12" y1="9" x2="12" y2="13"></line>
+        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+      </svg>
+    `;
+  }
+
+  notification.innerHTML = `
+    ${iconSVG}
+    <span class="notification-text">${message}</span>
+    <button class="notification-close" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+  `;
+
+  // Append to body
+  document.body.appendChild(notification);
+
+  // Trigger animation
+  setTimeout(() => {
+    notification.classList.add('show');
+  }, 10);
+
+  // Auto dismiss after 4 seconds
+  const dismissTimeout = setTimeout(() => {
+    dismissNotification(notification);
+  }, 4000);
+
+  // Close button handler
+  const closeBtn = notification.querySelector('.notification-close');
+  closeBtn.addEventListener('click', () => {
+    clearTimeout(dismissTimeout);
+    dismissNotification(notification);
+  });
+}
+
+function dismissNotification(notification) {
+  notification.classList.remove('show');
+  setTimeout(() => {
+    if (notification.parentNode) {
+      notification.parentNode.removeChild(notification);
+    }
+  }, 300);
+}
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', () => {
@@ -356,7 +438,13 @@ function setupManualConversion() {
 
     // Validate input
     if (!markdownText) {
-      alert(t('emptyMarkdownError'));
+      showNotification(t('emptyMarkdownError'), 'warning');
+      
+      // Focus on markdown input
+      setTimeout(() => {
+        markdownInput.focus();
+      }, 100);
+      
       return;
     }
 
@@ -367,7 +455,7 @@ function setupManualConversion() {
 
     // Check if API key is provided
     if (!docxApiKey || docxApiKey.trim() === '') {
-      alert(t('apiKeyMissing'));
+      showNotification(t('apiKeyMissing'), 'error');
 
       // Highlight and focus on the API key input
       const apiKeyInput = document.getElementById('docxApiKey');
@@ -416,20 +504,55 @@ function setupManualConversion() {
     } catch (error) {
       // Show error message
       console.error('Conversion error:', error);
-      convertBtn.innerHTML = `
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="10"></circle>
-          <line x1="15" y1="9" x2="9" y2="15"></line>
-          <line x1="9" y1="9" x2="15" y2="15"></line>
-        </svg>
-        <span>${error.message || t('conversionFailed')}</span>
-      `;
+      
+      // Check if it's a 401 error (invalid API key)
+      if (error.status === 401) {
+        convertBtn.innerHTML = `
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="15" y1="9" x2="9" y2="15"></line>
+            <line x1="9" y1="9" x2="15" y2="15"></line>
+          </svg>
+          <span>${t('apiKeyInvalid')}</span>
+        `;
+        
+        // Highlight and focus on the API key input
+        const apiKeyInput = document.getElementById('docxApiKey');
+        apiKeyInput.classList.add('highlight-required');
+        
+        setTimeout(() => {
+          apiKeyInput.focus();
+          apiKeyInput.select(); // Select all text for easy replacement
 
-      // After a timeout, restore the original button
-      setTimeout(() => {
-        convertBtn.disabled = false;
-        convertBtn.innerHTML = originalButtonHTML;
-      }, 3000);
+          // Remove highlight when user starts typing
+          apiKeyInput.addEventListener('input', function onInput() {
+            apiKeyInput.classList.remove('highlight-required');
+            apiKeyInput.removeEventListener('input', onInput);
+          });
+        }, 100);
+
+        // After a longer timeout, restore the original button
+        setTimeout(() => {
+          convertBtn.disabled = false;
+          convertBtn.innerHTML = originalButtonHTML;
+        }, 4000);
+      } else {
+        // Other errors
+        convertBtn.innerHTML = `
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="15" y1="9" x2="9" y2="15"></line>
+            <line x1="9" y1="9" x2="15" y2="15"></line>
+          </svg>
+          <span>${error.message || t('conversionFailed')}</span>
+        `;
+
+        // After a timeout, restore the original button
+        setTimeout(() => {
+          convertBtn.disabled = false;
+          convertBtn.innerHTML = originalButtonHTML;
+        }, 3000);
+      }
     }
   });
 
@@ -487,7 +610,10 @@ async function convertMarkdownToDocx(markdownText, apiKey, convertMermaid = fals
 
     if (!response.ok) {
       const errorText = await response.text();
-      throw new Error(`API错误: ${response.status} ${errorText}`);
+      // Create error with status code
+      const error = new Error(`API错误: ${response.status} ${errorText}`);
+      error.status = response.status;
+      throw error;
     }
 
     // Download the file

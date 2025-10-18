@@ -1,3 +1,96 @@
+/* Notification styles */
+.notification {
+    position: fixed;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-100px);
+    max-width: 500px;
+    width: 90%;
+    padding: 1rem 1.25rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    z-index: 10000;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.notification.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+
+.notification.error {
+    border-left: 4px solid #f44336;
+}
+
+.notification.success {
+    border-left: 4px solid #4caf50;
+}
+
+.notification.warning {
+    border-left: 4px solid #ff9800;
+}
+
+.notification-icon {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+}
+
+.notification.error .notification-icon {
+    color: #f44336;
+}
+
+.notification.success .notification-icon {
+    color: #4caf50;
+}
+
+.notification.warning .notification-icon {
+    color: #ff9800;
+}
+
+.notification-text {
+    flex: 1;
+    color: var(--text-color);
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+.notification-close {
+    width: 20px;
+    height: 20px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-secondary);
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.notification-close:hover {
+    background: rgba(0, 0, 0, 0.05);
+    color: var(--text-color);
+}
+
+@media (prefers-color-scheme: dark) {
+    .notification {
+        background: var(--card-bg);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .notification-close:hover {
+        background: rgba(255, 255, 255, 0.1);
+    }
+}
+
 /* Banner styles */
 .banner {
     background: linear-gradient(135deg, rgba(77, 107, 254, 0.1) 0%, rgba(77, 107, 254, 0.05) 100%);
