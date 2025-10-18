@@ -157,11 +157,13 @@ function loadSettings() {
     const settings = {
       docxApiKey: localStorage.getItem('docxApiKey') || '',
       convertMermaid: localStorage.getItem('convertMermaid') === 'true',
-      lastUsedTemplate: localStorage.getItem('lastUsedTemplate') || 'templates'
+      lastUsedTemplate: localStorage.getItem('lastUsedTemplate') || 'templates',
+      markdownText: localStorage.getItem('markdownText') || ''
     };
 
     document.getElementById('docxApiKey').value = settings.docxApiKey;
     document.getElementById('convertMermaid').checked = settings.convertMermaid;
+    document.getElementById('markdownInput').value = settings.markdownText;
 
     // If API key is set, check quota
     if (settings.docxApiKey) {
@@ -178,12 +180,14 @@ function saveSettings() {
     const settings = {
       docxApiKey: document.getElementById('docxApiKey').value,
       convertMermaid: document.getElementById('convertMermaid').checked,
-      lastUsedTemplate: document.getElementById('wordTemplateSelect').value
+      lastUsedTemplate: document.getElementById('wordTemplateSelect').value,
+      markdownText: document.getElementById('markdownInput').value
     };
 
     localStorage.setItem('docxApiKey', settings.docxApiKey);
     localStorage.setItem('convertMermaid', settings.convertMermaid);
     localStorage.setItem('lastUsedTemplate', settings.lastUsedTemplate);
+    localStorage.setItem('markdownText', settings.markdownText);
 
     console.log('Settings saved');
 
@@ -211,6 +215,10 @@ function setupAutoSave() {
       input.addEventListener('input', debounce(saveSettings, 500));
     }
   });
+
+  // Auto-save markdown input with debounce
+  const markdownInput = document.getElementById('markdownInput');
+  markdownInput.addEventListener('input', debounce(saveSettings, 1000));
 }
 
 // Debounce function
@@ -559,6 +567,8 @@ function setupManualConversion() {
   // Clear button click handler
   clearBtn.addEventListener('click', () => {
     markdownInput.value = '';
+    // Save the cleared state
+    saveSettings();
   });
 }
 
