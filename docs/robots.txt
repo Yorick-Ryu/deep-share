@@ -1,0 +1,11 @@
+# robots.txt for ds.rick216.cn
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://ds.rick216.cn/sitemap.xml
+
+# Crawl-delay for politeness
+Crawl-delay: 1
+

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+    
+    <!-- Index Pages -->
+    <url>
+        <loc>https://ds.rick216.cn/</loc>
+        <xhtml:link rel="alternate" hreflang="zh-CN" href="https://ds.rick216.cn/" />
+        <xhtml:link rel="alternate" hreflang="en" href="https://ds.rick216.cn/index-en.html" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://ds.rick216.cn/index-en.html" />
+        <lastmod>2025-10-18</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>1.0</priority>
+    </url>
+    
+    <url>
+        <loc>https://ds.rick216.cn/index-en.html</loc>
+        <xhtml:link rel="alternate" hreflang="zh-CN" href="https://ds.rick216.cn/" />
+        <xhtml:link rel="alternate" hreflang="en" href="https://ds.rick216.cn/index-en.html" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://ds.rick216.cn/index-en.html" />
+        <lastmod>2025-10-18</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>1.0</priority>
+    </url>
+    
+    <!-- Converter Pages -->
+    <url>
+        <loc>https://ds.rick216.cn/converter.html</loc>
+        <xhtml:link rel="alternate" hreflang="zh-CN" href="https://ds.rick216.cn/converter.html" />
+        <xhtml:link rel="alternate" hreflang="en" href="https://ds.rick216.cn/converter-en.html" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://ds.rick216.cn/converter-en.html" />
+        <lastmod>2025-10-18</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+    
+    <url>
+        <loc>https://ds.rick216.cn/converter-en.html</loc>
+        <xhtml:link rel="alternate" hreflang="zh-CN" href="https://ds.rick216.cn/converter.html" />
+        <xhtml:link rel="alternate" hreflang="en" href="https://ds.rick216.cn/converter-en.html" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://ds.rick216.cn/converter-en.html" />
+        <lastmod>2025-10-18</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+    
+    <!-- Purchase Pages -->
+    <url>
+        <loc>https://ds.rick216.cn/purchase.html</loc>
+        <xhtml:link rel="alternate" hreflang="zh-CN" href="https://ds.rick216.cn/purchase.html" />
+        <xhtml:link rel="alternate" hreflang="en" href="https://ds.rick216.cn/purchase-en.html" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://ds.rick216.cn/purchase-en.html" />
+        <lastmod>2025-10-18</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    <url>
+        <loc>https://ds.rick216.cn/purchase-en.html</loc>
+        <xhtml:link rel="alternate" hreflang="zh-CN" href="https://ds.rick216.cn/purchase.html" />
+        <xhtml:link rel="alternate" hreflang="en" href="https://ds.rick216.cn/purchase-en.html" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://ds.rick216.cn/purchase-en.html" />
+        <lastmod>2025-10-18</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    <!-- Renew Page -->
+    <url>
+        <loc>https://ds.rick216.cn/renew.html</loc>
+        <xhtml:link rel="alternate" hreflang="zh-CN" href="https://ds.rick216.cn/renew.html" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://ds.rick216.cn/renew.html" />
+        <lastmod>2025-10-18</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    
+    <!-- Privacy Pages -->
+    <url>
+        <loc>https://ds.rick216.cn/privacy.html</loc>
+        <xhtml:link rel="alternate" hreflang="zh-CN" href="https://ds.rick216.cn/privacy.html" />
+        <xhtml:link rel="alternate" hreflang="en" href="https://ds.rick216.cn/privacy-en.html" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://ds.rick216.cn/privacy-en.html" />
+        <lastmod>2025-10-18</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.5</priority>
+    </url>
+    
+    <url>
+        <loc>https://ds.rick216.cn/privacy-en.html</loc>
+        <xhtml:link rel="alternate" hreflang="zh-CN" href="https://ds.rick216.cn/privacy.html" />
+        <xhtml:link rel="alternate" hreflang="en" href="https://ds.rick216.cn/privacy-en.html" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://ds.rick216.cn/privacy-en.html" />
+        <lastmod>2025-10-18</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.5</priority>
+    </url>
+    
+    <!-- Terms Pages -->
+    <url>
+        <loc>https://ds.rick216.cn/terms.html</loc>
+        <xhtml:link rel="alternate" hreflang="zh-CN" href="https://ds.rick216.cn/terms.html" />
+        <xhtml:link rel="alternate" hreflang="en" href="https://ds.rick216.cn/terms-en.html" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://ds.rick216.cn/terms-en.html" />
+        <lastmod>2025-10-18</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.5</priority>
+    </url>
+    
+    <url>
+        <loc>https://ds.rick216.cn/terms-en.html</loc>
+        <xhtml:link rel="alternate" hreflang="zh-CN" href="https://ds.rick216.cn/terms.html" />
+        <xhtml:link rel="alternate" hreflang="en" href="https://ds.rick216.cn/terms-en.html" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://ds.rick216.cn/terms-en.html" />
+        <lastmod>2025-10-18</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.5</priority>
+    </url>
+    
+</urlset>
+
