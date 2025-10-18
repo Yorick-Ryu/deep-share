@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeepSeek转Word - DeepShare</title>
+    
+    <meta name="description" content="DeepShare在线文档转换器 - 将DeepSeek、ChatGPT、豆包等AI对话的Markdown文本转换为精美的Word文档，支持公式和表格。" />
+    <meta name="keywords" content="ChatGPT转Word,DeepSeek转Word,DeepSeek导出Word,Gemini转Word,豆包导出Word,豆包转Word,公式复制,LaTeX,Word导出,在线转换,AI对话导出" />
+    
+    <!-- SEO: Canonical and Language -->
+    <link rel="canonical" href="https://ds.rick216.cn/zh-CN/converter" />
+    <link rel="alternate" hreflang="zh-CN" href="https://ds.rick216.cn/zh-CN/converter" />
+    <link rel="alternate" hreflang="en" href="https://ds.rick216.cn/en/converter" />
+    <link rel="alternate" hreflang="x-default" href="https://ds.rick216.cn/en/converter" />
+    
+    <link rel="icon" type="image/svg+xml" href="../assets/images/deepshare-icon.svg">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/converter.css">
+</head>
+
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <img src="../assets/images/deepshare-icon.svg" alt="DeepShare Logo">
+                <span>DeepShare</span>
+            </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="菜单">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+            <div class="nav-links">
+                <a href="/zh-CN/index">下载浏览器插件</a>
+                <a href="https://github.com/Yorick-Ryu/deep-share" target="_blank" class="github-link">
+                    <svg class="github-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path
+                            d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+                    </svg>
+                    GitHub
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="banner">
+        <div class="banner-content">
+            <svg class="banner-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+            </svg>
+            <span class="banner-text">无需复制粘贴，下载DeepShare浏览器插件一键导出Word文档</span>
+            <a href="/zh-CN/index" class="banner-button">立即下载</a>
+        </div>
+    </div>
+
+    <main>
+        <div class="converter-container">
+            <h1 style="text-align: center; margin-bottom: 1.5rem; font-size: 1.75rem;">DeepSeek转Word</h1>
+
+            <!-- Converter Card -->
+            <div class="converter-card">
+                <h2>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10 9 9 9 8 9"></polyline>
+                    </svg>
+                    转换文档
+                </h2>
+
+                <p class="feature-explanation">
+                    支持DeepSeek、ChatGPT、豆包、元宝等AI平台。复制需要转换的对话到Markdown输入框，点击"转换为文档"按钮立即下载Word格式，排版精美，支持公式、表格！
+                </p>
+
+                <div class="form-group">
+                    <label for="wordTemplateSelect">Word模版</label>
+                    <select id="wordTemplateSelect">
+                        <option value="templates">通用模版</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="markdownInput">Markdown 文本</label>
+                    <textarea id="markdownInput" placeholder="粘贴DeepSeek等AI的回答内容到这里，请使用回答末尾的「❐」按钮复制"></textarea>
+                </div>
+
+                <div class="form-actions">
+                    <button id="convertMarkdownBtn" class="btn btn-primary">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 3v4a1 1 0 0 0 1 1h4"></path>
+                            <path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2z"></path>
+                            <line x1="9" y1="9" x2="10" y2="9"></line>
+                            <line x1="9" y1="13" x2="15" y2="13"></line>
+                            <line x1="9" y1="17" x2="15" y2="17"></line>
+                        </svg>
+                        转换为文档
+                    </button>
+                    <button id="clearMarkdownBtn" class="btn btn-secondary">清空</button>
+                </div>
+            </div>
+
+            <!-- Settings Card -->
+            <div class="converter-card">
+                <h2>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"></path>
+                    </svg>
+                    转换设置
+                </h2>
+
+                <p class="feature-explanation">
+                    配置文档转换API，用于将AI对话的Markdown文本转换为排版精美的Word文档。
+                </p>
+
+                <div class="form-group">
+                    <label for="docxApiKey">API Key</label>
+                    <div class="api-key-input-wrapper">
+                        <input type="password" id="docxApiKey" placeholder="your-api-key">
+                        <button type="button" class="toggle-visibility-btn" id="toggleApiKeyVisibility" title="显示/隐藏">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                class="eye-icon">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                class="eye-off-icon" style="display: none;">
+                                <path
+                                    d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24">
+                                </path>
+                                <line x1="1" y1="1" x2="23" y2="23"></line>
+                            </svg>
+                        </button>
+                        <button type="button" class="copy-api-key-btn" id="copyApiKey" title="复制">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <span class="form-hint">购买 API Key? <a href="https://ds.rick216.cn/purchase.html" target="_blank">点击此处</a></span>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="convertMermaid">
+                    <label for="convertMermaid">启用Mermaid图表转换</label>
+                </div>
+
+                <!-- Quota information section -->
+                <div class="quota-section" id="quotaSection" style="display: none;">
+                    <div class="quota-info">
+                        <h3>您的转换次数</h3>
+                        <div class="quota-details">
+                            <div class="quota-item">
+                                <span class="quota-label">总计:</span>
+                                <span class="quota-value" id="totalQuota">--</span>
+                            </div>
+                            <div class="quota-item">
+                                <span class="quota-label">已用:</span>
+                                <span class="quota-value" id="usedQuota">--</span>
+                            </div>
+                            <div class="quota-item">
+                                <span class="quota-label">剩余:</span>
+                                <span class="quota-value quota-remaining" id="remainingQuota">--</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="quota-progress-container">
+                        <div class="quota-progress" id="quotaProgress"></div>
+                    </div>
+                    <div class="expiration-info">
+                        <span class="expiration-label">有效期至:</span>
+                        <span class="expiration-value" id="expirationDate">--</span>
+                    </div>
+                    <div class="quota-actions">
+                        <button id="refreshQuota" class="btn btn-secondary">刷新</button>
+                        <a href="https://ds.rick216.cn/purchase.html" target="_blank" class="purchase-link">购买次数</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="https://github.com/Yorick-Ryu/deep-share">GitHub</a>
+                <a href="/zh-CN/privacy">隐私政策</a>
+                <a href="/zh-CN/terms">使用条款</a>
+                <a href="/zh-CN/purchase">购买次数</a>
+            </div>
+            <p class="copyright">© 2025 DeepShare. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Mobile menu toggle -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const navLinks = document.querySelector('.nav-links');
+            
+            if (mobileMenuBtn) {
+                mobileMenuBtn.addEventListener('click', function() {
+                    navLinks.classList.toggle('mobile-active');
+                });
+                
+                // Close menu when clicking outside
+                document.addEventListener('click', function(event) {
+                    if (!event.target.closest('nav')) {
+                        navLinks.classList.remove('mobile-active');
+                    }
+                });
+                
+                // Close menu when clicking a link
+                navLinks.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', function() {
+                        navLinks.classList.remove('mobile-active');
+                    });
+                });
+            }
+        });
+    </script>
+
+    <script src="../assets/js/converter.js"></script>
+</body>
+
+</html>
+

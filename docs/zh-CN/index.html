@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeepShare - AI对话导出Word｜DeepSeek对话截图｜AI公式复制</title>
+    
+    <!-- SEO: Meta Description -->
+    <meta name="description" content="DeepShare - 一键从DeepSeek、ChatGPT、豆包等AI对话导出排版精美的Word文档，复制其中的公式；支持DeepSeek对话长截图。免费开源浏览器插件。" />
+    <meta name="keywords" content="DeepShare,DeepSeek,ChatGPT转Word,DeepSeek转Word,DeepSeek导出Word,Gemini转Word,豆包导出Word,公式复制,LaTeX,Word导出,截图分享,浏览器插件" />
+    <meta name="author" content="DeepShare" />
+    
+    <!-- SEO: Language and Regional Targeting -->
+    <link rel="canonical" href="https://ds.rick216.cn/zh-CN/index" />
+    <link rel="alternate" hreflang="zh-CN" href="https://ds.rick216.cn/zh-CN/index" />
+    <link rel="alternate" hreflang="zh-TW" href="https://ds.rick216.cn/zh-CN/index" />
+    <link rel="alternate" hreflang="en" href="https://ds.rick216.cn/en/index" />
+    <link rel="alternate" hreflang="x-default" href="https://ds.rick216.cn/en/index" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://ds.rick216.cn/zh-CN/index" />
+    <meta property="og:title" content="DeepShare - AI对话导出Word｜DeepSeek对话截图｜AI公式复制" />
+    <meta property="og:description" content="一键从DeepSeek、ChatGPT等AI对话导出排版精美的Word文档，复制其中的公式；支持DeepSeek对话长截图。" />
+    <meta property="og:site_name" content="DeepShare" />
+    <meta property="og:image" content="https://ds.rick216.cn/assets/images/cover.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:locale:alternate" content="en_US" />
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://ds.rick216.cn/zh-CN/index" />
+    <meta name="twitter:title" content="DeepShare - AI对话导出Word｜DeepSeek对话截图｜AI公式复制" />
+    <meta name="twitter:description" content="一键从DeepSeek、ChatGPT等AI对话导出排版精美的Word文档，复制其中的公式；支持DeepSeek对话长截图。" />
+    <meta name="twitter:image" content="https://ds.rick216.cn/assets/images/cover.jpg" />
+    
+    <link rel="icon" type="image/svg+xml" href="../assets/images/deepshare-icon.svg">
+    <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <img src="../assets/images/deepshare-icon.svg" alt="DeepShare Logo">
+                <span>DeepShare</span>
+            </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="菜单">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+            <div class="nav-links">
+                <a href="#features">功能</a>
+                <a href="#install">安装</a>
+                <a href="#usage">使用</a>
+                <a href="/zh-CN/converter">在线转换</a>
+                <a href="https://github.com/Yorick-Ryu/deep-share" target="_blank" class="github-link">
+                    <svg class="github-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path
+                            d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+                    </svg>
+                    GitHub
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="announcement-banner">
+        <div class="announcement-content">
+            <div class="announcement-text">
+                <span class="new-badge">新功能</span>
+                <span>AI对话导出Word文档功能已上线！一键导出为精美排版的Word文档，保留公式和表格！</span>
+            </div>
+            <a href="/zh-CN/purchase" class="announcement-button">立即购买使用</a>
+        </div>
+    </div>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h1>DeepShare</h1>
+                <p>一键从AI对话导出Word文档，复制其中的公式<br>DeepSeek对话长截图</p>
+                <div class="cta-buttons">
+                    <a href="https://microsoftedge.microsoft.com/addons/detail/deepshare/pdccjnppfegekpnhfljbngammgfbcofm" class="cta-button primary">Edge商店安装</a>
+                    <a href="https://chromewebstore.google.com/detail/omnaecaamcabmnbjnpjpecoaalfgidop"
+                        class="cta-button secondary">Chrome商店安装</a>
+                    <a href="https://addons.mozilla.org/firefox/addon/deepshare/" class="cta-button secondary">Firefox商店安装</a>
+                </div>
+                <p class="install-note">⚠️ 安装后请刷新已打开的 AI 对话使插件生效</p>
+            </div>
+            <div class="hero-image">
+                <div class="carousel">
+                    <div class="carousel-container">
+                        <img src="../assets/images/share.png" alt="DeepSeek分享对话" class="carousel-slide">
+                        <img src="../assets/images/copy-formula.png" alt="DeepSeek复制公式" class="carousel-slide">
+                        <img src="../assets/images/save-as-word.png" alt="DeepSeek保存为Word" class="carousel-slide">
+                        <img src="../assets/images/md2docx.png" alt="DeepSeek md2docx" class="carousel-slide">
+                    </div>
+                    <button class="carousel-button prev">&#10094;</button>
+                    <button class="carousel-button next">&#10095;</button>
+                    <div class="carousel-dots">
+                        <span class="dot active"></span>
+                        <span class="dot"></span>
+                        <span class="dot"></span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="features" class="features">
+            <h2>主要功能</h2>
+            <div class="feature-grid">
+                <!-- Add Word document conversion feature -->
+                <div class="feature-card">
+                    <svg class="feature-icon" viewBox="0 0 24 24">
+                        <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
+                        <polyline points="14 2 14 8 20 8" />
+                        <path d="M8 13h8M8 17h8M8 9h1" />
+                    </svg>
+                    <h3>导出为Word文档</h3>
+                    <p>将 AI 回答一键转换为排版精美的Word文档，公式、表格完美保留</p>
+                </div>
+                <div class="feature-card">
+                    <svg class="feature-icon" viewBox="0 0 24 24">
+                        <path d="M19.5 18.75h2.25m-.75-6l-4.5 6m0-6l4.5 6m-5.25 0h1.5m3-6l1.65.015m-6.15-.015h2.13m-6.63 6H13.5m-2.25-3v6m-1.29 0h5.49l.3-.75m-5.625-5.25H15l.75.75M3 20.25h4.5m-2.25-7.5v7.5m-3-5.25l.375-2.25h5.25L8.25 15m6-5.25l3-7.5l3 7.5m-4.5-3h3M13.5 9.75h1.5m4.5 0h1.5m-14.25-7.5v7.5m-1.5-7.5h3m-3 7.5H10.5l.81-1.485"/>
+                    </svg>
+                    <h3>LaTeX公式复制</h3>
+                    <p>点击AI对话中任意数学公式即可复制其LaTeX或MathML代码，轻松粘贴到Word</p>
+                </div>
+                <div class="feature-card">
+                    <svg class="feature-icon" viewBox="0 0 24 24">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12" />
+                    </svg>
+                    <h3>AI对话长截图</h3>
+                    <p>轻松截取完整对话内容，DeepSeek专属功能</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="install" class="install">
+            <h2>安装教程</h2>
+            <div class="install-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <p>从Chrome / Edge / Firefox应用商店安装</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <p>与AI进行对话</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <p>开始使用DeepShare</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="compatibility" class="compatibility">
+            <h2>功能适配</h2>
+            <div class="table-container">
+                <table class="compatibility-table">
+                    <thead>
+                        <tr>
+                            <th>AI平台</th>
+                            <th>公式复制</th>
+                            <th>对话转Word</th>
+                            <th>对话截图</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>DeepSeek</td>
+                            <td><span class="supported">✓</span></td>
+                            <td><span class="supported">✓</span></td>
+                            <td><span class="supported">✓</span></td>
+                        </tr>
+                        <tr>
+                            <td>ChatGPT</td>
+                            <td><span class="supported">✓</span></td>
+                            <td><span class="supported">✓</span></td>
+                            <td><span class="not-supported">✗</span></td>
+                        </tr>
+                        <tr>
+                            <td>Gemini</td>
+                            <td><span class="not-supported">✗</span></td>
+                            <td><span class="supported">✓</span></td>
+                            <td><span class="not-supported">✗</span></td>
+                        </tr>
+                        <tr>
+                            <td>豆包</td>
+                            <td><span class="supported">✓</span></td>
+                            <td><span class="partial">手动粘贴</span></td>
+                            <td><span class="not-supported">✗</span></td>
+                        </tr>
+                        <tr>
+                            <td>元宝</td>
+                            <td><span class="not-supported">✗</span></td>
+                            <td><span class="partial">手动粘贴</span></td>
+                            <td><span class="not-supported">✗</span></td>
+                        </tr>
+                        <tr>
+                            <td>Kimi</td>
+                            <td><span class="not-supported">✗</span></td>
+                            <td><span class="partial">手动粘贴</span></td>
+                            <td><span class="not-supported">✗</span></td>
+                        </tr>
+                        <tr>
+                            <td>Grok</td>
+                            <td><span class="supported">✓</span></td>
+                            <td><span class="partial">手动粘贴</span></td>
+                            <td><span class="not-supported">✗</span></td>
+                        </tr>
+                        <tr>
+                            <td>通义千问</td>
+                            <td><span class="supported">✓</span></td>
+                            <td><span class="partial">手动粘贴</span></td>
+                            <td><span class="not-supported">✗</span></td>
+                        </tr>
+                        <tr>
+                            <td>讯飞星火</td>
+                            <td><span class="supported">✓</span></td>
+                            <td><span class="partial">手动粘贴</span></td>
+                            <td><span class="not-supported">✗</span></td>
+                        </tr>
+                        <tr>
+                            <td>智谱清言</td>
+                            <td><span class="supported">✓</span></td>
+                            <td><span class="partial">手动粘贴</span></td>
+                            <td><span class="not-supported">✗</span></td>
+                        </tr>
+                        <tr>
+                            <td>OpenRouter</td>
+                            <td><span class="supported">✓</span></td>
+                            <td><span class="partial">手动粘贴</span></td>
+                            <td><span class="not-supported">✗</span></td>
+                        </tr>
+                        <tr>
+                            <td>Poe</td>
+                            <td><span class="supported">✓</span></td>
+                            <td><span class="partial">手动粘贴</span></td>
+                            <td><span class="not-supported">✗</span></td>
+                        </tr>
+                        <tr>
+                            <td>Monica</td>
+                            <td><span class="supported">✓</span></td>
+                            <td><span class="partial">手动粘贴</span></td>
+                            <td><span class="not-supported">✗</span></td>
+                        </tr>
+                        <tr>
+                            <td>问小白</td>
+                            <td><span class="supported">✓</span></td>
+                            <td><span class="partial">手动粘贴</span></td>
+                            <td><span class="not-supported">✗</span></td>
+                        </tr>
+                        <tr>
+                            <td>AskManyAI</td>
+                            <td><span class="supported">✓</span></td>
+                            <td><span class="partial">手动粘贴</span></td>
+                            <td><span class="not-supported">✗</span></td>
+                        </tr>
+                        <tr>
+                            <td>万知</td>
+                            <td><span class="supported">✓</span></td>
+                            <td><span class="partial">手动粘贴</span></td>
+                            <td><span class="not-supported">✗</span></td>
+                        </tr>
+                        <tr>
+                            <td>AI智慧岛</td>
+                            <td><span class="supported">✓</span></td>
+                            <td><span class="partial">手动粘贴</span></td>
+                            <td><span class="not-supported">✗</span></td>
+                        </tr>
+                        <tr>
+                            <td>纳米AI</td>
+                            <td><span class="supported">✓</span></td>
+                            <td><span class="partial">手动粘贴</span></td>
+                            <td><span class="not-supported">✗</span></td>
+                        </tr>
+                        <tr>
+                            <td>知乎</td>
+                            <td><span class="supported">✓</span></td>
+                            <td><span class="not-supported">✗</span></td>
+                            <td><span class="not-supported">✗</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="compatibility-note">注：手动粘贴功能表示支持将AI回答的Markdown文本复制到插件中，转换为Word文档。</p>
+        </section>
+
+        <section id="usage" class="usage">
+            <h2>使用演示</h2>
+            <div class="demo-video">
+                <!-- Desktop version -->
+                <iframe class="douyin-desktop" width="1080" height="720" frameborder="0"
+                    src="https://open.douyin.com/player/video?vid=7561334582499478830&autoplay=0"
+                    referrerpolicy="unsafe-url" allowfullscreen>
+                </iframe>
+                <!-- Mobile version -->
+                <iframe class="douyin-mobile" width="405" height="720" frameborder="0"
+                    src="https://open.douyin.com/player/video?vid=7561334582499478830&autoplay=0"
+                    referrerpolicy="unsafe-url" allowfullscreen>
+                </iframe>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="https://github.com/Yorick-Ryu/deep-share">GitHub</a>
+                <a href="/zh-CN/privacy">隐私政策</a>
+                <a href="/zh-CN/terms">使用条款</a>
+                <a href="/zh-CN/purchase">购买次数</a>
+            </div>
+            <p class="copyright">© 2025 DeepShare. All rights reserved.</p>
+        </div>
+    </footer>
+    <script src="../assets/js/carousel.js"></script>
+    
+    <!-- Mobile menu toggle -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const navLinks = document.querySelector('.nav-links');
+            
+            if (mobileMenuBtn) {
+                mobileMenuBtn.addEventListener('click', function() {
+                    navLinks.classList.toggle('mobile-active');
+                });
+                
+                // Close menu when clicking outside
+                document.addEventListener('click', function(event) {
+                    if (!event.target.closest('nav')) {
+                        navLinks.classList.remove('mobile-active');
+                    }
+                });
+                
+                // Close menu when clicking a link
+                navLinks.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', function() {
+                        navLinks.classList.remove('mobile-active');
+                    });
+                });
+            }
+        });
+    </script>
+    
+    <!-- Vercel Web Analytics -->
+    <script>
+        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    </script>
+    <script defer src="/_vercel/insights/script.js"></script>
+</body>
+
+</html>

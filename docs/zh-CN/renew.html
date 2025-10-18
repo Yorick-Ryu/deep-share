@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>续费转换次数 - DeepShare</title>
+    
+    <!-- SEO: Canonical and Language -->
+    <link rel="canonical" href="https://ds.rick216.cn/zh-CN/renew" />
+    <link rel="alternate" hreflang="zh-CN" href="https://ds.rick216.cn/zh-CN/renew" />
+    <link rel="alternate" hreflang="x-default" href="https://ds.rick216.cn/zh-CN/renew" />
+    
+    <link rel="icon" type="image/svg+xml" href="../assets/images/deepshare-icon.svg">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/purchase.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="/zh-CN/index">
+                    <img src="../assets/images/deepshare-icon.svg" alt="DeepShare Logo">
+                    <span>DeepShare</span>
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="content">
+        <h1>续费 Word 文档转换次数</h1>
+        
+        <!-- Add wrapper div for left column elements -->
+        <div class="left-column-wrapper">
+            <!-- Renewal explanation section -->
+            <div class="free-features-section">
+                <h2>如何续费 DeepShare 转换次数</h2>
+                <p>使用您已有的 API Key 续费，无需重新进行插件设置，续费后的次数将直接添加到您的账户中。</p>
+                
+                <div class="free-features-list">
+                    <div class="free-feature-item">直接为已有账户充值</div>
+                    <div class="free-feature-item">无需重新设置插件</div>
+                    <div class="free-feature-item">自动累加转换次数</div>
+                    <div class="free-feature-item">保持原有有效期</div>
+                </div>
+                
+                <div class="paid-feature-explanation">
+                    <p><strong>请输入您的 API Key 进行续费</strong>，充值后将直接添加到您的账户中，原有的次数和有效期不变。</p>
+                </div>
+                
+                <div class="purchase-link-wrapper" style="margin-top: 1rem; text-align: center;">
+                    <a href="/zh-CN/purchase" class="purchase-link" style="color: #4D6BFE; text-decoration: none; font-weight: 500; display: inline-block;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 4px;">
+                            <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                            <path d="M12 11v4"></path>
+                            <path d="M9 13h6"></path>
+                            <path d="M7 7v0"></path>
+                            <path d="M17 7v0"></path>
+                            <path d="M17 17v0"></path>
+                            <path d="M7 17v0"></path>
+                        </svg>
+                        还没有 API Key？前往购买页面
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Add quota checker section -->
+            <div class="quota-checker">
+                <h2>查询剩余次数</h2>
+                <p>在续费前，您可以先查询当前账户的配额情况：</p>
+                
+                <div class="quota-form">
+                    <div class="form-group">
+                        <label for="check-api-key">您的 API Key</label>
+                        <div class="api-key-input-wrapper">
+                            <input type="password" id="check-api-key" placeholder="输入您的 API Key" autocomplete="off">
+                            <button type="button" class="toggle-visibility-btn" id="toggleQuotaApiKeyVisibility" title="显示/隐藏">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="eye-off-icon" style="display: none;">
+                                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                                </svg>
+                            </button>
+                            <button type="button" class="copy-api-key-btn" id="copyQuotaApiKey" title="复制">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <button class="check-quota-btn">查询配额</button>
+                </div>
+                
+                <div id="quota-results" style="display: none;">
+                    <div class="quota-result-card">
+                        <div class="quota-stats">
+                            <div class="quota-stat-item">
+                                <div class="quota-stat-label">总计次数</div>
+                                <div class="quota-stat-value" id="total-quota">-</div>
+                            </div>
+                            <div class="quota-stat-item">
+                                <div class="quota-stat-label">已使用</div>
+                                <div class="quota-stat-value" id="used-quota">-</div>
+                            </div>
+                            <div class="quota-stat-item">
+                                <div class="quota-stat-label">剩余次数</div>
+                                <div class="quota-stat-value highlight" id="remaining-quota">-</div>
+                            </div>
+                        </div>
+                        <div class="quota-progress-wrapper">
+                            <div class="quota-progress-bg">
+                                <div class="quota-progress-fill" id="quota-progress"></div>
+                            </div>
+                        </div>
+                        <div class="quota-expiration">
+                            <div class="quota-expiration-label">有效期至</div>
+                            <div class="quota-expiration-value" id="expiration-date">-</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- FAQ section -->
+            <div class="api-instructions">
+                <h2>常见问题</h2>
+                <div class="faq-card">
+                    <div class="faq-question">续费会影响原有的有效期吗？</div>
+                    <div class="faq-answer">续费成功会修改 API Key 的过期时间为支付成功时间的一年后。</div>
+                </div>
+                <div class="faq-card">
+                    <div class="faq-question">忘记 API Key 了怎么办？</div>
+                    <div class="faq-answer">如果您忘记了 API Key，请通过邮箱联系我们，提供您之前购买时使用的邮箱，我们会协助您找回。</div>
+                </div>
+                <div class="faq-card">
+                    <div class="faq-question">付款后多久到账？</div>
+                    <div class="faq-answer">正常情况下，付款完成后系统会立即为您的账户增加次数。如遇到延迟，请联系我们处理。</div>
+                </div>
+                <div class="faq-card">
+                    <div class="faq-question">有没有私有部署的方案？</div>
+                    <div class="faq-answer">有的，请加微信：<strong>yorick_cn</strong>，备注：<strong>私有ds</strong></div>
+                </div>
+                <div class="faq-card">
+                    <div class="faq-question">遇到其他问题？</div>
+                    <div class="faq-answer">请添加微信：<strong>yorick_cn</strong>，备注：<strong>ds</strong><br>
+                    或发送邮件至：<strong>yoricker@foxmail.com</strong></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="pricing-card">
+            <p class="feature-description">为您的 DeepShare 账户充值，继续享受 Word 文档转换功能！</p>
+            
+            <div class="price-tag">¥0.2 <span class="per-unit">/ 次</span></div>
+
+            <div class="purchase-form">
+                <div class="form-group">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                        <label for="renew-api-key">您的 API Key（用于续费绑定）</label>
+                        <a href="/zh-CN/purchase" class="purchase-link" style="color: #4D6BFE; text-decoration: none; font-size: 0.9rem; white-space: nowrap;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 4px;">
+                                <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                                <path d="M12 11v4"></path>
+                                <path d="M9 13h6"></path>
+                            </svg>
+                            还没有 API Key？前往购买页面
+                        </a>
+                    </div>
+                    <div class="api-key-input-wrapper">
+                        <input type="password" id="renew-api-key" placeholder="输入您的 API Key" required autocomplete="off">
+                        <button type="button" class="toggle-visibility-btn" id="toggleRenewApiKeyVisibility" title="显示/隐藏">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="eye-off-icon" style="display: none;">
+                                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                                <line x1="1" y1="1" x2="23" y2="23"></line>
+                            </svg>
+                        </button>
+                        <button type="button" class="copy-api-key-btn" id="copyRenewApiKey" title="复制">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>选择充值金额</label>
+                    <div class="amount-options">
+                        <div class="amount-option" data-value="1" style="display: none;">
+                            <div class="amount-value">¥1</div>
+                            <div class="conversions">5 次转换</div>
+                            <div class="total-conversions">总计 5 次</div>
+                        </div>
+                        <div class="amount-option" data-value="5">
+                            <div class="discount-badge">6.6折</div>
+                            <div class="amount-value">¥5</div>
+                            <div class="conversions">25 次转换</div>
+                            <div class="bonus">+13 次赠送</div>
+                            <div class="total-conversions">总计 38 次</div>
+                        </div>
+                        <div class="amount-option selected" data-value="10">
+                            <div class="discount-badge">6.3折</div>
+                            <div class="amount-value">¥10</div>
+                            <div class="conversions">50 次转换</div>
+                            <div class="bonus">+30 次赠送</div>
+                            <div class="total-conversions">总计 80 次</div>
+                        </div>
+                        <div class="amount-option" data-value="20">
+                            <div class="discount-badge">5.6折</div>
+                            <div class="amount-value">¥20</div>
+                            <div class="conversions">100 次转换</div>
+                            <div class="bonus">+80 次赠送</div>
+                            <div class="total-conversions">总计 180 次</div>
+                        </div>
+                        <div class="amount-option" data-value="60">
+                            <div class="discount-badge">5.0折</div>
+                            <div class="amount-value">¥60</div>
+                            <div class="conversions">300 次转换</div>
+                            <div class="bonus">+300 次赠送</div>
+                            <div class="total-conversions">总计 600 次</div>
+                        </div>
+                        <div class="amount-option" data-value="100">
+                            <div class="discount-badge">4.5折</div>
+                            <div class="amount-value">¥100</div>
+                            <div class="conversions">500 次转换</div>
+                            <div class="bonus">+600 次赠送</div>
+                            <div class="total-conversions">总计 1100 次</div>
+                        </div>
+                        <div class="amount-option" data-value="200">
+                            <div class="discount-badge">4.0折</div>
+                            <div class="amount-value">¥200</div>
+                            <div class="conversions">1000 次转换</div>
+                            <div class="bonus">+1500 次赠送</div>
+                            <div class="total-conversions">总计 2500 次</div>
+                        </div>
+                        <div class="amount-option" data-value="custom">
+                            <div class="amount-value">自定义</div>
+                            <div class="conversions">金额</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Custom amount input (initially hidden) -->
+                    <div id="custom-amount-container" style="display: none; margin-top: 1rem;">
+                        <label for="custom-amount">输入自定义金额（整数）</label>
+                        <div class="custom-amount-input-group">
+                            <span class="currency-symbol">¥</span>
+                            <input type="number" id="custom-amount" min="1" max="10000" step="1" placeholder="请输入金额（最小 1 元）" autocomplete="off">
+                        </div>
+                        <div id="custom-amount-details" class="custom-amount-details">
+                            <p>充值金额: <span id="custom-amount-value">--</span> 元</p>
+                            <p>可获得 <span id="custom-conversions">--</span> 次转换</p>
+                            <p class="bonus-text" id="custom-bonus-text" style="display: none;">赠送 <span id="custom-bonus">--</span> 次转换</p>
+                            <p>总计获得 <span id="custom-total-conversions">--</span> 次转换</p>
+                            <p id="custom-discount-text" class="discount-text" style="display: none;"></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="purchase-btn">立即续费</button>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="https://github.com/Yorick-Ryu/deep-share">GitHub</a>
+                <a href="/zh-CN/privacy">隐私政策</a>
+                <a href="/zh-CN/terms">使用条款</a>
+                <a href="/zh-CN/purchase">购买次数</a>
+            </div>
+            <p class="copyright">© 2025 DeepShare. All rights reserved.</p>
+        </div>
+    </footer>
+    <script src="../assets/js/renew.js"></script>
+    
+    <!-- Vercel Web Analytics -->
+    <script>
+        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    </script>
+    <script defer src="/_vercel/insights/script.js"></script>
+</body>
+</html>

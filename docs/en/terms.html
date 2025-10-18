@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service - DeepShare</title>
+    
+    <!-- SEO: Canonical and Language -->
+    <link rel="canonical" href="https://ds.rick216.cn/en/terms" />
+    <link rel="alternate" hreflang="zh-CN" href="https://ds.rick216.cn/zh-CN/terms" />
+    <link rel="alternate" hreflang="en" href="https://ds.rick216.cn/en/terms" />
+    <link rel="alternate" hreflang="x-default" href="https://ds.rick216.cn/en/terms" />
+    
+    <link rel="icon" type="image/svg+xml" href="../assets/images/deepshare-icon.svg">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        .content {
+            max-width: 800px;
+            margin: 100px auto;
+            padding: 0 20px;
+        }
+        .content h1 { margin-bottom: 2rem; }
+        .content h2 { margin: 2rem 0 1rem; }
+        .content ul { margin-left: 2rem; }
+        .content li { margin: 0.5rem 0; }
+        .logo a {
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="./index-en.html">
+                    <img src="../assets/images/deepshare-icon.svg" alt="DeepShare Logo">
+                    <span>DeepShare</span>
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="content">
+        <h1>Terms of Service</h1>
+        <p>Last updated: April 23, 2025</p>
+
+        <h2>Acceptance of Terms</h2>
+        <p>By using the DeepShare extension, you agree to comply with these terms. If you do not agree with these terms, please do not use this extension.</p>
+
+        <h2>License</h2>
+        <p>DeepShare is an open-source project released under the CC BY-NC 4.0 license. You may:</p>
+        <ul>
+            <li>Use this extension for free</li>
+            <li>View and modify the source code</li>
+            <li>Redistribute under the terms of the CC BY-NC 4.0 license</li>
+        </ul>
+
+        <h2>1. Scope of Use and Authorization</h2>
+        <p>This browser extension (hereinafter referred to as "this tool") is designed to provide users with <strong>convenient content format conversion functions</strong>, limited to the following lawful purposes:</p>
+        <ul>
+            <li>Content <strong>created by the user</strong> or for which the user has <strong>obtained explicit authorization</strong>;</li>
+            <li>Public information that is not protected by copyright or belongs to the public domain.</li>
+        </ul>
+        <p><strong>It is prohibited to use this tool for:</strong></p>
+        <ul>
+            <li>Unauthorized copying or distribution of copyrighted content;</li>
+            <li>Bypassing technical protection measures of target websites or violating their Terms of Service;</li>
+            <li>Any behavior that may infringe on others' privacy, intellectual property rights, or violate local laws and regulations.</li>
+        </ul>
+
+        <h2>2. User Obligations and Responsibilities</h2>
+        <h3>2.1 Content Legality</h3>
+        <p>You should ensure that all content processed through this tool meets the following requirements:</p>
+        <ul>
+            <li><strong>Ownership of Rights</strong>: You are the lawful owner of the content or have obtained written authorization from the rights holder;</li>
+            <li><strong>Privacy Compliance</strong>: Does not contain any legally protected sensitive personal information (such as ID numbers, bank accounts, etc.).</li>
+        </ul>
+
+        <h3>2.2 Technical Use Restrictions</h3>
+        <ul>
+            <li>This tool <strong>will not actively crack or bypass</strong> target website's anti-copy technologies (such as dynamic encryption, CAPTCHA, etc.), and its functionality depends on legitimate operations manually triggered by users;</li>
+            <li>You agree to comply with all terms of service of the target website and bear the consequences resulting from violation of the terms (such as account suspension, legal liability, etc.).</li>
+        </ul>
+
+        <h2>3. Data Privacy and Security</h2>
+        <h3>3.1 Clipboard Data</h3>
+        <ul>
+            <li>This tool only reads the Markdown text in the clipboard after the user <strong>allows reading clipboard content</strong>, and <strong>will not store or share</strong> any data;</li>
+            <li>Clipboard content is only used for local format conversion and memory is released immediately after processing.</li>
+        </ul>
+
+        <h2>4. Disclaimer</h2>
+        <ul>
+            <li><strong>No Liability for Infringement</strong>: The developer is not responsible for illegal content processed by users through this tool, and all consequences shall be borne by the user;</li>
+            <li><strong>No Warranty</strong>: This tool is provided "as is" without any warranty of compatibility, functional completeness, or result accuracy;</li>
+            <li><strong>Right to Terminate</strong>: The developer reserves the right to modify, suspend, or terminate this tool service at any time without prior notice.</li>
+        </ul>
+
+        <h2>Changes to Terms</h2>
+        <p>We reserve the right to modify these terms at any time. Modified terms will be posted on this page.</p>
+
+        <h2>Contact</h2>
+        <p>If you have any questions, please contact us through <a href="https://github.com/Yorick-Ryu/deep-share/issues" target="_blank">GitHub Issues</a>.</p>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="https://github.com/Yorick-Ryu/deep-share">GitHub</a>
+                <a href="./privacy-en.html">Privacy Policy</a>
+                <a href="./terms-en.html">Terms of Service</a>
+                <a href="./purchase-en.html">Purchase Credits</a>
+            </div>
+            <p class="copyright">© 2025 DeepShare. All rights reserved.</p>
+        </div>
+    </footer>
+    <script>
+        // Theme switching functionality
+        const themeToggle = document.querySelector('.theme-toggle');
+        const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+        
+        const currentTheme = localStorage.getItem('theme');
+        if (currentTheme) {
+            document.documentElement.setAttribute('data-theme', currentTheme);
+        } else {
+            const theme = prefersDarkScheme.matches ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+        }
+        
+        if (themeToggle) {
+            themeToggle.addEventListener('click', () => {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+                
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+            });
+        }
+    </script>
+    
+    <!-- Vercel Web Analytics -->
+    <script>
+        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    </script>
+    <script defer src="/_vercel/insights/script.js"></script>
+</body>
+</html>
+

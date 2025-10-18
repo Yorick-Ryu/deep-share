@@ -22,30 +22,158 @@
       ]
     },
     {
-      "source": "/index.html",
+      "source": "/zh-CN/(.*)",
       "headers": [
         {
           "key": "Content-Language",
           "value": "zh-CN"
-        },
-        {
-          "key": "Vary",
-          "value": "Accept-Language"
         }
       ]
     },
     {
-      "source": "/index-en.html",
+      "source": "/en/(.*)",
       "headers": [
         {
           "key": "Content-Language",
           "value": "en"
-        },
-        {
-          "key": "Vary",
-          "value": "Accept-Language"
         }
       ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "header",
+          "key": "Accept-Language",
+          "value": ".*(zh|zh-CN|zh-TW|zh-HK).*"
+        }
+      ],
+      "destination": "/zh-CN/index",
+      "permanent": false
+    },
+    {
+      "source": "/",
+      "destination": "/en/index",
+      "permanent": false
+    },
+    {
+      "source": "/index.html",
+      "destination": "/zh-CN/index",
+      "permanent": true
+    },
+    {
+      "source": "/index-en.html",
+      "destination": "/en/index",
+      "permanent": true
+    },
+    {
+      "source": "/converter.html",
+      "destination": "/zh-CN/converter",
+      "permanent": true
+    },
+    {
+      "source": "/converter-en.html",
+      "destination": "/en/converter",
+      "permanent": true
+    },
+    {
+      "source": "/purchase.html",
+      "destination": "/zh-CN/purchase",
+      "permanent": true
+    },
+    {
+      "source": "/purchase-en.html",
+      "destination": "/en/purchase",
+      "permanent": true
+    },
+    {
+      "source": "/privacy.html",
+      "destination": "/zh-CN/privacy",
+      "permanent": true
+    },
+    {
+      "source": "/privacy-en.html",
+      "destination": "/en/privacy",
+      "permanent": true
+    },
+    {
+      "source": "/terms.html",
+      "destination": "/zh-CN/terms",
+      "permanent": true
+    },
+    {
+      "source": "/terms-en.html",
+      "destination": "/en/terms",
+      "permanent": true
+    },
+    {
+      "source": "/renew.html",
+      "destination": "/zh-CN/renew",
+      "permanent": true
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/zh-CN",
+      "destination": "/zh-CN/index.html"
+    },
+    {
+      "source": "/zh-CN/",
+      "destination": "/zh-CN/index.html"
+    },
+    {
+      "source": "/zh-CN/index",
+      "destination": "/zh-CN/index.html"
+    },
+    {
+      "source": "/zh-CN/converter",
+      "destination": "/zh-CN/converter.html"
+    },
+    {
+      "source": "/zh-CN/purchase",
+      "destination": "/zh-CN/purchase.html"
+    },
+    {
+      "source": "/zh-CN/privacy",
+      "destination": "/zh-CN/privacy.html"
+    },
+    {
+      "source": "/zh-CN/terms",
+      "destination": "/zh-CN/terms.html"
+    },
+    {
+      "source": "/zh-CN/renew",
+      "destination": "/zh-CN/renew.html"
+    },
+    {
+      "source": "/en",
+      "destination": "/en/index.html"
+    },
+    {
+      "source": "/en/",
+      "destination": "/en/index.html"
+    },
+    {
+      "source": "/en/index",
+      "destination": "/en/index.html"
+    },
+    {
+      "source": "/en/converter",
+      "destination": "/en/converter.html"
+    },
+    {
+      "source": "/en/purchase",
+      "destination": "/en/purchase.html"
+    },
+    {
+      "source": "/en/privacy",
+      "destination": "/en/privacy.html"
+    },
+    {
+      "source": "/en/terms",
+      "destination": "/en/terms.html"
     }
   ]
 }
