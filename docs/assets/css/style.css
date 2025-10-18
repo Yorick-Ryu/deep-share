@@ -537,6 +537,49 @@ footer {
     font-size: 0.9rem;
 }
 
+/* Mobile Menu Button */
+.mobile-menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    color: var(--text-color);
+}
+
+.mobile-menu-btn svg {
+    width: 24px;
+    height: 24px;
+}
+
+/* Mobile Navigation Overlay */
+.nav-links.mobile-active {
+    display: flex !important;
+    flex-direction: column;
+    position: fixed;
+    top: 64px;
+    right: 0;
+    background: var(--bg-color);
+    border-left: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+    padding: 1rem;
+    gap: 1rem;
+    box-shadow: -2px 2px 8px rgba(0, 0, 0, 0.1);
+    z-index: 999;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .hero {
@@ -554,8 +597,23 @@ footer {
         align-items: center;
     }
 
+    .mobile-menu-btn {
+        display: block;
+    }
+
     .nav-links {
         display: none;
+    }
+
+    .nav-links a {
+        padding: 0.5rem 1rem;
+        width: 100%;
+        text-align: left;
+    }
+
+    .github-link {
+        border-top: 1px solid var(--border-color);
+        padding-top: 1rem;
     }
 
     .announcement-content {

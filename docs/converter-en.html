@@ -21,6 +21,13 @@
                 <img src="./assets/images/deepshare-icon.svg" alt="DeepShare Logo">
                 <span>DeepShare</span>
             </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
             <div class="nav-links">
                 <a href="./index-en.html">Download Browser Extension</a>
                 <a href="https://github.com/Yorick-Ryu/deep-share" target="_blank" class="github-link">
@@ -188,6 +195,34 @@
             <p class="copyright">© 2025 DeepShare. All rights reserved.</p>
         </div>
     </footer>
+
+    <!-- Mobile menu toggle -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const navLinks = document.querySelector('.nav-links');
+            
+            if (mobileMenuBtn) {
+                mobileMenuBtn.addEventListener('click', function() {
+                    navLinks.classList.toggle('mobile-active');
+                });
+                
+                // Close menu when clicking outside
+                document.addEventListener('click', function(event) {
+                    if (!event.target.closest('nav')) {
+                        navLinks.classList.remove('mobile-active');
+                    }
+                });
+                
+                // Close menu when clicking a link
+                navLinks.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', function() {
+                        navLinks.classList.remove('mobile-active');
+                    });
+                });
+            }
+        });
+    </script>
 
     <script>
         // Set language to English for this page
