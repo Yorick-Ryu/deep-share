@@ -279,7 +279,7 @@ function loadI18nText() {
 
   // Manual Document Conversion tab
   document.getElementById('manualConversionTitle').textContent = chrome.i18n.getMessage('manualConversionTitle') || '手动转换';
-  document.getElementById('manualConversionExplanation').textContent = chrome.i18n.getMessage('manualConversionExplanation') || '支持ChatGPT、豆包、元宝等，复制需要转换的对话到Markdown输入框，点击"转换为文档"按钮立即下载Word格式，排版精美，支持公式！';
+  document.getElementById('manualConversionExplanation').innerHTML = chrome.i18n.getMessage('manualConversionExplanation') || '支持ChatGPT、豆包、元宝等，复制需要转换的对话到Markdown输入框，点击"转换为文档"按钮立即下载Word格式，排版精美，支持公式！';
   document.getElementById('markdownInputLabel').textContent = chrome.i18n.getMessage('markdownInputLabel') || 'Markdown 文本';
   document.getElementById('templateLabel').textContent = chrome.i18n.getMessage('templateLabel') || 'Word Template';
   document.getElementById('convertMarkdownBtn').innerHTML = `
