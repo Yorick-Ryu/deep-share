@@ -67,10 +67,6 @@ You can watch a short demo of DeepShare on YouTube:
 
 [![DeepShare demo on YouTube](https://img.youtube.com/vi/QJu6pdZO8Wc/maxresdefault.jpg)](https://www.youtube.com/watch?v=QJu6pdZO8Wc)
 
-If your platform supports embeds, here's the video:
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/QJu6pdZO8Wc" title="DeepShare demo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
 ## License
 
 This project is open-sourced under the [CC BY-NC 4.0 License](LICENSE). This means you are free to use and modify the code for non-commercial purposes, but commercial use is prohibited.
