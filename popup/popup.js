@@ -244,6 +244,20 @@ function setupUIElements() {
   document.getElementById('refreshQuota').addEventListener('click', () => {
     checkQuota(true);
   });
+
+  // Set up server URL label click to toggle input visibility
+  const serverUrlLabel = document.getElementById('docxServerUrlLabel');
+  const serverUrlInput = document.getElementById('docxServerUrl');
+  
+  serverUrlLabel.addEventListener('click', () => {
+    if (serverUrlInput.classList.contains('visible')) {
+      serverUrlInput.classList.remove('visible');
+      serverUrlLabel.classList.remove('expanded');
+    } else {
+      serverUrlInput.classList.add('visible');
+      serverUrlLabel.classList.add('expanded');
+    }
+  });
 }
 
 // Load all i18n text

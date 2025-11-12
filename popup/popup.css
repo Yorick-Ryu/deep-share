@@ -191,6 +191,28 @@ label {
   color: var(--text-secondary);
 }
 
+/* Collapsible label styles */
+.collapsible-label {
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+}
+
+.collapsible-label::after {
+  content: " ▼";
+  font-size: 10px;
+  opacity: 0.6;
+  transition: opacity 0.2s ease;
+}
+
+.collapsible-label:hover::after {
+  opacity: 1;
+}
+
+.collapsible-label.expanded::after {
+  content: " ▲";
+}
+
 input[type="text"],
 input[type="password"] {
   width: 100%;
@@ -200,6 +222,26 @@ input[type="password"] {
   box-sizing: border-box;
   background: var(--input-bg);
   color: var(--text-color);
+  transition: opacity 0.2s ease, max-height 0.2s ease;
+}
+
+/* Collapsible input animation */
+#docxServerUrl {
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  margin-top: 0;
+  margin-bottom: -8px;
+  padding: 0 8px;
+  transition: all 0.3s ease;
+  display: block !important;
+}
+
+#docxServerUrl.visible {
+  max-height: 50px;
+  opacity: 1;
+  padding: 8px;
+  margin-top: 0;
 }
 
 input[type="text"]::placeholder,
