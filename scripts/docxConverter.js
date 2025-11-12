@@ -188,6 +188,7 @@ async function convertToDocxViaApi(content, serverUrl) {
         const settings = await chrome.storage.sync.get({
             docxServerUrl: 'https://api.ds.rick216.cn',
             docxApiKey: '',
+            removeDividers: false,  // Default to false for removing dividers
             convertMermaid: false,  // Default to false for Mermaid conversion
             lastUsedTemplate: null
         });
@@ -206,6 +207,7 @@ async function convertToDocxViaApi(content, serverUrl) {
         }
 
         console.debug('Sending content to API:', content.substring(0, 100) + '...');
+        console.debug('Remove Dividers:', settings.removeDividers);
         console.debug('Convert Mermaid:', settings.convertMermaid);
 
         const currentLang = chrome.i18n.getUILanguage();
@@ -214,6 +216,7 @@ async function convertToDocxViaApi(content, serverUrl) {
         const body = {
             content: content,
             filename: generateFilename(content),
+            remove_hr: settings.removeDividers,
             convert_mermaid: settings.convertMermaid,
             language: language
         };

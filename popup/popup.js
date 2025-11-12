@@ -41,6 +41,7 @@ function loadSettings(highlightApiKey = false) {
     'enableFormulaCopy',
     'formulaFormat',
     'screenshotMethod',
+    'removeDividers',
     'convertMermaid',
     'wordTemplateSelect'
   ], (data) => {
@@ -67,6 +68,9 @@ function loadSettings(highlightApiKey = false) {
     const formulaFormat = data.formulaFormat || 'mathml'; // Default to MathML
     document.getElementById('formatMathML').checked = formulaFormat === 'mathml';
     document.getElementById('formatLaTeX').checked = formulaFormat === 'latex';
+
+    // Remove dividers setting
+    document.getElementById('removeDividers').checked = !!data.removeDividers; // Default to false
 
     // Mermaid conversion setting
     document.getElementById('convertMermaid').checked = !!data.convertMermaid; // Default to false
@@ -161,6 +165,8 @@ function setupAutoSave() {
     // 添加截图方法相关的设置元素
     document.getElementById('methodDomToImage'),
     document.getElementById('methodHtml2Canvas'),
+    // 添加去除分割线设置
+    document.getElementById('removeDividers'),
     // 添加Mermaid转换设置
     document.getElementById('convertMermaid'),
     document.getElementById('wordTemplateSelect')
@@ -267,6 +273,7 @@ function loadI18nText() {
   document.getElementById('modeApiLabel').textContent = chrome.i18n.getMessage('modeApiLabel') || 'API';
   document.getElementById('docxServerUrlLabel').textContent = chrome.i18n.getMessage('docxServerUrlLabel') || 'Server URL';
   document.getElementById('docxApiKeyLabel').textContent = chrome.i18n.getMessage('docxApiKeyLabel') || 'API Key';
+  document.getElementById('removeDividersLabel').textContent = chrome.i18n.getMessage('removeDividersLabel') || '去除分割线';
   document.getElementById('convertMermaidLabel').textContent = chrome.i18n.getMessage('convertMermaidLabel') || '启用Mermaid图表转换';
 
   // Formula Copy Settings tab
@@ -370,6 +377,9 @@ function saveSettings() {
     // Formula copy settings
     enableFormulaCopy: document.getElementById('enableFormulaCopy').checked,
     formulaFormat: formulaFormat,
+
+    // Remove dividers setting
+    removeDividers: document.getElementById('removeDividers').checked,
 
     // Mermaid diagram conversion
     convertMermaid: document.getElementById('convertMermaid').checked,
@@ -541,6 +551,7 @@ function setupManualConversion() {
       docxServerUrl: 'https://api.ds.rick216.cn',
       docxApiKey: '',
       docxMode: 'api',
+      removeDividers: false,
       convertMermaid: false
     });
 
@@ -580,7 +591,7 @@ function setupManualConversion() {
       `;
 
       // Call the conversion function with markdown text
-      await convertMarkdownToDocx(markdownText, settings.docxServerUrl, settings.docxApiKey, settings.convertMermaid, document.getElementById('wordTemplateSelect').value);
+      await convertMarkdownToDocx(markdownText, settings.docxServerUrl, settings.docxApiKey, settings.removeDividers, settings.convertMermaid, document.getElementById('wordTemplateSelect').value);
 
       // Update button to show success message briefly
       convertBtn.innerHTML = `
@@ -626,7 +637,7 @@ function setupManualConversion() {
 }
 
 // Function to convert markdown text to DOCX
-async function convertMarkdownToDocx(markdownText, serverUrl, apiKey, convertMermaid = false, template) {
+async function convertMarkdownToDocx(markdownText, serverUrl, apiKey, removeDividers = false, convertMermaid = false, template) {
   try {
     const url = serverUrl || 'https://api.ds.rick216.cn';
 
@@ -654,6 +665,7 @@ async function convertMarkdownToDocx(markdownText, serverUrl, apiKey, convertMer
     const body = {
       content: markdownText,
       filename: filename,
+      remove_hr: removeDividers,
       convert_mermaid: convertMermaid,
       language: language
     };

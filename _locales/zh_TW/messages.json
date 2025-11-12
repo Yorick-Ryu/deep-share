@@ -209,6 +209,9 @@
     "screenshotMethodHint": {
         "message": "選擇用於截圖的方法，如果一種方法不工作，請嘗試另一種，切換後請刷新網頁。"
     },
+    "removeDividersLabel": {
+        "message": "去除分割線"
+    },
     "convertMermaidLabel": {
         "message": "啟用Mermaid圖表轉換（實驗性功能）"
     },

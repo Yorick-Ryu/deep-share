@@ -209,6 +209,9 @@
     "screenshotMethodHint": {
         "message": "Select the method used for screenshots. If one method doesn't work, try the other. Please refresh the page after switching."
     },
+    "removeDividersLabel": {
+        "message": "Remove Dividers"
+    },
     "convertMermaidLabel": {
         "message": "Enable Mermaid Diagram Conversion (Beta)"
     },
