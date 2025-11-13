@@ -110,6 +110,21 @@ nav {
     fill: currentColor;
 }
 
+.language-switch {
+    padding: 0.4rem 0.8rem;
+    background: var(--primary-color);
+    color: white !important;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+}
+
+.language-switch:hover {
+    background: var(--primary-hover);
+    color: white !important;
+    transform: translateY(-2px);
+}
+
 /* Announcement Banner */
 .announcement-banner {
     background: linear-gradient(90deg, rgba(77, 107, 254, 0.1) 0%, rgba(77, 107, 254, 0.2) 100%);
@@ -609,6 +624,13 @@ footer {
         padding: 0.5rem 1rem;
         width: 100%;
         text-align: left;
+    }
+
+    .language-switch {
+        width: auto;
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        margin: 0.5rem 1rem;
     }
 
     .github-link {
