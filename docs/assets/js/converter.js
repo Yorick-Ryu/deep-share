@@ -157,12 +157,14 @@ function loadSettings() {
     const settings = {
       docxApiKey: localStorage.getItem('docxApiKey') || '',
       convertMermaid: localStorage.getItem('convertMermaid') === 'true',
+      removeDividers: localStorage.getItem('removeDividers') === 'true',
       lastUsedTemplate: localStorage.getItem('lastUsedTemplate') || 'templates',
       markdownText: localStorage.getItem('markdownText') || ''
     };
 
     document.getElementById('docxApiKey').value = settings.docxApiKey;
     document.getElementById('convertMermaid').checked = settings.convertMermaid;
+    document.getElementById('removeDividers').checked = settings.removeDividers;
     document.getElementById('markdownInput').value = settings.markdownText;
 
     // If API key is set, check quota
@@ -180,12 +182,14 @@ function saveSettings() {
     const settings = {
       docxApiKey: document.getElementById('docxApiKey').value,
       convertMermaid: document.getElementById('convertMermaid').checked,
+      removeDividers: document.getElementById('removeDividers').checked,
       lastUsedTemplate: document.getElementById('wordTemplateSelect').value,
       markdownText: document.getElementById('markdownInput').value
     };
 
     localStorage.setItem('docxApiKey', settings.docxApiKey);
     localStorage.setItem('convertMermaid', settings.convertMermaid);
+    localStorage.setItem('removeDividers', settings.removeDividers);
     localStorage.setItem('lastUsedTemplate', settings.lastUsedTemplate);
     localStorage.setItem('markdownText', settings.markdownText);
 
@@ -205,6 +209,7 @@ function setupAutoSave() {
   const inputs = [
     document.getElementById('docxApiKey'),
     document.getElementById('convertMermaid'),
+    document.getElementById('removeDividers'),
     document.getElementById('wordTemplateSelect')
   ];
 
@@ -459,6 +464,7 @@ function setupManualConversion() {
     // Check API key
     const docxApiKey = document.getElementById('docxApiKey').value;
     const convertMermaid = document.getElementById('convertMermaid').checked;
+    const removeDividers = document.getElementById('removeDividers').checked;
     const template = document.getElementById('wordTemplateSelect').value;
 
     // Check if API key is provided
@@ -490,7 +496,7 @@ function setupManualConversion() {
       `;
 
       // Call the conversion function
-      await convertMarkdownToDocx(markdownText, docxApiKey, convertMermaid, template);
+      await convertMarkdownToDocx(markdownText, docxApiKey, convertMermaid, removeDividers, template);
 
       // Update button to show success message briefly
       convertBtn.innerHTML = `
@@ -573,7 +579,7 @@ function setupManualConversion() {
 }
 
 // Function to convert markdown text to DOCX
-async function convertMarkdownToDocx(markdownText, apiKey, convertMermaid = false, template) {
+async function convertMarkdownToDocx(markdownText, apiKey, convertMermaid = false, removeDividers = false, template) {
   try {
 
     // Generate filename based on content
@@ -602,6 +608,7 @@ async function convertMarkdownToDocx(markdownText, apiKey, convertMermaid = fals
       content: markdownText,
       filename: filename,
       convert_mermaid: convertMermaid,
+      remove_hr: removeDividers,
       language: lang
     };
 
