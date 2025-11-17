@@ -125,9 +125,19 @@
 
                 if (clipboardContent && clipboardContent.trim()) {
                     console.debug('Successfully read AI response from clipboard for Gemini');
+                    
+                    // Filter out Gemini citation markers
+                    let cleanedContent = clipboardContent;
+                    // Remove [cite_start] markers
+                    cleanedContent = cleanedContent.replace(/\[cite_start\]/g, '');
+                    // Remove [cite: numbers] markers (e.g., [cite: 4, 5], [cite: 16])
+                    cleanedContent = cleanedContent.replace(/\[cite:\s*[\d,\s]+\]/g, '');
+                    
+                    console.debug('Filtered Gemini citation markers');
+                    
                     const conversationData = {
                         role: 'assistant',
-                        content: clipboardContent,
+                        content: cleanedContent,
                     };
 
                     const event = new CustomEvent('deepshare:convertToDocx', {
