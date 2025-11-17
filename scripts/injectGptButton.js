@@ -250,12 +250,17 @@
                 const quoteContent = result;
                 result = tempResult;
                 
-                // Split by lines and add > prefix
-                quoteContent.split('\n').forEach(line => {
+                // Split by lines and add > prefix, preserving empty lines within quote
+                const contentLines = quoteContent.split('\n');
+                for (let i = 0; i < contentLines.length; i++) {
+                    const line = contentLines[i];
                     if (line.trim()) {
                         lines.push('> ' + line.trim());
+                    } else if (i > 0 && i < contentLines.length - 1 && contentLines[i + 1].trim()) {
+                        // Add empty quote line only if it's between content lines
+                        lines.push('>');
                     }
-                });
+                }
                 result += '\n' + lines.join('\n') + '\n\n';
                 return;
             }
@@ -329,7 +334,18 @@
                 
                 listItems.forEach(li => {
                     const indentation = '   '.repeat(indent);
-                    const prefix = isOrdered ? `${index}. ` : '* ';
+                    
+                    // Check if this is a task list item
+                    const isTaskList = li.classList && li.classList.contains('task-list-item');
+                    const checkbox = isTaskList ? li.querySelector('input[type="checkbox"]') : null;
+                    
+                    let prefix;
+                    if (checkbox) {
+                        // For task lists, use checkbox format with single space
+                        prefix = checkbox.checked ? '* [x] ' : '* [ ] ';
+                    } else {
+                        prefix = isOrdered ? `${index}. ` : '* ';
+                    }
                     result += indentation + prefix;
                     
                     // Process the list item's content
@@ -339,6 +355,11 @@
                         
                         // Skip whitespace-only text nodes in list items
                         if (child.nodeType === Node.TEXT_NODE && !child.textContent.trim()) {
+                            continue;
+                        }
+                        
+                        // Skip checkbox input itself
+                        if (child.tagName === 'INPUT' && child.type === 'checkbox') {
                             continue;
                         }
                         
@@ -371,6 +392,14 @@
             // Handle list items (when not already processed by parent UL/OL)
             if (node.tagName === 'LI') {
                 node.childNodes.forEach(child => processNode(child, indent, inListItem));
+                return;
+            }
+
+            // Handle strikethrough/delete
+            if (node.tagName === 'DEL') {
+                result += '~~';
+                node.childNodes.forEach(child => processNode(child, indent, inListItem));
+                result += '~~';
                 return;
             }
 
@@ -411,9 +440,30 @@
             // Handle links
             if (node.tagName === 'A') {
                 const href = node.getAttribute('href');
-                const text = node.textContent;
+                // Get text content but skip SVG and other decorative elements
+                let text = '';
+                const getTextOnly = (n) => {
+                    if (n.nodeType === Node.TEXT_NODE) {
+                        text += n.textContent;
+                    } else if (n.tagName === 'SPAN' && n.querySelector('svg')) {
+                        // Skip spans containing SVG icons
+                        return;
+                    } else if (n.childNodes) {
+                        n.childNodes.forEach(getTextOnly);
+                    }
+                };
+                node.childNodes.forEach(getTextOnly);
+                text = text.trim();
+                
+                // Check for title attribute
+                const title = node.getAttribute('title');
+                
                 if (href && href !== text) {
-                    result += '[' + text + '](' + href + ')';
+                    if (title) {
+                        result += '[' + text + '](' + href + ' "' + title + '")';
+                    } else {
+                        result += '[' + text + '](' + href + ')';
+                    }
                 } else {
                     result += text;
                 }
