@@ -212,8 +212,11 @@
     "removeDividersLabel": {
         "message": "去除分割線"
     },
+    "removeEmojisLabel": {
+        "message": "去除emoji表情"
+    },
     "convertMermaidLabel": {
-        "message": "啟用Mermaid圖表轉換（實驗性功能）"
+        "message": "Mermaid圖表轉換（實驗性功能）"
     },
     "getClipboardError": {
         "message": "從剪貼簿獲取內容失敗"

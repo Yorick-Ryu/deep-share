@@ -212,8 +212,11 @@
     "removeDividersLabel": {
         "message": "Remove Dividers"
     },
+    "removeEmojisLabel": {
+        "message": "Remove Emojis"
+    },
     "convertMermaidLabel": {
-        "message": "Enable Mermaid Diagram Conversion (Beta)"
+        "message": "Mermaid Diagram Conversion (Beta)"
     },
     "getClipboardError": {
         "message": "Failed to get content from clipboard"

@@ -189,6 +189,7 @@ async function convertToDocxViaApi(content, serverUrl) {
             docxServerUrl: 'https://api.ds.rick216.cn',
             docxApiKey: '',
             removeDividers: false,  // Default to false for removing dividers
+            removeEmojis: false,    // Default to false for removing emojis
             convertMermaid: false,  // Default to false for Mermaid conversion
             lastUsedTemplate: null
         });
@@ -208,13 +209,21 @@ async function convertToDocxViaApi(content, serverUrl) {
 
         console.debug('Sending content to API:', content.substring(0, 100) + '...');
         console.debug('Remove Dividers:', settings.removeDividers);
+        console.debug('Remove Emojis:', settings.removeEmojis);
         console.debug('Convert Mermaid:', settings.convertMermaid);
+
+        // Remove emojis from content if enabled (frontend processing)
+        let processedContent = content;
+        if (settings.removeEmojis) {
+            // Remove emoji characters using regex
+            processedContent = processedContent.replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F000}-\u{1F02F}\u{1F0A0}-\u{1F0FF}\u{1F100}-\u{1F64F}\u{1F680}-\u{1F6FF}\u{1F900}-\u{1F9FF}\u{1FA00}-\u{1FA6F}\u{1FA70}-\u{1FAFF}\u{FE00}-\u{FE0F}\u{1F200}-\u{1F251}]/gu, '');
+        }
 
         const currentLang = chrome.i18n.getUILanguage();
         const language = currentLang.startsWith('zh') ? 'zh' : 'en';
 
         const body = {
-            content: content,
+            content: processedContent,
             filename: generateFilename(content),
             remove_hr: settings.removeDividers,
             convert_mermaid: settings.convertMermaid,

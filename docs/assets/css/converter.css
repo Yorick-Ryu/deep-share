@@ -377,6 +377,22 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
     font-size: 0.9rem;
 }
 
+/* Row container for multiple checkboxes in one line */
+.checkbox-group-row {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+}
+
+.checkbox-group-row .checkbox-group {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+.checkbox-group-row .checkbox-group label {
+    white-space: nowrap;
+}
+
 .form-actions {
     display: flex;
     gap: 0.75rem;

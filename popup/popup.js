@@ -42,6 +42,7 @@ function loadSettings(highlightApiKey = false) {
     'formulaFormat',
     'screenshotMethod',
     'removeDividers',
+    'removeEmojis',
     'convertMermaid',
     'wordTemplateSelect'
   ], (data) => {
@@ -71,6 +72,9 @@ function loadSettings(highlightApiKey = false) {
 
     // Remove dividers setting
     document.getElementById('removeDividers').checked = !!data.removeDividers; // Default to false
+
+    // Remove emojis setting
+    document.getElementById('removeEmojis').checked = !!data.removeEmojis; // Default to false
 
     // Mermaid conversion setting
     document.getElementById('convertMermaid').checked = !!data.convertMermaid; // Default to false
@@ -167,6 +171,8 @@ function setupAutoSave() {
     document.getElementById('methodHtml2Canvas'),
     // 添加去除分割线设置
     document.getElementById('removeDividers'),
+    // 添加去除emoji设置
+    document.getElementById('removeEmojis'),
     // 添加Mermaid转换设置
     document.getElementById('convertMermaid'),
     document.getElementById('wordTemplateSelect')
@@ -288,6 +294,7 @@ function loadI18nText() {
   document.getElementById('docxServerUrlLabel').textContent = chrome.i18n.getMessage('docxServerUrlLabel') || 'Server URL';
   document.getElementById('docxApiKeyLabel').textContent = chrome.i18n.getMessage('docxApiKeyLabel') || 'API Key';
   document.getElementById('removeDividersLabel').textContent = chrome.i18n.getMessage('removeDividersLabel') || '去除分割线';
+  document.getElementById('removeEmojisLabel').textContent = chrome.i18n.getMessage('removeEmojisLabel') || '去除emoji表情';
   document.getElementById('convertMermaidLabel').textContent = chrome.i18n.getMessage('convertMermaidLabel') || '启用Mermaid图表转换';
 
   // Formula Copy Settings tab
@@ -394,6 +401,9 @@ function saveSettings() {
 
     // Remove dividers setting
     removeDividers: document.getElementById('removeDividers').checked,
+
+    // Remove emojis setting
+    removeEmojis: document.getElementById('removeEmojis').checked,
 
     // Mermaid diagram conversion
     convertMermaid: document.getElementById('convertMermaid').checked,
@@ -566,6 +576,7 @@ function setupManualConversion() {
       docxApiKey: '',
       docxMode: 'api',
       removeDividers: false,
+      removeEmojis: false,
       convertMermaid: false
     });
 
@@ -605,7 +616,7 @@ function setupManualConversion() {
       `;
 
       // Call the conversion function with markdown text
-      await convertMarkdownToDocx(markdownText, settings.docxServerUrl, settings.docxApiKey, settings.removeDividers, settings.convertMermaid, document.getElementById('wordTemplateSelect').value);
+      await convertMarkdownToDocx(markdownText, settings.docxServerUrl, settings.docxApiKey, settings.removeDividers, settings.removeEmojis, settings.convertMermaid, document.getElementById('wordTemplateSelect').value);
 
       // Update button to show success message briefly
       convertBtn.innerHTML = `
@@ -651,7 +662,7 @@ function setupManualConversion() {
 }
 
 // Function to convert markdown text to DOCX
-async function convertMarkdownToDocx(markdownText, serverUrl, apiKey, removeDividers = false, convertMermaid = false, template) {
+async function convertMarkdownToDocx(markdownText, serverUrl, apiKey, removeDividers = false, removeEmojis = false, convertMermaid = false, template) {
   try {
     const url = serverUrl || 'https://api.ds.rick216.cn';
 
@@ -676,8 +687,15 @@ async function convertMarkdownToDocx(markdownText, serverUrl, apiKey, removeDivi
     const currentLang = chrome.i18n.getUILanguage();
     const language = currentLang.startsWith('zh') ? 'zh' : 'en';
 
+    // Remove emojis from content if enabled (frontend processing)
+    let processedContent = markdownText;
+    if (removeEmojis) {
+      // Remove emoji characters using regex
+      processedContent = processedContent.replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F000}-\u{1F02F}\u{1F0A0}-\u{1F0FF}\u{1F100}-\u{1F64F}\u{1F680}-\u{1F6FF}\u{1F900}-\u{1F9FF}\u{1FA00}-\u{1FA6F}\u{1FA70}-\u{1FAFF}\u{FE00}-\u{FE0F}\u{1F200}-\u{1F251}]/gu, '');
+    }
+
     const body = {
-      content: markdownText,
+      content: processedContent,
       filename: filename,
       remove_hr: removeDividers,
       convert_mermaid: convertMermaid,

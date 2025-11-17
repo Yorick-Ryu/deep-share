@@ -301,6 +301,23 @@ button:hover {
   accent-color: var(--primary-color);
 }
 
+/* Row container for multiple checkboxes in one line */
+.checkbox-group-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.checkbox-group-row .checkbox-group {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.checkbox-group-row .checkbox-group label {
+  font-size: 14px;
+  white-space: nowrap;
+}
+
 @media (prefers-color-scheme: dark) {
   .checkbox-group input[type="checkbox"] {
     background-color: var(--input-bg);

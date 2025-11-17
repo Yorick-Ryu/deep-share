@@ -158,6 +158,7 @@ function loadSettings() {
       docxApiKey: localStorage.getItem('docxApiKey') || '',
       convertMermaid: localStorage.getItem('convertMermaid') === 'true',
       removeDividers: localStorage.getItem('removeDividers') === 'true',
+      removeEmojis: localStorage.getItem('removeEmojis') === 'true',
       lastUsedTemplate: localStorage.getItem('lastUsedTemplate') || 'templates',
       markdownText: localStorage.getItem('markdownText') || ''
     };
@@ -165,6 +166,7 @@ function loadSettings() {
     document.getElementById('docxApiKey').value = settings.docxApiKey;
     document.getElementById('convertMermaid').checked = settings.convertMermaid;
     document.getElementById('removeDividers').checked = settings.removeDividers;
+    document.getElementById('removeEmojis').checked = settings.removeEmojis;
     document.getElementById('markdownInput').value = settings.markdownText;
 
     // If API key is set, check quota
@@ -183,6 +185,7 @@ function saveSettings() {
       docxApiKey: document.getElementById('docxApiKey').value,
       convertMermaid: document.getElementById('convertMermaid').checked,
       removeDividers: document.getElementById('removeDividers').checked,
+      removeEmojis: document.getElementById('removeEmojis').checked,
       lastUsedTemplate: document.getElementById('wordTemplateSelect').value,
       markdownText: document.getElementById('markdownInput').value
     };
@@ -190,6 +193,7 @@ function saveSettings() {
     localStorage.setItem('docxApiKey', settings.docxApiKey);
     localStorage.setItem('convertMermaid', settings.convertMermaid);
     localStorage.setItem('removeDividers', settings.removeDividers);
+    localStorage.setItem('removeEmojis', settings.removeEmojis);
     localStorage.setItem('lastUsedTemplate', settings.lastUsedTemplate);
     localStorage.setItem('markdownText', settings.markdownText);
 
@@ -210,6 +214,7 @@ function setupAutoSave() {
     document.getElementById('docxApiKey'),
     document.getElementById('convertMermaid'),
     document.getElementById('removeDividers'),
+    document.getElementById('removeEmojis'),
     document.getElementById('wordTemplateSelect')
   ];
 
@@ -465,6 +470,7 @@ function setupManualConversion() {
     const docxApiKey = document.getElementById('docxApiKey').value;
     const convertMermaid = document.getElementById('convertMermaid').checked;
     const removeDividers = document.getElementById('removeDividers').checked;
+    const removeEmojis = document.getElementById('removeEmojis').checked;
     const template = document.getElementById('wordTemplateSelect').value;
 
     // Check if API key is provided
@@ -496,7 +502,7 @@ function setupManualConversion() {
       `;
 
       // Call the conversion function
-      await convertMarkdownToDocx(markdownText, docxApiKey, convertMermaid, removeDividers, template);
+      await convertMarkdownToDocx(markdownText, docxApiKey, convertMermaid, removeDividers, removeEmojis, template);
 
       // Update button to show success message briefly
       convertBtn.innerHTML = `
@@ -579,7 +585,7 @@ function setupManualConversion() {
 }
 
 // Function to convert markdown text to DOCX
-async function convertMarkdownToDocx(markdownText, apiKey, convertMermaid = false, removeDividers = false, template) {
+async function convertMarkdownToDocx(markdownText, apiKey, convertMermaid = false, removeDividers = false, removeEmojis = false, template) {
   try {
 
     // Generate filename based on content
@@ -604,8 +610,15 @@ async function convertMarkdownToDocx(markdownText, apiKey, convertMermaid = fals
 
     filename = `${filename}_${timestamp}`;
 
+    // Remove emojis from content if enabled (frontend processing)
+    let processedContent = markdownText;
+    if (removeEmojis) {
+      // Remove emoji characters using regex
+      processedContent = processedContent.replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F000}-\u{1F02F}\u{1F0A0}-\u{1F0FF}\u{1F100}-\u{1F64F}\u{1F680}-\u{1F6FF}\u{1F900}-\u{1F9FF}\u{1FA00}-\u{1FA6F}\u{1FA70}-\u{1FAFF}\u{FE00}-\u{FE0F}\u{1F200}-\u{1F251}]/gu, '');
+    }
+
     const body = {
-      content: markdownText,
+      content: processedContent,
       filename: filename,
       convert_mermaid: convertMermaid,
       remove_hr: removeDividers,
