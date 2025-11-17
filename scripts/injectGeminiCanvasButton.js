@@ -40,6 +40,14 @@
                 return;
             }
 
+            // 首先检查是否存在"导出到 Google 文档"按钮
+            const exportToDocsButton = menuContent.querySelector('button[data-test-id="export-to-docs-button"]');
+            
+            if (!exportToDocsButton) {
+                console.debug('DeepShare: Export to Google Docs button not found, skipping injection');
+                return;
+            }
+
             // 查找复制按钮，我们将在它后面插入
             const copyButton = menuContent.querySelector('copy-button');
             
@@ -139,7 +147,7 @@
 
     async function getCanvasContent() {
         // 从Canvas编辑器中解析Markdown内容
-        const editorElement = document.querySelector('#extended-response-markdown-content .ProseMirror');
+        const editorElement = document.querySelector('#extended-response-markdown-content');
         
         if (!editorElement) {
             throw new Error('无法找到Canvas编辑器');
