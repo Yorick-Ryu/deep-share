@@ -219,7 +219,7 @@
         "message": "Mermaid图表转换（实验性功能）"
     },
     "getClipboardError": {
-        "message": "从剪贴板获取内容失败"
+        "message": "获取内容失败"
     },
     "refreshButton": {
         "message": "刷新"
