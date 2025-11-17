@@ -367,9 +367,13 @@
                 if (thead) {
                     const headerRow = thead.querySelector('tr');
                     if (headerRow) {
-                        const headers = Array.from(headerRow.querySelectorAll('th'));
+                        // Check for both th and td elements (Gemini sometimes uses td in thead)
+                        let headers = Array.from(headerRow.querySelectorAll('th'));
+                        if (headers.length === 0) {
+                            headers = Array.from(headerRow.querySelectorAll('td'));
+                        }
                         if (headers.length > 0) {
-                            const headerTexts = headers.map(th => extractCellText(th));
+                            const headerTexts = headers.map(cell => extractCellText(cell));
                             result += '| ' + headerTexts.join(' | ') + ' |\n';
                             result += '| ' + headerTexts.map(() => '---').join(' | ') + ' |\n';
                             headerProcessed = true;
