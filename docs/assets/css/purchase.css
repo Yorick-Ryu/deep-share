@@ -2,7 +2,7 @@
 .pricing-card {
     border-radius: 12px;
     border: 1px solid #eee;
-    padding: 2rem;
+    padding: 1.5rem;
     margin: 2rem 0;
     box-shadow: 0 4px 12px rgba(0,0,0,0.05);
     transition: all 0.3s ease;
@@ -12,12 +12,12 @@
     box-shadow: 0 8px 24px rgba(0,0,0,0.1);
 }
 .price-tag {
-    font-size: 2.5rem;
+    font-size: 2.25rem;
     font-weight: bold;
     color: #4D6BFE;
 }
 .per-unit {
-    font-size: 1rem;
+    font-size: 0.9rem;
     color: #666;
     font-weight: normal;
 }
@@ -41,7 +41,7 @@
     margin-top: 1rem;
 }
 .form-group {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.25rem;
 }
 .form-group label {
     display: block;
@@ -50,22 +50,22 @@
 }
 .form-group input {
     width: 100%;
-    padding: 0.8rem;
+    padding: 0.7rem;
     border: 1px solid #ddd;
     border-radius: 6px;
-    font-size: 1rem;
+    font-size: 0.95rem;
 }
 .amount-options {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 0.75rem;
     margin: 1rem 0;
 }
 .amount-option {
     background: white;
     border: 2px solid #ddd;
     border-radius: 8px;
-    padding: 1rem;
+    padding: 0.75rem;
     text-align: center;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -80,24 +80,24 @@
 }
 .amount-value {
     font-weight: bold;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
 }
 .conversions {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     color: #666;
-    margin-top: 0.3rem;
+    margin-top: 0.25rem;
 }
 .bonus {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     color: #FF6B6B;
     font-weight: bold;
-    margin-top: 0.3rem;
+    margin-top: 0.25rem;
 }
 .total-conversions {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     color: #333;
     font-weight: bold;
-    margin-top: 0.3rem;
+    margin-top: 0.25rem;
 }
 .discount-badge {
     position: absolute;
@@ -116,8 +116,8 @@
     background: #4D6BFE;
     color: white;
     border: none;
-    padding: 1rem 2rem;
-    font-size: 1.1rem;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
     border-radius: 8px;
     cursor: pointer;
     font-weight: bold;
@@ -129,8 +129,8 @@
     transform: translateY(-2px);
 }
 .api-instructions {
-    margin-top: 3rem;
-    padding: 1.5rem;
+    margin-top: 2rem;
+    padding: 1.25rem;
     border: 1px solid #eee;
     border-radius: 8px;
     background-color: #f9f9f9;
@@ -224,10 +224,17 @@ input[type="number"]::-webkit-outer-spin-button {
     padding-left: 1rem;
 }
 
+.free-features-section h2,
+.quota-checker h2,
+.api-instructions h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
 /* Content layout styles */
 .content {
     max-width: 1200px;
-    margin: 100px auto;
+    margin: 80px auto;
     padding: 0 20px;
 }
 
@@ -245,7 +252,7 @@ input[type="number"]::-webkit-outer-spin-button {
         grid-template-areas: 
             "heading heading"
             "left-col right-col";
-        gap: 2rem;
+        gap: 1.5rem;
     }
     
     .content > h1 {
@@ -258,7 +265,7 @@ input[type="number"]::-webkit-outer-spin-button {
         grid-area: left-col;
         display: flex;
         flex-direction: column;
-        gap: 1rem;
+        gap: 0.75rem;
     }
     
     .free-features-section {
@@ -283,14 +290,14 @@ input[type="number"]::-webkit-outer-spin-button {
 .free-features-section {
     background-color: #f5f8ff;
     border-radius: 12px;
-    padding: 2rem;
-    margin-bottom: 2rem;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
     border-left: 4px solid #4D6BFE;
 }
 .free-features-list {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
+    gap: 0.75rem;
     margin-top: 1rem;
 }
 .free-feature-item {
@@ -304,7 +311,7 @@ input[type="number"]::-webkit-outer-spin-button {
     font-weight: bold;
 }
 .paid-feature-explanation {
-    margin-top: 1.5rem;
+    margin-top: 1.25rem;
     padding-top: 1rem;
     border-top: 1px solid rgba(77, 107, 254, 0.2);
 }
@@ -576,21 +583,21 @@ input[type="number"]::-webkit-outer-spin-button {
 .quota-checker {
     background-color: #f5f8ff;
     border-radius: 12px;
-    padding: 2rem;
-    margin-bottom: 2rem;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
     border-left: 4px solid #4D6BFE;
 }
 
 .quota-form {
-    margin: 1.5rem 0;
+    margin: 1.25rem 0;
 }
 
 .check-quota-btn {
     background: #4D6BFE;
     color: white;
     border: none;
-    padding: 0.8rem 1.5rem;
-    font-size: 1rem;
+    padding: 0.7rem 1.25rem;
+    font-size: 0.9rem;
     border-radius: 8px;
     cursor: pointer;
     font-weight: bold;
@@ -1293,7 +1300,8 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
 /* Dark mode adjustments for success modal */
 @media (prefers-color-scheme: dark) {
     .quota-summary-compact {
-        background-color: #333;
+        background-color: #333 !important;
+        color: #e0e0e0;
     }
     
     .quota-label {
