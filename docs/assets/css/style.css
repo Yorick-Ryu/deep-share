@@ -178,6 +178,11 @@ nav {
     cursor: pointer;
 }
 
+.mobile-menu-btn svg {
+    width: 24px;
+    height: 24px;
+}
+
 /* Announcement Banner */
 .announcement-banner {
     margin-top: var(--header-height);
