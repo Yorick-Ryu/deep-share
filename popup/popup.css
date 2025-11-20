@@ -357,6 +357,13 @@ button:hover {
   pointer-events: none;
 }
 
+/* Adjust tooltip position when it would overflow to the right */
+.checkbox-group .tooltip-icon:last-child .tooltip-text {
+  left: auto;
+  right: 0;
+  transform: none;
+}
+
 .tooltip-text::after {
   content: "";
   position: absolute;
@@ -366,6 +373,13 @@ button:hover {
   border-width: 5px;
   border-style: solid;
   border-color: transparent transparent rgba(0, 0, 0, 0.85) transparent;
+}
+
+/* Keep arrow at the same position for right-aligned tooltips */
+.checkbox-group .tooltip-icon:last-child .tooltip-text::after {
+  left: auto;
+  right: 8px;
+  transform: none;
 }
 
 .tooltip-icon:hover .tooltip-text {

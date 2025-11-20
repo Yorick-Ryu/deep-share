@@ -216,13 +216,13 @@
         "message": "Remove Emoji"
     },
     "convertMermaidLabel": {
-        "message": "Mermaid Diagram Conversion"
+        "message": "Mermaid Convert"
     },
     "compatModeLabel": {
-        "message": "Compatibility Mode"
+        "message": "Compat Mode"
     },
     "compatModeTooltip": {
-        "message": "Compatible with non-standard Markdown format"
+        "message": "Supports non-standard Markdown"
     },
     "getClipboardError": {
         "message": "Failed to get content"
