@@ -44,6 +44,7 @@ function loadSettings(highlightApiKey = false) {
     'removeDividers',
     'removeEmojis',
     'convertMermaid',
+    'compatMode',
     'wordTemplateSelect'
   ], (data) => {
     // Watermark settings
@@ -78,6 +79,9 @@ function loadSettings(highlightApiKey = false) {
 
     // Mermaid conversion setting
     document.getElementById('convertMermaid').checked = !!data.convertMermaid; // Default to false
+
+    // Compatibility Mode setting
+    document.getElementById('compatMode').checked = data.compatMode !== false; // Default to true
 
     // If API key is set, check quota
     if (data.docxApiKey) {
@@ -175,6 +179,7 @@ function setupAutoSave() {
     document.getElementById('removeEmojis'),
     // 添加Mermaid转换设置
     document.getElementById('convertMermaid'),
+    document.getElementById('compatMode'),
     document.getElementById('wordTemplateSelect')
   ];
 
@@ -296,6 +301,8 @@ function loadI18nText() {
   document.getElementById('removeDividersLabel').textContent = chrome.i18n.getMessage('removeDividersLabel') || '去除分割线';
   document.getElementById('removeEmojisLabel').textContent = chrome.i18n.getMessage('removeEmojisLabel') || '去除emoji表情';
   document.getElementById('convertMermaidLabel').textContent = chrome.i18n.getMessage('convertMermaidLabel') || '启用Mermaid图表转换';
+  document.getElementById('compatModeLabel').textContent = chrome.i18n.getMessage('compatModeLabel') || '兼容模式';
+  document.getElementById('compatModeTooltip').textContent = chrome.i18n.getMessage('compatModeTooltip') || '兼容不规范的Markdown格式';
 
   // Formula Copy Settings tab
   document.getElementById('formulaSettingsTitle').textContent = chrome.i18n.getMessage('formulaSettingsTitle') || 'Formula Copy Settings';
@@ -407,6 +414,7 @@ function saveSettings() {
 
     // Mermaid diagram conversion
     convertMermaid: document.getElementById('convertMermaid').checked,
+    compatMode: document.getElementById('compatMode').checked,
     lastUsedTemplate: document.getElementById('wordTemplateSelect').value
   };
 
@@ -577,7 +585,8 @@ function setupManualConversion() {
       docxMode: 'api',
       removeDividers: false,
       removeEmojis: false,
-      convertMermaid: false
+      convertMermaid: false,
+      compatMode: true
     });
 
     // Check if API key is provided
@@ -616,7 +625,7 @@ function setupManualConversion() {
       `;
 
       // Call the conversion function with markdown text
-      await convertMarkdownToDocx(markdownText, settings.docxServerUrl, settings.docxApiKey, settings.removeDividers, settings.removeEmojis, settings.convertMermaid, document.getElementById('wordTemplateSelect').value);
+      await convertMarkdownToDocx(markdownText, settings.docxServerUrl, settings.docxApiKey, settings.removeDividers, settings.removeEmojis, settings.convertMermaid, settings.compatMode, document.getElementById('wordTemplateSelect').value);
 
       // Update button to show success message briefly
       convertBtn.innerHTML = `
@@ -662,7 +671,7 @@ function setupManualConversion() {
 }
 
 // Function to convert markdown text to DOCX
-async function convertMarkdownToDocx(markdownText, serverUrl, apiKey, removeDividers = false, removeEmojis = false, convertMermaid = false, template) {
+async function convertMarkdownToDocx(markdownText, serverUrl, apiKey, removeDividers = false, removeEmojis = false, convertMermaid = false, compatMode = true, template) {
   try {
     const url = serverUrl || 'https://api.ds.rick216.cn';
 
@@ -714,6 +723,7 @@ async function convertMarkdownToDocx(markdownText, serverUrl, apiKey, removeDivi
       filename: filename,
       remove_hr: removeDividers,
       convert_mermaid: convertMermaid,
+      compat_mode: compatMode,
       language: language
     };
 

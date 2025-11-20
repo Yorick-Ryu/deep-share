@@ -216,7 +216,13 @@
         "message": "去除Emoji表情"
     },
     "convertMermaidLabel": {
-        "message": "Mermaid圖表轉換（實驗性功能）"
+        "message": "Mermaid圖表轉換"
+    },
+    "compatModeLabel": {
+        "message": "相容模式"
+    },
+    "compatModeTooltip": {
+        "message": "相容不規範的Markdown格式"
     },
     "getClipboardError": {
         "message": "獲取內容失敗"
