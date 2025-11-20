@@ -21,6 +21,8 @@
     --text-secondary: #aaaaaa;
     --border-color: #333333;
     --input-bg: #2d2d2d;
+    --primary-color: #6E85FF;
+    --primary-hover: #5C75FF;
     --card-bg: #2d2d2d;
     --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     --sidebar-bg: #252525;
@@ -173,6 +175,16 @@ body {
   color: var(--text-secondary);
   font-size: 12px;
   line-height: 1.5;
+}
+
+.feature-explanation a {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.feature-explanation a:hover {
+  text-decoration: underline;
 }
 
 .form-hint a {
@@ -378,7 +390,7 @@ button:hover {
 /* Keep arrow at the same position for right-aligned tooltips */
 .checkbox-group .tooltip-icon:last-child .tooltip-text::after {
   left: auto;
-  right: 8px;
+  right: 3px;
   transform: none;
 }
 

@@ -153,7 +153,7 @@
         "message": "请点击拓展图标购买或填写API-Key以使用文档转换功能"
     },
     "manualConversionExplanation": {
-        "message": "支持豆包、元宝、Claude等，复制需要转换的对话到Markdown输入框，点击\"转换为文档\"按钮立即下载Word格式，排版精美，支持公式！<a href=\"https://docs.deepshare.app\" target=\"_blank\" style=\"text-decoration: none;\">点击此处</a>查看详细教程"
+        "message": "支持豆包、元宝、Claude等，复制需要转换的对话到Markdown输入框，点击\"转换为文档\"按钮立即下载Word格式，排版精美，支持公式！<a href=\"https://docs.deepshare.app\" target=\"_blank\">点击此处</a>查看详细教程"
     },
     "manualConversionTitle": {
         "message": "手动转换文档"
