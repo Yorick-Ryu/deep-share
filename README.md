@@ -65,7 +65,7 @@ Note: Manual paste functionality means you can copy the Markdown text from AI re
 
 You can watch a short demo of DeepShare on YouTube:
 
-[![DeepShare demo on YouTube](https://img.youtube.com/vi/QJu6pdZO8Wc/maxresdefault.jpg)](https://www.youtube.com/watch?v=QJu6pdZO8Wc)
+[![DeepShare demo on YouTube](screenshots/promotional-banner-small-en.png)](https://www.youtube.com/watch?v=QJu6pdZO8Wc)
 
 ## License
 
