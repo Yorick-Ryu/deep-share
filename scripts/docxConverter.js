@@ -191,6 +191,7 @@ async function convertToDocxViaApi(content, serverUrl) {
             removeDividers: false,  // Default to false for removing dividers
             removeEmojis: false,    // Default to false for removing emojis
             convertMermaid: false,  // Default to false for Mermaid conversion
+            compatMode: true,       // Default to true for compatibility mode
             lastUsedTemplate: null
         });
 
@@ -242,6 +243,7 @@ async function convertToDocxViaApi(content, serverUrl) {
             filename: generateFilename(content),
             remove_hr: settings.removeDividers,
             convert_mermaid: settings.convertMermaid,
+            compat_mode: settings.compatMode,
             language: language
         };
 

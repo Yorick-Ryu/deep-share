@@ -159,6 +159,7 @@ function loadSettings() {
       convertMermaid: localStorage.getItem('convertMermaid') === 'true',
       removeDividers: localStorage.getItem('removeDividers') === 'true',
       removeEmojis: localStorage.getItem('removeEmojis') === 'true',
+      compatMode: localStorage.getItem('compatMode') !== 'false', // Default to true
       lastUsedTemplate: localStorage.getItem('lastUsedTemplate') || 'templates',
       markdownText: localStorage.getItem('markdownText') || ''
     };
@@ -167,6 +168,7 @@ function loadSettings() {
     document.getElementById('convertMermaid').checked = settings.convertMermaid;
     document.getElementById('removeDividers').checked = settings.removeDividers;
     document.getElementById('removeEmojis').checked = settings.removeEmojis;
+    document.getElementById('compatMode').checked = settings.compatMode;
     document.getElementById('markdownInput').value = settings.markdownText;
 
     // If API key is set, check quota
@@ -186,6 +188,7 @@ function saveSettings() {
       convertMermaid: document.getElementById('convertMermaid').checked,
       removeDividers: document.getElementById('removeDividers').checked,
       removeEmojis: document.getElementById('removeEmojis').checked,
+      compatMode: document.getElementById('compatMode').checked,
       lastUsedTemplate: document.getElementById('wordTemplateSelect').value,
       markdownText: document.getElementById('markdownInput').value
     };
@@ -194,6 +197,7 @@ function saveSettings() {
     localStorage.setItem('convertMermaid', settings.convertMermaid);
     localStorage.setItem('removeDividers', settings.removeDividers);
     localStorage.setItem('removeEmojis', settings.removeEmojis);
+    localStorage.setItem('compatMode', settings.compatMode);
     localStorage.setItem('lastUsedTemplate', settings.lastUsedTemplate);
     localStorage.setItem('markdownText', settings.markdownText);
 
@@ -215,6 +219,7 @@ function setupAutoSave() {
     document.getElementById('convertMermaid'),
     document.getElementById('removeDividers'),
     document.getElementById('removeEmojis'),
+    document.getElementById('compatMode'),
     document.getElementById('wordTemplateSelect')
   ];
 
@@ -471,6 +476,7 @@ function setupManualConversion() {
     const convertMermaid = document.getElementById('convertMermaid').checked;
     const removeDividers = document.getElementById('removeDividers').checked;
     const removeEmojis = document.getElementById('removeEmojis').checked;
+    const compatMode = document.getElementById('compatMode').checked;
     const template = document.getElementById('wordTemplateSelect').value;
 
     // Check if API key is provided
@@ -502,7 +508,7 @@ function setupManualConversion() {
       `;
 
       // Call the conversion function
-      await convertMarkdownToDocx(markdownText, docxApiKey, convertMermaid, removeDividers, removeEmojis, template);
+      await convertMarkdownToDocx(markdownText, docxApiKey, convertMermaid, removeDividers, removeEmojis, compatMode, template);
 
       // Update button to show success message briefly
       convertBtn.innerHTML = `
@@ -585,7 +591,7 @@ function setupManualConversion() {
 }
 
 // Function to convert markdown text to DOCX
-async function convertMarkdownToDocx(markdownText, apiKey, convertMermaid = false, removeDividers = false, removeEmojis = false, template) {
+async function convertMarkdownToDocx(markdownText, apiKey, convertMermaid = false, removeDividers = false, removeEmojis = false, compatMode = true, template) {
   try {
 
     // Generate filename based on content
@@ -637,6 +643,7 @@ async function convertMarkdownToDocx(markdownText, apiKey, convertMermaid = fals
       filename: filename,
       convert_mermaid: convertMermaid,
       remove_hr: removeDividers,
+      compat_mode: compatMode,
       language: lang
     };
 
