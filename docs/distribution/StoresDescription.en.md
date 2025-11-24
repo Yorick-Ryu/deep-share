@@ -1,10 +1,10 @@
 Export beautifully formatted Word documents from AI Chats on DeepSeek, ChatGPT, Grok, and more with one click, copy formulas; support for DeepSeek conversation long screenshots.
 
-DeepSeek to Word, ChatGPT to Word, Grok to Word
+DeepSeek to Word, ChatGPT to Word, Grok to Word, Gemini to Word
 
 🆓 Free Features
 - DeepSeek conversation long screenshots with customizable watermarks, select single or multiple conversations
-- Copy formulas from DeepSeek, ChatGPT, Grok (click formula to copy directly)
+- Copy formulas from DeepSeek, ChatGPT, Gemini, Grok (click formula to copy directly)
 - Clean and beautiful interface with no ads
 - Open-source and transparent frontend code, safe and reliable
 

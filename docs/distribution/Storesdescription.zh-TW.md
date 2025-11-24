@@ -1,10 +1,10 @@
 一鍵從DeepSeek、ChatGPT、Grok等AI對話匯出排版精美的Word文件，複製其中的公式；支援DeepSeek長對話截圖分享。
 
-DeepSeek轉Word、ChatGPT轉Word、Grok轉Word
+DeepSeek轉Word、ChatGPT轉Word、Gemini轉Word、Grok轉Word
 
 🆓 免費功能
 - DeepSeek對話長截圖，可自訂浮水印，選擇單條或多條對話
-- 複製DeepSeek、ChatGPT、Grok的公式（點擊公式直接複製）
+- 複製DeepSeek、ChatGPT、Gemini、Grok的公式（點擊公式直接複製）
 - 簡潔美觀的介面，無廣告干擾
 - 開源透明的前端程式碼，安全可靠
 

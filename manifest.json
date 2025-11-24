@@ -139,7 +139,7 @@
             "js": [
                 "lib/katex.min.js",
                 "scripts/notifications.js",
-                "scripts/copyKatex.js",
+                "scripts/copyGeminiMath.js",
                 "scripts/docxConverter.js",
                 "scripts/injectGeminiButton.js",
                 "scripts/injectGeminiCanvasButton.js"

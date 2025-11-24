@@ -1,10 +1,10 @@
 一键从DeepSeek、ChatGPT、豆包等AI对话导出排版精美的Word文档，复制其中的公式；支持DeepSeek对话长截图。
 
-DeepSeek转Word、ChatGPT转Word、豆包转Word
+DeepSeek转Word、ChatGPT转Word、豆包转Word、Gemini转Word
 
 🆓 免费功能
 - DeepSeek对话长截图，可自定义水印，选择单条或多条对话
-- 复制DeepSeek、ChatGPT、豆包的公式（点击公式直接复制）
+- 复制DeepSeek、ChatGPT、Gemini、豆包的公式（点击公式直接复制）
 - 简洁美观的界面，无广告干扰
 - 开源透明的前端代码，安全可靠
 
