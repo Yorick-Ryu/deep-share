@@ -478,6 +478,58 @@ button:hover {
   border-radius: 8px;
 }
 
+/* About section styles */
+.about-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.acknowledgment {
+  padding: 16px;
+  background: linear-gradient(135deg, rgba(77, 107, 254, 0.08) 0%, rgba(77, 107, 254, 0.04) 100%);
+  border-left: 3px solid var(--primary-color);
+  border-radius: 6px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-primary);
+  margin: 0 0 8px 0;
+}
+
+.about-item {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.about-item label {
+  font-weight: 500;
+  color: var(--text-primary);
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.about-item span,
+.about-link {
+  color: var(--text-secondary);
+  font-size: 14px;
+  word-break: break-all;
+  text-align: right;
+}
+
+.about-link {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.about-link:hover {
+  color: var(--primary-hover);
+  text-decoration: underline;
+}
+
 /* Quota section styles */
 .quota-section {
   margin-top: 20px;

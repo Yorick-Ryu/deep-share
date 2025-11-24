@@ -132,7 +132,7 @@
         "message": "Please select at least one message"
     },
     "sponsorTabLabel": {
-        "message": "Support Us"
+        "message": "About"
     },
     "totalQuotaLabel": {
         "message": "Total:"
@@ -265,5 +265,23 @@
     },
     "apiKeyError": {
         "message": "API Key error. Please check your email or contact customer service: yoricker@foxmail.com"
+    },
+    "aboutTabTitle": {
+        "message": "About DeepShare"
+    },
+    "versionLabel": {
+        "message": "Version:"
+    },
+    "documentationLabel": {
+        "message": "Documentation:"
+    },
+    "githubLabel": {
+        "message": "GitHub:"
+    },
+    "developerEmailLabel": {
+        "message": "Developer Email:"
+    },
+    "acknowledgmentText": {
+        "message": "Thank you to everyone who has shared suggestions for DeepShare! Many features are born from real user needs. Let's boost productivity together and save time for what truly matters in life."
     }
 }

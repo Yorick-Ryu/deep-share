@@ -275,20 +275,14 @@ function setupUIElements() {
 function loadI18nText() {
   // Get current UI language
   const currentLang = chrome.i18n.getUILanguage();
-  
-  // Show sponsor tab only for Chinese language
-  const sponsorTabBtn = document.querySelector('.sponsor-tab-btn');
-  if (sponsorTabBtn) {
-    sponsorTabBtn.style.display = currentLang.startsWith('zh') ? 'flex' : 'none';
-  }
 
   // Tab labels
   document.getElementById('docxTabLabel').textContent = chrome.i18n.getMessage('docxSettings') || 'Document Conversion';
   document.getElementById('manualDocxTabLabel').textContent = chrome.i18n.getMessage('manualDocxSettings') || '手动转换文档';
   document.getElementById('formulaTabLabel').textContent = chrome.i18n.getMessage('formulaTabLabel') || 'Formula Settings';
   document.getElementById('screenshotTabLabel').textContent = chrome.i18n.getMessage('screenshotSettings') || 'Screenshot Settings';
-  document.getElementById('sponsorTabLabel').textContent = chrome.i18n.getMessage('sponsorTabLabel') || 'Sponsor';
-  document.getElementById('sponsorTabTitle').textContent = chrome.i18n.getMessage('sponsorTabLabel') || 'Sponsor';
+  document.getElementById('sponsorTabLabel').textContent = chrome.i18n.getMessage('sponsorTabLabel') || 'About';
+  document.getElementById('sponsorTabTitle').textContent = chrome.i18n.getMessage('aboutTabTitle') || 'About DeepShare';
 
   // Document Conversion tab
   document.getElementById('docxSettingsTitle').textContent = chrome.i18n.getMessage('docxSettings') || 'Word (DOCX) Conversion';
@@ -342,8 +336,22 @@ function loadI18nText() {
   document.getElementById('methodHtml2CanvasLabel').textContent = chrome.i18n.getMessage('methodHtml2CanvasLabel') || 'html2canvas';
   document.getElementById('screenshotMethodHint').textContent = chrome.i18n.getMessage('screenshotMethodHint') || '选择用于截图的方法，如果一种方法不工作，请尝试另一种';
 
-  // Sponsor tab
-  document.getElementById('sponsorTitle').textContent = chrome.i18n.getMessage('sponsorTitle');
+  // About tab
+  document.getElementById('acknowledgmentText').textContent = chrome.i18n.getMessage('acknowledgmentText') || '感谢每一位为 DeepShare 提出建议的朋友！许多功能源于用户的真实需求，让我们一起提升效率，把节省的时间留给生活。';
+  document.getElementById('versionLabel').textContent = chrome.i18n.getMessage('versionLabel') || 'Version:';
+  document.getElementById('documentationLabel').textContent = chrome.i18n.getMessage('documentationLabel') || 'Documentation:';
+  document.getElementById('githubLabel').textContent = chrome.i18n.getMessage('githubLabel') || 'GitHub:';
+  document.getElementById('developerEmailLabel').textContent = chrome.i18n.getMessage('developerEmailLabel') || 'Developer Email:';
+  
+  // Load version from manifest
+  fetch(chrome.runtime.getURL('manifest.json'))
+    .then(response => response.json())
+    .then(manifest => {
+      document.getElementById('versionValue').textContent = manifest.version;
+    })
+    .catch(() => {
+      document.getElementById('versionValue').textContent = '1.2.2';
+    });
 
   // Quota section labels
   document.getElementById('quotaTitle').textContent = chrome.i18n.getMessage('quotaTitle') || '您的转换次数';

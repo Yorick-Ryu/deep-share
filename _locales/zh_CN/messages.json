@@ -132,7 +132,7 @@
         "message": "请至少选择一条对话"
     },
     "sponsorTabLabel": {
-        "message": "赞助"
+        "message": "关于"
     },
     "totalQuotaLabel": {
         "message": "总计:"
@@ -265,5 +265,23 @@
     },
     "apiKeyError": {
         "message": "API-KEY填写错误，请查看邮件或联系客服微信：yorick_cn"
+    },
+    "aboutTabTitle": {
+        "message": "关于 DeepShare"
+    },
+    "versionLabel": {
+        "message": "版本号:"
+    },
+    "documentationLabel": {
+        "message": "官方文档:"
+    },
+    "githubLabel": {
+        "message": "GitHub:"
+    },
+    "developerEmailLabel": {
+        "message": "开发者邮箱:"
+    },
+    "acknowledgmentText": {
+        "message": "感谢每一位为 DeepShare 提出建议的朋友！许多功能源于用户的真实需求，让我们一起提升效率，把节省的时间留给生活。"
     }
 }
