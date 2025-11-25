@@ -113,7 +113,7 @@
             "js": [
                 "lib/katex.min.js",
                 "scripts/notifications.js",
-                "scripts/copyKatex4DouBao.js"
+                "scripts/copyKatex4Doubao.js"
             ]
         },
         {
