@@ -1,9 +1,9 @@
 {
     "extensionName": {
-        "message": "DeepShare：AI对话分享与导出"
+        "message": "DeepShare：DeepSeek转Word"
     },
     "extensionDescription": {
-        "message": "一键复制DeepSeek、ChatGPT、豆包等AI对话的公式，导出排版精美的Word文档，支持DeepSeek长对话截图分享。"
+        "message": "一键将DeepSeek、ChatGPT、Gemini、豆包等AI对话导出为Word文档、复制公式；DeepSeek对话长截图分享。"
     },
     "shareButton": {
         "message": "分享对话"
@@ -69,7 +69,7 @@
         "message": "转换模式"
     },
     "modeLocalLabel": {
-        "message": "本地转换 (Pandoc)"
+        "message": "本地转换"
     },
     "modeApiLabel": {
         "message": "API转换"
@@ -132,7 +132,7 @@
         "message": "请至少选择一条对话"
     },
     "sponsorTabLabel": {
-        "message": "赞助"
+        "message": "关于"
     },
     "totalQuotaLabel": {
         "message": "总计:"
@@ -147,13 +147,13 @@
         "message": "您的转换次数"
     },
     "apiKeyHint": {
-        "message": "购买 API Key? <a href=\"https://ds.rick216.cn/purchase.html\" target=\"_blank\">点击此处</a>"
+        "message": "购买 API Key? <a href=\"https://ds.rick216.cn/purchase\" target=\"_blank\">点击此处</a>"
     },
     "apiKeyMissing": {
         "message": "请点击拓展图标购买或填写API-Key以使用文档转换功能"
     },
     "manualConversionExplanation": {
-        "message": "支持ChatGPT、豆包、元宝等，复制需要转换的对话到Markdown输入框，点击\"转换为文档\"按钮立即下载Word格式，排版精美，支持公式！"
+        "message": "支持豆包、元宝、Claude等，复制需要转换的对话到Markdown输入框，点击\"转换为文档\"按钮立即下载Word格式，排版精美，支持公式！<a href=\"https://docs.deepshare.app\" target=\"_blank\">点击此处</a>查看详细教程"
     },
     "manualConversionTitle": {
         "message": "手动转换文档"
@@ -209,11 +209,23 @@
     "screenshotMethodHint": {
         "message": "选择用于截图的方法，如果一种方法不工作，请尝试另一种，切换后请刷新网页。"
     },
+    "removeDividersLabel": {
+        "message": "去除分割线"
+    },
+    "removeEmojisLabel": {
+        "message": "去除Emoji表情"
+    },
     "convertMermaidLabel": {
-        "message": "启用Mermaid图表转换（实验性功能）"
+        "message": "Mermaid图表转换"
+    },
+    "compatModeLabel": {
+        "message": "兼容模式"
+    },
+    "compatModeTooltip": {
+        "message": "兼容不规范的Markdown格式"
     },
     "getClipboardError": {
-        "message": "从剪贴板获取内容失败"
+        "message": "获取内容失败"
     },
     "refreshButton": {
         "message": "刷新"
@@ -250,5 +262,26 @@
     },
     "imageCopyFailed": {
         "message": "复制图片到剪贴板失败"
+    },
+    "apiKeyError": {
+        "message": "API-KEY填写错误，请查看邮件或联系客服微信：yorick_cn"
+    },
+    "aboutTabTitle": {
+        "message": "关于 DeepShare"
+    },
+    "versionLabel": {
+        "message": "版本号:"
+    },
+    "documentationLabel": {
+        "message": "官方文档:"
+    },
+    "githubLabel": {
+        "message": "GitHub:"
+    },
+    "developerEmailLabel": {
+        "message": "开发者邮箱:"
+    },
+    "acknowledgmentText": {
+        "message": "感谢每一位为 DeepShare 提出建议的朋友！许多功能源于用户的真实需求，让我们一起提升效率，把节省的时间留给生活。"
     }
 }

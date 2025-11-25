@@ -41,7 +41,10 @@ function loadSettings(highlightApiKey = false) {
     'enableFormulaCopy',
     'formulaFormat',
     'screenshotMethod',
+    'removeDividers',
+    'removeEmojis',
     'convertMermaid',
+    'compatMode',
     'wordTemplateSelect'
   ], (data) => {
     // Watermark settings
@@ -68,8 +71,17 @@ function loadSettings(highlightApiKey = false) {
     document.getElementById('formatMathML').checked = formulaFormat === 'mathml';
     document.getElementById('formatLaTeX').checked = formulaFormat === 'latex';
 
+    // Remove dividers setting
+    document.getElementById('removeDividers').checked = !!data.removeDividers; // Default to false
+
+    // Remove emojis setting
+    document.getElementById('removeEmojis').checked = !!data.removeEmojis; // Default to false
+
     // Mermaid conversion setting
     document.getElementById('convertMermaid').checked = !!data.convertMermaid; // Default to false
+
+    // Compatibility Mode setting
+    document.getElementById('compatMode').checked = data.compatMode !== false; // Default to true
 
     // If API key is set, check quota
     if (data.docxApiKey) {
@@ -161,8 +173,13 @@ function setupAutoSave() {
     // 添加截图方法相关的设置元素
     document.getElementById('methodDomToImage'),
     document.getElementById('methodHtml2Canvas'),
+    // 添加去除分割线设置
+    document.getElementById('removeDividers'),
+    // 添加去除emoji设置
+    document.getElementById('removeEmojis'),
     // 添加Mermaid转换设置
     document.getElementById('convertMermaid'),
+    document.getElementById('compatMode'),
     document.getElementById('wordTemplateSelect')
   ];
 
@@ -238,26 +255,34 @@ function setupUIElements() {
   document.getElementById('refreshQuota').addEventListener('click', () => {
     checkQuota(true);
   });
+
+  // Set up server URL label click to toggle input visibility
+  const serverUrlLabel = document.getElementById('docxServerUrlLabel');
+  const serverUrlInput = document.getElementById('docxServerUrl');
+  
+  serverUrlLabel.addEventListener('click', () => {
+    if (serverUrlInput.classList.contains('visible')) {
+      serverUrlInput.classList.remove('visible');
+      serverUrlLabel.classList.remove('expanded');
+    } else {
+      serverUrlInput.classList.add('visible');
+      serverUrlLabel.classList.add('expanded');
+    }
+  });
 }
 
 // Load all i18n text
 function loadI18nText() {
   // Get current UI language
   const currentLang = chrome.i18n.getUILanguage();
-  
-  // Show sponsor tab only for Chinese language
-  const sponsorTabBtn = document.querySelector('.sponsor-tab-btn');
-  if (sponsorTabBtn) {
-    sponsorTabBtn.style.display = currentLang.startsWith('zh') ? 'flex' : 'none';
-  }
 
   // Tab labels
   document.getElementById('docxTabLabel').textContent = chrome.i18n.getMessage('docxSettings') || 'Document Conversion';
   document.getElementById('manualDocxTabLabel').textContent = chrome.i18n.getMessage('manualDocxSettings') || '手动转换文档';
   document.getElementById('formulaTabLabel').textContent = chrome.i18n.getMessage('formulaTabLabel') || 'Formula Settings';
   document.getElementById('screenshotTabLabel').textContent = chrome.i18n.getMessage('screenshotSettings') || 'Screenshot Settings';
-  document.getElementById('sponsorTabLabel').textContent = chrome.i18n.getMessage('sponsorTabLabel') || 'Sponsor';
-  document.getElementById('sponsorTabTitle').textContent = chrome.i18n.getMessage('sponsorTabLabel') || 'Sponsor';
+  document.getElementById('sponsorTabLabel').textContent = chrome.i18n.getMessage('sponsorTabLabel') || 'About';
+  document.getElementById('sponsorTabTitle').textContent = chrome.i18n.getMessage('aboutTabTitle') || 'About DeepShare';
 
   // Document Conversion tab
   document.getElementById('docxSettingsTitle').textContent = chrome.i18n.getMessage('docxSettings') || 'Word (DOCX) Conversion';
@@ -267,7 +292,11 @@ function loadI18nText() {
   document.getElementById('modeApiLabel').textContent = chrome.i18n.getMessage('modeApiLabel') || 'API';
   document.getElementById('docxServerUrlLabel').textContent = chrome.i18n.getMessage('docxServerUrlLabel') || 'Server URL';
   document.getElementById('docxApiKeyLabel').textContent = chrome.i18n.getMessage('docxApiKeyLabel') || 'API Key';
+  document.getElementById('removeDividersLabel').textContent = chrome.i18n.getMessage('removeDividersLabel') || '去除分割线';
+  document.getElementById('removeEmojisLabel').textContent = chrome.i18n.getMessage('removeEmojisLabel') || '去除emoji表情';
   document.getElementById('convertMermaidLabel').textContent = chrome.i18n.getMessage('convertMermaidLabel') || '启用Mermaid图表转换';
+  document.getElementById('compatModeLabel').textContent = chrome.i18n.getMessage('compatModeLabel') || '兼容模式';
+  document.getElementById('compatModeTooltip').textContent = chrome.i18n.getMessage('compatModeTooltip') || '兼容不规范的Markdown格式';
 
   // Formula Copy Settings tab
   document.getElementById('formulaSettingsTitle').textContent = chrome.i18n.getMessage('formulaSettingsTitle') || 'Formula Copy Settings';
@@ -279,7 +308,7 @@ function loadI18nText() {
 
   // Manual Document Conversion tab
   document.getElementById('manualConversionTitle').textContent = chrome.i18n.getMessage('manualConversionTitle') || '手动转换';
-  document.getElementById('manualConversionExplanation').textContent = chrome.i18n.getMessage('manualConversionExplanation') || '支持ChatGPT、豆包、元宝等，复制需要转换的对话到Markdown输入框，点击"转换为文档"按钮立即下载Word格式，排版精美，支持公式！';
+  document.getElementById('manualConversionExplanation').innerHTML = chrome.i18n.getMessage('manualConversionExplanation') || '支持ChatGPT、豆包、元宝等，复制需要转换的对话到Markdown输入框，点击"转换为文档"按钮立即下载Word格式，排版精美，支持公式！';
   document.getElementById('markdownInputLabel').textContent = chrome.i18n.getMessage('markdownInputLabel') || 'Markdown 文本';
   document.getElementById('templateLabel').textContent = chrome.i18n.getMessage('templateLabel') || 'Word Template';
   document.getElementById('convertMarkdownBtn').innerHTML = `
@@ -307,8 +336,22 @@ function loadI18nText() {
   document.getElementById('methodHtml2CanvasLabel').textContent = chrome.i18n.getMessage('methodHtml2CanvasLabel') || 'html2canvas';
   document.getElementById('screenshotMethodHint').textContent = chrome.i18n.getMessage('screenshotMethodHint') || '选择用于截图的方法，如果一种方法不工作，请尝试另一种';
 
-  // Sponsor tab
-  document.getElementById('sponsorTitle').textContent = chrome.i18n.getMessage('sponsorTitle');
+  // About tab
+  document.getElementById('acknowledgmentText').textContent = chrome.i18n.getMessage('acknowledgmentText') || '感谢每一位为 DeepShare 提出建议的朋友！许多功能源于用户的真实需求，让我们一起提升效率，把节省的时间留给生活。';
+  document.getElementById('versionLabel').textContent = chrome.i18n.getMessage('versionLabel') || 'Version:';
+  document.getElementById('documentationLabel').textContent = chrome.i18n.getMessage('documentationLabel') || 'Documentation:';
+  document.getElementById('githubLabel').textContent = chrome.i18n.getMessage('githubLabel') || 'GitHub:';
+  document.getElementById('developerEmailLabel').textContent = chrome.i18n.getMessage('developerEmailLabel') || 'Developer Email:';
+  
+  // Load version from manifest
+  fetch(chrome.runtime.getURL('manifest.json'))
+    .then(response => response.json())
+    .then(manifest => {
+      document.getElementById('versionValue').textContent = manifest.version;
+    })
+    .catch(() => {
+      document.getElementById('versionValue').textContent = '1.2.2';
+    });
 
   // Quota section labels
   document.getElementById('quotaTitle').textContent = chrome.i18n.getMessage('quotaTitle') || '您的转换次数';
@@ -371,8 +414,15 @@ function saveSettings() {
     enableFormulaCopy: document.getElementById('enableFormulaCopy').checked,
     formulaFormat: formulaFormat,
 
+    // Remove dividers setting
+    removeDividers: document.getElementById('removeDividers').checked,
+
+    // Remove emojis setting
+    removeEmojis: document.getElementById('removeEmojis').checked,
+
     // Mermaid diagram conversion
     convertMermaid: document.getElementById('convertMermaid').checked,
+    compatMode: document.getElementById('compatMode').checked,
     lastUsedTemplate: document.getElementById('wordTemplateSelect').value
   };
 
@@ -541,7 +591,10 @@ function setupManualConversion() {
       docxServerUrl: 'https://api.ds.rick216.cn',
       docxApiKey: '',
       docxMode: 'api',
-      convertMermaid: false
+      removeDividers: false,
+      removeEmojis: false,
+      convertMermaid: false,
+      compatMode: true
     });
 
     // Check if API key is provided
@@ -580,7 +633,7 @@ function setupManualConversion() {
       `;
 
       // Call the conversion function with markdown text
-      await convertMarkdownToDocx(markdownText, settings.docxServerUrl, settings.docxApiKey, settings.convertMermaid, document.getElementById('wordTemplateSelect').value);
+      await convertMarkdownToDocx(markdownText, settings.docxServerUrl, settings.docxApiKey, settings.removeDividers, settings.removeEmojis, settings.convertMermaid, settings.compatMode, document.getElementById('wordTemplateSelect').value);
 
       // Update button to show success message briefly
       convertBtn.innerHTML = `
@@ -626,7 +679,7 @@ function setupManualConversion() {
 }
 
 // Function to convert markdown text to DOCX
-async function convertMarkdownToDocx(markdownText, serverUrl, apiKey, convertMermaid = false, template) {
+async function convertMarkdownToDocx(markdownText, serverUrl, apiKey, removeDividers = false, removeEmojis = false, convertMermaid = false, compatMode = true, template) {
   try {
     const url = serverUrl || 'https://api.ds.rick216.cn';
 
@@ -651,10 +704,34 @@ async function convertMarkdownToDocx(markdownText, serverUrl, apiKey, convertMer
     const currentLang = chrome.i18n.getUILanguage();
     const language = currentLang.startsWith('zh') ? 'zh' : 'en';
 
+    // Remove emojis from content if enabled (frontend processing)
+    let processedContent = markdownText;
+    if (removeEmojis) {
+      // First, convert number emojis to their text equivalents
+      // Handle keycap number emojis (0️⃣-9️⃣) - these are composed of digit + FE0F + 20E3
+      processedContent = processedContent.replace(/0\uFE0F?\u20E3/gu, '0. ');
+      processedContent = processedContent.replace(/1\uFE0F?\u20E3/gu, '1. ');
+      processedContent = processedContent.replace(/2\uFE0F?\u20E3/gu, '2. ');
+      processedContent = processedContent.replace(/3\uFE0F?\u20E3/gu, '3. ');
+      processedContent = processedContent.replace(/4\uFE0F?\u20E3/gu, '4. ');
+      processedContent = processedContent.replace(/5\uFE0F?\u20E3/gu, '5. ');
+      processedContent = processedContent.replace(/6\uFE0F?\u20E3/gu, '6. ');
+      processedContent = processedContent.replace(/7\uFE0F?\u20E3/gu, '7. ');
+      processedContent = processedContent.replace(/8\uFE0F?\u20E3/gu, '8. ');
+      processedContent = processedContent.replace(/9\uFE0F?\u20E3/gu, '9. ');
+      // Handle special keycap ten emoji
+      processedContent = processedContent.replace(/🔟/gu, '10. ');
+      
+      // Then remove other emoji characters using regex
+      processedContent = processedContent.replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F000}-\u{1F02F}\u{1F0A0}-\u{1F0FF}\u{1F100}-\u{1F64F}\u{1F680}-\u{1F6FF}\u{1F900}-\u{1F9FF}\u{1FA00}-\u{1FA6F}\u{1FA70}-\u{1FAFF}\u{FE00}-\u{FE0F}\u{1F200}-\u{1F251}]/gu, '');
+    }
+
     const body = {
-      content: markdownText,
+      content: processedContent,
       filename: filename,
+      remove_hr: removeDividers,
       convert_mermaid: convertMermaid,
+      compat_mode: compatMode,
       language: language
     };
 

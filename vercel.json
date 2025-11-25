@@ -47,20 +47,6 @@
         }
       ]
     }
-  ],
-  "redirects": [
-    {
-      "source": "/",
-      "has": [
-        {
-          "type": "header",
-          "key": "Accept-Language",
-          "value": "(?!.*zh).*"
-        }
-      ],
-      "destination": "/index-en.html",
-      "permanent": false
-    }
   ]
 }
 

@@ -6,7 +6,7 @@
 
 A lightweight browser extension designed for AI users to easily copy formulas from ChatGPT, DeepSeek, Grok and 10+ other AI conversations, export beautifully formatted Word documents, and support long conversation screenshot sharing for DeepSeek.
 
-[简体中文](README.zh-CN.md)
+[简体中文文档](https://docs.deepshare.app/)
 
 ## Features
 
@@ -27,7 +27,7 @@ A lightweight browser extension designed for AI users to easily copy formulas fr
 |-------------|-------------|-------------|------------------------|
 | DeepSeek | ✓ | ✓ | ✓ |
 | ChatGPT | ✓ | ✓ | ✗ |
-| Gemini | ✗ | ✓ | ✗ |
+| Gemini | ✓ | ✓ | ✗ |
 | Grok | ✓ | Manual paste | ✗ |
 | ChatGLM | ✓ | Manual paste | ✗ |
 | OpenRouter | ✓ | Manual paste | ✗ |
@@ -35,7 +35,7 @@ A lightweight browser extension designed for AI users to easily copy formulas fr
 | Monica | ✓ | Manual paste | ✗ |
 | Cici | ✗ | Manual paste | ✗ |
 | Yuanbao | ✗ | Manual paste | ✗ |
-| Kimi | ✗ | Manual paste | ✗ |
+| Kimi | ✓ | Manual paste | ✗ |
 | Tongyi | ✓ | Manual paste | ✗ |
 | Xunfei Xinghuo | ✓ | Manual paste | ✗ |
 | Wen Xiaobai | ✓ | Manual paste | ✗ |
@@ -45,7 +45,7 @@ A lightweight browser extension designed for AI users to easily copy formulas fr
 | Bot.n | ✓ | Manual paste | ✗ |
 | Zhihu | ✓ | ✗ | ✗ |
 
-Note: Manual paste functionality means you can copy the Markdown text from AI responses into the extension to convert it to a Word document.
+Note: Manual paste functionality means you can copy the Markdown text from AI responses into the extension to convert it to a Word document. Kimi officially supports formula copying - right-click on formulas to copy.
 
 ## Installation
 
@@ -63,32 +63,9 @@ Note: Manual paste functionality means you can copy the Markdown text from AI re
 
 ## Usage
 
-Prerequisites: Install the extension
+You can watch a short demo of DeepShare on YouTube:
 
-1. Visit a supported AI platform (e.g., https://chat.deepseek.com/)
-2. Start a new conversation
-3. Look for two buttons in the top-right corner:
-   - Select button: Enables selection mode to choose conversations
-   - Share button: Directly share all conversations
-4. In selection mode:
-   - Check the conversations you want to share
-   - Use "Select All"/"Deselect All" buttons for quick operations
-   - Click the share button to generate content for selected conversations
-5. Choose sharing format:
-   - Screenshot mode: Generates a long image with conversation content (DeepSeek only)
-   - Text mode: Plain text containing conversation content
-6. Copy or download the generated image and text
-
-## Watermark Settings
-
-Click the settings icon in the top-right corner of the share dialog to:
-
-- Hide the default screenshot watermark
-- Customize watermark content
-
-## Contributing
-
-Contributions via Issues and Pull Requests are welcome.
+[![DeepShare demo on YouTube](screenshots/promotional-banner-small-en.png)](https://www.youtube.com/watch?v=QJu6pdZO8Wc)
 
 ## License
 

@@ -57,7 +57,28 @@ async function getSelectedDeepSeekMessages() {
                     });
                 }
             } else {
-                const copyButton = messageDiv.querySelector('.ds-icon-button svg path[d*="M6.14926"]')?.closest('[role="button"]');
+                // More robust way to find copy button - multiple strategies
+                let copyButton = null;
+                
+                // Strategy 1: Find by .ds-icon-button class with role attribute and SVG path starting with M6.149
+                const dsIconButtons = messageDiv.querySelectorAll('.ds-icon-button[role="button"]');
+                for (const btn of dsIconButtons) {
+                    const svgPath = btn.querySelector('svg path[d^="M6.149"]');
+                    if (svgPath) {
+                        copyButton = btn;
+                        break;
+                    }
+                }
+                
+                // Strategy 2 (most stable): Find by role and tabindex (fallback)
+                if (!copyButton) {
+                    const buttons = messageDiv.querySelectorAll('[role="button"][tabindex]');
+                    if (buttons.length > 0) {
+                        // The copy button is typically the first button in AI responses
+                        copyButton = buttons[0];
+                    }
+                }
+                
                 if (copyButton) {
                     try {
                         const content = await getContentViaCopyButton(copyButton);

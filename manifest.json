@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "default_locale": "en",
     "name": "__MSG_extensionName__",
-    "version": "1.1.7",
+    "version": "1.2.4",
     "description": "__MSG_extensionDescription__",
     "icons": {
         "16": "icons/icon16.png",
@@ -139,9 +139,10 @@
             "js": [
                 "lib/katex.min.js",
                 "scripts/notifications.js",
-                "scripts/copyKatex.js",
+                "scripts/copyGeminiMath.js",
                 "scripts/docxConverter.js",
-                "scripts/injectGeminiButton.js"
+                "scripts/injectGeminiButton.js",
+                "scripts/injectGeminiCanvasButton.js"
             ]
         }
     ],

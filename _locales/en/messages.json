@@ -1,9 +1,9 @@
 {
     "extensionName": {
-        "message": "DeepShare: AI Chat Share & Export"
+        "message": "DeepShare: Export AI Chats as Word"
     },
     "extensionDescription": {
-        "message": "Copy formulas from AI chats (DeepSeek, ChatGPT, etc.), export to Word, and take long conversation screenshots on DeepSeek."
+        "message": "Export AI Chats from DeepSeek, ChatGPT, Gemini, Grok... to Word Documents, copy formulas; take long screenshots of DeepSeek Chats."
     },
     "shareButton": {
         "message": "Share Conversation"
@@ -132,7 +132,7 @@
         "message": "Please select at least one message"
     },
     "sponsorTabLabel": {
-        "message": "Support Us"
+        "message": "About"
     },
     "totalQuotaLabel": {
         "message": "Total:"
@@ -147,13 +147,13 @@
         "message": "Your Conversion Quota"
     },
     "apiKeyHint": {
-        "message": "Purchase API Key? <a href=\"https://ds.rick216.cn/purchase-en.html\" target=\"_blank\">Click here</a>"
+        "message": "Purchase API Key? <a href=\"https://ds.rick216.cn/purchase-en\" target=\"_blank\">Click here</a>"
     },
     "apiKeyMissing": {
         "message": "Please click the extension icon to purchase or enter an API Key to use the document conversion"
     },
     "manualConversionExplanation": {
-        "message": "Supports ChatGPT, Cici, Yuanbao, etc. Copy your conversation to the Markdown input box, click \"Convert to Document\" to download a beautifully formatted Word document with formula support!"
+        "message": "Supports Grok, Claude, Meta AI, etc. Copy your conversation to the Markdown input box, click \"Convert to Document\" to download a beautifully formatted Word document with formula support!"
     },
     "manualConversionTitle": {
         "message": "Paste AI Chat"
@@ -209,11 +209,23 @@
     "screenshotMethodHint": {
         "message": "Select the method used for screenshots. If one method doesn't work, try the other. Please refresh the page after switching."
     },
+    "removeDividersLabel": {
+        "message": "Remove Dividers"
+    },
+    "removeEmojisLabel": {
+        "message": "Remove Emoji"
+    },
     "convertMermaidLabel": {
-        "message": "Enable Mermaid Diagram Conversion (Beta)"
+        "message": "Mermaid Convert"
+    },
+    "compatModeLabel": {
+        "message": "Compat Mode"
+    },
+    "compatModeTooltip": {
+        "message": "Supports non-standard Markdown"
     },
     "getClipboardError": {
-        "message": "Failed to get content from clipboard"
+        "message": "Failed to get content"
     },
     "refreshButton": {
         "message": "Refresh"
@@ -250,5 +262,26 @@
     },
     "imageCopyFailed": {
         "message": "Failed to copy image to clipboard"
+    },
+    "apiKeyError": {
+        "message": "API Key error. Please check your email or contact customer service: yoricker@foxmail.com"
+    },
+    "aboutTabTitle": {
+        "message": "About DeepShare"
+    },
+    "versionLabel": {
+        "message": "Version:"
+    },
+    "documentationLabel": {
+        "message": "Documentation:"
+    },
+    "githubLabel": {
+        "message": "GitHub:"
+    },
+    "developerEmailLabel": {
+        "message": "Developer Email:"
+    },
+    "acknowledgmentText": {
+        "message": "Thank you to everyone who has shared suggestions for DeepShare! Many features are born from real user needs. Let's boost productivity together and save time for what truly matters in life."
     }
 }

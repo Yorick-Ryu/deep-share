@@ -66,14 +66,14 @@
           <span id="screenshotTabLabel">对话截图设置</span>
         </button>
 
-        <button class="tab-btn sponsor-tab-btn" data-tab="sponsor-tab" id="sponsorTabBtn" style="display: none;">
+        <button class="tab-btn sponsor-tab-btn" data-tab="sponsor-tab" id="sponsorTabBtn">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path
-              d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83">
-            </path>
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="16" x2="12" y2="12"></line>
+            <line x1="12" y1="8" x2="12.01" y2="8"></line>
           </svg>
-          <span id="sponsorTabLabel">Sponsor</span>
+          <span id="sponsorTabLabel">About</span>
         </button>
       </div>
     </div>
@@ -103,7 +103,7 @@
         </div>
 
         <div class="form-group">
-          <label for="docxServerUrl" id="docxServerUrlLabel">Server URL</label>
+          <label for="docxServerUrl" id="docxServerUrlLabel" class="collapsible-label">Server URL</label>
           <input type="text" id="docxServerUrl" placeholder="https://api.ds.rick216.cn">
         </div>
 
@@ -138,10 +138,36 @@
               target="_blank">点击此处</a></span>
         </div>
 
-        <!-- Mermaid diagram conversion -->
-        <div class="checkbox-group">
-          <input type="checkbox" id="convertMermaid">
-          <label for="convertMermaid" id="convertMermaidLabel"></label>
+        <!-- Remove dividers and emojis option (same row) -->
+        <div class="checkbox-group-row">
+          <div class="checkbox-group">
+            <input type="checkbox" id="removeDividers">
+            <label for="removeDividers" id="removeDividersLabel"></label>
+          </div>
+          <div class="checkbox-group">
+            <input type="checkbox" id="removeEmojis">
+            <label for="removeEmojis" id="removeEmojisLabel"></label>
+          </div>
+        </div>
+
+        <!-- Mermaid diagram conversion and Compatibility Mode -->
+        <div class="checkbox-group-row">
+          <div class="checkbox-group">
+            <input type="checkbox" id="convertMermaid">
+            <label for="convertMermaid" id="convertMermaidLabel"></label>
+          </div>
+          <div class="checkbox-group">
+            <input type="checkbox" id="compatMode" checked>
+            <label for="compatMode" id="compatModeLabel"></label>
+            <span class="tooltip-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="16" x2="12" y2="12"></line>
+                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+              </svg>
+              <span class="tooltip-text" id="compatModeTooltip"></span>
+            </span>
+          </div>
         </div>
 
         <!-- Quota information section -->
@@ -259,14 +285,38 @@
         </div>
       </div>
 
-      <!-- Sponsor Tab Content -->
+      <!-- About Tab Content -->
       <div class="tab-content" id="sponsor-tab">
-        <h2 id="sponsorTabTitle">Sponsor</h2>
+        <h2 id="sponsorTabTitle">About</h2>
 
-        <div class="sponsor-content">
-          <p class="sponsor-description" id="sponsorTitle">Thanks for using! If you find it helpful, feel free to
-            sponsor via WeChat QR code 😊</p>
-          <img src="../icons/sponsor-code.png" alt="Sponsor QR Code" class="sponsor-image">
+        <div class="about-content">
+          <p class="acknowledgment" id="acknowledgmentText">感谢每一位为 DeepShare 提出建议的朋友！许多功能源于用户的真实需求，让我们一起提升效率，把节省的时间留给生活。</p>
+          
+          <div class="about-item">
+            <label id="versionLabel">Version:</label>
+            <a href="https://github.com/Yorick-Ryu/deep-share/releases" target="_blank" class="about-link" id="versionValue">1.2.2</a>
+          </div>
+          
+          <div class="about-item">
+            <label id="documentationLabel">Documentation:</label>
+            <a href="https://docs.deepshare.app" target="_blank" class="about-link">
+              https://docs.deepshare.app
+            </a>
+          </div>
+          
+          <div class="about-item">
+            <label id="githubLabel">GitHub:</label>
+            <a href="https://github.com/Yorick-Ryu/deep-share" target="_blank" class="about-link">
+              https://github.com/Yorick-Ryu/deep-share
+            </a>
+          </div>
+          
+          <div class="about-item">
+            <label id="developerEmailLabel">Developer Email:</label>
+            <a href="mailto:yoricker@foxmail.com" class="about-link">
+              yoricker@foxmail.com
+            </a>
+          </div>
         </div>
       </div>
     </div>

@@ -1,9 +1,9 @@
 {
     "extensionName": {
-        "message": "DeepShare：AI對話分享與匯出"
+        "message": "DeepShare：AI對話轉Word檔案"
     },
     "extensionDescription": {
-        "message": "一鍵複製DeepSeek、ChatGPT、豆包等AI對話的公式，匯出排版精美的Word文件，支援DeepSeek長對話截圖分享。"
+        "message": "一鍵將DeepSeek、ChatGPT、Gemini、Grok等AI對話匯出為Word文件、複製公式；DeepSeek對話長截圖分享。"
     },
     "shareButton": {
         "message": "分享對話"
@@ -147,13 +147,13 @@
         "message": "您的轉換次數"
     },
     "apiKeyHint": {
-        "message": "購買 API Key? <a href=\"https://ds.rick216.cn/purchase-en.html\" target=\"_blank\">點擊此處</a>"
+        "message": "購買 API Key? <a href=\"https://ds.rick216.cn/purchase-en\" target=\"_blank\">點擊此處</a>"
     },
     "apiKeyMissing": {
         "message": "請點擊拓展圖標購買或填寫API-Key以使用文件轉換功能"
     },
     "manualConversionExplanation": {
-        "message": "支援ChatGPT、豆包、元寶等，複製需要轉換的對話到Markdown輸入框，點擊「轉換為文件」按鈕立即下載Word格式，排版精美，支援公式！"
+        "message": "支援ChatGPT、豆包、Claude等，複製需要轉換的對話到Markdown輸入框，點擊「轉換為文件」按鈕立即下載Word格式，排版精美，支援公式！"
     },
     "manualConversionTitle": {
         "message": "手動轉換文件"
@@ -209,11 +209,23 @@
     "screenshotMethodHint": {
         "message": "選擇用於截圖的方法，如果一種方法不工作，請嘗試另一種，切換後請刷新網頁。"
     },
+    "removeDividersLabel": {
+        "message": "去除分割線"
+    },
+    "removeEmojisLabel": {
+        "message": "去除Emoji表情"
+    },
     "convertMermaidLabel": {
-        "message": "啟用Mermaid圖表轉換（實驗性功能）"
+        "message": "Mermaid圖表轉換"
+    },
+    "compatModeLabel": {
+        "message": "相容模式"
+    },
+    "compatModeTooltip": {
+        "message": "相容不規範的Markdown格式"
     },
     "getClipboardError": {
-        "message": "從剪貼簿獲取內容失敗"
+        "message": "獲取內容失敗"
     },
     "refreshButton": {
         "message": "刷新"
@@ -250,5 +262,8 @@
     },
     "imageCopyFailed": {
         "message": "複製圖片到剪貼簿失敗"
+    },
+    "apiKeyError": {
+        "message": "API-KEY填寫錯誤，請查看郵件或聯繫客服微信：yorick_cn"
     }
 }

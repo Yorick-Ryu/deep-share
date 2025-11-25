@@ -12,9 +12,17 @@
     <header>
         <nav>
             <div class="logo">
-                <a href="./index.html">
-                    <img src="./assets/images/deepshare-icon.svg" alt="DeepShare Logo">
-                    <span>DeepShare</span>
+                <img src="./assets/images/deepshare-icon.svg" alt="DeepShare Logo">
+                <a href="./index.html"><span>DeepShare</span></a>
+            </div>
+            <div class="nav-links">
+                <a href="https://docs.deepshare.app" target="_blank">文档</a>
+                <a href="https://github.com/Yorick-Ryu/deep-share" target="_blank" class="github-link">
+                    <svg class="github-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path
+                            d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+                    </svg>
+                    GitHub
                 </a>
             </div>
         </nav>
@@ -27,18 +35,18 @@
         <div class="left-column-wrapper">
             <!-- Renewal explanation section -->
             <div class="free-features-section">
-                <h2>如何续费 DeepShare 转换次数</h2>
-                <p>使用您已有的 API Key 续费，无需重新进行插件设置，续费后的次数将直接添加到您的账户中。</p>
+                <h2>如何续费DeepShare转换次数</h2>
+                <p>使用您已有的API Key续费，无需重新进行插件设置，续费后的次数将直接添加到您的账户中。</p>
                 
                 <div class="free-features-list">
                     <div class="free-feature-item">直接为已有账户充值</div>
                     <div class="free-feature-item">无需重新设置插件</div>
                     <div class="free-feature-item">自动累加转换次数</div>
-                    <div class="free-feature-item">保持原有有效期</div>
+                    <div class="free-feature-item">重置一年有效期</div>
                 </div>
                 
                 <div class="paid-feature-explanation">
-                    <p><strong>请输入您的 API Key 进行续费</strong>，充值后将直接添加到您的账户中，原有的次数和有效期不变。</p>
+                    <p><strong>请输入您的API Key进行续费</strong>，充值后将直接添加到您的账户中，次数和有效期将更新。</p>
                 </div>
                 
                 <div class="purchase-link-wrapper" style="margin-top: 1rem; text-align: center;">
@@ -52,7 +60,7 @@
                             <path d="M17 17v0"></path>
                             <path d="M7 17v0"></path>
                         </svg>
-                        还没有 API Key？前往购买页面
+                        还没有API Key？前往购买页面
                     </a>
                 </div>
             </div>
@@ -64,7 +72,7 @@
                 
                 <div class="quota-form">
                     <div class="form-group">
-                        <label for="check-api-key">您的 API Key</label>
+                        <label for="check-api-key">您的API Key</label>
                         <div class="api-key-input-wrapper">
                             <input type="password" id="check-api-key" placeholder="输入您的 API Key" autocomplete="off">
                             <button type="button" class="toggle-visibility-btn" id="toggleQuotaApiKeyVisibility" title="显示/隐藏">
@@ -121,12 +129,12 @@
             <div class="api-instructions">
                 <h2>常见问题</h2>
                 <div class="faq-card">
-                    <div class="faq-question">续费会影响原有的有效期吗？</div>
-                    <div class="faq-answer">续费成功会修改 API Key 的过期时间为支付成功时间的一年后。</div>
+                    <div class="faq-question">续费会重置一年有效期吗？</div>
+                    <div class="faq-answer">会的，续费成功后会将有效期重置为一年。</div>
                 </div>
                 <div class="faq-card">
-                    <div class="faq-question">忘记 API Key 了怎么办？</div>
-                    <div class="faq-answer">如果您忘记了 API Key，请通过邮箱联系我们，提供您之前购买时使用的邮箱，我们会协助您找回。</div>
+                    <div class="faq-question">忘记API Key 了怎么办？</div>
+                    <div class="faq-answer">如果您忘记了API Key，请通过邮箱联系我们，提供您之前购买时使用的邮箱，我们会协助您找回。</div>
                 </div>
                 <div class="faq-card">
                     <div class="faq-question">付款后多久到账？</div>
@@ -145,21 +153,21 @@
         </div>
         
         <div class="pricing-card">
-            <p class="feature-description">为您的 DeepShare 账户充值，继续享受 Word 文档转换功能！</p>
+            <p class="feature-description">为您的DeepShare账户充值，继续享受Word文档转换功能！</p>
             
             <div class="price-tag">¥0.2 <span class="per-unit">/ 次</span></div>
 
             <div class="purchase-form">
                 <div class="form-group">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-                        <label for="renew-api-key">您的 API Key（用于续费绑定）</label>
+                        <label for="renew-api-key">您的API Key（用于续费绑定）</label>
                         <a href="./purchase.html" class="purchase-link" style="color: #4D6BFE; text-decoration: none; font-size: 0.9rem; white-space: nowrap;">
                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 4px;">
                                 <rect x="2" y="4" width="20" height="16" rx="2"></rect>
                                 <path d="M12 11v4"></path>
                                 <path d="M9 13h6"></path>
                             </svg>
-                            还没有 API Key？前往购买页面
+                            还没有API Key？前往购买页面
                         </a>
                     </div>
                     <div class="api-key-input-wrapper">
@@ -188,50 +196,48 @@
                     <div class="amount-options">
                         <div class="amount-option" data-value="1" style="display: none;">
                             <div class="amount-value">¥1</div>
-                            <div class="conversions">5 次转换</div>
-                            <div class="total-conversions">总计 5 次</div>
+                            <div class="conversions">5次转换</div>
+                            <div class="total-conversions">总计5次</div>
                         </div>
                         <div class="amount-option" data-value="5">
-                            <div class="discount-badge">6.6折</div>
                             <div class="amount-value">¥5</div>
-                            <div class="conversions">25 次转换</div>
-                            <div class="bonus">+13 次赠送</div>
-                            <div class="total-conversions">总计 38 次</div>
+                            <div class="conversions">25次转换</div>
+                            <div class="total-conversions">总计25次</div>
                         </div>
                         <div class="amount-option selected" data-value="10">
                             <div class="discount-badge">6.3折</div>
                             <div class="amount-value">¥10</div>
-                            <div class="conversions">50 次转换</div>
-                            <div class="bonus">+30 次赠送</div>
-                            <div class="total-conversions">总计 80 次</div>
+                            <div class="conversions">50次转换</div>
+                            <div class="bonus">+30次赠送</div>
+                            <div class="total-conversions">总计80次</div>
                         </div>
                         <div class="amount-option" data-value="20">
                             <div class="discount-badge">5.6折</div>
                             <div class="amount-value">¥20</div>
-                            <div class="conversions">100 次转换</div>
-                            <div class="bonus">+80 次赠送</div>
-                            <div class="total-conversions">总计 180 次</div>
+                            <div class="conversions">100次转换</div>
+                            <div class="bonus">+80次赠送</div>
+                            <div class="total-conversions">总计180次</div>
                         </div>
                         <div class="amount-option" data-value="60">
                             <div class="discount-badge">5.0折</div>
                             <div class="amount-value">¥60</div>
-                            <div class="conversions">300 次转换</div>
-                            <div class="bonus">+300 次赠送</div>
-                            <div class="total-conversions">总计 600 次</div>
+                            <div class="conversions">300次转换</div>
+                            <div class="bonus">+300次赠送</div>
+                            <div class="total-conversions">总计600次</div>
                         </div>
                         <div class="amount-option" data-value="100">
                             <div class="discount-badge">4.5折</div>
                             <div class="amount-value">¥100</div>
-                            <div class="conversions">500 次转换</div>
-                            <div class="bonus">+600 次赠送</div>
-                            <div class="total-conversions">总计 1100 次</div>
+                            <div class="conversions">500次转换</div>
+                            <div class="bonus">+600次赠送</div>
+                            <div class="total-conversions">总计1100次</div>
                         </div>
                         <div class="amount-option" data-value="200">
                             <div class="discount-badge">4.0折</div>
                             <div class="amount-value">¥200</div>
-                            <div class="conversions">1000 次转换</div>
-                            <div class="bonus">+1500 次赠送</div>
-                            <div class="total-conversions">总计 2500 次</div>
+                            <div class="conversions">1000次转换</div>
+                            <div class="bonus">+1500次赠送</div>
+                            <div class="total-conversions">总计2500次</div>
                         </div>
                         <div class="amount-option" data-value="custom">
                             <div class="amount-value">自定义</div>
@@ -244,13 +250,13 @@
                         <label for="custom-amount">输入自定义金额（整数）</label>
                         <div class="custom-amount-input-group">
                             <span class="currency-symbol">¥</span>
-                            <input type="number" id="custom-amount" min="1" max="10000" step="1" placeholder="请输入金额（最小 1 元）" autocomplete="off">
+                            <input type="number" id="custom-amount" min="1" max="10000" step="1" placeholder="请输入金额" autocomplete="off">
                         </div>
                         <div id="custom-amount-details" class="custom-amount-details">
-                            <p>充值金额: <span id="custom-amount-value">--</span> 元</p>
-                            <p>可获得 <span id="custom-conversions">--</span> 次转换</p>
-                            <p class="bonus-text" id="custom-bonus-text" style="display: none;">赠送 <span id="custom-bonus">--</span> 次转换</p>
-                            <p>总计获得 <span id="custom-total-conversions">--</span> 次转换</p>
+                            <p>充值金额: <span id="custom-amount-value">--</span>元</p>
+                            <p>可获得<span id="custom-conversions">--</span>次转换</p>
+                            <p class="bonus-text" id="custom-bonus-text" style="display: none;">赠送<span id="custom-bonus">--</span>次转换</p>
+                            <p>总计获得<span id="custom-total-conversions">--</span>次转换</p>
                             <p id="custom-discount-text" class="discount-text" style="display: none;"></p>
                         </div>
                     </div>

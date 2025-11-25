@@ -154,7 +154,7 @@
         let result = '';
 
         // Process all child nodes
-        const processNode = (node) => {
+        const processNode = (node, indent = 0, inListItem = false, trimText = false) => {
             // Skip citation pills and other metadata elements
             if (node.nodeType === Node.ELEMENT_NODE) {
                 if (node.hasAttribute('data-testid') && node.getAttribute('data-testid') === 'webpage-citation-pill') {
@@ -192,15 +192,40 @@
                 const level = node.tagName[1];
                 const headingMark = '#'.repeat(parseInt(level));
                 result += '\n' + headingMark + ' ';
-                node.childNodes.forEach(processNode);
+                node.childNodes.forEach(child => processNode(child, indent, false));
                 result += '\n\n';
                 return;
             }
 
             // Handle paragraphs
             if (node.tagName === 'P') {
-                node.childNodes.forEach(processNode);
-                result += '\n\n';
+                // In list items, trim leading/trailing whitespace from text nodes
+                if (inListItem) {
+                    const childNodes = Array.from(node.childNodes);
+                    
+                    // Find first and last non-whitespace-only nodes
+                    let firstIdx = -1;
+                    let lastIdx = -1;
+                    for (let i = 0; i < childNodes.length; i++) {
+                        const child = childNodes[i];
+                        if (child.nodeType !== Node.TEXT_NODE || child.textContent.trim()) {
+                            if (firstIdx === -1) firstIdx = i;
+                            lastIdx = i;
+                        }
+                    }
+                    
+                    // Process each node with trim flags
+                    for (let i = firstIdx; i <= lastIdx && i >= 0; i++) {
+                        const child = childNodes[i];
+                        const trimStart = (i === firstIdx);
+                        const trimEnd = (i === lastIdx);
+                        const needTrim = (trimStart ? 'start' : '') + (trimEnd ? 'end' : '');
+                        processNode(child, indent, inListItem, needTrim || false);
+                    }
+                } else {
+                    node.childNodes.forEach(child => processNode(child, indent, inListItem, false));
+                    result += '\n\n';
+                }
                 return;
             }
 
@@ -221,16 +246,21 @@
                 const lines = [];
                 const tempResult = result;
                 result = '';
-                node.childNodes.forEach(processNode);
+                node.childNodes.forEach(child => processNode(child, indent, false));
                 const quoteContent = result;
                 result = tempResult;
                 
-                // Split by lines and add > prefix
-                quoteContent.split('\n').forEach(line => {
+                // Split by lines and add > prefix, preserving empty lines within quote
+                const contentLines = quoteContent.split('\n');
+                for (let i = 0; i < contentLines.length; i++) {
+                    const line = contentLines[i];
                     if (line.trim()) {
                         lines.push('> ' + line.trim());
+                    } else if (i > 0 && i < contentLines.length - 1 && contentLines[i + 1].trim()) {
+                        // Add empty quote line only if it's between content lines
+                        lines.push('>');
                     }
-                });
+                }
                 result += '\n' + lines.join('\n') + '\n\n';
                 return;
             }
@@ -300,27 +330,83 @@
             if (node.tagName === 'UL' || node.tagName === 'OL') {
                 const isOrdered = node.tagName === 'OL';
                 let index = 1;
-                node.querySelectorAll(':scope > li').forEach(li => {
-                    const prefix = isOrdered ? `${index}. ` : '* ';
-                    result += prefix;
-                    li.childNodes.forEach(processNode);
+                const listItems = Array.from(node.children).filter(child => child.tagName === 'LI');
+                
+                listItems.forEach(li => {
+                    const indentation = '   '.repeat(indent);
+                    
+                    // Check if this is a task list item
+                    const isTaskList = li.classList && li.classList.contains('task-list-item');
+                    const checkbox = isTaskList ? li.querySelector('input[type="checkbox"]') : null;
+                    
+                    let prefix;
+                    if (checkbox) {
+                        // For task lists, use checkbox format with single space
+                        prefix = checkbox.checked ? '* [x] ' : '* [ ] ';
+                    } else {
+                        prefix = isOrdered ? `${index}. ` : '* ';
+                    }
+                    result += indentation + prefix;
+                    
+                    // Process the list item's content
+                    let hasContent = false;
+                    for (let i = 0; i < li.childNodes.length; i++) {
+                        const child = li.childNodes[i];
+                        
+                        // Skip whitespace-only text nodes in list items
+                        if (child.nodeType === Node.TEXT_NODE && !child.textContent.trim()) {
+                            continue;
+                        }
+                        
+                        // Skip checkbox input itself
+                        if (child.tagName === 'INPUT' && child.type === 'checkbox') {
+                            continue;
+                        }
+                        
+                        // If it's a nested list, handle it separately with increased indent
+                        if (child.tagName === 'UL' || child.tagName === 'OL') {
+                            if (hasContent) {
+                                result += '\n';
+                            }
+                            processNode(child, indent + 1, false);
+                        } else {
+                            // Process other content (text, p tags, etc.)
+                            const beforeLength = result.length;
+                            processNode(child, indent, true);
+                            if (result.length > beforeLength) {
+                                hasContent = true;
+                            }
+                        }
+                    }
+                    
                     result += '\n';
                     index++;
                 });
-                result += '\n';
+                
+                if (indent === 0) {
+                    result += '\n';
+                }
                 return;
             }
 
             // Handle list items (when not already processed by parent UL/OL)
             if (node.tagName === 'LI') {
-                node.childNodes.forEach(processNode);
+                node.childNodes.forEach(child => processNode(child, indent, inListItem));
+                return;
+            }
+
+            // Handle strikethrough/delete
+            if (node.tagName === 'DEL') {
+                result += '~~';
+                node.childNodes.forEach(child => processNode(child, indent, inListItem));
+                result += '~~';
                 return;
             }
 
             // Handle strong/bold
             if (node.tagName === 'STRONG') {
                 result += '**';
-                node.childNodes.forEach(processNode);
+                node.childNodes.forEach(child => processNode(child, indent, inListItem));
                 result += '**';
                 return;
             }
@@ -328,7 +414,7 @@
             // Handle emphasis/italic
             if (node.tagName === 'EM') {
                 result += '*';
-                node.childNodes.forEach(processNode);
+                node.childNodes.forEach(child => processNode(child, indent, inListItem));
                 result += '*';
                 return;
             }
@@ -354,9 +440,30 @@
             // Handle links
             if (node.tagName === 'A') {
                 const href = node.getAttribute('href');
-                const text = node.textContent;
+                // Get text content but skip SVG and other decorative elements
+                let text = '';
+                const getTextOnly = (n) => {
+                    if (n.nodeType === Node.TEXT_NODE) {
+                        text += n.textContent;
+                    } else if (n.tagName === 'SPAN' && n.querySelector('svg')) {
+                        // Skip spans containing SVG icons
+                        return;
+                    } else if (n.childNodes) {
+                        n.childNodes.forEach(getTextOnly);
+                    }
+                };
+                node.childNodes.forEach(getTextOnly);
+                text = text.trim();
+                
+                // Check for title attribute
+                const title = node.getAttribute('title');
+                
                 if (href && href !== text) {
-                    result += '[' + text + '](' + href + ')';
+                    if (title) {
+                        result += '[' + text + '](' + href + ' "' + title + '")';
+                    } else {
+                        result += '[' + text + '](' + href + ')';
+                    }
                 } else {
                     result += text;
                 }
@@ -365,17 +472,22 @@
 
             // Handle text nodes
             if (node.nodeType === Node.TEXT_NODE) {
-                result += node.textContent;
+                let text = node.textContent;
+                if (trimText) {
+                    if (trimText.includes('start')) text = text.trimStart();
+                    if (trimText.includes('end')) text = text.trimEnd();
+                }
+                result += text;
                 return;
             }
 
             // Handle other elements with children
             if (node.childNodes && node.childNodes.length > 0) {
-                node.childNodes.forEach(processNode);
+                node.childNodes.forEach(child => processNode(child, indent, inListItem));
             }
         };
 
-        markdownDiv.childNodes.forEach(processNode);
+        markdownDiv.childNodes.forEach(child => processNode(child, 0, false));
 
         // Clean up excessive newlines
         result = result.replace(/\n{3,}/g, '\n\n').trim();

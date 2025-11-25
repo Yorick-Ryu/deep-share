@@ -34,11 +34,18 @@ function injectDocxButton() {
                         }
 
                         copyButtons.forEach(copyBtn => {
-                            // More flexible check for copy button - look for SVG with copy-like paths or first button
-                            const isCopyButton = copyBtn === buttonGroup.querySelector('[role="button"]') || 
-                                               copyBtn.querySelector('svg path[d*="M6.14926"]') || // Copy icon path signature
+                            // More flexible check for copy button with prioritized strategies
+                            // Strategy 1: .ds-icon-button class with role attribute and SVG path starting with M6.149
+                            const isStrategy1 = copyBtn.classList.contains('ds-icon-button') && 
+                                               copyBtn.hasAttribute('role') && 
+                                               copyBtn.querySelector('svg path[d^="M6.149"]');
+                            
+                            // Strategy 2 (most stable): First button with role="button"
+                            const isStrategy2 = copyBtn === buttonGroup.querySelector('[role="button"]') ||
                                                copyBtn === Array.from(buttonGroup.children).find(child => 
                                                    child.hasAttribute('role') && child.getAttribute('role') === 'button');
+                            
+                            const isCopyButton = isStrategy1 || isStrategy2;
 
                             if (!isCopyButton) return;
 
@@ -222,7 +229,7 @@ function injectDocxButton() {
         // Always use assistant role for docx conversion
         let role = 'assistant';
         
-        console.debug('Using copy button for data extraction:', copyButton);
+        // console.debug('Using copy button for data extraction:', copyButton);
         
         if (copyButton) {
             try {

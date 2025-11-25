@@ -21,6 +21,8 @@
     --text-secondary: #aaaaaa;
     --border-color: #333333;
     --input-bg: #2d2d2d;
+    --primary-color: #6E85FF;
+    --primary-hover: #5C75FF;
     --card-bg: #2d2d2d;
     --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     --sidebar-bg: #252525;
@@ -175,6 +177,16 @@ body {
   line-height: 1.5;
 }
 
+.feature-explanation a {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.feature-explanation a:hover {
+  text-decoration: underline;
+}
+
 .form-hint a {
   color: var(--primary-color);
   text-decoration: none;
@@ -191,6 +203,28 @@ label {
   color: var(--text-secondary);
 }
 
+/* Collapsible label styles */
+.collapsible-label {
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+}
+
+.collapsible-label::after {
+  content: " ▼";
+  font-size: 10px;
+  opacity: 0.6;
+  transition: opacity 0.2s ease;
+}
+
+.collapsible-label:hover::after {
+  opacity: 1;
+}
+
+.collapsible-label.expanded::after {
+  content: " ▲";
+}
+
 input[type="text"],
 input[type="password"] {
   width: 100%;
@@ -200,6 +234,26 @@ input[type="password"] {
   box-sizing: border-box;
   background: var(--input-bg);
   color: var(--text-color);
+  transition: opacity 0.2s ease, max-height 0.2s ease;
+}
+
+/* Collapsible input animation */
+#docxServerUrl {
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  margin-top: 0;
+  margin-bottom: -8px;
+  padding: 0 8px;
+  transition: all 0.3s ease;
+  display: block !important;
+}
+
+#docxServerUrl.visible {
+  max-height: 50px;
+  opacity: 1;
+  padding: 8px;
+  margin-top: 0;
 }
 
 input[type="text"]::placeholder,
@@ -257,6 +311,102 @@ button:hover {
 .checkbox-group input[type="checkbox"] {
   cursor: pointer;
   accent-color: var(--primary-color);
+}
+
+/* Row container for multiple checkboxes in one line */
+.checkbox-group-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.checkbox-group-row .checkbox-group {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.checkbox-group-row .checkbox-group label {
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+/* Tooltip icon styles */
+.tooltip-icon {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  margin-left: 2px;
+  color: var(--text-secondary);
+  cursor: help;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+
+.tooltip-icon:hover {
+  opacity: 1;
+}
+
+.tooltip-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.tooltip-text {
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  top: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.85);
+  color: white;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  z-index: 1000;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+  pointer-events: none;
+}
+
+/* Adjust tooltip position when it would overflow to the right */
+.checkbox-group .tooltip-icon:last-child .tooltip-text {
+  left: auto;
+  right: 0;
+  transform: none;
+}
+
+.tooltip-text::after {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent rgba(0, 0, 0, 0.85) transparent;
+}
+
+/* Keep arrow at the same position for right-aligned tooltips */
+.checkbox-group .tooltip-icon:last-child .tooltip-text::after {
+  left: auto;
+  right: 3px;
+  transform: none;
+}
+
+.tooltip-icon:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
+
+@media (prefers-color-scheme: dark) {
+  .tooltip-text {
+    background-color: rgba(50, 50, 50, 0.95);
+  }
+  
+  .tooltip-text::after {
+    border-color: transparent transparent rgba(50, 50, 50, 0.95) transparent;
+  }
 }
 
 @media (prefers-color-scheme: dark) {
@@ -326,6 +476,58 @@ button:hover {
   width: 200px;
   height: 200px;
   border-radius: 8px;
+}
+
+/* About section styles */
+.about-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.acknowledgment {
+  padding: 16px;
+  background: linear-gradient(135deg, rgba(77, 107, 254, 0.08) 0%, rgba(77, 107, 254, 0.04) 100%);
+  border-left: 3px solid var(--primary-color);
+  border-radius: 6px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-primary);
+  margin: 0 0 8px 0;
+}
+
+.about-item {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.about-item label {
+  font-weight: 500;
+  color: var(--text-primary);
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.about-item span,
+.about-link {
+  color: var(--text-secondary);
+  font-size: 14px;
+  word-break: break-all;
+  text-align: right;
+}
+
+.about-link {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.about-link:hover {
+  color: var(--primary-hover);
+  text-decoration: underline;
 }
 
 /* Quota section styles */

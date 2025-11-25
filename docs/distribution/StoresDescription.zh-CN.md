@@ -1,26 +1,24 @@
-一款专为 AI 用户设计的轻量级浏览器插件，一键复制DeepSeek、ChatGPT、豆包等AI对话的公式，导出排版精美的Word文档，支持DeepSeek长对话截图分享。
+一键从DeepSeek、ChatGPT、豆包等AI对话导出排版精美的Word文档，复制其中的公式；支持DeepSeek对话长截图。
+
+DeepSeek转Word、ChatGPT转Word、豆包转Word、Gemini转Word
 
 🆓 免费功能
-一键截取对话：快速捕获 DeepSeek 对话内容
-多格式分享：支持图片或纯文本格式
-公式处理：点击任意数学公式即可复制其 LaTeX 代码
-自定义水印：个性化您的分享内容
-精确选择：支持选择单条或多条对话/提供一键全选/取消全选功能
-简洁体验：直观界面，无广告干扰
-完全开源：代码透明，安全可靠
+- DeepSeek对话长截图，可自定义水印，选择单条或多条对话
+- 复制DeepSeek、ChatGPT、Gemini、豆包的公式（点击公式直接复制）
+- 简洁美观的界面，无广告干扰
+- 开源透明的前端代码，安全可靠
 
 💎 高级功能
-Word文档导出：将对话转换为DOCX格式，完美保留数学公式格式和Mermaid图表
-灵活定价：
-标准价格：￥0.2/次
+Word文档导出：将对话转换为DOCX格式，完美保留数学公式格式、表格和Mermaid图表
+定价：
+标准价格：单次转换￥0.2
 限时优惠：多买多送，实际均价低至￥0.1/次
 
 📱 平台兼容性
-DeepSeek：完全支持公式复制、Word导出、对话截图
-ChatGPT：支持公式复制、Word导出
-Gemini：支持Word导出
-豆包：支持公式复制、手动Word导出
-元宝、Kimi等10+AI平台：支持手动Word导出
+DeepSeek：完全支持公式复制、一键导出Word、对话截图
+ChatGPT、Gemini：支持公式复制、一键导出Word
+豆包：支持公式复制、手动导出Word
+元宝、Kimi等10+AI平台：支持手动导出Word
 
 🚀 为什么选择 DeepShare？
 为数学、科研工作者优化的公式处理

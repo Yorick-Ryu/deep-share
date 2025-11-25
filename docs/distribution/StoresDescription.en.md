@@ -1,24 +1,22 @@
-A lightweight browser extension designed for AI users to easily copy formulas from ChatGPT, DeepSeek, Grok and 10+ other AI conversations, export beautifully formatted Word documents, and support long conversation screenshot sharing for DeepSeek.
+Export beautifully formatted Word documents from AI Chats on DeepSeek, ChatGPT, Grok, and more with one click, copy formulas; support for DeepSeek conversation long screenshots.
+
+DeepSeek to Word, ChatGPT to Word, Grok to Word, Gemini to Word
 
 🆓 Free Features
-One-click Conversation Capture: Quickly capture DeepSeek conversation content
-Multiple Sharing Formats: Support for image or plain text formats
-Formula Handling: Click any mathematical formula to copy its LaTeX code
-Custom Watermark: Personalize your shared content
-Precise Selection: Select single or multiple conversation turns/One-click select all/deselect all functionality
-Clean Experience: Intuitive interface with no ads
-Fully Open Source: Transparent code, safe and reliable
+- DeepSeek conversation long screenshots with customizable watermarks, select single or multiple conversations
+- Copy formulas from DeepSeek, ChatGPT, Gemini, Grok (click formula to copy directly)
+- Clean and beautiful interface with no ads
+- Open-source and transparent frontend code, safe and reliable
 
 💎 Premium Features
-Word Document Export: Convert conversations to DOCX format with perfectly preserved mathematical formulas and Mermaid diagrams
-Flexible Pricing:
-Standard price: $0.05/conversion
-Limited-time offer: Multi-buy, multi-get! Effective price as low as $0.02/conversion
+Word Document Export: Convert conversations to DOCX format, perfectly preserving mathematical formulas, tables, and Mermaid charts
+Pricing:
+Standard price: $0.05 per conversion
+Limited-time offer: Buy more, get more bonuses, actual average price as low as $0.02/conversion
 
 📱 Platform Compatibility
 DeepSeek: Full support for formula copying, Word export, conversation screenshots
-ChatGPT: Support for formula copying, Word export
-Gemini: Support for Word export
+ChatGPT, Gemini: Support for formula copying, Word export
 Grok: Support for formula copying, manual Word export
 Cici, Kimi and 10+ other AI platforms: Support for manual Word export
 

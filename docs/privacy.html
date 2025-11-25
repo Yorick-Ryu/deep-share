@@ -12,10 +12,12 @@
             margin: 100px auto;
             padding: 0 20px;
         }
-        .content h1 { margin-bottom: 2rem; }
-        .content h2 { margin: 2rem 0 1rem; }
-        .content ul { margin-left: 2rem; }
-        .content li { margin: 0.5rem 0; }
+        .content h1 { margin-bottom: 2rem; font-size: 2.5rem; text-align: center;}
+        .content h2 { margin: 2rem 0 1rem; font-size: 1.75rem; }
+        .content h3 { margin: 1.5rem 0 0.75rem; font-size: 1.4rem; }
+        .content ul { margin-left: 1.5rem; margin-bottom: 1rem; }
+        .content li { margin: 0.5rem 0; color: var(--text-muted); }
+        .content p { color: var(--text-muted); line-height: 1.7; }
         .logo a {
             text-decoration: none;
             color: inherit;
@@ -34,12 +36,21 @@
                     <span>DeepShare</span>
                 </a>
             </div>
+            <div class="nav-links">
+                <a href="https://docs.deepshare.app" target="_blank">文档</a>
+                <a href="https://github.com/Yorick-Ryu/deep-share" target="_blank" class="github-link">
+                    <svg class="github-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+                    </svg>
+                    GitHub
+                </a>
+            </div>
         </nav>
     </header>
 
     <main class="content">
         <h1>隐私政策</h1>
-        <p>最后更新：2025-04-23</p>
+        <p style="text-align: center; margin-bottom: 3rem;">最后更新：2025-04-23</p>
 
         <h2>1. 数据收集与处理原则</h2>
         <p>DeepShare 是一个以用户隐私保护为核心的开源浏览器插件，我们坚持以下原则：</p>
@@ -56,7 +67,7 @@
         <p>在使用本工具时：</p>
         <ul>
             <li>仅在您<strong>明确授权</strong>的情况下，DeepShare 才会读取剪贴板中的内容</li>
-            <li>剪贴板内容仅用于格式转换
+            <li>剪贴板内容仅用于格式转换</li>
             <li>我们<strong>不会</strong>存储您的任何剪贴板数据到任何服务器</li>
         </ul>
 
@@ -112,28 +123,6 @@
             <p class="copyright">© 2025 DeepShare. All rights reserved.</p>
         </div>
     </footer>
-    <script>
-        // Theme switching functionality
-        const themeToggle = document.querySelector('.theme-toggle');
-        const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
-        
-        const currentTheme = localStorage.getItem('theme');
-        if (currentTheme) {
-            document.documentElement.setAttribute('data-theme', currentTheme);
-        } else {
-            const theme = prefersDarkScheme.matches ? 'dark' : 'light';
-            document.documentElement.setAttribute('data-theme', theme);
-            localStorage.setItem('theme', theme);
-        }
-        
-        themeToggle.addEventListener('click', () => {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-            
-            document.documentElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-        });
-    </script>
     
     <!-- Vercel Web Analytics -->
     <script>

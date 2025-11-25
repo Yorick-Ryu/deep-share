@@ -209,8 +209,6 @@ function updateCustomAmountDetails() {
             bonus = Math.ceil(conversions * 0.8);
         } else if (amount >= 10) {
             bonus = Math.ceil(conversions * 0.6);
-        } else if (amount >= 5) {
-            bonus = Math.ceil(conversions * 0.5);
         }
         
         const totalConversions = conversions + bonus;
@@ -254,8 +252,6 @@ async function processPayment(email, amount) {
         bonus = Math.ceil(conversions * 0.8);
     } else if (amount >= 10) {
         bonus = Math.ceil(conversions * 0.6);
-    } else if (amount >= 5) {
-        bonus = Math.ceil(conversions * 0.5);
     }
     
     // Show loading state on the purchase button
