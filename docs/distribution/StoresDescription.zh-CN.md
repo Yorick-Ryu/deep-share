@@ -16,8 +16,7 @@ Word文档导出：将对话转换为DOCX格式，完美保留数学公式格式
 
 📱 平台兼容性
 DeepSeek：完全支持公式复制、一键导出Word、对话截图
-ChatGPT：支持公式复制、一键导出Word
-Gemini：支持一键导出Word
+ChatGPT、Gemini：支持公式复制、一键导出Word
 豆包：支持公式复制、手动导出Word
 元宝、Kimi等10+AI平台：支持手动导出Word
 

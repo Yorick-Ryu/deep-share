@@ -16,8 +16,7 @@ Word文件匯出：將對話轉換為DOCX格式，完美保留數學公式格式
 
 📱 平台相容性
 DeepSeek：完全支援公式複製、一鍵匯出Word、對話截圖
-ChatGPT：支援公式複製、一鍵匯出Word
-Gemini：支援一鍵匯出Word
+ChatGPT、Gemini：支援公式複製、一鍵匯出Word
 Grok：支援公式複製、手動匯出Word
 元寶、Kimi等10+AI平台：支援手動匯出Word
 

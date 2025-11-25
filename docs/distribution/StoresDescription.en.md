@@ -16,8 +16,7 @@ Limited-time offer: Buy more, get more bonuses, actual average price as low as $
 
 📱 Platform Compatibility
 DeepSeek: Full support for formula copying, Word export, conversation screenshots
-ChatGPT: Support for formula copying, Word export
-Gemini: Support for Word export
+ChatGPT, Gemini: Support for formula copying, Word export
 Grok: Support for formula copying, manual Word export
 Cici, Kimi and 10+ other AI platforms: Support for manual Word export
 
