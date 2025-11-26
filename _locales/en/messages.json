@@ -283,5 +283,14 @@
     },
     "acknowledgmentText": {
         "message": "Thank you to everyone who has shared suggestions for DeepShare! Many features are born from real user needs. Let's boost productivity together and save time for what truly matters in life."
+    },
+    "referenceSources": {
+        "message": "References"
+    },
+    "unusedSources": {
+        "message": "Sources Reviewed but Not Used"
+    },
+    "saveAsMarkdown": {
+        "message": "Save as Markdown"
     }
 }

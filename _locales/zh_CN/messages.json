@@ -283,5 +283,14 @@
     },
     "acknowledgmentText": {
         "message": "感谢每一位为 DeepShare 提出建议的朋友！许多功能源于用户的真实需求，让我们一起提升效率，把节省的时间留给生活。"
+    },
+    "referenceSources": {
+        "message": "参考来源"
+    },
+    "unusedSources": {
+        "message": "已查阅但未使用的来源"
+    },
+    "saveAsMarkdown": {
+        "message": "保存为Markdown"
     }
 }
