@@ -274,5 +274,20 @@
     },
     "saveAsMarkdown": {
         "message": "儲存為Markdown"
+    },
+    "otherSettingsTabLabel": {
+        "message": "其他設定"
+    },
+    "otherSettingsTitle": {
+        "message": "其他設定"
+    },
+    "geminiSettingsTitle": {
+        "message": "Gemini"
+    },
+    "exportGeminiSourcesLabel": {
+        "message": "匯出深度研究來源"
+    },
+    "exportGeminiSourcesHint": {
+        "message": "匯出 Gemini 深度研究報告時包含參考來源"
     }
 }

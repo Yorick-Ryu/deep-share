@@ -292,5 +292,20 @@
     },
     "saveAsMarkdown": {
         "message": "Save as Markdown"
+    },
+    "otherSettingsTabLabel": {
+        "message": "Other Settings"
+    },
+    "otherSettingsTitle": {
+        "message": "Other Settings"
+    },
+    "geminiSettingsTitle": {
+        "message": "Gemini"
+    },
+    "exportGeminiSourcesLabel": {
+        "message": "Export Deep Research sources"
+    },
+    "exportGeminiSourcesHint": {
+        "message": "Include reference sources when exporting Gemini Deep Research reports"
     }
 }

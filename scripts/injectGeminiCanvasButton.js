@@ -297,15 +297,23 @@
         
         console.debug('DeepShare: Extracting content from Canvas DOM');
         
+        // 获取导出来源的设置
+        const settings = await new Promise(resolve => {
+            chrome.storage.sync.get({ exportGeminiSources: true }, resolve);
+        });
+        const shouldExportSources = settings.exportGeminiSources;
+        
         // 先构建来源索引映射
-        const sourceIndexMap = buildSourceIndexMap();
+        const sourceIndexMap = shouldExportSources ? buildSourceIndexMap() : new Map();
         
         let content = extractContentWithFormulas(editorElement, sourceIndexMap);
         
-        // 提取并附加深度研究来源
-        const sources = extractDeepResearchSources(sourceIndexMap);
-        if (sources) {
-            content += sources;
+        // 根据设置决定是否提取并附加深度研究来源
+        if (shouldExportSources) {
+            const sources = extractDeepResearchSources(sourceIndexMap);
+            if (sources) {
+                content += sources;
+            }
         }
         
         return content;
