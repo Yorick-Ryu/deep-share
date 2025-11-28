@@ -363,7 +363,7 @@ function loadI18nText() {
       document.getElementById('versionValue').textContent = manifest.version;
     })
     .catch(() => {
-      document.getElementById('versionValue').textContent = '1.2.2';
+      document.getElementById('versionValue').textContent = 'Error';
     });
 
   // Quota section labels
@@ -474,8 +474,8 @@ function checkQuota(forceRefresh = false) {
     // If we have cached data and it's not a forced refresh, use it
     if (cachedData && !forceRefresh) {
       const lastChecked = new Date(cachedData.lastChecked);
-      // Use cached data if it's less than 5 minutes old
-      if ((now - lastChecked) < 5 * 60 * 1000) {
+      // Use cached data if it's less than 10 minutes old
+      if ((now - lastChecked) < 10 * 60 * 1000) {
         displayQuotaData(cachedData);
         return;
       }

@@ -388,4 +388,3 @@ function generateFilename(content) {
 
 // Initialize the module
 initDocxConverter();
-checkQuota(); // Check quota on startup
