@@ -468,6 +468,10 @@
 
             // Handle source footnotes (引用上标)
             if (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'SOURCE-FOOTNOTE') {
+                // 如果 sourceIndexMap 为空，表示用户不想导出来源，跳过所有引用上标
+                if (sourceIndexMap.size === 0) {
+                    return;
+                }
                 const supElement = node.querySelector('sup[data-turn-source-index]');
                 if (supElement) {
                     const turnIndex = parseInt(supElement.getAttribute('data-turn-source-index'), 10);
@@ -475,10 +479,8 @@
                     if (sourceInfo) {
                         // 插入可点击的上标链接
                         result += `<sup>[[${sourceInfo.displayIndex}]](#ref-${sourceInfo.displayIndex})</sup>`;
-                    } else {
-                        // 如果找不到映射，直接使用 turnIndex（已经是从1开始）
-                        result += `<sup>[${turnIndex}]</sup>`;
                     }
+                    // 如果找不到映射，不输出任何内容（可能是来源列表中不存在的索引）
                 }
                 return;
             }
