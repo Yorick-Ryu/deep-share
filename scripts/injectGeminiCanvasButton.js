@@ -35,8 +35,9 @@
         
         menuContents.forEach(menuContent => {
             // 检查是否已经注入过按钮
-            if (menuContent.querySelector('.deepshare-canvas-docx-button')) {
-                console.debug('DeepShare: DOCX button already exists in menu');
+            if (menuContent.querySelector('.deepshare-canvas-docx-button') || 
+                menuContent.querySelector('.deepshare-canvas-md-button')) {
+                console.debug('DeepShare: Buttons already exist in menu');
                 return;
             }
 
@@ -79,14 +80,42 @@
                         <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
                     </svg>
                 </mat-icon>
-                <span class="mat-mdc-menu-item-text"> ${chrome.i18n.getMessage('docxButton') || '导出为 Word'}</span>
+                <span class="mat-mdc-menu-item-text"> ${chrome.i18n.getMessage('docxButton') || 'Save as Word'}</span>
                 <div matripple="" class="mat-ripple mat-mdc-menu-ripple"></div>
             `;
 
             docxButtonWrapper.appendChild(docxButton);
 
-            // 在复制按钮后面插入
+            // 创建保存为Markdown按钮的容器
+            const mdButtonWrapper = document.createElement('deepshare-md-button');
+            mdButtonWrapper.className = 'deepshare-canvas-md-button ng-star-inserted';
+            mdButtonWrapper.setAttribute('data-test-id', 'deepshare-md-button');
+            mdButtonWrapper.setAttribute('aria-label', chrome.i18n.getMessage('saveAsMarkdown') || 'Save as Markdown');
+
+            // 创建Markdown按钮元素
+            const mdButton = document.createElement('button');
+            mdButton.className = 'mat-mdc-menu-item mat-focus-indicator menu-item-button';
+            mdButton.setAttribute('mat-menu-item', '');
+            mdButton.setAttribute('role', 'menuitem');
+            mdButton.setAttribute('tabindex', '0');
+            mdButton.setAttribute('aria-disabled', 'false');
+
+            // 创建Markdown按钮内容
+            mdButton.innerHTML = `
+                <mat-icon role="img" data-test-id="md-icon" fonticon="file_download" class="mat-icon notranslate google-symbols mat-ligature-font mat-icon-no-color" aria-hidden="true" data-mat-icon-type="font" data-mat-icon-name="file_download">
+                    <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" style="width: 20px; height: 20px;">
+                        <path d="M20.56 18H3.44C2.65 18 2 17.37 2 16.59V7.41C2 6.63 2.65 6 3.44 6H20.56C21.35 6 22 6.63 22 7.41V16.59C22 17.37 21.35 18 20.56 18M6.81 15.19V11.53L8.73 13.88L10.65 11.53V15.19H12.58V8.81H10.65L8.73 11.16L6.81 8.81H4.89V15.19H6.81M19.69 12H17.77V8.81H15.85V12H13.92L16.81 15.28L19.69 12Z"/>
+                    </svg>
+                </mat-icon>
+                <span class="mat-mdc-menu-item-text"> ${chrome.i18n.getMessage('saveAsMarkdown') || 'Save as Markdown'}</span>
+                <div matripple="" class="mat-ripple mat-mdc-menu-ripple"></div>
+            `;
+
+            mdButtonWrapper.appendChild(mdButton);
+
+            // 在复制按钮后面插入两个按钮
             copyButton.parentNode.insertBefore(docxButtonWrapper, copyButton.nextSibling);
+            copyButton.parentNode.insertBefore(mdButtonWrapper, docxButtonWrapper.nextSibling);
 
             // 添加点击事件
             docxButton.addEventListener('click', async (e) => {
@@ -141,8 +170,121 @@
                 }
             });
 
-            console.debug('DeepShare: Canvas DOCX button successfully injected into menu');
+            // 添加Markdown按钮点击事件
+            mdButton.addEventListener('click', async (e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                
+                try {
+                    console.debug('DeepShare: Canvas Markdown button clicked');
+
+                    // 禁用按钮
+                    mdButton.setAttribute('disabled', 'true');
+                    mdButton.style.opacity = '0.6';
+
+                    // 获取Canvas内容
+                    const canvasContent = await getCanvasContent();
+
+                    if (canvasContent && canvasContent.trim()) {
+                        console.debug('DeepShare: Successfully got Canvas content for Markdown');
+                        
+                        // 直接下载为 Markdown 文件
+                        downloadMarkdownFile(canvasContent);
+
+                        // 关闭菜单
+                        setTimeout(() => {
+                            const backdrop = document.querySelector('.cdk-overlay-backdrop');
+                            if (backdrop) {
+                                backdrop.click();
+                            }
+                        }, 100);
+                    } else {
+                        console.warn('DeepShare: Canvas content was empty');
+                        window.showToastNotification(chrome.i18n.getMessage('getClipboardError') || '无法获取内容', 'error');
+                    }
+                } catch (error) {
+                    console.error('DeepShare: Error getting Canvas content:', error);
+                    window.showToastNotification(`${chrome.i18n.getMessage('getClipboardError') || '获取内容失败'}: ${error.message}`, 'error');
+                } finally {
+                    // 重新启用按钮
+                    mdButton.removeAttribute('disabled');
+                    mdButton.style.opacity = '1';
+                }
+            });
+
+            console.debug('DeepShare: Canvas DOCX and Markdown buttons successfully injected into menu');
         });
+    }
+
+    /**
+     * 下载 Markdown 文件
+     */
+    function downloadMarkdownFile(content) {
+        const filename = generateFilename(content) + '.md';
+        
+        // 创建 Blob 对象
+        const blob = new Blob([content], { type: 'text/markdown;charset=utf-8' });
+        
+        // 创建下载链接
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = filename;
+        
+        // 触发下载
+        document.body.appendChild(link);
+        link.click();
+        
+        // 清理
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+        
+        console.debug(`DeepShare: Markdown file downloaded as ${filename}`);
+    }
+
+    /**
+     * 生成文件名
+     * 基于内容的第一行和本地时间戳生成文件名
+     */
+    function generateFilename(content) {
+        // 获取本地时区时间戳
+        function getLocalTimestamp() {
+            const now = new Date();
+            const options = {
+                year: 'numeric', month: '2-digit', day: '2-digit',
+                hour: '2-digit', minute: '2-digit', second: '2-digit',
+                hour12: false
+            };
+            const localTime = now.toLocaleString('zh-CN', options)
+                .replace(/[\/\s:]/g, '-')
+                .replace(',', '');
+            return localTime;
+        }
+
+        // 默认文件名
+        if (!content || typeof content !== 'string') {
+            const timestamp = getLocalTimestamp();
+            return `document_${timestamp}`;
+        }
+
+        // 提取第一行作为文件名
+        const firstLine = content.split('\n')[0] || '';
+        let filename = firstLine.trim();
+
+        // 截取前10个字符
+        filename = filename.substring(0, 10).trim();
+
+        // 移除文件名中不允许的特殊字符，保留中文和字母数字
+        filename = filename.replace(/[^a-zA-Z0-9_\u4e00-\u9fa5]/g, '');
+
+        // 如果清理后为空，使用默认名
+        if (!filename) {
+            filename = 'document';
+        }
+
+        // 添加本地时区时间戳
+        const timestamp = getLocalTimestamp();
+        return `${filename}_${timestamp}`;
     }
 
     async function getCanvasContent() {
@@ -154,14 +296,168 @@
         }
         
         console.debug('DeepShare: Extracting content from Canvas DOM');
-        return extractContentWithFormulas(editorElement);
+        
+        // 获取导出来源的设置
+        const settings = await new Promise(resolve => {
+            chrome.storage.sync.get({ exportGeminiSources: true }, resolve);
+        });
+        const shouldExportSources = settings.exportGeminiSources;
+        
+        // 先构建来源索引映射
+        const sourceIndexMap = shouldExportSources ? buildSourceIndexMap() : new Map();
+        
+        let content = extractContentWithFormulas(editorElement, sourceIndexMap);
+        
+        // 根据设置决定是否提取并附加深度研究来源
+        if (shouldExportSources) {
+            const sources = extractDeepResearchSources(sourceIndexMap);
+            if (sources) {
+                content += sources;
+            }
+        }
+        
+        return content;
+    }
+
+    /**
+     * 构建来源索引映射
+     * Build a mapping from turn-source-index to source info
+     * data-turn-source-index 从 1 开始，直接对应来源列表的顺序
+     */
+    function buildSourceIndexMap() {
+        const sourceMap = new Map();
+        const sourceListContainer = document.querySelector('deep-research-source-lists');
+        if (!sourceListContainer) {
+            return sourceMap;
+        }
+
+        const usedSourcesDiv = sourceListContainer.querySelector('.source-list.used-sources');
+        if (!usedSourcesDiv) {
+            return sourceMap;
+        }
+
+        // 获取所有来源项，按顺序对应 data-turn-source-index（从1开始）
+        const items = usedSourcesDiv.querySelectorAll('browse-web-item');
+        
+        items.forEach((item, index) => {
+            const linkEl = item.querySelector('a[href]');
+            if (!linkEl) return;
+            
+            const url = linkEl.getAttribute('href');
+            if (!url) return;
+            
+            const domainEl = item.querySelector('.display-name');
+            const titleEl = item.querySelector('.sub-title');
+            
+            // data-turn-source-index 从 1 开始，所以用 index + 1 作为 key
+            const sourceIndex = index + 1;
+            sourceMap.set(sourceIndex, {
+                displayIndex: sourceIndex,
+                url: url,
+                domain: domainEl ? domainEl.textContent.trim() : '',
+                title: titleEl ? titleEl.textContent.trim() : ''
+            });
+        });
+        
+        return sourceMap;
+    }
+
+    /**
+     * 提取 Gemini 深度研究报告中使用的来源
+     * Extract sources from Gemini deep research report
+     */
+    function extractDeepResearchSources(sourceIndexMap) {
+        const sourceListContainer = document.querySelector('deep-research-source-lists');
+        if (!sourceListContainer) {
+            console.debug('DeepShare: No deep research sources found');
+            return null;
+        }
+
+        let result = '';
+        
+        // 查找"报告中使用的来源"区域
+        const usedSourcesDiv = sourceListContainer.querySelector('.source-list.used-sources');
+        if (usedSourcesDiv && sourceIndexMap && sourceIndexMap.size > 0) {
+            const referenceTitle = chrome.i18n.getMessage('referenceSources') || 'References';
+            result += `\n\n### ${referenceTitle}\n\n`;
+            // 使用 sourceIndexMap 中的来源，按 displayIndex 排序
+            const sortedSources = Array.from(sourceIndexMap.values())
+                .sort((a, b) => a.displayIndex - b.displayIndex);
+            
+            sortedSources.forEach(source => {
+                // 添加锚点 ID，用于文内引用跳转
+                // 使用尖括号包裹 URL 以处理 URL 中可能包含的括号
+                result += `<a id="ref-${source.displayIndex}"></a>${source.displayIndex}. [${source.title || source.domain}](<${source.url}>)`;
+                if (source.title && source.domain) {
+                    result += ` - *${source.domain}*`;
+                }
+                result += '\n\n';
+            });
+        }
+
+        // 查找"已查阅但未在报告中使用的来源"区域（可选）
+        const unusedSourcesDiv = sourceListContainer.querySelector('.source-list.unused-sources');
+        if (unusedSourcesDiv) {
+            const unusedSources = extractSourcesFromList(unusedSourcesDiv);
+            if (unusedSources.length > 0) {
+                const unusedTitle = chrome.i18n.getMessage('unusedSources') || 'Sources Reviewed but Not Used';
+                result += `\n### ${unusedTitle}\n\n`;
+                unusedSources.forEach((source, index) => {
+                    // 使用尖括号包裹 URL 以处理 URL 中可能包含的括号
+                    result += `${index + 1}. [${source.title || source.domain}](<${source.url}>)`;
+                    if (source.title && source.domain) {
+                        result += ` - *${source.domain}*`;
+                    }
+                    result += '\n';
+                });
+            }
+        }
+
+        if (result) {
+            console.debug('DeepShare: Successfully extracted deep research sources');
+        }
+        
+        return result;
+    }
+
+    /**
+     * 从来源列表中提取链接信息
+     */
+    function extractSourcesFromList(listElement) {
+        const sources = [];
+        const items = listElement.querySelectorAll('browse-web-item a[href]');
+        
+        items.forEach(item => {
+            const url = item.getAttribute('href');
+            if (!url) return;
+            
+            // 跳过包含片段标识符的重复链接 (如 #:~:text=...)
+            if (url.includes('#:~:text=')) return;
+            
+            const domainEl = item.querySelector('.display-name');
+            const titleEl = item.querySelector('.sub-title');
+            
+            const domain = domainEl ? domainEl.textContent.trim() : '';
+            const title = titleEl ? titleEl.textContent.trim() : '';
+            
+            // 避免重复添加相同URL
+            if (!sources.some(s => s.url === url)) {
+                sources.push({
+                    url: url,
+                    domain: domain,
+                    title: title
+                });
+            }
+        });
+        
+        return sources;
     }
 
     /**
      * Extract content from Gemini Canvas with proper formula conversion
      * Converts KaTeX formulas to standard Markdown format
      */
-    function extractContentWithFormulas(container) {
+    function extractContentWithFormulas(container, sourceIndexMap = new Map()) {
         let result = '';
         let listDepth = 0; // Track nesting level for lists
 
@@ -169,6 +465,36 @@
         const processNode = (node, indent = '') => {
             // Skip if not a valid node
             if (!node) return;
+
+            // Handle source footnotes (引用上标)
+            if (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'SOURCE-FOOTNOTE') {
+                // 如果 sourceIndexMap 为空，表示用户不想导出来源，跳过所有引用上标
+                if (sourceIndexMap.size === 0) {
+                    return;
+                }
+                const supElement = node.querySelector('sup[data-turn-source-index]');
+                if (supElement) {
+                    const turnIndex = parseInt(supElement.getAttribute('data-turn-source-index'), 10);
+                    const sourceInfo = sourceIndexMap.get(turnIndex);
+                    if (sourceInfo) {
+                        // 插入可点击的上标链接
+                        result += `<sup>[[${sourceInfo.displayIndex}]](#ref-${sourceInfo.displayIndex})</sup>`;
+                    }
+                    // 如果找不到映射，不输出任何内容（可能是来源列表中不存在的索引）
+                }
+                return;
+            }
+
+            // Handle sources-carousel-inline (跳过来源轮播)
+            if (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'SOURCES-CAROUSEL-INLINE') {
+                return; // 跳过这个元素
+            }
+
+            // Handle response-element wrappers (处理响应元素包装器)
+            if (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'RESPONSE-ELEMENT') {
+                node.childNodes.forEach(n => processNode(n, indent));
+                return;
+            }
 
             // Handle block-level math formulas
             if (node.nodeType === Node.ELEMENT_NODE && node.classList && node.classList.contains('math-block')) {

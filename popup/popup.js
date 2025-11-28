@@ -45,7 +45,8 @@ function loadSettings(highlightApiKey = false) {
     'removeEmojis',
     'convertMermaid',
     'compatMode',
-    'wordTemplateSelect'
+    'wordTemplateSelect',
+    'exportGeminiSources'
   ], (data) => {
     // Watermark settings
     document.getElementById('watermark').value = data.customWatermark || '';
@@ -82,6 +83,9 @@ function loadSettings(highlightApiKey = false) {
 
     // Compatibility Mode setting
     document.getElementById('compatMode').checked = data.compatMode !== false; // Default to true
+
+    // Gemini Deep Research sources export setting
+    document.getElementById('exportGeminiSources').checked = data.exportGeminiSources !== false; // Default to true
 
     // If API key is set, check quota
     if (data.docxApiKey) {
@@ -180,7 +184,9 @@ function setupAutoSave() {
     // 添加Mermaid转换设置
     document.getElementById('convertMermaid'),
     document.getElementById('compatMode'),
-    document.getElementById('wordTemplateSelect')
+    document.getElementById('wordTemplateSelect'),
+    // Gemini settings
+    document.getElementById('exportGeminiSources')
   ];
 
   // Add change event listeners to each input
@@ -336,6 +342,13 @@ function loadI18nText() {
   document.getElementById('methodHtml2CanvasLabel').textContent = chrome.i18n.getMessage('methodHtml2CanvasLabel') || 'html2canvas';
   document.getElementById('screenshotMethodHint').textContent = chrome.i18n.getMessage('screenshotMethodHint') || '选择用于截图的方法，如果一种方法不工作，请尝试另一种';
 
+  // Other Settings tab
+  document.getElementById('otherSettingsTabLabel').textContent = chrome.i18n.getMessage('otherSettingsTabLabel') || 'Other Settings';
+  document.getElementById('otherSettingsTitle').textContent = chrome.i18n.getMessage('otherSettingsTitle') || 'Other Settings';
+  document.getElementById('geminiSettingsTitle').textContent = chrome.i18n.getMessage('geminiSettingsTitle') || 'Gemini';
+  document.getElementById('exportGeminiSourcesLabel').textContent = chrome.i18n.getMessage('exportGeminiSourcesLabel') || 'Export Deep Research sources';
+  document.getElementById('exportGeminiSourcesHint').textContent = chrome.i18n.getMessage('exportGeminiSourcesHint') || 'Include reference sources when exporting Gemini Deep Research reports';
+
   // About tab
   document.getElementById('acknowledgmentText').textContent = chrome.i18n.getMessage('acknowledgmentText') || '感谢每一位为 DeepShare 提出建议的朋友！许多功能源于用户的真实需求，让我们一起提升效率，把节省的时间留给生活。';
   document.getElementById('versionLabel').textContent = chrome.i18n.getMessage('versionLabel') || 'Version:';
@@ -350,7 +363,7 @@ function loadI18nText() {
       document.getElementById('versionValue').textContent = manifest.version;
     })
     .catch(() => {
-      document.getElementById('versionValue').textContent = '1.2.2';
+      document.getElementById('versionValue').textContent = 'Error';
     });
 
   // Quota section labels
@@ -423,7 +436,10 @@ function saveSettings() {
     // Mermaid diagram conversion
     convertMermaid: document.getElementById('convertMermaid').checked,
     compatMode: document.getElementById('compatMode').checked,
-    lastUsedTemplate: document.getElementById('wordTemplateSelect').value
+    lastUsedTemplate: document.getElementById('wordTemplateSelect').value,
+
+    // Gemini settings
+    exportGeminiSources: document.getElementById('exportGeminiSources').checked
   };
 
   // Save all settings at once
@@ -458,8 +474,8 @@ function checkQuota(forceRefresh = false) {
     // If we have cached data and it's not a forced refresh, use it
     if (cachedData && !forceRefresh) {
       const lastChecked = new Date(cachedData.lastChecked);
-      // Use cached data if it's less than 5 minutes old
-      if ((now - lastChecked) < 5 * 60 * 1000) {
+      // Use cached data if it's less than 10 minutes old
+      if ((now - lastChecked) < 10 * 60 * 1000) {
         displayQuotaData(cachedData);
         return;
       }

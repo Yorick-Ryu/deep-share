@@ -852,8 +852,22 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
   animation: spin 1s linear infinite;
 }
 
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
+/* Settings section styles */
+.settings-section {
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.settings-section:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.settings-section-title {
+  margin: 0 0 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-color);
 }
