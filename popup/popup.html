@@ -298,6 +298,23 @@
       <div class="tab-content" id="other-settings-tab">
         <h2 id="otherSettingsTitle">Other Settings</h2>
 
+        <!-- Language Selection -->
+        <div class="settings-section">
+          <h3 class="settings-section-title" id="languageSettingsTitle">Language</h3>
+          <div class="form-group">
+            <label for="languageSelect" id="languageSelectLabel">Display Language</label>
+            <select id="languageSelect">
+              <option value="auto" id="languageAuto">Auto (Browser Default)</option>
+              <option value="en">English</option>
+              <option value="zh_CN">简体中文</option>
+              <option value="zh_TW">繁體中文</option>
+              <option value="fr">Français</option>
+              <option value="ja">日本語</option>
+            </select>
+            <span class="form-hint" id="languageHint">Select your preferred display language</span>
+          </div>
+        </div>
+
         <div class="settings-section">
           <h3 class="settings-section-title" id="geminiSettingsTitle">Gemini</h3>
           <div class="checkbox-group">

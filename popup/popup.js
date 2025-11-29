@@ -1,9 +1,16 @@
+// Global variable to store custom locale messages
+let customLocaleMessages = null;
+let currentLanguage = 'auto';
+
 // Initialize and load settings
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   // Check for action parameters in the URL
   const urlParams = new URLSearchParams(window.location.search);
   const action = urlParams.get('action');
   const highlightApiKey = action === 'apiKeyMissing';
+
+  // Load language preference first, then load i18n text
+  await loadLanguagePreference();
 
   // Load saved settings
   loadSettings(highlightApiKey);
@@ -30,6 +37,57 @@ document.addEventListener('DOMContentLoaded', () => {
   loadI18nText();
 });
 
+// Function to load language preference and custom locale messages
+async function loadLanguagePreference() {
+  return new Promise((resolve) => {
+    chrome.storage.sync.get(['preferredLanguage'], async (data) => {
+      currentLanguage = data.preferredLanguage || 'auto';
+      
+      if (currentLanguage !== 'auto') {
+        // Load custom locale messages
+        await loadLocaleMessages(currentLanguage);
+      }
+      
+      resolve();
+    });
+  });
+}
+
+// Function to load messages from a specific locale file
+async function loadLocaleMessages(locale) {
+  try {
+    const url = chrome.runtime.getURL(`_locales/${locale}/messages.json`);
+    const response = await fetch(url);
+    if (response.ok) {
+      customLocaleMessages = await response.json();
+    } else {
+      console.error(`Failed to load locale ${locale}:`, response.status);
+      customLocaleMessages = null;
+    }
+  } catch (error) {
+    console.error(`Error loading locale ${locale}:`, error);
+    customLocaleMessages = null;
+  }
+}
+
+// Function to get a message (from custom locale or chrome.i18n)
+function getMessage(key, substitutions) {
+  // If we have custom locale messages and the key exists, use it
+  if (customLocaleMessages && customLocaleMessages[key]) {
+    let message = customLocaleMessages[key].message;
+    // Handle substitutions if provided
+    if (substitutions) {
+      const subs = Array.isArray(substitutions) ? substitutions : [substitutions];
+      subs.forEach((sub, index) => {
+        message = message.replace(`$${index + 1}`, sub);
+      });
+    }
+    return message;
+  }
+  // Otherwise, use chrome.i18n.getMessage
+  return chrome.i18n.getMessage(key, substitutions);
+}
+
 // Function to load saved settings
 function loadSettings(highlightApiKey = false) {
   chrome.storage.sync.get([
@@ -46,7 +104,8 @@ function loadSettings(highlightApiKey = false) {
     'convertMermaid',
     'compatMode',
     'wordTemplateSelect',
-    'exportGeminiSources'
+    'exportGeminiSources',
+    'preferredLanguage'
   ], (data) => {
     // Watermark settings
     document.getElementById('watermark').value = data.customWatermark || '';
@@ -86,6 +145,9 @@ function loadSettings(highlightApiKey = false) {
 
     // Gemini Deep Research sources export setting
     document.getElementById('exportGeminiSources').checked = data.exportGeminiSources !== false; // Default to true
+
+    // Language preference
+    document.getElementById('languageSelect').value = data.preferredLanguage || 'auto';
 
     // If API key is set, check quota
     if (data.docxApiKey) {
@@ -186,7 +248,9 @@ function setupAutoSave() {
     document.getElementById('compatMode'),
     document.getElementById('wordTemplateSelect'),
     // Gemini settings
-    document.getElementById('exportGeminiSources')
+    document.getElementById('exportGeminiSources'),
+    // Language settings
+    document.getElementById('languageSelect')
   ];
 
   // Add change event listeners to each input
@@ -196,6 +260,24 @@ function setupAutoSave() {
     if (input.type === 'text' || input.type === 'password') {
       input.addEventListener('input', debounce(saveSettings, 500));
     }
+  });
+
+  // Special handler for language change - reload i18n text after saving
+  document.getElementById('languageSelect').addEventListener('change', async (e) => {
+    const newLanguage = e.target.value;
+    currentLanguage = newLanguage;
+    
+    if (newLanguage === 'auto') {
+      customLocaleMessages = null;
+    } else {
+      await loadLocaleMessages(newLanguage);
+    }
+    
+    // Reload all i18n text with the new language
+    loadI18nText();
+    
+    // Refresh template selector with new language
+    setupTemplateSelector();
   });
 }
 
@@ -279,44 +361,41 @@ function setupUIElements() {
 
 // Load all i18n text
 function loadI18nText() {
-  // Get current UI language
-  const currentLang = chrome.i18n.getUILanguage();
-
   // Tab labels
-  document.getElementById('docxTabLabel').textContent = chrome.i18n.getMessage('docxSettings') || 'Document Conversion';
-  document.getElementById('manualDocxTabLabel').textContent = chrome.i18n.getMessage('manualDocxSettings') || '手动转换文档';
-  document.getElementById('formulaTabLabel').textContent = chrome.i18n.getMessage('formulaTabLabel') || 'Formula Settings';
-  document.getElementById('screenshotTabLabel').textContent = chrome.i18n.getMessage('screenshotSettings') || 'Screenshot Settings';
-  document.getElementById('sponsorTabLabel').textContent = chrome.i18n.getMessage('sponsorTabLabel') || 'About';
-  document.getElementById('sponsorTabTitle').textContent = chrome.i18n.getMessage('aboutTabTitle') || 'About DeepShare';
+  document.getElementById('docxTabLabel').textContent = getMessage('docxSettings') || 'Document Conversion';
+  document.getElementById('manualDocxTabLabel').textContent = getMessage('manualDocxSettings') || '手动转换文档';
+  document.getElementById('formulaTabLabel').textContent = getMessage('formulaTabLabel') || 'Formula Settings';
+  document.getElementById('screenshotTabLabel').textContent = getMessage('screenshotSettings') || 'Screenshot Settings';
+  document.getElementById('sponsorTabLabel').textContent = getMessage('sponsorTabLabel') || 'About';
+  document.getElementById('sponsorTabTitle').textContent = getMessage('aboutTabTitle') || 'About DeepShare';
 
   // Document Conversion tab
-  document.getElementById('docxSettingsTitle').textContent = chrome.i18n.getMessage('docxSettings') || 'Word (DOCX) Conversion';
-  document.getElementById('docxFeatureExplanation').textContent = chrome.i18n.getMessage('docxFeatureExplanation') || 'Used to configure AI conversation to Word document conversion. Other features like conversation screenshots, LaTeX formula copying, and image sharing are free and ready to use.';
-  document.getElementById('docxModeLabel').textContent = chrome.i18n.getMessage('docxModeLabel') || 'Conversion Mode';
-  document.getElementById('modeLocalLabel').textContent = chrome.i18n.getMessage('modeLocalLabel') || 'Local';
-  document.getElementById('modeApiLabel').textContent = chrome.i18n.getMessage('modeApiLabel') || 'API';
-  document.getElementById('docxServerUrlLabel').textContent = chrome.i18n.getMessage('docxServerUrlLabel') || 'Server URL';
-  document.getElementById('docxApiKeyLabel').textContent = chrome.i18n.getMessage('docxApiKeyLabel') || 'API Key';
-  document.getElementById('removeDividersLabel').textContent = chrome.i18n.getMessage('removeDividersLabel') || '去除分割线';
-  document.getElementById('removeEmojisLabel').textContent = chrome.i18n.getMessage('removeEmojisLabel') || '去除emoji表情';
-  document.getElementById('convertMermaidLabel').textContent = chrome.i18n.getMessage('convertMermaidLabel') || '启用Mermaid图表转换';
-  document.getElementById('compatModeLabel').textContent = chrome.i18n.getMessage('compatModeLabel') || '兼容模式';
-  document.getElementById('compatModeTooltip').textContent = chrome.i18n.getMessage('compatModeTooltip') || '兼容不规范的Markdown格式';
+  document.getElementById('docxSettingsTitle').textContent = getMessage('docxSettings') || 'Word (DOCX) Conversion';
+  document.getElementById('docxFeatureExplanation').textContent = getMessage('docxFeatureExplanation') || 'Used to configure AI conversation to Word document conversion. Other features like conversation screenshots, LaTeX formula copying, and image sharing are free and ready to use.';
+  document.getElementById('docxModeLabel').textContent = getMessage('docxModeLabel') || 'Conversion Mode';
+  document.getElementById('modeLocalLabel').textContent = getMessage('modeLocalLabel') || 'Local';
+  document.getElementById('modeApiLabel').textContent = getMessage('modeApiLabel') || 'API';
+  document.getElementById('docxServerUrlLabel').textContent = getMessage('docxServerUrlLabel') || 'Server URL';
+  document.getElementById('docxApiKeyLabel').textContent = getMessage('docxApiKeyLabel') || 'API Key';
+  document.getElementById('removeDividersLabel').textContent = getMessage('removeDividersLabel') || '去除分割线';
+  document.getElementById('removeEmojisLabel').textContent = getMessage('removeEmojisLabel') || '去除emoji表情';
+  document.getElementById('convertMermaidLabel').textContent = getMessage('convertMermaidLabel') || '启用Mermaid图表转换';
+  document.getElementById('compatModeLabel').textContent = getMessage('compatModeLabel') || '兼容模式';
+  document.getElementById('compatModeTooltip').textContent = getMessage('compatModeTooltip') || '兼容不规范的Markdown格式';
 
   // Formula Copy Settings tab
-  document.getElementById('formulaSettingsTitle').textContent = chrome.i18n.getMessage('formulaSettingsTitle') || 'Formula Copy Settings';
-  document.getElementById('enableFormulaCopyLabel').textContent = chrome.i18n.getMessage('enableFormulaCopyLabel') || 'Enable Formula Copy';
-  document.getElementById('formulaFormatLabel').textContent = chrome.i18n.getMessage('formulaFormatLabel') || 'Formula Copy Format';
-  document.getElementById('formatMathMLLabel').textContent = chrome.i18n.getMessage('formatMathMLLabel') || 'MathML';
-  document.getElementById('formatLaTeXLabel').textContent = chrome.i18n.getMessage('formatLaTeXLabel') || 'LaTeX';
-  document.getElementById('formulaFormatHint').textContent = chrome.i18n.getMessage('formulaFormatHint') || 'MathML is compatible with more editors, LaTeX is for professional typesetting';
+  document.getElementById('formulaSettingsTitle').textContent = getMessage('formulaSettingsTitle') || 'Formula Copy Settings';
+  document.getElementById('enableFormulaCopyLabel').textContent = getMessage('enableFormulaCopyLabel') || 'Enable Formula Copy';
+  document.getElementById('formulaFormatLabel').textContent = getMessage('formulaFormatLabel') || 'Formula Copy Format';
+  document.getElementById('formatMathMLLabel').textContent = getMessage('formatMathMLLabel') || 'MathML';
+  document.getElementById('formatLaTeXLabel').textContent = getMessage('formatLaTeXLabel') || 'LaTeX';
+  document.getElementById('formulaFormatHint').textContent = getMessage('formulaFormatHint') || 'MathML is compatible with more editors, LaTeX is for professional typesetting';
 
   // Manual Document Conversion tab
-  document.getElementById('manualConversionTitle').textContent = chrome.i18n.getMessage('manualConversionTitle') || '手动转换';
-  document.getElementById('manualConversionExplanation').innerHTML = chrome.i18n.getMessage('manualConversionExplanation') || '支持ChatGPT、豆包、元宝等，复制需要转换的对话到Markdown输入框，点击"转换为文档"按钮立即下载Word格式，排版精美，支持公式！';
-  document.getElementById('markdownInputLabel').textContent = chrome.i18n.getMessage('markdownInputLabel') || 'Markdown 文本';
-  document.getElementById('templateLabel').textContent = chrome.i18n.getMessage('templateLabel') || 'Word Template';
+  document.getElementById('manualConversionTitle').textContent = getMessage('manualConversionTitle') || '手动转换';
+  document.getElementById('manualConversionExplanation').innerHTML = getMessage('manualConversionExplanation') || '支持ChatGPT、豆包、元宝等，复制需要转换的对话到Markdown输入框，点击"转换为文档"按钮立即下载Word格式，排版精美，支持公式！';
+  document.getElementById('markdownInputLabel').textContent = getMessage('markdownInputLabel') || 'Markdown 文本';
+  document.getElementById('templateLabel').textContent = getMessage('templateLabel') || 'Word Template';
   document.getElementById('convertMarkdownBtn').innerHTML = `
     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;">
       <path d="M14 3v4a1 1 0 0 0 1 1h4"></path>
@@ -325,36 +404,40 @@ function loadI18nText() {
       <line x1="9" y1="13" x2="15" y2="13"></line>
       <line x1="9" y1="17" x2="15" y2="17"></line>
     </svg>
-    ${chrome.i18n.getMessage('convertToDocx') || '转换为文档'}
+    ${getMessage('convertToDocx') || '转换为文档'}
   `;
-  document.getElementById('clearMarkdownBtn').textContent = chrome.i18n.getMessage('clearMarkdown') || '清空';
-  document.getElementById('markdownInput').placeholder = chrome.i18n.getMessage('markdownInputPlaceholder') || '在此粘贴 Markdown 格式文本...';
+  document.getElementById('clearMarkdownBtn').textContent = getMessage('clearMarkdown') || '清空';
+  document.getElementById('markdownInput').placeholder = getMessage('markdownInputPlaceholder') || '在此粘贴 Markdown 格式文本...';
 
   // Screenshot settings tab (previously Watermark tab)
-  document.getElementById('screenshotSettingsTitle').textContent = chrome.i18n.getMessage('screenshotSettings') || 'Screenshot Settings';
-  document.getElementById('hideDefaultWatermarkLabel').textContent = chrome.i18n.getMessage('hideDefaultWatermarkLabel') || 'Hide Default Watermark';
-  document.getElementById('customWatermarkLabel').textContent = chrome.i18n.getMessage('customWatermarkLabel') || 'Custom Watermark Text (Optional)';
-  document.getElementById('watermark').placeholder = chrome.i18n.getMessage('customWatermarkPlaceholder') || 'Enter custom watermark here';
+  document.getElementById('screenshotSettingsTitle').textContent = getMessage('screenshotSettings') || 'Screenshot Settings';
+  document.getElementById('hideDefaultWatermarkLabel').textContent = getMessage('hideDefaultWatermarkLabel') || 'Hide Default Watermark';
+  document.getElementById('customWatermarkLabel').textContent = getMessage('customWatermarkLabel') || 'Custom Watermark Text (Optional)';
+  document.getElementById('watermark').placeholder = getMessage('customWatermarkPlaceholder') || 'Enter custom watermark here';
   
   // Screenshot method labels
-  document.getElementById('screenshotMethodLabel').textContent = chrome.i18n.getMessage('screenshotMethodLabel') || 'Screenshot Method';
-  document.getElementById('methodDomToImageLabel').textContent = chrome.i18n.getMessage('methodDomToImageLabel') || 'dom-to-image';
-  document.getElementById('methodHtml2CanvasLabel').textContent = chrome.i18n.getMessage('methodHtml2CanvasLabel') || 'html2canvas';
-  document.getElementById('screenshotMethodHint').textContent = chrome.i18n.getMessage('screenshotMethodHint') || '选择用于截图的方法，如果一种方法不工作，请尝试另一种';
+  document.getElementById('screenshotMethodLabel').textContent = getMessage('screenshotMethodLabel') || 'Screenshot Method';
+  document.getElementById('methodDomToImageLabel').textContent = getMessage('methodDomToImageLabel') || 'dom-to-image';
+  document.getElementById('methodHtml2CanvasLabel').textContent = getMessage('methodHtml2CanvasLabel') || 'html2canvas';
+  document.getElementById('screenshotMethodHint').textContent = getMessage('screenshotMethodHint') || '选择用于截图的方法，如果一种方法不工作，请尝试另一种';
 
   // Other Settings tab
-  document.getElementById('otherSettingsTabLabel').textContent = chrome.i18n.getMessage('otherSettingsTabLabel') || 'Other Settings';
-  document.getElementById('otherSettingsTitle').textContent = chrome.i18n.getMessage('otherSettingsTitle') || 'Other Settings';
-  document.getElementById('geminiSettingsTitle').textContent = chrome.i18n.getMessage('geminiSettingsTitle') || 'Gemini';
-  document.getElementById('exportGeminiSourcesLabel').textContent = chrome.i18n.getMessage('exportGeminiSourcesLabel') || 'Export Deep Research sources';
-  document.getElementById('exportGeminiSourcesHint').textContent = chrome.i18n.getMessage('exportGeminiSourcesHint') || 'Include reference sources when exporting Gemini Deep Research reports';
+  document.getElementById('otherSettingsTabLabel').textContent = getMessage('otherSettingsTabLabel') || 'Other Settings';
+  document.getElementById('otherSettingsTitle').textContent = getMessage('otherSettingsTitle') || 'Other Settings';
+  document.getElementById('languageSettingsTitle').textContent = getMessage('languageSettingsTitle') || 'Language';
+  document.getElementById('languageSelectLabel').textContent = getMessage('languageSelectLabel') || 'Display Language';
+  document.getElementById('languageAuto').textContent = getMessage('languageAuto') || 'Auto (Browser Default)';
+  document.getElementById('languageHint').textContent = getMessage('languageHint') || 'Select your preferred display language';
+  document.getElementById('geminiSettingsTitle').textContent = getMessage('geminiSettingsTitle') || 'Gemini';
+  document.getElementById('exportGeminiSourcesLabel').textContent = getMessage('exportGeminiSourcesLabel') || 'Export Deep Research sources';
+  document.getElementById('exportGeminiSourcesHint').textContent = getMessage('exportGeminiSourcesHint') || 'Include reference sources when exporting Gemini Deep Research reports';
 
   // About tab
-  document.getElementById('acknowledgmentText').textContent = chrome.i18n.getMessage('acknowledgmentText') || '感谢每一位为 DeepShare 提出建议的朋友！许多功能源于用户的真实需求，让我们一起提升效率，把节省的时间留给生活。';
-  document.getElementById('versionLabel').textContent = chrome.i18n.getMessage('versionLabel') || 'Version:';
-  document.getElementById('documentationLabel').textContent = chrome.i18n.getMessage('documentationLabel') || 'Documentation:';
-  document.getElementById('githubLabel').textContent = chrome.i18n.getMessage('githubLabel') || 'GitHub:';
-  document.getElementById('developerEmailLabel').textContent = chrome.i18n.getMessage('developerEmailLabel') || 'Developer Email:';
+  document.getElementById('acknowledgmentText').textContent = getMessage('acknowledgmentText') || '感谢每一位为 DeepShare 提出建议的朋友！许多功能源于用户的真实需求，让我们一起提升效率，把节省的时间留给生活。';
+  document.getElementById('versionLabel').textContent = getMessage('versionLabel') || 'Version:';
+  document.getElementById('documentationLabel').textContent = getMessage('documentationLabel') || 'Documentation:';
+  document.getElementById('githubLabel').textContent = getMessage('githubLabel') || 'GitHub:';
+  document.getElementById('developerEmailLabel').textContent = getMessage('developerEmailLabel') || 'Developer Email:';
   
   // Load version from manifest
   fetch(chrome.runtime.getURL('manifest.json'))
@@ -367,14 +450,14 @@ function loadI18nText() {
     });
 
   // Quota section labels
-  document.getElementById('quotaTitle').textContent = chrome.i18n.getMessage('quotaTitle') || '您的转换次数';
-  document.getElementById('totalQuotaLabel').textContent = chrome.i18n.getMessage('totalQuotaLabel') || '总计:';
-  document.getElementById('usedQuotaLabel').textContent = chrome.i18n.getMessage('usedQuotaLabel') || '已用:';
-  document.getElementById('remainingQuotaLabel').textContent = chrome.i18n.getMessage('remainingQuotaLabel') || '剩余:';
+  document.getElementById('quotaTitle').textContent = getMessage('quotaTitle') || '您的转换次数';
+  document.getElementById('totalQuotaLabel').textContent = getMessage('totalQuotaLabel') || '总计:';
+  document.getElementById('usedQuotaLabel').textContent = getMessage('usedQuotaLabel') || '已用:';
+  document.getElementById('remainingQuotaLabel').textContent = getMessage('remainingQuotaLabel') || '剩余:';
   
   // API key hint with proper HTML handling
   const apiKeyHint = document.getElementById('apiKeyHint');
-  const apiKeyHintMessage = chrome.i18n.getMessage('apiKeyHint');
+  const apiKeyHintMessage = getMessage('apiKeyHint');
   if (apiKeyHintMessage) {
     apiKeyHint.innerHTML = apiKeyHintMessage;
   }
@@ -382,13 +465,13 @@ function loadI18nText() {
   // Quota action buttons
   const refreshBtn = document.getElementById('refreshQuota');
   if (refreshBtn) {
-    refreshBtn.textContent = chrome.i18n.getMessage('refreshButton') || '刷新';
+    refreshBtn.textContent = getMessage('refreshButton') || '刷新';
   }
   
   // Update purchase link text
   const purchaseLink = document.querySelector('.purchase-link');
   if (purchaseLink) {
-    purchaseLink.textContent = chrome.i18n.getMessage('purchaseQuota') || '购买次数';
+    purchaseLink.textContent = getMessage('purchaseQuota') || '购买次数';
   }
 }
 
@@ -439,7 +522,10 @@ function saveSettings() {
     lastUsedTemplate: document.getElementById('wordTemplateSelect').value,
 
     // Gemini settings
-    exportGeminiSources: document.getElementById('exportGeminiSources').checked
+    exportGeminiSources: document.getElementById('exportGeminiSources').checked,
+
+    // Language settings
+    preferredLanguage: document.getElementById('languageSelect').value
   };
 
   // Save all settings at once
@@ -539,14 +625,14 @@ function displayQuotaData(data) {
     const expirationDate = new Date(data.expiresAt);
     document.getElementById('expirationDate').textContent = formatDate(expirationDate);
   } else {
-    const unknownText = chrome.i18n.getMessage('unknown') || 'Unknown';
+    const unknownText = getMessage('unknown') || 'Unknown';
     document.getElementById('expirationDate').textContent = unknownText;
   }
 
   // Update expiration label if needed
   const expirationLabel = document.getElementById('expirationLabel');
   if (expirationLabel) {
-    expirationLabel.textContent = chrome.i18n.getMessage('expirationLabel') || '有效期至:';
+    expirationLabel.textContent = getMessage('expirationLabel') || '有效期至:';
   }
 
   // Update progress bar to show remaining quota percentage instead of used
@@ -598,7 +684,7 @@ function setupManualConversion() {
 
     // Validate input
     if (!markdownText) {
-      alert(chrome.i18n.getMessage('emptyMarkdownError') || '请输入Markdown文本');
+      alert(getMessage('emptyMarkdownError') || '请输入Markdown文本');
       return;
     }
 
@@ -616,7 +702,7 @@ function setupManualConversion() {
     // Check if API key is provided
     if (!settings.docxApiKey || settings.docxApiKey.trim() === '') {
       // Show message
-      alert(chrome.i18n.getMessage('apiKeyMissing') || '请购买或填写API-Key以使用文档转换功能');
+      alert(getMessage('apiKeyMissing') || '请购买或填写API-Key以使用文档转换功能');
 
       // Switch to document conversion tab
       const docxTabBtn = document.querySelector('.tab-btn[data-tab="docx-tab"]');
@@ -645,7 +731,7 @@ function setupManualConversion() {
       convertBtn.disabled = true;
       convertBtn.innerHTML = `
         <div class="button-spinner"></div>
-        <span>${chrome.i18n.getMessage('docxConverting') || '正在转换...'}</span>
+        <span>${getMessage('docxConverting') || '正在转换...'}</span>
       `;
 
       // Call the conversion function with markdown text
@@ -656,7 +742,7 @@ function setupManualConversion() {
         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;">
           <path d="M20 6L9 17l-5-5"/>
         </svg>
-        <span>${chrome.i18n.getMessage('docxConversionSuccess') || '转换成功!'}</span>
+        <span>${getMessage('docxConversionSuccess') || '转换成功!'}</span>
       `;
 
       // After a timeout, restore the original button
@@ -791,10 +877,13 @@ async function setupTemplateSelector() {
   const selectElement = document.getElementById('wordTemplateSelect');
   if (!selectElement) return;
 
+  // Clear existing options
+  selectElement.innerHTML = '';
+
   // Set default option first
   const defaultOption = document.createElement('option');
   defaultOption.value = 'templates';
-  defaultOption.textContent = chrome.i18n.getMessage('universalTemplate') || 'Universal';
+  defaultOption.textContent = getMessage('universalTemplate') || 'Universal';
   selectElement.appendChild(defaultOption);
 
   try {
@@ -807,12 +896,13 @@ async function setupTemplateSelector() {
     }
 
     const templatesByLang = await response.json();
-    const currentLang = chrome.i18n.getUILanguage();
     
-    let templates = [];
-    if (currentLang.startsWith('zh')) {
-      templates = templatesByLang.zh || [];
-    } else {
+    // Determine the template language key based on current language preference
+    let templateLangKey = getTemplateLangKey();
+    
+    // Try to get templates for the current language, fall back to 'en' if not available
+    let templates = templatesByLang[templateLangKey] || [];
+    if (templates.length === 0 && templateLangKey !== 'en') {
       templates = templatesByLang.en || [];
     }
     
@@ -838,4 +928,20 @@ async function setupTemplateSelector() {
       }
     });
   }
+}
+
+// Helper function to get the template language key based on current language preference
+function getTemplateLangKey() {
+  // If language is set to auto, use browser's UI language
+  const lang = currentLanguage === 'auto' ? chrome.i18n.getUILanguage() : currentLanguage;
+  
+  // Map language codes to template keys
+  // zh_CN, zh_TW, zh -> 'zh'
+  // Other languages -> 'en' (fallback)
+  if (lang.startsWith('zh') || lang === 'zh_CN' || lang === 'zh_TW') {
+    return 'zh';
+  }
+  
+  // For other languages, check if they have specific templates, otherwise use 'en'
+  return 'en';
 }
