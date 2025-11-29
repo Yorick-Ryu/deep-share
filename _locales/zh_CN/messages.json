@@ -307,5 +307,17 @@
     },
     "exportGeminiSourcesHint": {
         "message": "导出 Gemini 深度研究报告时包含参考来源"
+    },
+    "languageSettingsTitle": {
+        "message": "语言"
+    },
+    "languageSelectLabel": {
+        "message": "显示语言"
+    },
+    "languageAuto": {
+        "message": "自动（跟随浏览器）"
+    },
+    "languageHint": {
+        "message": "选择您偏好的显示语言"
     }
 }

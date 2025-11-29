@@ -1,0 +1,324 @@
+{
+    "extensionName": {
+        "message": "DeepShare：AI会話をWordにエクスポート"
+    },
+    "extensionDescription": {
+        "message": "DeepSeek、ChatGPT、Gemini、Grokなどの AI 会話を Word 文書にエクスポート、数式をコピー；DeepSeek 会話の長いスクリーンショット対応。"
+    },
+    "shareButton": {
+        "message": "会話を共有"
+    },
+    "modalTitle": {
+        "message": "会話を共有"
+    },
+    "imageTab": {
+        "message": "画像"
+    },
+    "textTab": {
+        "message": "テキスト"
+    },
+    "wordTab": {
+        "message": "Word"
+    },
+    "wordExportInfo": {
+        "message": "ダウンロードまたはコピーボタンをクリックして、ユーザーの質問と AI の回答を Word 文書にエクスポートします"
+    },
+    "noAiResponses": {
+        "message": "AI の回答が見つかりません"
+    },
+    "downloadButton": {
+        "message": "ダウンロード"
+    },
+    "copyButton": {
+        "message": "コピー"
+    },
+    "docxButton": {
+        "message": "Word として保存"
+    },
+    "docxFeatureExplanation": {
+        "message": "AI 会話を Word 文書に変換する機能のみの設定です。会話スクリーンショットや数式コピーなどの機能は無料でご利用いただけます。"
+    },
+    "docxFeatureComingSoon": {
+        "message": "DOCX エクスポート機能は近日公開！"
+    },
+    "docxConversionSuccess": {
+        "message": "DOCX への変換に成功しました！"
+    },
+    "docxConverting": {
+        "message": "文書に変換中です。このポップアップを閉じないでください！"
+    },
+    "docxConversionError": {
+        "message": "DOCX への変換に失敗しました。変換サービスが実行中であることを確認してください。"
+    },
+    "watermarkSettings": {
+        "message": "透かし設定"
+    },
+    "screenshotSettings": {
+        "message": "スクショ"
+    },
+    "docxSettings": {
+        "message": "AI 会話を Word に"
+    },
+    "docxServerUrlLabel": {
+        "message": "サーバー URL"
+    },
+    "docxApiKeyLabel": {
+        "message": "API キー"
+    },
+    "docxModeLabel": {
+        "message": "変換モード"
+    },
+    "modeLocalLabel": {
+        "message": "ローカル (Pandoc)"
+    },
+    "modeApiLabel": {
+        "message": "API"
+    },
+    "copied": {
+        "message": "コピーしました！"
+    },
+    "copyFailed": {
+        "message": "コピーに失敗しました！"
+    },
+    "formulaCopied": {
+        "message": "数式をコピーしました！"
+    },
+    "clickToCopyFormula": {
+        "message": "クリックして数式をコピー"
+    },
+    "generatingImage": {
+        "message": "スクリーンショットを生成中..."
+    },
+    "generateFailed": {
+        "message": "スクリーンショットに失敗しました。ページを更新してお試しください！"
+    },
+    "defaultWatermark": {
+        "message": "DeepSeek AI によって生成されたコンテンツ、DeepShare 拡張機能でキャプチャ"
+    },
+    "settingsButton": {
+        "message": "透かし設定"
+    },
+    "hideDefaultWatermarkLabel": {
+        "message": "デフォルトの透かしを非表示"
+    },
+    "customWatermarkLabel": {
+        "message": "カスタム透かしテキスト（オプション）"
+    },
+    "customWatermarkPlaceholder": {
+        "message": "ここにカスタム透かしを入力"
+    },
+    "saveSettings": {
+        "message": "設定を保存"
+    },
+    "settingsSaved": {
+        "message": "保存しました"
+    },
+    "sponsorTitle": {
+        "message": "ご利用ありがとうございます！便利だと思ったら、WeChat QR コードでスポンサーしていただけると嬉しいです 😊"
+    },
+    "selectButton": {
+        "message": "メッセージを選択"
+    },
+    "selectAllButton": {
+        "message": "すべて選択"
+    },
+    "selectAllResponsesButton": {
+        "message": "すべての回答を選択"
+    },
+    "unselectAllButton": {
+        "message": "選択解除"
+    },
+    "noMessageSelected": {
+        "message": "少なくとも1つのメッセージを選択してください"
+    },
+    "sponsorTabLabel": {
+        "message": "概要"
+    },
+    "totalQuotaLabel": {
+        "message": "合計:"
+    },
+    "usedQuotaLabel": {
+        "message": "使用済み:"
+    },
+    "remainingQuotaLabel": {
+        "message": "残り:"
+    },
+    "quotaTitle": {
+        "message": "変換クォータ"
+    },
+    "apiKeyHint": {
+        "message": "API キーを購入しますか？<a href=\"https://ds.rick216.cn/purchase-en\" target=\"_blank\">こちらをクリック</a>"
+    },
+    "apiKeyMissing": {
+        "message": "文書変換機能を使用するには、拡張機能アイコンをクリックして API キーを購入または入力してください"
+    },
+    "manualConversionExplanation": {
+        "message": "Grok、Claude、Meta AI などをサポート。会話を Markdown 入力ボックスにコピーし、「文書に変換」をクリックすると、数式対応の美しいフォーマットの Word 文書をダウンロードできます！"
+    },
+    "manualConversionTitle": {
+        "message": "AI 会話を貼り付け"
+    },
+    "markdownInputLabel": {
+        "message": "Markdown テキスト"
+    },
+    "markdownInputPlaceholder": {
+        "message": "Markdown 形式のテキストをここに貼り付け..."
+    },
+    "convertToDocx": {
+        "message": "文書に変換"
+    },
+    "clearMarkdown": {
+        "message": "クリア"
+    },
+    "emptyMarkdownError": {
+        "message": "Markdown テキストを入力してください"
+    },
+    "manualDocxSettings": {
+        "message": "AI 会話を貼り付け"
+    },
+    "formulaTabLabel": {
+        "message": "数式コピー"
+    },
+    "formulaSettingsTitle": {
+        "message": "数式コピー設定"
+    },
+    "enableFormulaCopyLabel": {
+        "message": "数式コピーを有効にする"
+    },
+    "formulaFormatLabel": {
+        "message": "数式コピー形式"
+    },
+    "formatMathMLLabel": {
+        "message": "MathML"
+    },
+    "formatLaTeXLabel": {
+        "message": "LaTeX"
+    },
+    "formulaFormatHint": {
+        "message": "MathML はより多くのエディタと互換性があり、LaTeX は専門的な組版向けです"
+    },
+    "screenshotMethodLabel": {
+        "message": "スクリーンショット方式"
+    },
+    "methodDomToImageLabel": {
+        "message": "dom-to-image"
+    },
+    "methodHtml2CanvasLabel": {
+        "message": "html2canvas"
+    },
+    "screenshotMethodHint": {
+        "message": "スクリーンショットに使用する方式を選択します。1つの方式が機能しない場合は、別の方式をお試しください。切り替え後はページを更新してください。"
+    },
+    "removeDividersLabel": {
+        "message": "区切り線を削除"
+    },
+    "removeEmojisLabel": {
+        "message": "絵文字を削除"
+    },
+    "convertMermaidLabel": {
+        "message": "Mermaid 変換"
+    },
+    "compatModeLabel": {
+        "message": "互換モード"
+    },
+    "compatModeTooltip": {
+        "message": "非標準の Markdown をサポート"
+    },
+    "getClipboardError": {
+        "message": "コンテンツの取得に失敗しました"
+    },
+    "refreshButton": {
+        "message": "更新"
+    },
+    "purchaseQuota": {
+        "message": "クォータを購入"
+    },
+    "expirationLabel": {
+        "message": "有効期限:"
+    },
+    "unknown": {
+        "message": "不明"
+    },
+    "templateLabel": {
+        "message": "Word テンプレート"
+    },
+    "universalTemplate": {
+        "message": "汎用"
+    },
+    "saveAsImageButton": {
+        "message": "画像として保存"
+    },
+    "screenshotInitiated": {
+        "message": "スクリーンショットを生成中..."
+    },
+    "screenshotSuccess": {
+        "message": "スクリーンショットを保存しました"
+    },
+    "screenshotFailed": {
+        "message": "スクリーンショットに失敗しました。更新してみてください"
+    },
+    "imageCopied": {
+        "message": "画像をクリップボードにコピーしました"
+    },
+    "imageCopyFailed": {
+        "message": "画像のクリップボードへのコピーに失敗しました"
+    },
+    "apiKeyError": {
+        "message": "API キーエラー。メールを確認するか、カスタマーサービスにお問い合わせください: yoricker@foxmail.com"
+    },
+    "aboutTabTitle": {
+        "message": "DeepShare について"
+    },
+    "versionLabel": {
+        "message": "バージョン:"
+    },
+    "documentationLabel": {
+        "message": "ドキュメント:"
+    },
+    "githubLabel": {
+        "message": "GitHub:"
+    },
+    "developerEmailLabel": {
+        "message": "開発者メール:"
+    },
+    "acknowledgmentText": {
+        "message": "DeepShare に提案を寄せてくださった皆様に感謝します！多くの機能は実際のユーザーのニーズから生まれました。一緒に生産性を高め、人生で本当に大切なことのために時間を節約しましょう。"
+    },
+    "referenceSources": {
+        "message": "参考文献"
+    },
+    "unusedSources": {
+        "message": "確認済みだが未使用のソース"
+    },
+    "saveAsMarkdown": {
+        "message": "Markdown として保存"
+    },
+    "otherSettingsTabLabel": {
+        "message": "その他の設定"
+    },
+    "otherSettingsTitle": {
+        "message": "その他の設定"
+    },
+    "geminiSettingsTitle": {
+        "message": "Gemini"
+    },
+    "exportGeminiSourcesLabel": {
+        "message": "深層研究ソースをエクスポート"
+    },
+    "exportGeminiSourcesHint": {
+        "message": "Gemini 深層研究レポートをエクスポートする際に参考ソースを含める"
+    },
+    "languageSettingsTitle": {
+        "message": "言語"
+    },
+    "languageSelectLabel": {
+        "message": "表示言語"
+    },
+    "languageAuto": {
+        "message": "自動（ブラウザのデフォルト）"
+    },
+    "languageHint": {
+        "message": "お好みの表示言語を選択してください"
+    }
+}
+

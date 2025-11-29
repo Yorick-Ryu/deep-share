@@ -307,5 +307,17 @@
     },
     "exportGeminiSourcesHint": {
         "message": "Include reference sources when exporting Gemini Deep Research reports"
+    },
+    "languageSettingsTitle": {
+        "message": "Language"
+    },
+    "languageSelectLabel": {
+        "message": "Display Language"
+    },
+    "languageAuto": {
+        "message": "Auto (Browser Default)"
+    },
+    "languageHint": {
+        "message": "Select your preferred display language"
     }
 }

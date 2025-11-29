@@ -289,5 +289,17 @@
     },
     "exportGeminiSourcesHint": {
         "message": "匯出 Gemini 深度研究報告時包含參考來源"
+    },
+    "languageSettingsTitle": {
+        "message": "語言"
+    },
+    "languageSelectLabel": {
+        "message": "顯示語言"
+    },
+    "languageAuto": {
+        "message": "自動（跟隨瀏覽器）"
+    },
+    "languageHint": {
+        "message": "選擇您偏好的顯示語言"
     }
 }

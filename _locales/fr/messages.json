@@ -1,0 +1,324 @@
+{
+    "extensionName": {
+        "message": "DeepShare : Exporter les chats IA vers Word"
+    },
+    "extensionDescription": {
+        "message": "Exportez les conversations IA de DeepSeek, ChatGPT, Gemini, Grok... vers des documents Word, copiez les formules ; captures d'écran longues des chats DeepSeek."
+    },
+    "shareButton": {
+        "message": "Partager la conversation"
+    },
+    "modalTitle": {
+        "message": "Partager la conversation"
+    },
+    "imageTab": {
+        "message": "Image"
+    },
+    "textTab": {
+        "message": "Texte"
+    },
+    "wordTab": {
+        "message": "Word"
+    },
+    "wordExportInfo": {
+        "message": "Cliquez sur le bouton télécharger ou copier pour exporter les questions et les réponses IA vers un document Word"
+    },
+    "noAiResponses": {
+        "message": "Aucune réponse IA trouvée"
+    },
+    "downloadButton": {
+        "message": "Télécharger"
+    },
+    "copyButton": {
+        "message": "Copier"
+    },
+    "docxButton": {
+        "message": "Enregistrer en Word"
+    },
+    "docxFeatureExplanation": {
+        "message": "Utilisé uniquement pour configurer la conversion des conversations IA en documents Word. Les autres fonctionnalités comme les captures d'écran et la copie de formules sont gratuites."
+    },
+    "docxFeatureComingSoon": {
+        "message": "Fonction d'export DOCX bientôt disponible !"
+    },
+    "docxConversionSuccess": {
+        "message": "Conversion en DOCX réussie !"
+    },
+    "docxConverting": {
+        "message": "Conversion en cours, veuillez ne pas fermer cette fenêtre !"
+    },
+    "docxConversionError": {
+        "message": "Échec de la conversion en DOCX. Veuillez vérifier que le service de conversion est en cours d'exécution."
+    },
+    "watermarkSettings": {
+        "message": "Paramètres du filigrane"
+    },
+    "screenshotSettings": {
+        "message": "Capture d'écran"
+    },
+    "docxSettings": {
+        "message": "Chat IA vers Word"
+    },
+    "docxServerUrlLabel": {
+        "message": "URL du serveur"
+    },
+    "docxApiKeyLabel": {
+        "message": "Clé API"
+    },
+    "docxModeLabel": {
+        "message": "Mode de conversion"
+    },
+    "modeLocalLabel": {
+        "message": "Local (Pandoc)"
+    },
+    "modeApiLabel": {
+        "message": "API"
+    },
+    "copied": {
+        "message": "Copié !"
+    },
+    "copyFailed": {
+        "message": "Échec de la copie !"
+    },
+    "formulaCopied": {
+        "message": "Formule copiée !"
+    },
+    "clickToCopyFormula": {
+        "message": "Cliquez pour copier la formule"
+    },
+    "generatingImage": {
+        "message": "Génération de la capture d'écran..."
+    },
+    "generateFailed": {
+        "message": "Échec de la capture d'écran, veuillez actualiser la page !"
+    },
+    "defaultWatermark": {
+        "message": "Contenu généré par DeepSeek AI, capturé par l'extension DeepShare"
+    },
+    "settingsButton": {
+        "message": "Paramètres du filigrane"
+    },
+    "hideDefaultWatermarkLabel": {
+        "message": "Masquer le filigrane par défaut"
+    },
+    "customWatermarkLabel": {
+        "message": "Texte de filigrane personnalisé (optionnel)"
+    },
+    "customWatermarkPlaceholder": {
+        "message": "Entrez le filigrane personnalisé ici"
+    },
+    "saveSettings": {
+        "message": "Enregistrer les paramètres"
+    },
+    "settingsSaved": {
+        "message": "Enregistré"
+    },
+    "sponsorTitle": {
+        "message": "Merci d'utiliser DeepShare ! Si vous le trouvez utile, n'hésitez pas à nous soutenir via le QR code WeChat 😊"
+    },
+    "selectButton": {
+        "message": "Sélectionner les messages"
+    },
+    "selectAllButton": {
+        "message": "Tout sélectionner"
+    },
+    "selectAllResponsesButton": {
+        "message": "Sélectionner toutes les réponses"
+    },
+    "unselectAllButton": {
+        "message": "Tout désélectionner"
+    },
+    "noMessageSelected": {
+        "message": "Veuillez sélectionner au moins un message"
+    },
+    "sponsorTabLabel": {
+        "message": "À propos"
+    },
+    "totalQuotaLabel": {
+        "message": "Total :"
+    },
+    "usedQuotaLabel": {
+        "message": "Utilisé :"
+    },
+    "remainingQuotaLabel": {
+        "message": "Restant :"
+    },
+    "quotaTitle": {
+        "message": "Votre quota de conversion"
+    },
+    "apiKeyHint": {
+        "message": "Acheter une clé API ? <a href=\"https://ds.rick216.cn/purchase-en\" target=\"_blank\">Cliquez ici</a>"
+    },
+    "apiKeyMissing": {
+        "message": "Veuillez cliquer sur l'icône de l'extension pour acheter ou entrer une clé API pour utiliser la conversion de documents"
+    },
+    "manualConversionExplanation": {
+        "message": "Prend en charge Grok, Claude, Meta AI, etc. Copiez votre conversation dans la zone Markdown, cliquez sur « Convertir en document » pour télécharger un document Word joliment formaté avec support des formules !"
+    },
+    "manualConversionTitle": {
+        "message": "Coller le chat IA"
+    },
+    "markdownInputLabel": {
+        "message": "Texte Markdown"
+    },
+    "markdownInputPlaceholder": {
+        "message": "Collez le texte au format Markdown ici..."
+    },
+    "convertToDocx": {
+        "message": "Convertir en document"
+    },
+    "clearMarkdown": {
+        "message": "Effacer"
+    },
+    "emptyMarkdownError": {
+        "message": "Veuillez entrer du texte Markdown"
+    },
+    "manualDocxSettings": {
+        "message": "Coller le chat IA"
+    },
+    "formulaTabLabel": {
+        "message": "Copie de formule"
+    },
+    "formulaSettingsTitle": {
+        "message": "Paramètres de copie de formule"
+    },
+    "enableFormulaCopyLabel": {
+        "message": "Activer la copie de formule"
+    },
+    "formulaFormatLabel": {
+        "message": "Format de copie de formule"
+    },
+    "formatMathMLLabel": {
+        "message": "MathML"
+    },
+    "formatLaTeXLabel": {
+        "message": "LaTeX"
+    },
+    "formulaFormatHint": {
+        "message": "MathML est compatible avec plus d'éditeurs, LaTeX est pour la composition professionnelle"
+    },
+    "screenshotMethodLabel": {
+        "message": "Méthode de capture d'écran"
+    },
+    "methodDomToImageLabel": {
+        "message": "dom-to-image"
+    },
+    "methodHtml2CanvasLabel": {
+        "message": "html2canvas"
+    },
+    "screenshotMethodHint": {
+        "message": "Sélectionnez la méthode de capture d'écran. Si une méthode ne fonctionne pas, essayez l'autre. Veuillez actualiser la page après le changement."
+    },
+    "removeDividersLabel": {
+        "message": "Supprimer les séparateurs"
+    },
+    "removeEmojisLabel": {
+        "message": "Supprimer les émojis"
+    },
+    "convertMermaidLabel": {
+        "message": "Conversion Mermaid"
+    },
+    "compatModeLabel": {
+        "message": "Mode compatibilité"
+    },
+    "compatModeTooltip": {
+        "message": "Prend en charge le Markdown non standard"
+    },
+    "getClipboardError": {
+        "message": "Échec de la récupération du contenu"
+    },
+    "refreshButton": {
+        "message": "Actualiser"
+    },
+    "purchaseQuota": {
+        "message": "Acheter un quota"
+    },
+    "expirationLabel": {
+        "message": "Valide jusqu'au :"
+    },
+    "unknown": {
+        "message": "Inconnu"
+    },
+    "templateLabel": {
+        "message": "Modèle Word"
+    },
+    "universalTemplate": {
+        "message": "Universel"
+    },
+    "saveAsImageButton": {
+        "message": "Enregistrer en image"
+    },
+    "screenshotInitiated": {
+        "message": "Génération de la capture d'écran..."
+    },
+    "screenshotSuccess": {
+        "message": "Capture d'écran enregistrée"
+    },
+    "screenshotFailed": {
+        "message": "Échec de la capture d'écran, essayez d'actualiser ?"
+    },
+    "imageCopied": {
+        "message": "Image copiée dans le presse-papiers"
+    },
+    "imageCopyFailed": {
+        "message": "Échec de la copie de l'image dans le presse-papiers"
+    },
+    "apiKeyError": {
+        "message": "Erreur de clé API. Veuillez vérifier votre e-mail ou contacter le service client : yoricker@foxmail.com"
+    },
+    "aboutTabTitle": {
+        "message": "À propos de DeepShare"
+    },
+    "versionLabel": {
+        "message": "Version :"
+    },
+    "documentationLabel": {
+        "message": "Documentation :"
+    },
+    "githubLabel": {
+        "message": "GitHub :"
+    },
+    "developerEmailLabel": {
+        "message": "E-mail du développeur :"
+    },
+    "acknowledgmentText": {
+        "message": "Merci à tous ceux qui ont partagé leurs suggestions pour DeepShare ! De nombreuses fonctionnalités sont nées de vrais besoins utilisateurs. Améliorons ensemble la productivité et économisons du temps pour ce qui compte vraiment."
+    },
+    "referenceSources": {
+        "message": "Références"
+    },
+    "unusedSources": {
+        "message": "Sources consultées mais non utilisées"
+    },
+    "saveAsMarkdown": {
+        "message": "Enregistrer en Markdown"
+    },
+    "otherSettingsTabLabel": {
+        "message": "Autres paramètres"
+    },
+    "otherSettingsTitle": {
+        "message": "Autres paramètres"
+    },
+    "geminiSettingsTitle": {
+        "message": "Gemini"
+    },
+    "exportGeminiSourcesLabel": {
+        "message": "Exporter les sources de recherche approfondie"
+    },
+    "exportGeminiSourcesHint": {
+        "message": "Inclure les sources de référence lors de l'exportation des rapports de recherche approfondie Gemini"
+    },
+    "languageSettingsTitle": {
+        "message": "Langue"
+    },
+    "languageSelectLabel": {
+        "message": "Langue d'affichage"
+    },
+    "languageAuto": {
+        "message": "Auto (Défaut du navigateur)"
+    },
+    "languageHint": {
+        "message": "Sélectionnez votre langue d'affichage préférée"
+    }
+}
+
