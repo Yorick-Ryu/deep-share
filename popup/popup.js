@@ -144,7 +144,7 @@ function loadSettings(highlightApiKey = false) {
     document.getElementById('compatMode').checked = data.compatMode !== false; // Default to true
 
     // Gemini Deep Research sources export setting
-    document.getElementById('exportGeminiSources').checked = data.exportGeminiSources !== false; // Default to true
+    document.getElementById('exportGeminiSources').checked = data.exportGeminiSources === true; // Default to false
 
     // Language preference
     document.getElementById('languageSelect').value = data.preferredLanguage || 'auto';

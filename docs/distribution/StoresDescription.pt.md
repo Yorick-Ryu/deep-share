@@ -27,3 +27,4 @@ Resultados de compartilhamento limpos e profissionais
 Opções de exportação abrangentes para diferentes cenários
 Instale agora e experimente uma forma mais inteligente de compartilhar suas conversas de IA!
 
+
