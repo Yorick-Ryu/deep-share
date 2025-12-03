@@ -105,6 +105,12 @@ function initPurchaseForm() {
     const purchaseBtn = document.querySelector('.purchase-btn');
     if (purchaseBtn) {
         purchaseBtn.addEventListener('click', () => {
+            // Check if maintenance mode is enabled
+            if (purchaseBtn.disabled) {
+                alert('Payment system is under maintenance and purchases are temporarily unavailable. Please try again later, or contact us via email: yoricker@foxmail.com');
+                return;
+            }
+            
             const emailInput = document.getElementById('email');
             const email = emailInput.value.trim();
             const selectedOption = document.querySelector('.amount-option.selected');

@@ -123,6 +123,11 @@ function initPurchaseForm() {
     const purchaseBtn = document.querySelector('.purchase-btn');
     if (purchaseBtn) {
         purchaseBtn.addEventListener('click', () => {
+            // Check if maintenance mode is enabled
+            if (purchaseBtn.disabled) {
+                alert('支付通道正在维护中，暂时无法购买。请稍后再试，或通过微信联系我们：yorick_cn');
+                return;
+            }
             const emailInput = document.getElementById('email');
             const email = emailInput.value.trim();
             const selectedOption = document.querySelector('.amount-option.selected');

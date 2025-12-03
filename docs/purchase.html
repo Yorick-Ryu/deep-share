@@ -30,6 +30,15 @@
     <main class="content">
         <h1>购买 Word 文档转换次数</h1>
         
+        <!-- Maintenance notice -->
+        <div class="maintenance-notice">
+            <div class="maintenance-icon">🔧</div>
+            <div class="maintenance-content">
+                <h3>支付通道维护中</h3>
+                <p>支付通道正在维护，暂时无法购买。请稍后再试，或通过微信联系我们：<strong>yorick_cn</strong></p>
+            </div>
+        </div>
+        
         <!-- Add wrapper div for left column elements -->
         <div class="left-column-wrapper">
             <!-- Free features section -->
@@ -183,12 +192,12 @@
                             已有API Key？前往续费页面
                         </a>
                     </div>
-                    <input type="email" id="email" placeholder="example@email.com" required autocomplete="off">
+                    <input type="email" id="email" placeholder="example@email.com" required autocomplete="off" disabled>
                 </div>
                 
                 <div class="form-group">
                     <label>选择充值金额</label>
-                    <div class="amount-options">
+                    <div class="amount-options" style="pointer-events: none; opacity: 0.6;">
                         <div class="amount-option" data-value="1" style="display: none;">
                             <div class="amount-value">¥1</div>
                             <div class="conversions">5次转换</div>
@@ -244,7 +253,7 @@
                         <label for="custom-amount">输入自定义金额（整数）</label>
                         <div class="custom-amount-input-group">
                             <span class="currency-symbol">¥</span>
-                            <input type="number" id="custom-amount" min="1" max="10000" step="1" placeholder="请输入金额" autocomplete="off">
+                            <input type="number" id="custom-amount" min="1" max="10000" step="1" placeholder="请输入金额" autocomplete="off" disabled>
                         </div>
                         <div id="custom-amount-details" class="custom-amount-details">
                             <p>充值金额: <span id="custom-amount-value">--</span>元</p>
@@ -256,7 +265,7 @@
                     </div>
                 </div>
                 
-                <button class="purchase-btn">立即购买</button>
+                <button class="purchase-btn" id="purchase-btn" disabled>维护中，暂时无法购买</button>
             </div>
         </div>
     </main>
