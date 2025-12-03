@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notification Test</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f3f4f6;
+            transition: background-color 0.3s;
+        }
+        body.dark {
+            background-color: #111827;
+            color: white;
+        }
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: opacity 0.2s;
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+        .success { background-color: #10b981; color: white; }
+        .error { background-color: #ef4444; color: white; }
+        .info { background-color: #3b82f6; color: white; }
+        .loading { background-color: #6b7280; color: white; }
+        .toggle { background-color: #8b5cf6; color: white; }
+    </style>
+</head>
+<body>
+    <h1>Notification System Test</h1>
+    <div class="controls">
+        <button class="success" onclick="showToastNotification('Success! Operation completed.', 'success')">Success</button>
+        <button class="error" onclick="showToastNotification('Error! Something went wrong.', 'error')">Error</button>
+        <button class="info" onclick="showToastNotification('Info: This is a long message to test how it wraps and aligns with the icon properly.', 'info')">Info (Long)</button>
+        <button class="loading" onclick="showToastNotification('Loading resources...', 'loading', 0)">Loading</button>
+        <button class="toggle" onclick="document.body.classList.toggle('dark')">Toggle Dark Mode</button>
+    </div>
+
+    <script src="../scripts/notifications.js"></script>
+</body>
+</html>

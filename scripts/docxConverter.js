@@ -18,7 +18,7 @@ function initDocxConverter() {
 // Function to handle the conversion process
 async function convertToDocx(message, sourceButton) {
     console.debug('Starting DOCX conversion');
-    
+
     // Check if message is a Promise and await it
     if (message instanceof Promise) {
         try {
@@ -31,7 +31,7 @@ async function convertToDocx(message, sourceButton) {
     } else {
         console.debug('Message:', message);
     }
-    
+
     // Check for API key first
     try {
         const settings = await chrome.storage.sync.get({
@@ -94,7 +94,10 @@ async function convertToDocx(message, sourceButton) {
         }
 
         // Show success notification
-        window.showToastNotification(chrome.i18n.getMessage('docxConversionSuccess'), 'success');
+        // Show success notification with a slight delay to avoid UI stutter
+        setTimeout(() => {
+            window.showToastNotification(chrome.i18n.getMessage('docxConversionSuccess'), 'success');
+        }, 300);
 
     } catch (error) {
         console.error('DOCX conversion failed:', error);
@@ -107,8 +110,8 @@ async function convertToDocx(message, sourceButton) {
         // Check if it's an API key related error
         let errorMessage = error.message;
         if (error.message && (
-            error.message.includes('Failed to read') || 
-            error.message.includes('headers') || 
+            error.message.includes('Failed to read') ||
+            error.message.includes('headers') ||
             error.message.includes('ISO-8859-1') ||
             error.message.includes('401') ||
             error.message.includes('403') ||
@@ -230,7 +233,7 @@ async function convertToDocxViaApi(content, serverUrl) {
             processedContent = processedContent.replace(/9\uFE0F?\u20E3/gu, '9. ');
             // Handle special keycap ten emoji
             processedContent = processedContent.replace(/🔟/gu, '10. ');
-            
+
             // Then remove other emoji characters using regex
             processedContent = processedContent.replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F000}-\u{1F02F}\u{1F0A0}-\u{1F0FF}\u{1F100}-\u{1F64F}\u{1F680}-\u{1F6FF}\u{1F900}-\u{1F9FF}\u{1FA00}-\u{1FA6F}\u{1FA70}-\u{1FAFF}\u{FE00}-\u{FE0F}\u{1F200}-\u{1F251}]/gu, '');
         }

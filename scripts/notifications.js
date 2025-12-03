@@ -1,235 +1,257 @@
 /**
  * DeepShare Notification Utility
- * Displays notifications using DeepSeek's native toast notification style
+ * A modern, beautiful toast notification system with glassmorphism and dark mode support.
  */
 
-// Store notifications by ID to allow specific dismissals
-const activeToasts = new Map();
-let toastCounter = 0;
+(function () {
+    // --- Styles ---
+    const styles = `
+        :root {
+            --ds-toast-bg-light: rgba(255, 255, 255, 0.85);
+            --ds-toast-bg-dark: rgba(30, 30, 35, 0.85);
+            --ds-toast-border-light: rgba(255, 255, 255, 0.5);
+            --ds-toast-border-dark: rgba(255, 255, 255, 0.1);
+            --ds-toast-text-light: #1f2937;
+            --ds-toast-text-dark: #f3f4f6;
+            --ds-toast-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+            --ds-toast-font: 'Inter', system-ui, -apple-system, sans-serif;
+            --ds-toast-z-index: 9999;
+        }
 
-// Function to show a toast notification in DeepSeek's native style
-function showToastNotification(message, type = 'success', duration = 2000) {
-    const toastId = ++toastCounter;
-
-    // Check if there's already an existing notification container
-    let container = document.querySelector('.ds-toast-container');
-
-    // If no container exists, create one matching DeepSeek's structure
-    if (!container) {
-        container = document.createElement('div');
-        container.className = 'ds-toast-container';
-        container.style.cssText = `
+        .ds-toast-container {
             position: fixed;
-            top: 16px;
+            top: 24px;
             left: 50%;
             transform: translateX(-50%);
-            z-index: 9999;
+            z-index: var(--ds-toast-z-index);
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 8px;
-            width: auto;
+            gap: 12px;
             pointer-events: none;
-        `;
+            width: auto;
+            max-width: 90vw;
+        }
 
-        document.body.appendChild(container);
-    }
+        .ds-toast {
+            pointer-events: auto;
+            display: flex;
+            align-items: flex-start;
+            padding: 12px 16px;
+            background: var(--ds-toast-bg-light);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--ds-toast-border-light);
+            border-radius: 12px;
+            box-shadow: var(--ds-toast-shadow);
+            color: var(--ds-toast-text-light);
+            font-family: var(--ds-toast-font);
+            min-width: 300px;
+            max-width: 400px;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            opacity: 0;
+            transform: translateY(-20px) scale(0.95);
+            animation: ds-toast-enter 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
 
-    // Create animation wrapper
-    const animationWrapper = document.createElement('div');
-    animationWrapper.className = 'ds-toast-animation';
-    animationWrapper.dataset.toastId = toastId;
-    animationWrapper.style.cssText = `
-        pointer-events: auto;
-        margin: 0 auto;
-        display: flex;
-        justify-content: center;
-        width: auto;
+        /* Dark Mode Support */
+        @media (prefers-color-scheme: dark) {
+            .ds-toast {
+                background: var(--ds-toast-bg-dark);
+                border-color: var(--ds-toast-border-dark);
+                color: var(--ds-toast-text-dark);
+            }
+        }
+        
+        /* Manual Dark Mode Override */
+        body.dark .ds-toast, html.dark .ds-toast {
+            background: var(--ds-toast-bg-dark);
+            border-color: var(--ds-toast-border-dark);
+            color: var(--ds-toast-text-dark);
+        }
+
+        @keyframes ds-toast-enter {
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes ds-toast-exit {
+            to {
+                opacity: 0;
+                transform: translateY(-10px) scale(0.95);
+            }
+        }
+
+        .ds-toast.exiting {
+            animation: ds-toast-exit 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .ds-toast__icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            margin-right: 12px;
+            flex-shrink: 0;
+            /* Optical alignment for 24px icon with 20px line-height text (approx) */
+            margin-top: 0px; 
+        }
+
+        .ds-toast__content {
+            flex: 1;
+            font-size: 14px;
+            line-height: 1.5; /* 21px */
+            font-weight: 500;
+            padding-top: 1.5px; /* (24 - 21) / 2 = 1.5px to center text with icon */
+        }
+
+        .ds-toast__close {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            margin-left: 12px;
+            cursor: pointer;
+            opacity: 0.5;
+            transition: opacity 0.2s;
+            flex-shrink: 0;
+            margin-top: 2px; /* Align with icon center */
+        }
+
+        .ds-toast__close:hover {
+            opacity: 1;
+        }
+
+        /* Icon Colors */
+        .ds-toast--success .ds-toast__icon { color: #10b981; }
+        .ds-toast--error .ds-toast__icon { color: #ef4444; }
+        .ds-toast--info .ds-toast__icon { color: #3b82f6; }
+        .ds-toast--loading .ds-toast__icon { color: #3b82f6; }
+
+        /* Spinner */
+        @keyframes ds-spin {
+            to { transform: rotate(360deg); }
+        }
+        .ds-spinner {
+            animation: ds-spin 1s linear infinite;
+        }
     `;
 
-    // Detect dark mode
-    const isDarkMode = document.documentElement.classList.contains('dark') ||
-        document.body.classList.contains('dark') ||
-        window.matchMedia('(prefers-color-scheme: dark)').matches;
+    // --- Icons ---
+    const icons = {
+        success: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`,
+        error: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>`,
+        info: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>`,
+        loading: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ds-spinner"><line x1="12" y1="2" x2="12" y2="6"></line><line x1="12" y1="18" x2="12" y2="22"></line><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line><line x1="2" y1="12" x2="6" y2="12"></line><line x1="18" y1="12" x2="22" y2="12"></line><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line></svg>`,
+        close: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`
+    };
 
-    // Create toast element with appropriate dark mode styling
-    const toast = document.createElement('div');
-    toast.className = `ds-toast ds-toast--plain ds-toast--${type}`;
-    toast.style.cssText = `
-        background-color: ${isDarkMode ? '#3a3a45' : 'white'};
-        color: ${isDarkMode ? '#e0e0e0' : '#333'};
-        border-radius: 8px;
-        box-shadow: ${isDarkMode ? '0 2px 12px rgba(0, 0, 0, 0.4)' : '0 2px 12px rgba(0, 0, 0, 0.15)'};
-        padding: 8px 16px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        min-width: 200px;
-        max-width: 80vw;
-    `;
+    // --- State ---
+    const activeToasts = new Map();
+    let toastIdCounter = 0;
 
-    // Add icon based on type
-    let iconSVG;
-    let iconColor;
-
-    if (type === 'success') {
-        iconSVG = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 20 20"><g fill="none"><path d="M10 2a8 8 0 1 1 0 16a8 8 0 0 1 0-16zm3.358 5.646a.5.5 0 0 0-.637-.057l-.07.057L9 11.298L7.354 9.651l-.07-.058a.5.5 0 0 0-.695.696l.057.07l2 2l.07.057a.5.5 0 0 0 .568 0l.07-.058l4.004-4.004l.058-.07a.5.5 0 0 0-.058-.638z" fill="currentColor"></path></g></svg>';
-        iconColor = '#4caf50';
-    } else if (type === 'error') {
-        iconSVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><g fill="none"><path d="M10 2a8 8 0 1 1 0 16a8 8 0 0 1 0-16zm0 1.5a6.5 6.5 0 1 0 0 13a6.5 6.5 0 0 0 0-13zM10 9a1 1 0 0 1 1 1v3a1 1 0 1 1-2 0v-3a1 1 0 0 1 1-1zm0-3a1 1 0 1 1 0 2a1 1 0 0 1 0-2z" fill="currentColor"></path></g></svg>';
-        iconColor = '#f44336';
-    } else if (type === 'loading') {
-        // Loading spinner icon
-        iconSVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="spinning-loader"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="50 20"></circle></svg>';
-        iconColor = '#2196f3';
-    } else { // info type and default
-        iconSVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><g fill="none"><path d="M10 2a8 8 0 1 1 0 16a8 8 0 0 1 0-16zm0 1.5a6.5 6.5 0 1 0 0 13a6.5 6.5 0 0 0 0-13zM10 6a1 1 0 0 1 1 1v5a1 1 0 1 1-2 0V7a1 1 0 0 1 1-1zm0 9a1 1 0 1 1 0-2a1 1 0 0 1 0 2z" fill="currentColor"></path></g></svg>';
-        iconColor = '#2196f3';
-    }
-
-    // Create icon container
-    const iconDiv = document.createElement('div');
-    iconDiv.className = 'ds-toast__icon';
-    iconDiv.style.cssText = `
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 20px;
-        height: 20px;
-        flex-shrink: 0;
-        color: ${iconColor};
-    `;
-    iconDiv.innerHTML = iconSVG;
-
-    // Add spinning animation if this is a loading icon
-    if (type === 'loading') {
-        // Add keyframes for the spinner animation
-        if (!document.querySelector('#ds-spinner-keyframes')) {
+    // --- Initialization ---
+    function injectStyles() {
+        if (!document.getElementById('ds-toast-styles')) {
             const styleSheet = document.createElement('style');
-            styleSheet.id = 'ds-spinner-keyframes';
-            styleSheet.textContent = `
-                @keyframes ds-spin {
-                    0% { transform: rotate(0deg); }
-                    100% { transform: rotate(360deg); }
-                }
-                .spinning-loader {
-                    animation: ds-spin 1.5s linear infinite;
-                    transform-origin: center center;
-                }
-            `;
+            styleSheet.id = 'ds-toast-styles';
+            styleSheet.textContent = styles;
             document.head.appendChild(styleSheet);
         }
     }
 
-    // Create content
-    const contentDiv = document.createElement('div');
-    contentDiv.className = 'ds-toast__content';
-    contentDiv.style.cssText = `
-        flex: 1;
-        font-size: 14px;
-        line-height: 1.5;
-    `;
-    contentDiv.textContent = message;
-
-    // Create close button with consistent styling in dark mode
-    const closeDiv = document.createElement('div');
-    closeDiv.className = 'ds-toast__close';
-    closeDiv.style.cssText = `
-        width: 16px;
-        height: 16px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        opacity: 0.6;
-        transition: opacity 0.2s ease;
-        flex-shrink: 0;
-        color: ${isDarkMode ? '#e0e0e0' : '#333'};
-    `;
-    closeDiv.innerHTML = '<svg viewBox="0 0 10 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M9.314 1.187a.97.97 0 0 1 0 1.373L2.059 9.815A.97.97 0 1 1 .686 8.443l7.255-7.256a.97.97 0 0 1 1.373 0z" fill="currentColor"></path><path fill-rule="evenodd" clip-rule="evenodd" d="M.686 1.185a.97.97 0 0 1 1.373 0l7.255 7.256A.97.97 0 0 1 7.94 9.814L.686 2.558a.97.97 0 0 1 0-1.373z" fill="currentColor"></path></svg>';
-
-    // Add hover effect to close button
-    closeDiv.addEventListener('mouseenter', () => {
-        closeDiv.style.opacity = '1';
-    });
-
-    closeDiv.addEventListener('mouseleave', () => {
-        closeDiv.style.opacity = '0.6';
-    });
-
-    // Assemble the toast
-    toast.appendChild(iconDiv);
-    toast.appendChild(contentDiv);
-    toast.appendChild(closeDiv);
-
-    // Add toast to animation wrapper
-    animationWrapper.appendChild(toast);
-
-    // Add to container
-    container.appendChild(animationWrapper);
-
-    // Apply fade-in animation
-    animationWrapper.animate(
-        [
-            { opacity: 0, transform: 'translateY(10px) scale(0.95)' },
-            { opacity: 1, transform: 'translateY(0) scale(1)' }
-        ],
-        { duration: 300, fill: 'forwards', easing: 'ease-out' }
-    );
-
-    // Function to remove the toast with animation
-    function removeToast() {
-        clearTimeout(timeoutId);
-        activeToasts.delete(toastId);
-
-        const fadeOutAnimation = animationWrapper.animate(
-            [
-                { opacity: 1, transform: 'translateY(0) scale(1)' },
-                { opacity: 0, transform: 'translateY(-10px) scale(0.95)' }
-            ],
-            { duration: 300, fill: 'forwards', easing: 'ease-in' }
-        );
-
-        fadeOutAnimation.onfinish = () => {
-            if (container.contains(animationWrapper)) {
-                container.removeChild(animationWrapper);
-            }
-
-            // If no more toasts, remove the container
-            if (container.children.length === 0) {
-                if (document.body.contains(container)) {
-                    document.body.removeChild(container);
-                }
-            }
-        };
+    function getContainer() {
+        let container = document.querySelector('.ds-toast-container');
+        if (!container) {
+            container = document.createElement('div');
+            container.className = 'ds-toast-container';
+            document.body.appendChild(container);
+        }
+        return container;
     }
 
-    // Handle close button click
-    closeDiv.addEventListener('click', () => {
-        removeToast();
-    });
+    // --- Core Function ---
+    function showToastNotification(message, type = 'success', duration = 3000) {
+        injectStyles();
+        const container = getContainer();
+        const id = ++toastIdCounter;
 
-    // Store the removeToast function so we can call it programmatically
-    activeToasts.set(toastId, removeToast);
+        const toast = document.createElement('div');
+        toast.className = `ds-toast ds-toast--${type}`;
+        toast.setAttribute('role', 'alert');
 
-    // Auto-remove after duration (if not info type)
-    const timeoutId = setTimeout(() => {
-        removeToast();
-    }, duration);
+        // Icon
+        const iconDiv = document.createElement('div');
+        iconDiv.className = 'ds-toast__icon';
+        iconDiv.innerHTML = icons[type] || icons.info;
 
-    return toastId; // Return ID for programmatic dismissal
-}
+        // Content
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'ds-toast__content';
+        contentDiv.textContent = message;
 
-// Function to dismiss a specific notification by ID
-function dismissToastNotification(id) {
-    const removeToast = activeToasts.get(id);
-    if (removeToast) {
-        removeToast();
+        // Close Button
+        const closeDiv = document.createElement('div');
+        closeDiv.className = 'ds-toast__close';
+        closeDiv.innerHTML = icons.close;
+        closeDiv.onclick = (e) => {
+            e.stopPropagation();
+            dismissToastNotification(id);
+        };
+
+        toast.appendChild(iconDiv);
+        toast.appendChild(contentDiv);
+        toast.appendChild(closeDiv);
+
+        container.appendChild(toast);
+
+        // Auto dismiss
+        let timeoutId;
+        if (duration > 0 && type !== 'loading') {
+            timeoutId = setTimeout(() => {
+                dismissToastNotification(id);
+            }, duration);
+        }
+
+        // Store reference
+        activeToasts.set(id, { element: toast, timeoutId });
+
+        return id;
+    }
+
+    function dismissToastNotification(id) {
+        const toastData = activeToasts.get(id);
+        if (!toastData) return false;
+
+        const { element, timeoutId } = toastData;
+
+        if (timeoutId) clearTimeout(timeoutId);
+        activeToasts.delete(id);
+
+        // Add exit animation class
+        element.classList.add('exiting');
+
+        // Remove from DOM after animation
+        element.addEventListener('animationend', () => {
+            if (element.parentNode) {
+                element.parentNode.removeChild(element);
+            }
+            // Cleanup container if empty
+            const container = document.querySelector('.ds-toast-container');
+            if (container && container.children.length === 0) {
+                container.remove();
+            }
+        });
+
         return true;
     }
-    return false;
-}
 
-// Export the functions for other scripts to use
-window.showToastNotification = showToastNotification;
-window.dismissToastNotification = dismissToastNotification;
+    // --- Export ---
+    window.showToastNotification = showToastNotification;
+    window.dismissToastNotification = dismissToastNotification;
+
+})();

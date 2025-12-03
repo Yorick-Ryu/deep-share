@@ -419,30 +419,6 @@
   }
 }
 
-/* Notification styles */
-.deepseek-notification {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  padding: 10px 20px;
-  border-radius: 4px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  z-index: 9999;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  max-width: 300px;
-}
-
-.deepseek-notification.success {
-  background-color: #4caf50;
-  color: white;
-}
-
-.deepseek-notification.error {
-  background-color: #f44336;
-  color: white;
-}
-
 /* Show format selector when text tab is active */
 .tab-btn[data-tab="text"].active~.action-buttons .format-dropdown-container {
   display: inline-block;
