@@ -53,6 +53,7 @@
             "js": [
                 "lib/html2canvas.min.js",
                 "lib/dom-to-image.min.js",
+                "lib/snapdom.min.js",
                 "lib/katex.min.js",
                 "scripts/notifications.js",
                 "scripts/copyKatex.js",

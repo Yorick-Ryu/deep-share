@@ -178,14 +178,30 @@ async function captureDeepSeekMessages(customWatermark) {
                 console.error('dom-to-image failed, falling back to html2canvas', e);
                 // Fallback to html2canvas if dom-to-image fails
             }
+        } else if (screenshotMethod === 'snapdom' && typeof snapdom !== 'undefined') {
+            try {
+                const result = await snapdom(container, {
+                    backgroundColor: backgroundColor,
+                    embedFonts: true,
+                    filter: (element) => {
+                        if (!element.classList) return true;
+                        return !(element.classList.contains('fab07e97') ||
+                            element.classList.contains('ds-checkbox-wrapper'));
+                    }
+                });
+                const img = await result.toPng();
+                dataUrl = img.src;
+            } catch (e) {
+                console.error('SnapDOM failed', e);
+            }
         }
-        
+
         // 如果 dom-to-image 失败或未选择，则使用 html2canvas
         if (!dataUrl) {
             if (typeof html2canvas === 'undefined') {
                 throw new Error('html2canvas not loaded');
             }
-            
+
             const canvas = await html2canvas(container, {
                 backgroundColor: backgroundColor,
                 useCORS: true,
@@ -198,7 +214,7 @@ async function captureDeepSeekMessages(customWatermark) {
             });
             dataUrl = canvas.toDataURL('image/png');
         }
-        
+
 
         // Restore hidden conversations
         if (selectionMode) {
