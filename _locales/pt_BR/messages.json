@@ -195,7 +195,7 @@
         "message": "LaTeX"
     },
     "formulaFormatHint": {
-        "message": "MathML é compatível com mais editores, LaTeX é para composição profissional"
+        "message": "O formato MathML é adequado para Word, LaTeX é adequado para WPS e Overleaf, etc."
     },
     "screenshotMethodLabel": {
         "message": "Método de captura"

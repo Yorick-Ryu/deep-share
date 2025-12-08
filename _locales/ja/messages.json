@@ -195,7 +195,7 @@
         "message": "LaTeX"
     },
     "formulaFormatHint": {
-        "message": "MathML はより多くのエディタと互換性があり、LaTeX は専門的な組版向けです"
+        "message": "MathML形式はWordに適しており、LaTeXはWPSやOverleafなどに適しています"
     },
     "screenshotMethodLabel": {
         "message": "スクリーンショット方式"

@@ -195,7 +195,7 @@
         "message": "LaTeX"
     },
     "formulaFormatHint": {
-        "message": "MathML 格式相容更多編輯器，LaTeX 適合專業排版"
+        "message": "MathML 格式適合 Word，LaTeX 適合 WPS 和 Overleaf 等"
     },
     "screenshotMethodLabel": {
         "message": "截圖方式"
