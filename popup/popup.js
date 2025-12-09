@@ -134,7 +134,7 @@ function loadSettings(highlightApiKey = false) {
     document.getElementById('formatLaTeX').checked = formulaFormat === 'latex';
     
     // Formula engine settings
-    const formulaEngine = data.formulaEngine || 'mathjax'; // Default to MathJax
+    const formulaEngine = data.formulaEngine || 'katex'; // Default to KaTeX
     document.getElementById('engineMathJax').checked = formulaEngine === 'mathjax';
     document.getElementById('engineKaTeX').checked = formulaEngine === 'katex';
 
@@ -504,8 +504,10 @@ function saveSettings() {
   }
 
   // Get formula engine from radio buttons
-  let formulaEngine = 'mathjax'; // 默认为 MathJax
-  if (document.getElementById('engineKaTeX').checked) {
+  let formulaEngine = 'katex'; // 默认为 KaTeX
+  if (document.getElementById('engineMathJax').checked) {
+    formulaEngine = 'mathjax';
+  } else if (document.getElementById('engineKaTeX').checked) {
     formulaEngine = 'katex';
   }
 

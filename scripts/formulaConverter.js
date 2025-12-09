@@ -84,7 +84,7 @@ const deepShareFormulaConverter = (() => {
 
     async function convertLatexToMathML(latexCode, options = {}) {
         const displayMode = options.displayMode !== false;
-        const engine = options.engine || 'mathjax';
+        const engine = options.engine || 'katex';
 
         if (engine === 'katex') {
             await waitForKaTeX();

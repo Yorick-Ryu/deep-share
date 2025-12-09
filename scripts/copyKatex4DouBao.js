@@ -8,7 +8,7 @@
 let formulaSettings = {
     enableFormulaCopy: true,  // 默认启用
     formulaFormat: 'mathml',  // 默认使用 MathML
-    formulaEngine: 'mathjax'  // 默认使用 MathJax
+    formulaEngine: 'katex'  // 默认使用 KaTeX
 };
 
 // Function to add copy functionality to LaTeX formulas in Doubao platform
@@ -108,7 +108,7 @@ function loadSettings() {
     chrome.storage.sync.get({
         enableFormulaCopy: true,   // 默认启用
         formulaFormat: 'mathml',   // 默认使用 MathML
-        formulaEngine: 'mathjax'   // 默认使用 MathJax
+        formulaEngine: 'katex'   // 默认使用 KaTeX
     }, (settings) => {
         formulaSettings = settings;
         updateAllElements();
