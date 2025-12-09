@@ -197,6 +197,18 @@
     "formulaFormatHint": {
         "message": "MathML形式はWordに適しており、LaTeXはWPSやOverleafなどに適しています"
     },
+    "formulaEngineLabel": {
+        "message": "変換エンジン"
+    },
+    "engineMathJaxLabel": {
+        "message": "MathJax"
+    },
+    "engineKaTeXLabel": {
+        "message": "KaTeX"
+    },
+    "formulaEngineHint": {
+        "message": "MathJaxは互換性が高く、KaTeXは高速です"
+    },
     "screenshotMethodLabel": {
         "message": "スクリーンショット方式"
     },

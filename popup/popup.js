@@ -98,6 +98,7 @@ function loadSettings(highlightApiKey = false) {
     'docxMode',
     'enableFormulaCopy',
     'formulaFormat',
+    'formulaEngine',
     'screenshotMethod',
     'removeDividers',
     'removeEmojis',
@@ -131,6 +132,11 @@ function loadSettings(highlightApiKey = false) {
     const formulaFormat = data.formulaFormat || 'mathml'; // Default to MathML
     document.getElementById('formatMathML').checked = formulaFormat === 'mathml';
     document.getElementById('formatLaTeX').checked = formulaFormat === 'latex';
+    
+    // Formula engine settings
+    const formulaEngine = data.formulaEngine || 'mathjax'; // Default to MathJax
+    document.getElementById('engineMathJax').checked = formulaEngine === 'mathjax';
+    document.getElementById('engineKaTeX').checked = formulaEngine === 'katex';
 
     // Remove dividers setting
     document.getElementById('removeDividers').checked = !!data.removeDividers; // Default to false
@@ -237,6 +243,9 @@ function setupAutoSave() {
     document.getElementById('enableFormulaCopy'),
     document.getElementById('formatMathML'),
     document.getElementById('formatLaTeX'),
+    // 添加公式转换引擎设置
+    document.getElementById('engineMathJax'),
+    document.getElementById('engineKaTeX'),
     // 添加截图方法相关的设置元素
     document.getElementById('methodDomToImage'),
     document.getElementById('methodHtml2Canvas'),
@@ -392,6 +401,10 @@ function loadI18nText() {
   document.getElementById('formatMathMLLabel').textContent = getMessage('formatMathMLLabel') || 'MathML';
   document.getElementById('formatLaTeXLabel').textContent = getMessage('formatLaTeXLabel') || 'LaTeX';
   document.getElementById('formulaFormatHint').textContent = getMessage('formulaFormatHint') || 'MathML is compatible with more editors, LaTeX is for professional typesetting';
+  document.getElementById('formulaEngineLabel').textContent = getMessage('formulaEngineLabel') || '转换引擎';
+  document.getElementById('engineMathJaxLabel').textContent = getMessage('engineMathJaxLabel') || 'MathJax';
+  document.getElementById('engineKaTeXLabel').textContent = getMessage('engineKaTeXLabel') || 'KaTeX';
+  document.getElementById('formulaEngineHint').textContent = getMessage('formulaEngineHint') || 'MathJax 兼容性更好，KaTeX 转换更快';
 
   // Manual Document Conversion tab
   document.getElementById('manualConversionTitle').textContent = getMessage('manualConversionTitle') || '手动转换';
@@ -490,6 +503,12 @@ function saveSettings() {
     formulaFormat = 'latex';
   }
 
+  // Get formula engine from radio buttons
+  let formulaEngine = 'mathjax'; // 默认为 MathJax
+  if (document.getElementById('engineKaTeX').checked) {
+    formulaEngine = 'katex';
+  }
+
   // Get screenshot method from radio buttons
   let screenshotMethod = 'domtoimage'; // 默认为 dom-to-image
   if (document.getElementById('methodHtml2Canvas').checked) {
@@ -515,6 +534,7 @@ function saveSettings() {
     // Formula copy settings
     enableFormulaCopy: document.getElementById('enableFormulaCopy').checked,
     formulaFormat: formulaFormat,
+    formulaEngine: formulaEngine,
 
     // Remove dividers setting
     removeDividers: document.getElementById('removeDividers').checked,

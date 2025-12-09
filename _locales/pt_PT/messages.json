@@ -197,6 +197,18 @@
     "formulaFormatHint": {
         "message": "O formato MathML é adequado para Word, LaTeX é adequado para WPS e Overleaf, etc."
     },
+    "formulaEngineLabel": {
+        "message": "Motor de conversão"
+    },
+    "engineMathJaxLabel": {
+        "message": "MathJax"
+    },
+    "engineKaTeXLabel": {
+        "message": "KaTeX"
+    },
+    "formulaEngineHint": {
+        "message": "O MathJax oferece melhor compatibilidade, o KaTeX é mais rápido"
+    },
     "screenshotMethodLabel": {
         "message": "Método de captura"
     },

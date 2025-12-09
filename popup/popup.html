@@ -299,6 +299,21 @@
           </div>
           <span class="form-hint" id="formulaFormatHint">MathML 格式兼容更多编辑器，LaTeX 适合专业排版</span>
         </div>
+
+        <div class="form-group">
+          <label id="formulaEngineLabel">转换引擎</label>
+          <div class="radio-group">
+            <div class="radio-option">
+              <input type="radio" id="engineMathJax" name="formulaEngine" value="mathjax" checked>
+              <label for="engineMathJax" id="engineMathJaxLabel">MathJax</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" id="engineKaTeX" name="formulaEngine" value="katex">
+              <label for="engineKaTeX" id="engineKaTeXLabel">KaTeX</label>
+            </div>
+          </div>
+          <span class="form-hint" id="formulaEngineHint">MathJax 兼容性更好，KaTeX 转换更快</span>
+        </div>
       </div>
 
       <!-- Other Settings Tab Content -->

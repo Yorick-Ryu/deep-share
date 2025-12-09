@@ -1,12 +1,14 @@
 /**
- * KaTeX formula copy functionality for Zhihu platform
+ * Formula copy functionality for Zhihu platform
  * Adds click events to LaTeX formulas on Zhihu to extract the code and enable copying
+ * Uses background script for LaTeX to MathML conversion via MathJax or KaTeX
  */
 
 // 存储全局设置对象，便于快速访问
 let formulaSettings = {
     enableFormulaCopy: true,  // 默认启用
-    formulaFormat: 'mathml'   // 默认使用 MathML
+    formulaFormat: 'mathml',  // 默认使用 MathML
+    formulaEngine: 'mathjax'  // 默认使用 MathJax
 };
 
 // Function to add copy functionality to LaTeX formulas in Zhihu platform
@@ -70,8 +72,8 @@ async function handleFormulaClick(e) {
                 // Copy raw LaTeX
                 textToCopy = latexCode;
             } else {
-                // Convert LaTeX to MathML
-                textToCopy = convertLatexToMathML(latexCode);
+                // Convert LaTeX to MathML via background script
+                textToCopy = await convertLatexToMathML(latexCode);
             }
 
             // Copy to clipboard
@@ -131,29 +133,26 @@ function updateAllElements() {
     formulaElements.forEach(updateElementStyle);
 }
 
-// Function to convert LaTeX to MathML using KaTeX
-function convertLatexToMathML(latexCode) {
-    // Create a temporary container
-    const container = document.createElement('div');
-
+// Function to convert LaTeX to MathML via background script
+async function convertLatexToMathML(latexCode, displayMode = true) {
     try {
-        // Use KaTeX to render LaTeX as MathML
-        katex.render(latexCode, container, {
-            output: 'mathml',
-            throwOnError: false,
-            displayMode: true
+        // Send message to background script for conversion
+        const response = await chrome.runtime.sendMessage({
+            action: 'convertLatexToMathML',
+            latex: latexCode,
+            displayMode: displayMode,
+            engine: formulaSettings.formulaEngine
         });
-
-        // Extract the MathML content
-        const mathmlElement = container.querySelector('math');
-        if (mathmlElement) {
-            return mathmlElement.outerHTML;
-        } else {
-            console.error('Failed to generate MathML from LaTeX:', latexCode);
-            return latexCode; // Fallback to original LaTeX code
+        
+        if (response && response.success) {
+            return response.mathml;
         }
+        
+        // If conversion failed, return the original LaTeX code
+        console.error('MathML conversion failed:', response?.error);
+        return response?.fallback || latexCode;
     } catch (error) {
-        console.error('KaTeX rendering error:', error);
+        console.error('Error requesting MathML conversion:', error);
         return latexCode; // Fallback to original LaTeX code
     }
 }
@@ -161,8 +160,9 @@ function convertLatexToMathML(latexCode) {
 // 加载设置
 function loadSettings() {
     chrome.storage.sync.get({
-        enableFormulaCopy: true,  // 默认启用
-        formulaFormat: 'mathml'   // 默认使用 MathML
+        enableFormulaCopy: true,   // 默认启用
+        formulaFormat: 'mathml',   // 默认使用 MathML
+        formulaEngine: 'mathjax'   // 默认使用 MathJax
     }, (settings) => {
         formulaSettings = settings;
         updateAllElements();
@@ -200,8 +200,11 @@ function initKatexCopy4Zhihu() {
         if (changes.formulaFormat) {
             formulaSettings.formulaFormat = changes.formulaFormat.newValue;
         }
+        if (changes.formulaEngine) {
+            formulaSettings.formulaEngine = changes.formulaEngine.newValue;
+        }
         // 如果相关设置有变更，更新所有元素
-        if (changes.enableFormulaCopy || changes.formulaFormat) {
+        if (changes.enableFormulaCopy || changes.formulaFormat || changes.formulaEngine) {
             updateAllElements();
         }
     });
