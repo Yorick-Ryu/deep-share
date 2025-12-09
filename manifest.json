@@ -17,8 +17,7 @@
     },
     "permissions": [
         "activeTab",
-        "storage",
-        "offscreen"
+        "storage"
     ],
     "host_permissions": [
         "https://chat.deepseek.com/*",
@@ -55,6 +54,10 @@
                 "lib/html2canvas.min.js",
                 "lib/dom-to-image.min.js",
                 "lib/snapdom.min.js",
+                "lib/mathjax-config.js",
+                "lib/mathjax.min.js",
+                "lib/katex.min.js",
+                "scripts/formulaConverter.js",
                 "scripts/notifications.js",
                 "scripts/copyKatex.js",
                 "scripts/docxConverter.js",
@@ -84,6 +87,10 @@
                 "scripts/style.css"
             ],
             "js": [
+                "lib/mathjax-config.js",
+                "lib/mathjax.min.js",
+                "lib/katex.min.js",
+                "scripts/formulaConverter.js",
                 "scripts/notifications.js",
                 "scripts/copyKatex.js"
             ]
@@ -96,6 +103,10 @@
                 "scripts/style.css"
             ],
             "js": [
+                "lib/mathjax-config.js",
+                "lib/mathjax.min.js",
+                "lib/katex.min.js",
+                "scripts/formulaConverter.js",
                 "scripts/notifications.js",
                 "scripts/copyKatex.js",
                 "scripts/docxConverter.js",
@@ -110,6 +121,10 @@
                 "scripts/style.css"
             ],
             "js": [
+                "lib/mathjax-config.js",
+                "lib/mathjax.min.js",
+                "lib/katex.min.js",
+                "scripts/formulaConverter.js",
                 "scripts/notifications.js",
                 "scripts/copyKatex4Doubao.js"
             ]
@@ -122,6 +137,10 @@
                 "scripts/style.css"
             ],
             "js": [
+                "lib/mathjax-config.js",
+                "lib/mathjax.min.js",
+                "lib/katex.min.js",
+                "scripts/formulaConverter.js",
                 "scripts/notifications.js",
                 "scripts/copyKatex4Zhihu.js"
             ]
@@ -134,6 +153,10 @@
                 "scripts/style.css"
             ],
             "js": [
+                "lib/mathjax-config.js",
+                "lib/mathjax.min.js",
+                "lib/katex.min.js",
+                "scripts/formulaConverter.js",
                 "scripts/notifications.js",
                 "scripts/copyGeminiMath.js",
                 "scripts/docxConverter.js",

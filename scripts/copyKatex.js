@@ -1,7 +1,7 @@
 /**
  * KaTeX formula copy functionality
  * Adds click events to KaTeX formulas to allow copying the LaTeX code or MathML
- * Uses background script for LaTeX to MathML conversion via MathJax or KaTeX
+ * Uses in-page converter for LaTeX to MathML conversion via MathJax or KaTeX
  */
 
 // 存储全局设置对象，便于快速访问
@@ -85,26 +85,19 @@ function updateAllElements() {
     katexElements.forEach(updateElementStyle);
 }
 
-// Function to convert LaTeX to MathML via background script
+// Function to convert LaTeX to MathML via in-page converter
 async function convertLatexToMathML(latexCode, displayMode = true) {
     try {
-        // Send message to background script for conversion
-        const response = await chrome.runtime.sendMessage({
-            action: 'convertLatexToMathML',
-            latex: latexCode,
-            displayMode: displayMode,
-            engine: formulaSettings.formulaEngine
-        });
-        
-        if (response && response.success) {
-            return response.mathml;
+        if (window.deepShareFormulaConverter) {
+            return await window.deepShareFormulaConverter.convertLatexToMathML(latexCode, {
+                displayMode,
+                engine: formulaSettings.formulaEngine
+            });
         }
-        
-        // If conversion failed, return the original LaTeX code
-        console.error('MathML conversion failed:', response?.error);
-        return response?.fallback || latexCode;
+        console.error('MathML converter not available');
+        return latexCode;
     } catch (error) {
-        console.error('Error requesting MathML conversion:', error);
+        console.error('Error converting MathML:', error);
         return latexCode; // Fallback to original LaTeX code
     }
 }
