@@ -114,12 +114,36 @@ window.captureMessages = async function (customWatermark) {
                             node.classList.contains('message-checkbox-wrapper')));
                 }
             });
-        } else {
+        } else if (screenshotMethod === 'snapdom' && typeof snapdom !== 'undefined') {
+            try {
+                // 使用 SnapDOM
+                const result = await snapdom(container, {
+                    backgroundColor: backgroundColor,
+                    embedFonts: true,
+                    filter: (element) => {
+                        // SnapDOM filter: true to keep, false to exclude
+                        if (!element.classList) return true;
+                        return !(element.classList.contains('deepseek-share-btn') ||
+                            element.classList.contains('message-checkbox-wrapper'));
+                    }
+                });
+
+                // SnapDOM produces an image element
+                const img = await result.toPng();
+                dataUrl = img.src;
+            } catch (e) {
+                console.error('SnapDOM failed, falling back to html2canvas', e);
+                // Fallback will happen below
+            }
+        }
+
+        // Check if dataUrl is set, otherwise use fallback
+        if (!dataUrl) {
             // 使用html2canvas（默认或fallback）
             if (typeof html2canvas === 'undefined') {
                 throw new Error('html2canvas not loaded');
             }
-            
+
             // 使用html2canvas
             const canvas = await html2canvas(container, {
                 backgroundColor: backgroundColor,

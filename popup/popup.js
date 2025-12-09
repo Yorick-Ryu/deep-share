@@ -42,12 +42,12 @@ async function loadLanguagePreference() {
   return new Promise((resolve) => {
     chrome.storage.sync.get(['preferredLanguage'], async (data) => {
       currentLanguage = data.preferredLanguage || 'auto';
-      
+
       if (currentLanguage !== 'auto') {
         // Load custom locale messages
         await loadLocaleMessages(currentLanguage);
       }
-      
+
       resolve();
     });
   });
@@ -98,6 +98,7 @@ function loadSettings(highlightApiKey = false) {
     'docxMode',
     'enableFormulaCopy',
     'formulaFormat',
+    'formulaEngine',
     'screenshotMethod',
     'removeDividers',
     'removeEmojis',
@@ -115,6 +116,7 @@ function loadSettings(highlightApiKey = false) {
     const screenshotMethod = data.screenshotMethod || 'domtoimage'; // Default to dom-to-image
     document.getElementById('methodDomToImage').checked = screenshotMethod === 'domtoimage';
     document.getElementById('methodHtml2Canvas').checked = screenshotMethod === 'html2canvas';
+    document.getElementById('methodSnapDOM').checked = screenshotMethod === 'snapdom';
 
     // DOCX conversion settings
     document.getElementById('docxServerUrl').value = data.docxServerUrl || 'https://api.ds.rick216.cn';
@@ -130,6 +132,11 @@ function loadSettings(highlightApiKey = false) {
     const formulaFormat = data.formulaFormat || 'mathml'; // Default to MathML
     document.getElementById('formatMathML').checked = formulaFormat === 'mathml';
     document.getElementById('formatLaTeX').checked = formulaFormat === 'latex';
+    
+    // Formula engine settings
+    const formulaEngine = data.formulaEngine || 'mathjax'; // Default to MathJax
+    document.getElementById('engineMathJax').checked = formulaEngine === 'mathjax';
+    document.getElementById('engineKaTeX').checked = formulaEngine === 'katex';
 
     // Remove dividers setting
     document.getElementById('removeDividers').checked = !!data.removeDividers; // Default to false
@@ -144,7 +151,7 @@ function loadSettings(highlightApiKey = false) {
     document.getElementById('compatMode').checked = data.compatMode !== false; // Default to true
 
     // Gemini Deep Research sources export setting
-    document.getElementById('exportGeminiSources').checked = data.exportGeminiSources !== false; // Default to true
+    document.getElementById('exportGeminiSources').checked = data.exportGeminiSources === true; // Default to false
 
     // Language preference
     document.getElementById('languageSelect').value = data.preferredLanguage || 'auto';
@@ -236,9 +243,13 @@ function setupAutoSave() {
     document.getElementById('enableFormulaCopy'),
     document.getElementById('formatMathML'),
     document.getElementById('formatLaTeX'),
+    // 添加公式转换引擎设置
+    document.getElementById('engineMathJax'),
+    document.getElementById('engineKaTeX'),
     // 添加截图方法相关的设置元素
     document.getElementById('methodDomToImage'),
     document.getElementById('methodHtml2Canvas'),
+    document.getElementById('methodSnapDOM'),
     // 添加去除分割线设置
     document.getElementById('removeDividers'),
     // 添加去除emoji设置
@@ -266,16 +277,16 @@ function setupAutoSave() {
   document.getElementById('languageSelect').addEventListener('change', async (e) => {
     const newLanguage = e.target.value;
     currentLanguage = newLanguage;
-    
+
     if (newLanguage === 'auto') {
       customLocaleMessages = null;
     } else {
       await loadLocaleMessages(newLanguage);
     }
-    
+
     // Reload all i18n text with the new language
     loadI18nText();
-    
+
     // Refresh template selector with new language
     setupTemplateSelector();
   });
@@ -347,7 +358,7 @@ function setupUIElements() {
   // Set up server URL label click to toggle input visibility
   const serverUrlLabel = document.getElementById('docxServerUrlLabel');
   const serverUrlInput = document.getElementById('docxServerUrl');
-  
+
   serverUrlLabel.addEventListener('click', () => {
     if (serverUrlInput.classList.contains('visible')) {
       serverUrlInput.classList.remove('visible');
@@ -390,6 +401,10 @@ function loadI18nText() {
   document.getElementById('formatMathMLLabel').textContent = getMessage('formatMathMLLabel') || 'MathML';
   document.getElementById('formatLaTeXLabel').textContent = getMessage('formatLaTeXLabel') || 'LaTeX';
   document.getElementById('formulaFormatHint').textContent = getMessage('formulaFormatHint') || 'MathML is compatible with more editors, LaTeX is for professional typesetting';
+  document.getElementById('formulaEngineLabel').textContent = getMessage('formulaEngineLabel') || '转换引擎';
+  document.getElementById('engineMathJaxLabel').textContent = getMessage('engineMathJaxLabel') || 'MathJax';
+  document.getElementById('engineKaTeXLabel').textContent = getMessage('engineKaTeXLabel') || 'KaTeX';
+  document.getElementById('formulaEngineHint').textContent = getMessage('formulaEngineHint') || 'MathJax 兼容性更好，KaTeX 转换更快';
 
   // Manual Document Conversion tab
   document.getElementById('manualConversionTitle').textContent = getMessage('manualConversionTitle') || '手动转换';
@@ -414,11 +429,13 @@ function loadI18nText() {
   document.getElementById('hideDefaultWatermarkLabel').textContent = getMessage('hideDefaultWatermarkLabel') || 'Hide Default Watermark';
   document.getElementById('customWatermarkLabel').textContent = getMessage('customWatermarkLabel') || 'Custom Watermark Text (Optional)';
   document.getElementById('watermark').placeholder = getMessage('customWatermarkPlaceholder') || 'Enter custom watermark here';
-  
+
   // Screenshot method labels
   document.getElementById('screenshotMethodLabel').textContent = getMessage('screenshotMethodLabel') || 'Screenshot Method';
   document.getElementById('methodDomToImageLabel').textContent = getMessage('methodDomToImageLabel') || 'dom-to-image';
   document.getElementById('methodHtml2CanvasLabel').textContent = getMessage('methodHtml2CanvasLabel') || 'html2canvas';
+  const snapDomLabel = document.getElementById('methodSnapDOMLabel');
+  if (snapDomLabel) snapDomLabel.textContent = 'SnapDOM';
   document.getElementById('screenshotMethodHint').textContent = getMessage('screenshotMethodHint') || '选择用于截图的方法，如果一种方法不工作，请尝试另一种';
 
   // Other Settings tab
@@ -438,7 +455,7 @@ function loadI18nText() {
   document.getElementById('documentationLabel').textContent = getMessage('documentationLabel') || 'Documentation:';
   document.getElementById('githubLabel').textContent = getMessage('githubLabel') || 'GitHub:';
   document.getElementById('developerEmailLabel').textContent = getMessage('developerEmailLabel') || 'Developer Email:';
-  
+
   // Load version from manifest
   fetch(chrome.runtime.getURL('manifest.json'))
     .then(response => response.json())
@@ -454,7 +471,7 @@ function loadI18nText() {
   document.getElementById('totalQuotaLabel').textContent = getMessage('totalQuotaLabel') || '总计:';
   document.getElementById('usedQuotaLabel').textContent = getMessage('usedQuotaLabel') || '已用:';
   document.getElementById('remainingQuotaLabel').textContent = getMessage('remainingQuotaLabel') || '剩余:';
-  
+
   // API key hint with proper HTML handling
   const apiKeyHint = document.getElementById('apiKeyHint');
   const apiKeyHintMessage = getMessage('apiKeyHint');
@@ -467,7 +484,7 @@ function loadI18nText() {
   if (refreshBtn) {
     refreshBtn.textContent = getMessage('refreshButton') || '刷新';
   }
-  
+
   // Update purchase link text
   const purchaseLink = document.querySelector('.purchase-link');
   if (purchaseLink) {
@@ -485,11 +502,19 @@ function saveSettings() {
   if (document.getElementById('formatLaTeX').checked) {
     formulaFormat = 'latex';
   }
-  
+
+  // Get formula engine from radio buttons
+  let formulaEngine = 'mathjax'; // 默认为 MathJax
+  if (document.getElementById('engineKaTeX').checked) {
+    formulaEngine = 'katex';
+  }
+
   // Get screenshot method from radio buttons
   let screenshotMethod = 'domtoimage'; // 默认为 dom-to-image
   if (document.getElementById('methodHtml2Canvas').checked) {
     screenshotMethod = 'html2canvas';
+  } else if (document.getElementById('methodSnapDOM').checked) {
+    screenshotMethod = 'snapdom';
   }
 
   // Collect all settings
@@ -497,7 +522,7 @@ function saveSettings() {
     // Watermark settings
     customWatermark: document.getElementById('watermark').value,
     hideDefaultWatermark: document.getElementById('hideDefaultWatermark').checked,
-    
+
     // Screenshot method
     screenshotMethod: screenshotMethod,
 
@@ -509,6 +534,7 @@ function saveSettings() {
     // Formula copy settings
     enableFormulaCopy: document.getElementById('enableFormulaCopy').checked,
     formulaFormat: formulaFormat,
+    formulaEngine: formulaEngine,
 
     // Remove dividers setting
     removeDividers: document.getElementById('removeDividers').checked,
@@ -652,7 +678,7 @@ function displayQuotaData(data) {
 function formatDate(date) {
   // Get the current UI language
   const currentLang = chrome.i18n.getUILanguage();
-  
+
   if (currentLang.startsWith('zh')) {
     // Chinese format
     const year = date.getFullYear();
@@ -823,7 +849,7 @@ async function convertMarkdownToDocx(markdownText, serverUrl, apiKey, removeDivi
       processedContent = processedContent.replace(/9\uFE0F?\u20E3/gu, '9. ');
       // Handle special keycap ten emoji
       processedContent = processedContent.replace(/🔟/gu, '10. ');
-      
+
       // Then remove other emoji characters using regex
       processedContent = processedContent.replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F000}-\u{1F02F}\u{1F0A0}-\u{1F0FF}\u{1F100}-\u{1F64F}\u{1F680}-\u{1F6FF}\u{1F900}-\u{1F9FF}\u{1FA00}-\u{1FA6F}\u{1FA70}-\u{1FAFF}\u{FE00}-\u{FE0F}\u{1F200}-\u{1F251}]/gu, '');
     }
@@ -896,16 +922,16 @@ async function setupTemplateSelector() {
     }
 
     const templatesByLang = await response.json();
-    
+
     // Determine the template language key based on current language preference
     let templateLangKey = getTemplateLangKey();
-    
+
     // Try to get templates for the current language, fall back to 'en' if not available
     let templates = templatesByLang[templateLangKey] || [];
     if (templates.length === 0 && templateLangKey !== 'en') {
       templates = templatesByLang.en || [];
     }
-    
+
     // remove 'templates' from the list as it is already added as 'Universal'
     templates.filter(t => t !== 'templates').forEach(templateName => {
       const option = document.createElement('option');
@@ -934,14 +960,14 @@ async function setupTemplateSelector() {
 function getTemplateLangKey() {
   // If language is set to auto, use browser's UI language
   const lang = currentLanguage === 'auto' ? chrome.i18n.getUILanguage() : currentLanguage;
-  
+
   // Map language codes to template keys
   // zh_CN, zh_TW, zh -> 'zh'
   // Other languages -> 'en' (fallback)
   if (lang.startsWith('zh') || lang === 'zh_CN' || lang === 'zh_TW') {
     return 'zh';
   }
-  
+
   // For other languages, check if they have specific templates, otherwise use 'en'
   return 'en';
 }

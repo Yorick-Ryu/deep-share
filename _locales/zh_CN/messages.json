@@ -195,7 +195,19 @@
         "message": "LaTeX"
     },
     "formulaFormatHint": {
-        "message": "MathML 格式兼容更多编辑器，LaTeX 适合专业排版"
+        "message": "MathML 格式适合Word，LaTeX 适合WPS和Overleaf等"
+    },
+    "formulaEngineLabel": {
+        "message": "转换引擎"
+    },
+    "engineMathJaxLabel": {
+        "message": "MathJax"
+    },
+    "engineKaTeXLabel": {
+        "message": "KaTeX"
+    },
+    "formulaEngineHint": {
+        "message": "MathJax 兼容性更好，KaTeX 转换更快"
     },
     "screenshotMethodLabel": {
         "message": "截图方式"

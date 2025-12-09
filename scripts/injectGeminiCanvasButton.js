@@ -299,7 +299,7 @@
         
         // 获取导出来源的设置
         const settings = await new Promise(resolve => {
-            chrome.storage.sync.get({ exportGeminiSources: true }, resolve);
+            chrome.storage.sync.get({ exportGeminiSources: false }, resolve);
         });
         const shouldExportSources = settings.exportGeminiSources;
         

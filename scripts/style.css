@@ -13,7 +13,7 @@
     --modal-bg: #1e1e1e;
     --modal-text: #e0e0e0;
     --modal-border: #333333;
-    --button-color: rgb(205, 212, 223);
+    --button-color: rgb(173, 178, 184);
     --button-hover-bg: rgba(77, 107, 254, 0.2);
     --button-hover-color: rgb(107, 137, 254);
     --modal-overlay: rgba(0, 0, 0, 0.7);
@@ -63,15 +63,15 @@
 
   .deepseek-share-btn .share-button,
   .deepseek-share-btn .select-button {
-    color: rgb(205, 212, 223);
+    color: rgb(173, 178, 184);
     /* 深色模式下的颜色 */
   }
 
   .deepseek-share-btn .share-button:hover,
   .deepseek-share-btn .select-button:hover {
-    background: rgba(205, 212, 223, 0.1);
+    background: rgba(173, 178, 184, 0.1);
     /* 深色模式下的悬停背景色 */
-    color: rgb(205, 212, 223);
+    color: rgb(98, 99, 99);
   }
 }
 
@@ -359,8 +359,8 @@
 
   .select-all-btn,
   .select-all-responses-btn {
-    color: rgb(205, 212, 223);
-    border-color: rgb(205, 212, 223);
+    color: rgb(173, 178, 184);
+    border-color: rgb(173, 178, 184);
   }
 
   .select-all-btn:hover,
@@ -417,30 +417,6 @@
     opacity: 1;
     transform: translateX(-50%) translateY(0);
   }
-}
-
-/* Notification styles */
-.deepseek-notification {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  padding: 10px 20px;
-  border-radius: 4px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  z-index: 9999;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  max-width: 300px;
-}
-
-.deepseek-notification.success {
-  background-color: #4caf50;
-  color: white;
-}
-
-.deepseek-notification.error {
-  background-color: #f44336;
-  color: white;
 }
 
 /* Show format selector when text tab is active */
@@ -669,7 +645,7 @@
 
 @media (prefers-color-scheme: dark) {
    .deepshare-gemini-docx-btn .mat-icon {
-      color: #a2a9b0;
+      color: rgb(196, 199, 197);
    }
    .deepshare-gemini-docx-btn .mdc-icon-button:hover {
     background-color: #a8c7fa14;

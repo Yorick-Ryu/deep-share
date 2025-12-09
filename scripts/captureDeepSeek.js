@@ -158,47 +158,63 @@ async function captureDeepSeekMessages(customWatermark) {
         console.debug(screenshotMethod)
 
         // 根据设置选择截图方法
-        if (screenshotMethod === 'html2canvas' && typeof html2canvas !== 'undefined') {
+        if (screenshotMethod === 'domtoimage' && typeof domtoimage !== 'undefined') {
             try {
-                const canvas = await html2canvas(container, {
+                dataUrl = await domtoimage.toPng(container, {
+                    bgcolor: backgroundColor,
+                    style: {
+                        'margin': '0',
+                        'transform': 'none'
+                    },
+                    filter: (node) => {
+                        // 过滤掉不需要的元素
+                        return !(node.classList &&
+                            (node.classList.contains('fab07e97') ||
+                                node.classList.contains('ds-checkbox-wrapper')));
+                    },
+                    skipAutoScale: true
+                });
+            } catch (e) {
+                console.error('dom-to-image failed, falling back to html2canvas', e);
+                // Fallback to html2canvas if dom-to-image fails
+            }
+        } else if (screenshotMethod === 'snapdom' && typeof snapdom !== 'undefined') {
+            try {
+                const result = await snapdom(container, {
                     backgroundColor: backgroundColor,
-                    useCORS: true,
-                    scale: window.devicePixelRatio,
-                    allowTaint: true,
-                    ignoreElements: (element) => {
-                        return element.classList.contains('fab07e97') ||
-                            element.classList.contains('ds-checkbox-wrapper');
+                    embedFonts: true,
+                    filter: (element) => {
+                        if (!element.classList) return true;
+                        return !(element.classList.contains('fab07e97') ||
+                            element.classList.contains('ds-checkbox-wrapper'));
                     }
                 });
-                dataUrl = canvas.toDataURL('image/png');
+                const img = await result.toPng();
+                dataUrl = img.src;
             } catch (e) {
-                console.error('html2canvas failed, falling back to dom-to-image', e);
-                // Fallback to dom-to-image if html2canvas fails
+                console.error('SnapDOM failed', e);
             }
         }
-        
-        // 如果 html2canvas 失败或未选择，则使用 dom-to-image
+
+        // 如果 dom-to-image 失败或未选择，则使用 html2canvas
         if (!dataUrl) {
-            if (typeof domtoimage === 'undefined') {
-                throw new Error('dom-to-image not loaded');
+            if (typeof html2canvas === 'undefined') {
+                throw new Error('html2canvas not loaded');
             }
-            
-            dataUrl = await domtoimage.toPng(container, {
-                bgcolor: backgroundColor,
-                style: {
-                    'margin': '0',
-                    'transform': 'none'
-                },
-                filter: (node) => {
-                    // 过滤掉不需要的元素
-                    return !(node.classList &&
-                        (node.classList.contains('fab07e97') ||
-                            node.classList.contains('ds-checkbox-wrapper')));
-                },
-                skipAutoScale: true
+
+            const canvas = await html2canvas(container, {
+                backgroundColor: backgroundColor,
+                useCORS: true,
+                scale: window.devicePixelRatio,
+                allowTaint: true,
+                ignoreElements: (element) => {
+                    return element.classList.contains('fab07e97') ||
+                        element.classList.contains('ds-checkbox-wrapper');
+                }
             });
+            dataUrl = canvas.toDataURL('image/png');
         }
-        
+
 
         // Restore hidden conversations
         if (selectionMode) {
