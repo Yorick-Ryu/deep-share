@@ -300,6 +300,17 @@ function showPaymentModal(orderData, email, amount, conversions, bonus) {
     const modal = document.createElement('div');
     modal.className = 'payment-modal';
     
+    // Add beforeunload event listener to warn user about refreshing during payment
+    const beforeUnloadHandler = (e) => {
+        e.preventDefault();
+        e.returnValue = '确定要刷新页面吗？如果您已经付款，刷新后可能接收不到支付结果通知！付款后没收到API Key请加微信：yorick_cn';
+        return e.returnValue;
+    };
+    window.addEventListener('beforeunload', beforeUnloadHandler);
+    
+    // Store the handler in the modal so we can remove it later
+    modal._beforeUnloadHandler = beforeUnloadHandler;
+    
     // Detect if user is on mobile
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     
@@ -359,6 +370,10 @@ function showPaymentModal(orderData, email, amount, conversions, bonus) {
                 
                 <div class="order-id">
                     <span>订单号: ${orderData.order_no}</span>
+                </div>
+                
+                <div class="payment-help" style="text-align: center; margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px solid #eee; color: #666; font-size: 0.8rem;">
+                    <p style="margin: 0;">无法付款或其他付款方式请加微信：<strong style="color: #4D6BFE;">yorick_cn</strong></p>
                 </div>
             </div>
         </div>
@@ -659,6 +674,12 @@ function closeModal(modal) {
     if (modal._abortController) {
         modal._abortController.abort();
         console.log('Payment polling stopped');
+    }
+    
+    // Remove beforeunload event listener
+    if (modal._beforeUnloadHandler) {
+        window.removeEventListener('beforeunload', modal._beforeUnloadHandler);
+        console.log('Beforeunload handler removed');
     }
     
     modal.style.opacity = '0';
