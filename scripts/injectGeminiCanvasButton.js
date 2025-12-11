@@ -601,6 +601,11 @@
                 return;
             }
 
+            // Handle table footer (skip "Export to Google Sheets" button)
+            if (node.nodeType === Node.ELEMENT_NODE && node.classList && node.classList.contains('table-footer')) {
+                return; // Skip table footer which contains export buttons
+            }
+
             // Handle tables
             if (node.tagName === 'TABLE') {
                 result += '\n';
