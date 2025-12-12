@@ -278,6 +278,9 @@
     "apiKeyError": {
         "message": "API-KEY填寫錯誤，請查看郵件或聯繫客服微信：yorick_cn"
     },
+    "quotaExceededError": {
+        "message": "轉換次數已用完，請充值後繼續使用"
+    },
     "referenceSources": {
         "message": "參考來源"
     },

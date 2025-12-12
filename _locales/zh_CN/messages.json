@@ -278,6 +278,9 @@
     "apiKeyError": {
         "message": "API-KEY填写错误，请查看邮件或联系客服微信：yorick_cn"
     },
+    "quotaExceededError": {
+        "message": "转换次数已用完，请充值后继续使用"
+    },
     "aboutTabTitle": {
         "message": "关于 DeepShare"
     },

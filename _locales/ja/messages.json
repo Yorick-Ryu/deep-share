@@ -278,6 +278,9 @@
     "apiKeyError": {
         "message": "API キーエラー。メールを確認するか、カスタマーサービスにお問い合わせください: yoricker@foxmail.com"
     },
+    "quotaExceededError": {
+        "message": "使用回数の上限に達しました。続けるにはアカウントをチャージしてください。"
+    },
     "aboutTabTitle": {
         "message": "DeepShare について"
     },

@@ -278,6 +278,9 @@
     "apiKeyError": {
         "message": "API Key error. Please check your email or contact customer service: yoricker@foxmail.com"
     },
+    "quotaExceededError": {
+        "message": "Quota exceeded. Please top up your account to continue."
+    },
     "aboutTabTitle": {
         "message": "About DeepShare"
     },

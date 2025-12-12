@@ -278,6 +278,9 @@
     "apiKeyError": {
         "message": "Erro de chave API. Verifique o seu e-mail ou contacte o suporte: yoricker@foxmail.com"
     },
+    "quotaExceededError": {
+        "message": "Quota esgotada. Por favor, recarregue a sua conta para continuar."
+    },
     "aboutTabTitle": {
         "message": "Sobre o DeepShare"
     },

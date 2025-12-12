@@ -107,15 +107,31 @@ async function convertToDocx(message, sourceButton) {
             window.dismissToastNotification(convertingNotificationId);
         }
 
-        // Check if it's an API key related error
+        // Check error type and show appropriate message
         let errorMessage = error.message;
+        
+        // 401 Unauthorized - Invalid/missing/expired API key
         if (error.message && (
+            error.message.includes('401') ||
+            error.message.includes('Unauthorized') ||
+            error.message.includes('API Key is required') ||
+            error.message.includes('Invalid or expired API key')
+        )) {
+            errorMessage = chrome.i18n.getMessage('apiKeyError') || 'API-KEY填写错误，请联系客服微信：yorick_cn';
+        }
+        // 403 Forbidden - Quota exceeded
+        else if (error.message && (
+            error.message.includes('403') ||
+            error.message.includes('Forbidden') ||
+            error.message.includes('Quota exceeded')
+        )) {
+            errorMessage = chrome.i18n.getMessage('quotaExceededError') || '转换次数已用完，请充值后继续使用';
+        }
+        // Other API-related errors
+        else if (error.message && (
             error.message.includes('Failed to read') ||
             error.message.includes('headers') ||
-            error.message.includes('ISO-8859-1') ||
-            error.message.includes('401') ||
-            error.message.includes('403') ||
-            error.message.includes('Unauthorized')
+            error.message.includes('ISO-8859-1')
         )) {
             errorMessage = chrome.i18n.getMessage('apiKeyError') || 'API-KEY填写错误，请联系客服微信：yorick_cn';
         }
