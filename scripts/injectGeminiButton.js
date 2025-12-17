@@ -69,8 +69,8 @@
         docxButton.setAttribute('_ngcontent-ng-c3341669442', '');
         docxButton.setAttribute('mat-icon-button', ''); // 改为icon-button
         docxButton.setAttribute('tabindex', '0');
-        docxButton.setAttribute('mattooltip', chrome.i18n.getMessage('docxButton') || '保存为Word');
-        docxButton.setAttribute('aria-label', chrome.i18n.getMessage('docxButton') || '保存为Word');
+        // docxButton.setAttribute('mattooltip', chrome.i18n.getMessage('docxButton') || '保存为Word');
+        // docxButton.setAttribute('aria-label', chrome.i18n.getMessage('docxButton') || '保存为Word');
         docxButton.setAttribute('data-test-id', 'docx-button');
         docxButton.setAttribute('mat-ripple-loader-class-name', 'mat-mdc-button-ripple');
         docxButton.setAttribute('mat-ripple-loader-centered', ''); // 添加居中属性

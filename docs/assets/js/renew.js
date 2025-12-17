@@ -147,8 +147,8 @@ function initRenewForm() {
                 amount = customAmountInput.value;
                 
                 // Validate custom amount
-                if (!amount || isNaN(amount) || parseInt(amount) < 1 || parseInt(amount) > 10000 || amount.includes('.')) {
-                    alert('请输入有效的整数金额（1 - 10000 元）');
+                if (!amount || isNaN(amount) || parseInt(amount) < 1 || parseInt(amount) > 1000 || amount.includes('.')) {
+                    alert('请输入有效的整数金额（1 - 1000 元）');
                     customAmountInput.focus();
                     return;
                 }
