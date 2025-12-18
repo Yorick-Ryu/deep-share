@@ -7,6 +7,7 @@
     'use strict';
 
     let lastUrl = location.href;
+    let activeMessageContainer = null;
     console.debug('DeepShare: Initializing DOCX button injection for ChatGPT');
 
     function findAndInjectButtons() {
@@ -18,6 +19,20 @@
             if (copyButton && !group.querySelector('.deepshare-docx-btn')) {
                 injectButton(copyButton);
             }
+
+            // Handle "More" menu listener to track active message
+            const moreButtons = group.querySelectorAll('button[aria-haspopup="menu"]');
+            moreButtons.forEach(moreButton => {
+                if (!moreButton.dataset.deepshareListenerAttached) {
+                    moreButton.dataset.deepshareListenerAttached = 'true';
+                    moreButton.addEventListener('click', () => {
+                        activeMessageContainer = moreButton.closest('.agent-turn');
+                        console.debug('DeepShare: More menu opened, tracking message container');
+                        // Wait for the menu overlay to appear
+                        setTimeout(injectMdButtonToMenu, 100);
+                    });
+                }
+            });
         });
     }
 
@@ -202,7 +217,7 @@
                 // In list items, trim leading/trailing whitespace from text nodes
                 if (inListItem) {
                     const childNodes = Array.from(node.childNodes);
-                    
+
                     // Find first and last non-whitespace-only nodes
                     let firstIdx = -1;
                     let lastIdx = -1;
@@ -213,7 +228,7 @@
                             lastIdx = i;
                         }
                     }
-                    
+
                     // Process each node with trim flags
                     for (let i = firstIdx; i <= lastIdx && i >= 0; i++) {
                         const child = childNodes[i];
@@ -249,7 +264,7 @@
                 node.childNodes.forEach(child => processNode(child, indent, false));
                 const quoteContent = result;
                 result = tempResult;
-                
+
                 // Split by lines and add > prefix, preserving empty lines within quote
                 const contentLines = quoteContent.split('\n');
                 for (let i = 0; i < contentLines.length; i++) {
@@ -268,59 +283,71 @@
             // Handle tables
             if (node.tagName === 'TABLE') {
                 result += '\n';
-                const thead = node.querySelector('thead');
-                const tbody = node.querySelector('tbody');
 
-                // Process header
-                if (thead) {
-                    const headerRow = thead.querySelector('tr');
-                    if (headerRow) {
-                        const headers = Array.from(headerRow.querySelectorAll('th'));
-                        const headerTexts = headers.map(th => {
-                            let text = '';
-                            th.childNodes.forEach(child => {
-                                if (child.nodeType === Node.TEXT_NODE) {
-                                    text += child.textContent;
-                                } else if (child.tagName === 'A') {
-                                    text += child.textContent;
-                                }
-                            });
-                            return text.trim();
-                        });
-                        result += '| ' + headerTexts.join(' | ') + ' |\n';
-                        result += '| ' + headerTexts.map(() => '---').join(' | ') + ' |\n';
-                    }
-                }
-
-                // Process body
-                if (tbody) {
-                    const rows = tbody.querySelectorAll('tr');
-                    rows.forEach(row => {
-                        const cells = Array.from(row.querySelectorAll('td'));
-                        const cellTexts = cells.map(td => {
-                            let text = '';
-                            const processCell = (n) => {
-                                if (n.nodeType === Node.TEXT_NODE) {
-                                    text += n.textContent;
-                                } else if (n.tagName === 'A') {
-                                    text += '[' + n.textContent + '](' + n.href + ')';
-                                } else if (n.tagName === 'CODE') {
-                                    text += '`' + n.textContent + '`';
-                                } else if (n.tagName === 'STRONG') {
-                                    text += '**';
-                                    n.childNodes.forEach(processCell);
-                                    text += '**';
+                const processCell = (cell) => {
+                    let cellText = '';
+                    const traverse = (n) => {
+                        if (n.nodeType === Node.TEXT_NODE) {
+                            cellText += n.textContent;
+                        } else if (n.nodeType === Node.ELEMENT_NODE) {
+                            if (n.classList.contains('katex')) {
+                                const annotation = n.querySelector('annotation[encoding="application/x-tex"]');
+                                if (annotation) {
+                                    cellText += '$' + annotation.textContent.trim() + '$';
                                     return;
-                                } else if (n.childNodes) {
-                                    n.childNodes.forEach(processCell);
                                 }
-                            };
-                            td.childNodes.forEach(processCell);
-                            return text.trim();
-                        });
-                        result += '| ' + cellTexts.join(' | ') + ' |\n';
-                    });
+                            }
+
+                            if (n.tagName === 'BR') {
+                                cellText += ' ';
+                            } else if (n.tagName === 'A') {
+                                cellText += '[' + (n.textContent || '') + '](' + (n.href || '') + ')';
+                            } else if (n.tagName === 'STRONG' || n.tagName === 'B') {
+                                cellText += '**';
+                                n.childNodes.forEach(traverse);
+                                cellText += '**';
+                            } else if (n.tagName === 'EM' || n.tagName === 'I') {
+                                cellText += '*';
+                                n.childNodes.forEach(traverse);
+                                cellText += '*';
+                            } else if (n.tagName === 'CODE') {
+                                cellText += '`' + n.textContent + '`';
+                            } else {
+                                // Recurse for wraps like SPAN, DIV, P
+                                n.childNodes.forEach(traverse);
+                            }
+                        }
+                    };
+                    cell.childNodes.forEach(traverse);
+                    return cellText.replace(/\|/g, '\\|').trim();
+                };
+
+                const rows = Array.from(node.querySelectorAll('tr'));
+                if (rows.length === 0) return;
+
+                let headerRow = node.querySelector('thead > tr');
+                let bodyRows = [];
+
+                if (headerRow) {
+                    bodyRows = rows.filter(r => r !== headerRow && !r.closest('tfoot'));
+                } else {
+                    // If no explicit thead, assume first row is header (standard for MD tables)
+                    headerRow = rows[0];
+                    bodyRows = rows.slice(1);
                 }
+
+                if (headerRow) {
+                    const cells = Array.from(headerRow.querySelectorAll('th, td'));
+                    const headers = cells.map(processCell);
+                    result += '| ' + headers.join(' | ') + ' |\n';
+                    result += '| ' + headers.map(() => '---').join(' | ') + ' |\n';
+                }
+
+                bodyRows.forEach(row => {
+                    const cells = Array.from(row.querySelectorAll('td, th'));
+                    const rowTexts = cells.map(processCell);
+                    result += '| ' + rowTexts.join(' | ') + ' |\n';
+                });
 
                 result += '\n';
                 return;
@@ -331,14 +358,14 @@
                 const isOrdered = node.tagName === 'OL';
                 let index = 1;
                 const listItems = Array.from(node.children).filter(child => child.tagName === 'LI');
-                
+
                 listItems.forEach(li => {
                     const indentation = '   '.repeat(indent);
-                    
+
                     // Check if this is a task list item
                     const isTaskList = li.classList && li.classList.contains('task-list-item');
                     const checkbox = isTaskList ? li.querySelector('input[type="checkbox"]') : null;
-                    
+
                     let prefix;
                     if (checkbox) {
                         // For task lists, use checkbox format with single space
@@ -347,22 +374,22 @@
                         prefix = isOrdered ? `${index}. ` : '* ';
                     }
                     result += indentation + prefix;
-                    
+
                     // Process the list item's content
                     let hasContent = false;
                     for (let i = 0; i < li.childNodes.length; i++) {
                         const child = li.childNodes[i];
-                        
+
                         // Skip whitespace-only text nodes in list items
                         if (child.nodeType === Node.TEXT_NODE && !child.textContent.trim()) {
                             continue;
                         }
-                        
+
                         // Skip checkbox input itself
                         if (child.tagName === 'INPUT' && child.type === 'checkbox') {
                             continue;
                         }
-                        
+
                         // If it's a nested list, handle it separately with increased indent
                         if (child.tagName === 'UL' || child.tagName === 'OL') {
                             if (hasContent) {
@@ -378,11 +405,11 @@
                             }
                         }
                     }
-                    
+
                     result += '\n';
                     index++;
                 });
-                
+
                 if (indent === 0) {
                     result += '\n';
                 }
@@ -454,10 +481,10 @@
                 };
                 node.childNodes.forEach(getTextOnly);
                 text = text.trim();
-                
+
                 // Check for title attribute
                 const title = node.getAttribute('title');
-                
+
                 if (href && href !== text) {
                     if (title) {
                         result += '[' + text + '](' + href + ' "' + title + '")';
@@ -493,5 +520,91 @@
         result = result.replace(/\n{3,}/g, '\n\n').trim();
 
         return result;
+    }
+
+    function injectMdButtonToMenu() {
+        // Find the Radix menu content
+        const menuContents = document.querySelectorAll('div[role="menu"]');
+
+        menuContents.forEach(menuContent => {
+            // Check if already injected
+            if (menuContent.querySelector('.deepshare-menu-md-button')) {
+                return;
+            }
+
+            console.debug('DeepShare: Injecting Markdown button into ChatGPT More menu');
+
+            // Create menu item element matching ChatGPT's style
+            const mdButton = document.createElement('div');
+            mdButton.className = 'group __menu-item gap-1.5 deepshare-menu-md-button hover:bg-token-main-surface-secondary cursor-pointer px-3 py-2 rounded-xl';
+            mdButton.setAttribute('role', 'menuitem');
+            mdButton.setAttribute('tabindex', '0');
+
+            // Find an existing menu item to copy styles if needed, or just use the class
+            mdButton.innerHTML = `
+                <div class="flex items-center justify-center group-disabled:opacity-50 group-data-disabled:opacity-50 icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" style="width: 20px; height: 20px;">
+                        <path d="M20.56 18H3.44C2.65 18 2 17.37 2 16.59V7.41C2 6.63 2.65 6 3.44 6H20.56C21.35 6 22 6.63 22 7.41V16.59C22 17.37 21.35 18 20.56 18M6.81 15.19V11.53L8.73 13.88L10.65 11.53V15.19H12.58V8.81H10.65L8.73 11.16L6.81 8.81H4.89V15.19H6.81M19.69 12H17.77V8.81H15.85V12H13.92L16.81 15.28L19.69 12Z"/>
+                    </svg>
+                </div>
+                <div class="flex min-w-0 grow items-center gap-2.5">
+                    <div class="truncate">${chrome.i18n.getMessage('saveAsMarkdown') || 'Save as Markdown'}</div>
+                </div>
+            `;
+
+            // Prepend or append? Usually consistent with Gemini we prepend to the first few actions
+            menuContent.prepend(mdButton);
+
+            // Click event
+            mdButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (!activeMessageContainer) {
+                    console.error('DeepShare: No active message container found');
+                    return;
+                }
+
+                const markdown = extractContentWithFormulas(activeMessageContainer);
+                if (markdown) {
+                    downloadMarkdownFile(markdown);
+                }
+
+                // Close menu - GPT uses Radix, clicking outside or selecting works
+                // We'll just let it be or try to find a backdrop if necessary
+                // Most Radix menus close on selection automatically if handled right
+                // But since we stopPropagation, we might need to manually close it if GPT doesn't
+                document.body.click();
+            });
+        });
+    }
+
+    function downloadMarkdownFile(content) {
+        const filename = generateFilename(content) + '.md';
+        const blob = new Blob([content], { type: 'text/markdown;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+    }
+
+    function generateFilename(content) {
+        const now = new Date();
+        const timestamp = now.toLocaleString('zh-CN', {
+            year: 'numeric', month: '2-digit', day: '2-digit',
+            hour: '2-digit', minute: '2-digit', second: '2-digit',
+            hour12: false
+        }).replace(/[\/\s:]/g, '-').replace(',', '');
+
+        if (!content) return `chatgpt_${timestamp}`;
+        // Try to get first line (ignoring markdown headers)
+        const lines = content.split('\n').filter(l => l.trim().length > 0);
+        let firstLine = '';
+        if (lines.length > 0) {
+            firstLine = lines[0].replace(/^#+\s*/, '').replace(/[^a-zA-Z0-9_\u4e00-\u9fa5]/g, '').substring(0, 15).trim();
+        }
+        return `${firstLine || 'chatgpt'}_${timestamp}`;
     }
 })();
