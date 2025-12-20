@@ -197,14 +197,14 @@ function loadSettings(highlightApiKey = false) {
 
 // Set up tab switching functionality
 function setupTabs() {
-  const tabButtons = document.querySelectorAll('.tab-btn');
+  const tabButtons = Array.from(document.querySelectorAll('.tab-btn'));
 
   tabButtons.forEach(button => {
     button.addEventListener('click', () => {
       const targetTabId = button.getAttribute('data-tab');
 
       // Update active tab button
-      document.querySelectorAll('.tab-btn').forEach(btn => {
+      tabButtons.forEach(btn => {
         btn.classList.remove('active');
       });
       button.classList.add('active');
@@ -218,6 +218,32 @@ function setupTabs() {
       // Save the active tab ID to chrome.storage.sync
       chrome.storage.sync.set({ 'lastActiveTab': targetTabId });
     });
+  });
+
+  // Add keyboard navigation for tabs
+  document.addEventListener('keydown', (e) => {
+    // If user is typing in an input or textarea, don't switch tabs
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+      return;
+    }
+
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      e.preventDefault();
+
+      const currentActiveBtn = document.querySelector('.tab-btn.active');
+      const currentIndex = tabButtons.indexOf(currentActiveBtn);
+      let nextIndex;
+
+      if (e.key === 'ArrowDown') {
+        nextIndex = (currentIndex + 1) % tabButtons.length;
+      } else {
+        nextIndex = (currentIndex - 1 + tabButtons.length) % tabButtons.length;
+      }
+
+      tabButtons[nextIndex].click();
+      // Scroll the sidebar if needed
+      tabButtons[nextIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
   });
 }
 
