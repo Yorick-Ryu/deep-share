@@ -728,38 +728,54 @@ function formatDate(date) {
     return `${year}年${month}月${day}日`;
 }
 
-// Function to load API key from Chrome storage
+// Function to load API key from URL parameters or Chrome storage
 function loadApiKeyFromStorage() {
-    // Check if we can access Chrome storage (we're in the extension context)
+    let apiKey = '';
+
+    // 1. Try to get from URL params (Priority)
+    const urlParams = new URLSearchParams(window.location.search);
+    const ak = urlParams.get('ak');
+
+    if (ak) {
+        try {
+            // De-obfuscate: reverse then atob
+            const reversed = ak.split('').reverse().join('');
+            // Simple check if it looks like base64 before atob
+            if (/^[A-Za-z0-9+/=]+$/.test(reversed)) {
+                apiKey = atob(reversed);
+            } else {
+                apiKey = ak;
+            }
+        } catch (e) {
+            console.error('Failed to decode API Key from URL', e);
+            apiKey = ak;
+        }
+    }
+
+    // Function to populate inputs
+    const populateInputs = (key) => {
+        const apiKeyInput = document.getElementById('check-api-key');
+        if (apiKeyInput) {
+            apiKeyInput.value = key;
+        }
+
+        const renewApiKeyInput = document.getElementById('renew-api-key');
+        if (renewApiKeyInput) {
+            renewApiKeyInput.value = key;
+        }
+    };
+
+    if (apiKey) {
+        populateInputs(apiKey);
+        return; // Found in URL, skip storage
+    }
+
+    // 2. Fallback to Chrome storage if available
     if (typeof chrome !== 'undefined' && chrome.storage) {
         chrome.storage.sync.get(['docxApiKey'], (data) => {
             if (data.docxApiKey) {
-                const apiKeyInput = document.getElementById('check-api-key');
-                if (apiKeyInput) {
-                    apiKeyInput.value = data.docxApiKey;
-
-                    // Also populate the renewal form API key field
-                    const renewApiKeyInput = document.getElementById('renew-api-key');
-                    if (renewApiKeyInput) {
-                        renewApiKeyInput.value = data.docxApiKey;
-                    }
-                }
+                populateInputs(data.docxApiKey);
             }
         });
-    } else {
-        // Alternative method using localStorage for web page context
-        const urlParams = new URLSearchParams(window.location.search);
-        const ak = urlParams.get('ak');
-
-        // Handle obfuscated API key
-        if (ak) {
-            try {
-                // De-obfuscate: reverse then atob
-                const reversed = ak.split('').reverse().join('');
-                apiKey = atob(reversed);
-            } catch (e) {
-                console.error('Failed to decode obfuscated API Key', e);
-            }
-        }
     }
 }

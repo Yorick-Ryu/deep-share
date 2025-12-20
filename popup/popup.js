@@ -132,7 +132,7 @@ function loadSettings(highlightApiKey = false) {
     const formulaFormat = data.formulaFormat || 'mathml'; // Default to MathML
     document.getElementById('formatMathML').checked = formulaFormat === 'mathml';
     document.getElementById('formatLaTeX').checked = formulaFormat === 'latex';
-    
+
     // Formula engine settings
     const formulaEngine = data.formulaEngine || 'mathjax'; // Default to MathJax
     document.getElementById('engineMathJax').checked = formulaEngine === 'mathjax';
@@ -156,9 +156,21 @@ function loadSettings(highlightApiKey = false) {
     // Language preference
     document.getElementById('languageSelect').value = data.preferredLanguage || 'auto';
 
-    // If API key is set, check quota
+    // If API key is set, check quota and update renewal link
     if (data.docxApiKey) {
       checkQuota();
+
+      const purchaseLink = document.querySelector('.purchase-link');
+      if (purchaseLink) {
+        try {
+          // Simple obfuscation: Base64 + Reverse
+          const encodedKey = btoa(data.docxApiKey).split('').reverse().join('');
+          const baseUrl = purchaseLink.href.split('?')[0];
+          purchaseLink.href = `${baseUrl}?ak=${encodeURIComponent(encodedKey)}`;
+        } catch (e) {
+          console.error('Failed to encode API Key', e);
+        }
+      }
     }
 
     // If API key is missing and we should highlight it, add highlighting and focus
