@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>支付结果 - DeepShare</title>
+    <link rel="icon" type="image/svg+xml" href="./assets/images/deepshare-icon.svg">
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <link rel="stylesheet" href="./assets/css/purchase.css">
+    <style>
+        .result-container {
+            max-width: 600px;
+            margin: 100px auto;
+            padding: 2rem;
+            text-align: center;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .result-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .success-icon {
+            background-color: rgba(77, 107, 254, 0.1);
+            color: #4D6BFE;
+        }
+
+        .error-icon {
+            background-color: rgba(255, 107, 107, 0.1);
+            color: #FF6B6B;
+        }
+
+        .pending-icon {
+            background-color: rgba(0, 0, 0, 0.05);
+            color: #888;
+        }
+
+        .result-title {
+            font-size: 1.75rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .result-message {
+            color: #666;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .api-key-display {
+            background-color: #f8f9ff;
+            border: 1px dashed #4D6BFE;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            position: relative;
+        }
+
+        .api-key-label {
+            font-size: 0.8rem;
+            color: #4D6BFE;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .api-key-value {
+            font-family: monospace;
+            font-size: 1.1rem;
+            color: #333;
+            word-break: break-all;
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .secondary-btn {
+            background: #f0f2f5;
+            color: #333;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .secondary-btn:hover {
+            background: #e4e6e9;
+        }
+
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #4D6BFE;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .result-container {
+                background: #2d2d2d;
+            }
+
+            .result-title {
+                color: #fff;
+            }
+
+            .result-message {
+                color: #aaa;
+            }
+
+            .api-key-display {
+                background: #1e1e1e;
+            }
+
+            .api-key-value {
+                color: #eee;
+            }
+
+            .secondary-btn {
+                background: #3d3d3d;
+                color: #eee;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <img src="./assets/images/deepshare-icon.svg" alt="DeepShare Logo">
+                <a href="./index.html"><span>DeepShare</span></a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="result-container" id="status-checking">
+            <div class="loader"></div>
+            <h1 class="result-title">正在查询订单...</h1>
+            <p class="result-message">请稍等，我们正在同步您的支付状态。</p>
+        </div>
+
+        <div class="result-container" id="status-success" style="display: none;">
+            <div class="result-icon success-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+            </div>
+            <h1 class="result-title">支付成功</h1>
+            <p class="result-message">您的订单已完成，转换次数已充值到您的账户。</p>
+
+            <div class="api-key-display">
+                <div class="api-key-label">您的 API Key</div>
+                <div class="api-key-value" id="success-api-key">----</div>
+            </div>
+
+            <div class="quota-stats" style="display: flex; justify-content: space-around; margin: 1.5rem 0;">
+                <div class="quota-stat-item">
+                    <div class="quota-stat-label">本次充值</div>
+                    <div class="quota-stat-value" id="current-quota"
+                        style="font-size: 1.5rem; font-weight: bold; color: #4D6BFE;">-</div>
+                </div>
+                <div class="quota-stat-item">
+                    <div class="quota-stat-label">赠送次数</div>
+                    <div class="quota-stat-value" id="gift-quota"
+                        style="font-size: 1.5rem; font-weight: bold; color: #4D6BFE;">-</div>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <a href="./purchase.html" class="secondary-btn">返回购买页</a>
+                <button class="purchase-btn" onclick="copyApiKey('success-api-key', this)">复制 API Key</button>
+            </div>
+        </div>
+
+        <div class="result-container" id="status-error" style="display: none;">
+            <div class="result-icon error-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </div>
+            <h1 class="result-title">支付结果未确认</h1>
+            <p class="result-message" id="error-message">我们未能自动确认您的支付状态。如果您已完成支付，请联系客服处理。</p>
+
+            <div class="api-key-display" id="error-api-key-container" style="display: none;">
+                <div class="api-key-label">关联 API Key</div>
+                <div class="api-key-value" id="error-api-key">----</div>
+            </div>
+
+            <div class="action-buttons">
+                <a href="./purchase.html" class="secondary-btn">返回购买页</a>
+                <button class="purchase-btn" onclick="copyApiKey('error-api-key', this)">复制 API Key</button>
+            </div>
+        </div>
+    </main>
+
+    <script src="./assets/js/payment-result.js"></script>
+</body>
+
+</html>

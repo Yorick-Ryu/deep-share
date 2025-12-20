@@ -4,23 +4,27 @@
     border: 1px solid #eee;
     padding: 1.5rem;
     margin: 2rem 0;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     transition: all 0.3s ease;
 }
+
 .pricing-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
 }
+
 .price-tag {
     font-size: 2.25rem;
     font-weight: bold;
     color: #4D6BFE;
 }
+
 .per-unit {
     font-size: 0.9rem;
     color: #666;
     font-weight: normal;
 }
+
 .promotion-badge {
     display: inline-block;
     background-color: #FF6B6B;
@@ -31,23 +35,28 @@
     font-weight: bold;
     margin-bottom: 1rem;
 }
+
 .promotion-details {
     background-color: rgba(255, 107, 107, 0.1);
     border-left: 4px solid #FF6B6B;
     padding: 1rem;
     margin: 1.5rem 0;
 }
+
 .purchase-form {
     margin-top: 1rem;
 }
+
 .form-group {
     margin-bottom: 1.25rem;
 }
+
 .form-group label {
     display: block;
     margin-bottom: 0.5rem;
     font-weight: 500;
 }
+
 .form-group input {
     width: 100%;
     padding: 0.7rem;
@@ -55,12 +64,14 @@
     border-radius: 6px;
     font-size: 0.95rem;
 }
+
 .amount-options {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
     gap: 0.75rem;
     margin: 1rem 0;
 }
+
 .amount-option {
     background: white;
     border: 2px solid #ddd;
@@ -71,34 +82,41 @@
     transition: all 0.2s ease;
     position: relative;
 }
+
 .amount-option:hover {
     border-color: #4D6BFE;
 }
+
 .amount-option.selected {
     border-color: #4D6BFE;
     background: rgba(77, 107, 254, 0.05);
 }
+
 .amount-value {
     font-weight: bold;
     font-size: 1.1rem;
 }
+
 .conversions {
     font-size: 0.85rem;
     color: #666;
     margin-top: 0.25rem;
 }
+
 .bonus {
     font-size: 0.85rem;
     color: #FF6B6B;
     font-weight: bold;
     margin-top: 0.25rem;
 }
+
 .total-conversions {
     font-size: 0.85rem;
     color: #333;
     font-weight: bold;
     margin-top: 0.25rem;
 }
+
 .discount-badge {
     position: absolute;
     top: -10px;
@@ -109,9 +127,10 @@
     font-size: 0.75rem;
     font-weight: bold;
     border-radius: 12px 4px 12px 4px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     transform: rotate(15deg);
 }
+
 .purchase-btn {
     background: #4D6BFE;
     color: white;
@@ -124,10 +143,12 @@
     width: 100%;
     transition: all 0.2s ease;
 }
+
 .purchase-btn:hover {
     background: #3D5BEE;
     transform: translateY(-2px);
 }
+
 .api-instructions {
     margin-top: 2rem;
     padding: 1.25rem;
@@ -135,6 +156,7 @@
     border-radius: 8px;
     background-color: #f9f9f9;
 }
+
 .step-number {
     display: inline-flex;
     align-items: center;
@@ -148,6 +170,7 @@
     font-weight: bold;
     margin-right: 0.5rem;
 }
+
 code {
     background: rgba(77, 107, 254, 0.1);
     padding: 0.2rem 0.4rem;
@@ -201,8 +224,8 @@ input[type="number"] {
     font-size: 1rem;
 }
 
-input[type="number"]::-webkit-inner-spin-button, 
-input[type="number"]::-webkit-outer-spin-button { 
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
     opacity: 1;
 }
 
@@ -210,6 +233,78 @@ input[type="number"]::-webkit-outer-spin-button {
 @media (max-width: 768px) {
     .amount-options {
         grid-template-columns: repeat(2, 1fr);
+    }
+
+    .payment-methods {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Payment Method Selection Styles */
+.payment-methods {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 0.75rem;
+    margin: 1rem 0;
+}
+
+.payment-method {
+    background: white;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem 0.75rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.payment-method:hover {
+    border-color: #4D6BFE;
+}
+
+.payment-method.selected {
+    border-color: #4D6BFE;
+    background: rgba(77, 107, 254, 0.05);
+}
+
+.method-icon {
+    color: #666;
+}
+
+.payment-method.selected .method-icon {
+    color: #4D6BFE;
+}
+
+.method-name {
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.method-desc {
+    font-size: 0.75rem;
+    color: #888;
+}
+
+@media (prefers-color-scheme: dark) {
+    .payment-method {
+        background: #2d2d2d;
+        border-color: #444;
+    }
+
+    .payment-method.selected {
+        background: rgba(77, 107, 254, 0.2);
+    }
+
+    .method-desc {
+        color: #aaa;
+    }
+
+    .method-icon {
+        color: #aaa;
     }
 }
 
@@ -240,26 +335,26 @@ input[type="number"]::-webkit-outer-spin-button {
 
 /* Two-column layout for desktop */
 @media (min-width: 992px) {
-    .content > h1 {
+    .content>h1 {
         text-align: center;
         margin-bottom: 1rem;
     }
-    
+
     /* Create a two-column layout */
     .content {
         display: grid;
         grid-template-columns: 5fr 7fr;
-        grid-template-areas: 
+        grid-template-areas:
             "heading heading"
             "left-col right-col";
         gap: 1.5rem;
     }
-    
-    .content > h1 {
+
+    .content>h1 {
         grid-area: heading;
         width: 100%;
     }
-    
+
     /* Left column with free features and API instructions */
     .left-column-wrapper {
         grid-area: left-col;
@@ -267,16 +362,16 @@ input[type="number"]::-webkit-outer-spin-button {
         flex-direction: column;
         gap: 0.75rem;
     }
-    
+
     .free-features-section {
         margin: 0;
     }
-    
+
     .api-instructions {
         margin: 0;
         width: auto;
     }
-    
+
     /* Right column with pricing card */
     .pricing-card {
         grid-area: right-col;
@@ -294,22 +389,26 @@ input[type="number"]::-webkit-outer-spin-button {
     margin-bottom: 1.5rem;
     border-left: 4px solid #4D6BFE;
 }
+
 .free-features-list {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 0.75rem;
     margin-top: 1rem;
 }
+
 .free-feature-item {
     display: flex;
     align-items: flex-start;
     gap: 0.5rem;
 }
+
 .free-feature-item:before {
     content: "✓";
     color: #4D6BFE;
     font-weight: bold;
 }
+
 .paid-feature-explanation {
     margin-top: 1.25rem;
     padding-top: 1rem;
@@ -321,42 +420,52 @@ input[type="number"]::-webkit-outer-spin-button {
     .pricing-card {
         border-color: #333;
         background-color: #2d2d2d;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
+
     .amount-option {
         background: #2d2d2d;
         border-color: #444;
     }
+
     .amount-option.selected {
         background: rgba(77, 107, 254, 0.2);
     }
+
     .total-conversions {
         color: #ccc;
     }
+
     .api-instructions {
         background-color: #2d2d2d;
         border-color: #333;
     }
+
     .form-group input {
         background-color: #2d2d2d;
         border-color: #444;
         color: #fff;
     }
+
     .currency-symbol {
         background-color: #333;
         border-color: #444;
     }
+
     .custom-amount-details {
         background-color: #2d2d2d;
     }
+
     input[type="number"] {
         background-color: #2d2d2d;
         border-color: #444;
         color: #fff;
     }
+
     .feature-description {
         color: #eee;
     }
+
     .free-features-section {
         background-color: #2a2d3a;
         border-left-color: #4D6BFE;
@@ -365,34 +474,35 @@ input[type="number"]::-webkit-outer-spin-button {
 
 /* Responsive adjustments */
 @media (max-width: 991px) {
+
     /* On mobile and tablets, change the order to show pricing-card first */
     .content {
         display: flex;
         flex-direction: column;
     }
-    
+
     /* Reduce space between h1 and pricing-card on mobile */
-    .content > h1 {
+    .content>h1 {
         margin-bottom: 1rem;
     }
-    
+
     /* Pricing card appears first (order: 1) */
     .pricing-card {
         order: 1;
         margin: 0 0 2rem 0;
     }
-    
+
     /* Left column wrapper appears second (order: 2) */
     .left-column-wrapper {
         order: 2;
     }
-    
+
     .free-features-section,
     .quota-checker,
     .api-instructions {
         margin: 0 0 2rem 0;
     }
-    
+
     .api-instructions {
         margin-bottom: 0;
     }
@@ -542,10 +652,21 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 @keyframes fadeInOut {
-    0% { opacity: 0; }
-    20% { opacity: 1; }
-    80% { opacity: 1; }
-    100% { opacity: 0; }
+    0% {
+        opacity: 0;
+    }
+
+    20% {
+        opacity: 1;
+    }
+
+    80% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
 }
 
 /* Dark mode styles for modal */
@@ -554,19 +675,19 @@ input[type="number"]::-webkit-outer-spin-button {
         background-color: #2d2d2d;
         color: #fff;
     }
-    
+
     .close-modal {
         color: #aaa;
     }
-    
+
     .close-modal:hover {
         color: #fff;
     }
-    
+
     .payment-note {
         color: #aaa;
     }
-    
+
     .wechat-id {
         color: #eee;
     }
@@ -614,7 +735,7 @@ input[type="number"]::-webkit-outer-spin-button {
     background-color: white;
     border-radius: 8px;
     padding: 1.5rem;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     margin-top: 1.5rem;
 }
 
@@ -689,7 +810,7 @@ input[type="number"]::-webkit-outer-spin-button {
     .quota-expiration {
         border-top-color: rgba(255, 255, 255, 0.1);
     }
-    
+
     .quota-expiration-label {
         color: #aaa;
     }
@@ -700,15 +821,15 @@ input[type="number"]::-webkit-outer-spin-button {
     .quota-checker {
         background-color: #2a2d3a;
     }
-    
+
     .quota-result-card {
         background-color: #2d2d2d;
     }
-    
+
     .quota-progress-bg {
         background-color: #444;
     }
-    
+
     .quota-stat-label {
         color: #aaa;
     }
@@ -722,7 +843,8 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .api-key-input-wrapper input {
-    padding-right: 70px; /* Make room for both buttons */
+    padding-right: 70px;
+    /* Make room for both buttons */
 }
 
 /* Hide browser's default password reveal icon */
@@ -784,11 +906,12 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
 
 /* Dark mode adjustments */
 @media (prefers-color-scheme: dark) {
+
     .toggle-visibility-btn,
     .copy-api-key-btn {
         color: #aaa;
     }
-    
+
     .toggle-visibility-btn:hover,
     .copy-api-key-btn:hover {
         color: #fff;
@@ -840,7 +963,7 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
     .faq-section {
         background-color: #2a2d3a;
     }
-    
+
     .faq-card {
         border-bottom-color: rgba(77, 107, 254, 0.3);
     }
@@ -963,7 +1086,8 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
 
 .open-alipay-btn {
     display: inline-block;
-    background-color: #00a0e9; /* Alipay blue color */
+    background-color: #00a0e9;
+    /* Alipay blue color */
     color: white;
     border: none;
     padding: 0.8rem 1.5rem;
@@ -1037,7 +1161,7 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
     padding: 1rem;
     text-align: center;
     min-width: 100px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .quota-stat-label {
@@ -1097,36 +1221,38 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
 @media (prefers-color-scheme: dark) {
     .order-summary {
         background-color: #333;
-        color: #e0e0e0; /* Adding text color for dark mode */
+        color: #e0e0e0;
+        /* Adding text color for dark mode */
     }
-    
+
     .order-detail.total {
         border-top-color: #555;
     }
-    
+
     .order-id {
-        color: #aaa; /* Lighter color for order ID in dark mode */
+        color: #aaa;
+        /* Lighter color for order ID in dark mode */
     }
-    
+
     .api-key-section {
         background-color: #333;
     }
-    
+
     .api-key-display-wrapper input {
         background-color: #2d2d2d;
         border-color: #444;
         color: #fff;
     }
-    
+
     .quota-stat-item {
         background-color: #2d2d2d;
     }
-    
+
     .api-key-instruction,
     .payment-status {
         color: #aaa;
     }
-    
+
     .next-steps {
         background-color: #2a2d3a;
     }
@@ -1174,22 +1300,22 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
         flex-direction: row;
         align-items: flex-start;
     }
-    
+
     .payment-qrcode-area {
         width: 40%;
         padding-right: 1rem;
         border-right: 1px solid #eee;
     }
-    
+
     .payment-info-area {
         width: 60%;
         padding-left: 1rem;
     }
-    
+
     .payment-modal-content {
         max-width: 600px;
     }
-    
+
     .order-summary {
         margin-top: 0;
     }
@@ -1200,7 +1326,7 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
     .payment-instructions {
         background-color: #333;
     }
-    
+
     @media (min-width: 640px) {
         .payment-qrcode-area {
             border-right-color: #444;
@@ -1230,8 +1356,10 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
 .success-content {
     display: flex;
     flex-direction: column;
-    gap: 0.8rem; /* 减小gap从1rem到0.8rem */
-    margin-top: 0.5rem; /* 减小上边距 */
+    gap: 0.8rem;
+    /* 减小gap从1rem到0.8rem */
+    margin-top: 0.5rem;
+    /* 减小上边距 */
 }
 
 .quota-summary-compact {
@@ -1303,11 +1431,11 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
         background-color: #333 !important;
         color: #e0e0e0;
     }
-    
+
     .quota-label {
         color: #aaa;
     }
-    
+
     .next-steps-compact {
         background-color: #2a2d3a;
     }
@@ -1315,7 +1443,8 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
 
 /* Modified Payment Modal Styles */
 .payment-modal-content {
-    max-width: 400px; /* Reduced from 500px to 400px for a slimmer modal */
+    max-width: 400px;
+    /* Reduced from 500px to 400px for a slimmer modal */
 }
 
 .payment-header {
@@ -1340,11 +1469,13 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.5rem; /* Reduced gap for more compact layout */
+    gap: 0.5rem;
+    /* Reduced gap for more compact layout */
 }
 
 .alipay-qrcode-large {
-    width: 180px; /* Smaller QR code for more compact layout */
+    width: 180px;
+    /* Smaller QR code for more compact layout */
     margin: 0 auto;
     text-align: center;
 }
@@ -1359,7 +1490,8 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 0.5rem; /* Reduced for compact layout */
+    margin-top: 0.5rem;
+    /* Reduced for compact layout */
     gap: 0.5rem;
 }
 
@@ -1381,16 +1513,19 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
 }
 
 .order-summary {
-    margin: 0.25rem auto; /* Reduced margin for compact layout */
+    margin: 0.25rem auto;
+    /* Reduced margin for compact layout */
     background-color: #f8f8f8;
     border-radius: 8px;
     padding: 0.6rem 0.8rem;
-    width: 180px; /* Match the QR code width */
+    width: 180px;
+    /* Match the QR code width */
     text-align: left;
 }
 
 .order-id {
-    margin-top: 0.25rem; /* Reduced for compact layout */
+    margin-top: 0.25rem;
+    /* Reduced for compact layout */
     font-size: 0.8rem;
     color: #888;
 }
@@ -1400,12 +1535,12 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
     .payment-status {
         color: #aaa;
     }
-    
+
     .order-summary {
         background-color: #333 !important;
         color: #e0e0e0;
     }
-    
+
     .order-detail {
         color: #e0e0e0;
     }
@@ -1426,7 +1561,8 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
 }
 
 .api-key-display-wrapper input {
-    padding-right: 70px; /* Make room for both buttons */
+    padding-right: 70px;
+    /* Make room for both buttons */
     width: 100%;
     font-family: monospace;
 }
@@ -1504,7 +1640,7 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
     .usage-instructions {
         background-color: #2a2d3a;
     }
-    
+
     .api-key-instruction {
         color: #aaa;
     }
@@ -1514,37 +1650,45 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
 .success-container {
     display: flex;
     flex-direction: column;
-    gap: 0.6rem; /* 减小整体间距 */
+    gap: 0.6rem;
+    /* 减小整体间距 */
 }
 
 .success-header {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 0; /* 从0.6rem减小到0.4rem - 减少支付成功与下面元素的距离 */
+    margin-bottom: 0;
+    /* 从0.6rem减小到0.4rem - 减少支付成功与下面元素的距离 */
 }
 
 .success-header h2 {
-    margin-top: 0.3rem; /* 从0.4rem减小到0.3rem */
+    margin-top: 0.3rem;
+    /* 从0.4rem减小到0.3rem */
     margin-bottom: 0;
 }
 
 .success-content {
     display: flex;
     flex-direction: column;
-    gap: 0.6rem; /* 从0.8rem减小到0.6rem */
-    margin-top: 0.3rem; /* 从0.4rem减小到0.3rem */
+    gap: 0.6rem;
+    /* 从0.8rem减小到0.6rem */
+    margin-top: 0.3rem;
+    /* 从0.4rem减小到0.3rem */
 }
 
 /* API Key 区域调整 */
 .api-key-section {
-    margin: 0.4rem 0; /* 从0.6rem 0减小到0.4rem 0 */
-    padding: 0.7rem; /* 从0.8rem减小到0.7rem */
+    margin: 0.4rem 0;
+    /* 从0.6rem 0减小到0.4rem 0 */
+    padding: 0.7rem;
+    /* 从0.8rem减小到0.7rem */
 }
 
 .api-key-instruction {
-    margin: 0.2rem 0 0 0; 
-    font-size: 0.85rem; /* 缩小说明文字 */
+    margin: 0.2rem 0 0 0;
+    font-size: 0.85rem;
+    /* 缩小说明文字 */
     color: #666;
 }
 
@@ -1554,10 +1698,12 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
 }
 
 .api-key-display-wrapper input {
-    padding-right: 80px; /* 适应两个按钮 */
+    padding-right: 80px;
+    /* 适应两个按钮 */
     width: 100%;
     font-family: monospace;
-    font-size: 0.9rem; /* 减小API Key字体大小 */
+    font-size: 0.9rem;
+    /* 减小API Key字体大小 */
 }
 
 /* 使用说明调整 */
@@ -1565,19 +1711,23 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
     margin-top: 0.4rem;
     background-color: #f5f8ff;
     border-radius: 8px;
-    padding: 0.7rem; /* 与quota-summary-compact内边距保持一致 */
+    padding: 0.7rem;
+    /* 与quota-summary-compact内边距保持一致 */
 }
 
 .usage-title {
     margin: 0;
     font-size: 1rem;
-    padding-left: 0; /* 移除左内边距 */
+    padding-left: 0;
+    /* 移除左内边距 */
     text-align: left;
 }
 
 .usage-steps {
-    list-style-position: inside; /* 确保列表符号在容器内 */
-    padding-left: 0; /* 移除默认的左内边距 */
+    list-style-position: inside;
+    /* 确保列表符号在容器内 */
+    padding-left: 0;
+    /* 移除默认的左内边距 */
     margin: 0.3rem 0 0 0;
     text-align: left;
 }
@@ -1587,14 +1737,16 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
     font-size: 0.9rem;
     display: flex;
     align-items: center;
-    padding-left: 0; /* 移除左内边距 */
+    padding-left: 0;
+    /* 移除左内边距 */
 }
 
 /* 调整quota-summary-compact的样式使其与usage-instructions保持一致 */
 .quota-summary-compact {
     background-color: #f8f8f8;
     border-radius: 8px;
-    padding: 0.7rem; /* 从1rem减小到0.7rem */
+    padding: 0.7rem;
+    /* 从1rem减小到0.7rem */
 }
 
 /* 使用说明调整 */
@@ -1602,19 +1754,23 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
     margin-top: 0.4rem;
     background-color: #f5f8ff;
     border-radius: 8px;
-    padding: 0.7rem; /* 与quota-summary-compact内边距保持一致 */
+    padding: 0.7rem;
+    /* 与quota-summary-compact内边距保持一致 */
 }
 
 .usage-title {
     margin: 0;
     font-size: 1rem;
-    padding-left: 0; /* 移除左内边距 */
+    padding-left: 0;
+    /* 移除左内边距 */
     text-align: left;
 }
 
 .usage-steps {
-    list-style-position: inside; /* 确保列表符号在容器内 */
-    padding-left: 0; /* 移除默认的左内边距 */
+    list-style-position: inside;
+    /* 确保列表符号在容器内 */
+    padding-left: 0;
+    /* 移除默认的左内边距 */
     margin: 0.3rem 0 0 0;
     text-align: left;
 }
@@ -1624,14 +1780,16 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
     font-size: 0.9rem;
     display: flex;
     align-items: center;
-    padding-left: 0; /* 移除左内边距 */
+    padding-left: 0;
+    /* 移除左内边距 */
 }
 
 /* 调整quota-summary-compact的样式使其与usage-instructions保持一致 */
 .quota-summary-compact {
     background-color: #f8f8f8;
     border-radius: 8px;
-    padding: 0.7rem; /* 从1rem减小到0.7rem */
+    padding: 0.7rem;
+    /* 从1rem减小到0.7rem */
 }
 
 /* Dark mode adjustments for success modal */
@@ -1640,15 +1798,15 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
         background-color: #333 !important;
         color: #e0e0e0;
     }
-    
+
     .quota-label {
         color: #aaa;
     }
-    
+
     .next-steps-compact {
         background-color: #2a2d3a;
     }
-    
+
     .usage-instructions {
         background-color: #2a2d3a !important;
         color: #e0e0e0;

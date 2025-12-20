@@ -1,21 +1,21 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Theme switching functionality
     initThemeSystem();
-    
+
     // Purchase form functionality
     initPurchaseForm();
-    
+
     // Load API key from Chrome storage if available
     loadApiKeyFromStorage();
-    
+
     // Set up API key visibility toggle
     const toggleApiKeyBtn = document.getElementById('toggleQuotaApiKeyVisibility');
     const apiKeyInput = document.getElementById('check-api-key');
-    
+
     if (toggleApiKeyBtn && apiKeyInput) {
         const eyeIcon = toggleApiKeyBtn.querySelector('.eye-icon');
         const eyeOffIcon = toggleApiKeyBtn.querySelector('.eye-off-icon');
-        
+
         toggleApiKeyBtn.addEventListener('click', () => {
             if (apiKeyInput.type === 'password') {
                 apiKeyInput.type = 'text';
@@ -28,18 +28,18 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-    
+
     // Set up API key copy button
     const copyApiKeyBtn = document.getElementById('copyQuotaApiKey');
-    
+
     if (copyApiKeyBtn && apiKeyInput) {
         copyApiKeyBtn.addEventListener('click', () => {
             const apiKey = apiKeyInput.value.trim();
-            
+
             if (!apiKey) {
                 return;
             }
-            
+
             // Copy to clipboard
             navigator.clipboard.writeText(apiKey).then(() => {
                 // Show success tooltip
@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 tooltip.className = 'copy-tooltip';
                 tooltip.textContent = '已复制!';
                 copyApiKeyBtn.appendChild(tooltip);
-                
+
                 // Remove tooltip after animation completes
                 setTimeout(() => {
                     if (tooltip.parentNode === copyApiKeyBtn) {
@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function initThemeSystem() {
     const themeToggle = document.querySelector('.theme-toggle');
     const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
-    
+
     const currentTheme = localStorage.getItem('theme');
     if (currentTheme) {
         document.documentElement.setAttribute('data-theme', currentTheme);
@@ -72,12 +72,12 @@ function initThemeSystem() {
         document.documentElement.setAttribute('data-theme', theme);
         localStorage.setItem('theme', theme);
     }
-    
+
     if (themeToggle) {
         themeToggle.addEventListener('click', () => {
             const currentTheme = document.documentElement.getAttribute('data-theme');
             const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-            
+
             document.documentElement.setAttribute('data-theme', newTheme);
             localStorage.setItem('theme', newTheme);
         });
@@ -91,7 +91,7 @@ const baseUrl = 'https://api.ds.rick216.cn';
 function initPurchaseForm() {
     const customAmountContainer = document.getElementById('custom-amount-container');
     const customAmountInput = document.getElementById('custom-amount');
-    
+
     // Setup amount option selection
     document.querySelectorAll('.amount-option').forEach(option => {
         option.addEventListener('click', () => {
@@ -101,7 +101,7 @@ function initPurchaseForm() {
             });
             // Add selected class to clicked option
             option.classList.add('selected');
-            
+
             // Check if custom option was selected
             const value = option.getAttribute('data-value');
             if (value === 'custom') {
@@ -113,12 +113,12 @@ function initPurchaseForm() {
             }
         });
     });
-    
+
     // Custom amount input handler
     if (customAmountInput) {
         customAmountInput.addEventListener('input', updateCustomAmountDetails);
     }
-    
+
     // Purchase button handler
     const purchaseBtn = document.querySelector('.purchase-btn');
     if (purchaseBtn) {
@@ -127,41 +127,43 @@ function initPurchaseForm() {
             const email = emailInput.value.trim();
             const selectedOption = document.querySelector('.amount-option.selected');
             let amount;
-            
+            // Randomly select payment method: 'web' or 'api'
+            const method = Math.random() < 0.5 ? 'web' : 'api';
+
             if (selectedOption.getAttribute('data-value') === 'custom') {
                 amount = customAmountInput.value;
-                
+
                 // Validate custom amount
                 if (!amount || isNaN(amount) || parseInt(amount) < 1 || parseInt(amount) > 1000 || amount.includes('.')) {
                     alert('请输入有效的整数金额（1 - 1000 元）');
                     customAmountInput.focus();
                     return;
                 }
-                
+
                 // Convert to integer
                 amount = parseInt(amount);
             } else {
                 amount = selectedOption.getAttribute('data-value');
             }
-            
+
             // Validate email format
             if (!email) {
                 alert('请填写您的邮箱地址');
                 emailInput.focus();
                 return;
             }
-            
+
             if (!isValidEmail(email)) {
                 alert('请输入有效的邮箱地址');
                 emailInput.focus();
                 return;
             }
-            
+
             // Call payment processing function
-            processPayment(email, amount);
+            processPayment(email, amount, method);
         });
     }
-    
+
     // Set up quota checker functionality
     const checkQuotaBtn = document.querySelector('.check-quota-btn');
     if (checkQuotaBtn) {
@@ -184,7 +186,7 @@ function updateCustomAmountDetails() {
     const customBonusText = document.getElementById('custom-bonus-text');
     const customTotalConversions = document.getElementById('custom-total-conversions');
     const customDiscountText = document.getElementById('custom-discount-text');
-    
+
     // Default values
     customAmountValue.textContent = '--';
     customConversions.textContent = '--';
@@ -192,7 +194,7 @@ function updateCustomAmountDetails() {
     customBonusText.style.display = 'none';
     customTotalConversions.textContent = '--';
     customDiscountText.style.display = 'none';
-    
+
     // If we have a valid amount
     if (customAmount && !isNaN(customAmount) && parseInt(customAmount) >= 1) {
         const amount = parseInt(customAmount);
@@ -210,14 +212,14 @@ function updateCustomAmountDetails() {
         } else if (amount >= 10) {
             bonus = Math.ceil(conversions * 0.6);
         }
-        
+
         const totalConversions = conversions + bonus;
         let discountDisplay = '-';
 
         customAmountValue.textContent = amount;
         customConversions.textContent = conversions;
         customTotalConversions.textContent = totalConversions;
-        
+
         if (bonus > 0 && totalConversions > 0) {
             const discount = (50 * amount) / totalConversions;
             // Display discount like "X.X折", or "X折" if it's a whole number
@@ -238,7 +240,7 @@ function updateCustomAmountDetails() {
 }
 
 // Process payment by creating an order through the API and showing the payment modal
-async function processPayment(email, amount) {
+async function processPayment(email, amount, method = 'api') {
     // Calculate conversions and bonus (still needed for display)
     const conversions = amount * 5;
     let bonus = 0;
@@ -253,15 +255,16 @@ async function processPayment(email, amount) {
     } else if (amount >= 10) {
         bonus = Math.ceil(conversions * 0.6);
     }
-    
+
     // Show loading state on the purchase button
     const purchaseBtn = document.querySelector('.purchase-btn');
     const originalBtnText = purchaseBtn.textContent;
     purchaseBtn.textContent = '处理中...';
     purchaseBtn.disabled = true;
-    
+
     try {
         // Create the payment order via API
+        const resultUrl = new URL('payment-result.html', window.location.href).href;
         const response = await fetch(`${baseUrl}/payments/guest-create`, {
             method: 'POST',
             headers: {
@@ -271,20 +274,36 @@ async function processPayment(email, amount) {
                 email: email,
                 amount: parseFloat(amount),
                 payment_method: 'alipay',
-                return_url: window.location.href
+                method: method,
+                return_url: method === 'web' ? resultUrl : window.location.href
             })
         });
-        
+
         if (!response.ok) {
             const errorData = await response.json();
             throw new Error(errorData.detail || '创建订单失败，请稍后重试');
         }
-        
+
         const orderData = await response.json();
-        
-        // Show the Alipay payment modal with the QR code
+
+        // Handle web method (direct redirect)
+        if (method === 'web' && orderData.payment_url) {
+            // Save info for the result page
+            if (orderData.api_key) localStorage.setItem('pending_api_key', orderData.api_key);
+            if (orderData.order_no) localStorage.setItem('pending_order_no', orderData.order_no);
+
+            // Show a simple message or just redirect
+            purchaseBtn.textContent = '正在前往支付...';
+
+            setTimeout(() => {
+                window.location.href = orderData.payment_url;
+            }, 500);
+            return;
+        }
+
+        // Show the Alipay payment modal with the QR code (for 'api' method)
         showPaymentModal(orderData, email, amount, conversions, bonus);
-        
+
     } catch (error) {
         alert('支付处理出错: ' + error.message);
     } finally {
@@ -299,7 +318,7 @@ function showPaymentModal(orderData, email, amount, conversions, bonus) {
     // Create modal container
     const modal = document.createElement('div');
     modal.className = 'payment-modal';
-    
+
     // Add beforeunload event listener to warn user about refreshing during payment
     const beforeUnloadHandler = (e) => {
         e.preventDefault();
@@ -307,13 +326,13 @@ function showPaymentModal(orderData, email, amount, conversions, bonus) {
         return e.returnValue;
     };
     window.addEventListener('beforeunload', beforeUnloadHandler);
-    
+
     // Store the handler in the modal so we can remove it later
     modal._beforeUnloadHandler = beforeUnloadHandler;
-    
+
     // Detect if user is on mobile
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    
+
     // If on mobile and have payment_url, we can redirect directly
     if (isMobile && orderData.payment_url) {
         // Store the order info in localStorage so we can check status if user returns to page
@@ -327,15 +346,15 @@ function showPaymentModal(orderData, email, amount, conversions, bonus) {
             email: email,
             timestamp: new Date().getTime()
         }));
-        
+
         // Redirect to payment URL after a short delay
         setTimeout(() => {
             window.location.href = orderData.payment_url;
         }, 500);
-        
+
         return;
     }
-    
+
     // Create modal content for QR code payment - optimized more compact layout with single column
     modal.innerHTML = `
         <div class="payment-modal-content">
@@ -378,15 +397,15 @@ function showPaymentModal(orderData, email, amount, conversions, bonus) {
             </div>
         </div>
     `;
-    
+
     // Add modal to the page
     document.body.appendChild(modal);
-    
+
     // Show the modal with animation
     setTimeout(() => {
         modal.style.opacity = '1';
     }, 10);
-    
+
     // Close button functionality
     const closeBtn = modal.querySelector('.close-modal');
     closeBtn.addEventListener('click', () => {
@@ -395,7 +414,7 @@ function showPaymentModal(orderData, email, amount, conversions, bonus) {
             closeModal(modal);
         }
     });
-    
+
     // Close if clicking outside the modal content
     modal.addEventListener('click', (e) => {
         if (e.target === modal) {
@@ -405,7 +424,7 @@ function showPaymentModal(orderData, email, amount, conversions, bonus) {
             }
         }
     });
-    
+
     // Start polling for payment status
     pollPaymentStatus(orderData.order_no, orderData.api_key, modal);
 }
@@ -415,19 +434,19 @@ function pollPaymentStatus(orderNo, apiKey, modal) {
     let pollCount = 0;
     const maxPolls = 60; // Poll for maximum 3 minutes (60 * 3 seconds)
     const pollInterval = 3000; // Poll every 3 seconds
-    
+
     // Create an AbortController to allow stopping the polling
     const abortController = new AbortController();
     // Store the controller in the modal element so we can access it when closing
     modal._abortController = abortController;
-    
+
     const checkStatus = async () => {
         // Check if polling has been aborted
         if (abortController.signal.aborted) {
             console.log('Payment status polling was aborted');
             return;
         }
-        
+
         try {
             const response = await fetch(`${baseUrl}/payments/status/${orderNo}`, {
                 method: 'GET',
@@ -435,57 +454,57 @@ function pollPaymentStatus(orderNo, apiKey, modal) {
                     'X-API-Key': apiKey
                 }
             });
-            
+
             if (!response.ok) {
                 throw new Error('获取支付状态失败');
             }
-            
+
             const data = await response.json();
-            
+
             // If payment was successful
             if (data.status === 'success') {
                 // Update UI to show success
                 const statusElement = modal.querySelector('.payment-status');
                 const spinnerElement = modal.querySelector('.payment-progress-spinner');
-                
+
                 if (statusElement) {
                     statusElement.textContent = '支付成功！';
                     statusElement.classList.add('success');
                 }
-                
+
                 if (spinnerElement) {
                     spinnerElement.style.display = 'none';
                 }
-                
+
                 // Replace modal content with success information
                 setTimeout(() => {
                     showSuccessInformation(modal, apiKey, data);
                 }, 1500);
-                
+
                 return;
             }
-            
+
             // If payment failed
             if (data.status === 'failed') {
                 const statusElement = modal.querySelector('.payment-status');
                 const spinnerElement = modal.querySelector('.payment-progress-spinner');
-                
+
                 if (statusElement) {
                     statusElement.textContent = '支付失败';
                     statusElement.classList.add('error');
                 }
-                
+
                 if (spinnerElement) {
                     spinnerElement.style.display = 'none';
                 }
-                
+
                 return;
             }
-            
+
             // Continue polling if still pending
             if (data.status === 'pending') {
                 pollCount++;
-                
+
                 if (pollCount < maxPolls && !abortController.signal.aborted) {
                     setTimeout(checkStatus, pollInterval);
                 } else {
@@ -496,18 +515,18 @@ function pollPaymentStatus(orderNo, apiKey, modal) {
                     }
                 }
             }
-            
+
         } catch (error) {
             console.error('Error checking payment status:', error);
             pollCount++;
-            
+
             // Continue polling even with errors, within limits
             if (pollCount < maxPolls && !abortController.signal.aborted) {
                 setTimeout(checkStatus, pollInterval);
             }
         }
     };
-    
+
     // Start the polling
     checkStatus();
 }
@@ -515,7 +534,7 @@ function pollPaymentStatus(orderNo, apiKey, modal) {
 // Show success information after payment
 function showSuccessInformation(modal, apiKey, paymentData) {
     const modalContent = modal.querySelector('.payment-modal-content');
-    
+
     if (modalContent) {
         modalContent.innerHTML = `
             <span class="close-modal">&times;</span>
@@ -575,26 +594,26 @@ function showSuccessInformation(modal, apiKey, paymentData) {
                 <button class="success-close-btn">关闭窗口</button>
             </div>
         `;
-        
+
         // Set up event listeners for the new elements
         const closeBtn = modalContent.querySelector('.close-modal');
         const successCloseBtn = modalContent.querySelector('.success-close-btn');
         const apiKeyInput = modalContent.querySelector('#success-api-key');
         const copyApiKeyBtn = modalContent.querySelector('#copySuccessApiKey');
         const downloadApiKeyBtn = modalContent.querySelector('#downloadSuccessApiKey');
-        
+
         // Close button functionality
         if (closeBtn) {
             closeBtn.addEventListener('click', () => {
                 closeModal(modal);
             });
         }
-        
+
         // Success close button functionality
         if (successCloseBtn) {
             successCloseBtn.addEventListener('click', () => {
                 closeModal(modal);
-                
+
                 // After closing, populate the API key in the quota checker field
                 const checkApiKeyInput = document.getElementById('check-api-key');
                 if (checkApiKeyInput) {
@@ -607,7 +626,7 @@ function showSuccessInformation(modal, apiKey, paymentData) {
                 }
             });
         }
-        
+
         // Copy API key button functionality
         if (copyApiKeyBtn && apiKeyInput) {
             copyApiKeyBtn.addEventListener('click', () => {
@@ -619,7 +638,7 @@ function showSuccessInformation(modal, apiKey, paymentData) {
                     tooltip.textContent = '已复制!';
                     tooltip.style.opacity = '1';
                     copyApiKeyBtn.appendChild(tooltip);
-                    
+
                     // Remove tooltip after animation completes
                     setTimeout(() => {
                         if (tooltip.parentNode === copyApiKeyBtn) {
@@ -629,33 +648,33 @@ function showSuccessInformation(modal, apiKey, paymentData) {
                 });
             });
         }
-        
+
         // Download API key button functionality
         if (downloadApiKeyBtn && apiKeyInput) {
             downloadApiKeyBtn.addEventListener('click', () => {
                 // Create a text file with the API key
-                const blob = new Blob([apiKey], {type: 'text/plain'});
+                const blob = new Blob([apiKey], { type: 'text/plain' });
                 const url = URL.createObjectURL(blob);
-                
+
                 // Create temporary link and trigger download
                 const a = document.createElement('a');
                 a.href = url;
                 a.download = 'deepshare_api_key.txt';
                 document.body.appendChild(a);
                 a.click();
-                
+
                 // Clean up
                 setTimeout(() => {
                     document.body.removeChild(a);
                     window.URL.revokeObjectURL(url);
-                    
+
                     // Show success tooltip
                     const tooltip = document.createElement('span');
                     tooltip.className = 'copy-tooltip';
                     tooltip.textContent = '已下载!';
                     tooltip.style.opacity = '1';
                     downloadApiKeyBtn.appendChild(tooltip);
-                    
+
                     // Remove tooltip after animation completes
                     setTimeout(() => {
                         if (tooltip.parentNode === downloadApiKeyBtn) {
@@ -675,13 +694,13 @@ function closeModal(modal) {
         modal._abortController.abort();
         console.log('Payment polling stopped');
     }
-    
+
     // Remove beforeunload event listener
     if (modal._beforeUnloadHandler) {
         window.removeEventListener('beforeunload', modal._beforeUnloadHandler);
         console.log('Beforeunload handler removed');
     }
-    
+
     modal.style.opacity = '0';
     setTimeout(() => {
         document.body.removeChild(modal);
@@ -709,14 +728,14 @@ function fallbackCopyToClipboard(text) {
     textarea.style.position = 'absolute';
     textarea.style.left = '-9999px';
     document.body.appendChild(textarea);
-    
+
     try {
         textarea.select();
         document.execCommand('copy');
     } catch (err) {
         console.error('Fallback clipboard copy failed: ', err);
     }
-    
+
     document.body.removeChild(textarea);
 }
 
@@ -724,18 +743,18 @@ function fallbackCopyToClipboard(text) {
 async function checkQuota() {
     const apiKey = document.getElementById('check-api-key').value.trim();
     const resultsDiv = document.getElementById('quota-results');
-    
+
     if (!apiKey) {
         alert('请输入您的 API Key');
         return;
     }
-    
+
     // Show loading state
     const checkBtn = document.querySelector('.check-quota-btn');
     const originalText = checkBtn.textContent;
     checkBtn.textContent = '查询中...';
     checkBtn.disabled = true;
-    
+
     try {
         const response = await fetch(`${baseUrl}/auth/quota`, {
             method: 'GET',
@@ -743,18 +762,18 @@ async function checkQuota() {
                 'X-API-Key': apiKey
             }
         });
-        
+
         if (!response.ok) {
             throw new Error(`API Key 无效或服务器错误: ${response.status}`);
         }
-        
+
         const data = await response.json();
-        
+
         // Display results
         document.getElementById('total-quota').textContent = data.total_quota;
         document.getElementById('used-quota').textContent = data.used_quota;
         document.getElementById('remaining-quota').textContent = data.remaining_quota;
-        
+
         // Format and display expiration date
         if (data.expires_at) {
             const expirationDate = new Date(data.expires_at);
@@ -763,22 +782,22 @@ async function checkQuota() {
         } else {
             document.getElementById('expiration-date').textContent = '未知';
         }
-        
+
         // Calculate percentage of remaining quota (not used quota) and update progress bar
         const percentRemaining = (data.remaining_quota / data.total_quota) * 100;
         const progressBar = document.getElementById('quota-progress');
         progressBar.style.width = `${percentRemaining}%`;
-        
+
         // Change color if running low (less than 20% remaining)
         if (data.remaining_quota < data.total_quota * 0.2) {
             progressBar.style.backgroundColor = '#FF6B6B';
         } else {
             progressBar.style.backgroundColor = '#4D6BFE';
         }
-        
+
         // Show results
         resultsDiv.style.display = 'block';
-        
+
     } catch (error) {
         alert(`查询失败: ${error.message}`);
         resultsDiv.style.display = 'none';
@@ -813,7 +832,7 @@ function loadApiKeyFromStorage() {
         // Alternative method using localStorage for web page context
         const urlParams = new URLSearchParams(window.location.search);
         const apiKey = urlParams.get('apiKey');
-        
+
         if (apiKey) {
             const apiKeyInput = document.getElementById('check-api-key');
             if (apiKeyInput) {

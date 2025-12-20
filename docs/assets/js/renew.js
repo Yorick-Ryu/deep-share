@@ -1,19 +1,19 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Theme switching functionality
     initThemeSystem();
-    
+
     // Purchase form functionality
     initRenewForm();
-    
+
     // Load API key from Chrome storage if available
     loadApiKeyFromStorage();
-    
+
     // Set up API key visibility toggle for quota checker
     setupApiKeyToggle('toggleQuotaApiKeyVisibility', 'check-api-key');
-    
+
     // Set up API key visibility toggle for renewal form
     setupApiKeyToggle('toggleRenewApiKeyVisibility', 'renew-api-key');
-    
+
     // Set up API key copy buttons
     setupApiKeyCopy('copyQuotaApiKey', 'check-api-key');
     setupApiKeyCopy('copyRenewApiKey', 'renew-api-key');
@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function initThemeSystem() {
     const themeToggle = document.querySelector('.theme-toggle');
     const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
-    
+
     const currentTheme = localStorage.getItem('theme');
     if (currentTheme) {
         document.documentElement.setAttribute('data-theme', currentTheme);
@@ -32,12 +32,12 @@ function initThemeSystem() {
         document.documentElement.setAttribute('data-theme', theme);
         localStorage.setItem('theme', theme);
     }
-    
+
     if (themeToggle) {
         themeToggle.addEventListener('click', () => {
             const currentTheme = document.documentElement.getAttribute('data-theme');
             const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-            
+
             document.documentElement.setAttribute('data-theme', newTheme);
             localStorage.setItem('theme', newTheme);
         });
@@ -48,11 +48,11 @@ function initThemeSystem() {
 function setupApiKeyToggle(toggleBtnId, inputId) {
     const toggleBtn = document.getElementById(toggleBtnId);
     const apiKeyInput = document.getElementById(inputId);
-    
+
     if (toggleBtn && apiKeyInput) {
         const eyeIcon = toggleBtn.querySelector('.eye-icon');
         const eyeOffIcon = toggleBtn.querySelector('.eye-off-icon');
-        
+
         toggleBtn.addEventListener('click', () => {
             if (apiKeyInput.type === 'password') {
                 apiKeyInput.type = 'text';
@@ -71,15 +71,15 @@ function setupApiKeyToggle(toggleBtnId, inputId) {
 function setupApiKeyCopy(copyBtnId, inputId) {
     const copyBtn = document.getElementById(copyBtnId);
     const apiKeyInput = document.getElementById(inputId);
-    
+
     if (copyBtn && apiKeyInput) {
         copyBtn.addEventListener('click', () => {
             const apiKey = apiKeyInput.value.trim();
-            
+
             if (!apiKey) {
                 return;
             }
-            
+
             // Copy to clipboard
             navigator.clipboard.writeText(apiKey).then(() => {
                 // Show success tooltip
@@ -87,7 +87,7 @@ function setupApiKeyCopy(copyBtnId, inputId) {
                 tooltip.className = 'copy-tooltip';
                 tooltip.textContent = '已复制!';
                 copyBtn.appendChild(tooltip);
-                
+
                 // Remove tooltip after animation completes
                 setTimeout(() => {
                     if (tooltip.parentNode === copyBtn) {
@@ -106,7 +106,7 @@ const baseUrl = 'https://api.ds.rick216.cn';
 function initRenewForm() {
     const customAmountContainer = document.getElementById('custom-amount-container');
     const customAmountInput = document.getElementById('custom-amount');
-    
+
     // Setup amount option selection
     document.querySelectorAll('.amount-option').forEach(option => {
         option.addEventListener('click', () => {
@@ -116,7 +116,7 @@ function initRenewForm() {
             });
             // Add selected class to clicked option
             option.classList.add('selected');
-            
+
             // Check if custom option was selected
             const value = option.getAttribute('data-value');
             if (value === 'custom') {
@@ -128,12 +128,12 @@ function initRenewForm() {
             }
         });
     });
-    
+
     // Custom amount input handler
     if (customAmountInput) {
         customAmountInput.addEventListener('input', updateCustomAmountDetails);
     }
-    
+
     // Purchase button handler
     const purchaseBtn = document.querySelector('.purchase-btn');
     if (purchaseBtn) {
@@ -142,35 +142,37 @@ function initRenewForm() {
             const apiKey = apiKeyInput.value.trim();
             const selectedOption = document.querySelector('.amount-option.selected');
             let amount;
-            
+            // Randomly select payment method: 'web' or 'api'
+            const method = Math.random() < 0.5 ? 'web' : 'api';
+
             if (selectedOption.getAttribute('data-value') === 'custom') {
                 amount = customAmountInput.value;
-                
+
                 // Validate custom amount
                 if (!amount || isNaN(amount) || parseInt(amount) < 1 || parseInt(amount) > 1000 || amount.includes('.')) {
                     alert('请输入有效的整数金额（1 - 1000 元）');
                     customAmountInput.focus();
                     return;
                 }
-                
+
                 // Convert to integer
                 amount = parseInt(amount);
             } else {
                 amount = selectedOption.getAttribute('data-value');
             }
-            
+
             // Validate API key format
             if (!apiKey) {
                 alert('请填写您的 API Key');
                 apiKeyInput.focus();
                 return;
             }
-            
+
             // Call payment processing function
-            processRenewal(apiKey, amount);
+            processRenewal(apiKey, amount, method);
         });
     }
-    
+
     // Set up quota checker functionality
     const checkQuotaBtn = document.querySelector('.check-quota-btn');
     if (checkQuotaBtn) {
@@ -240,7 +242,7 @@ function updateCustomAmountDetails() {
 }
 
 // Process renewal payment by creating an order through the API and showing the payment modal
-async function processRenewal(apiKey, amount) {
+async function processRenewal(apiKey, amount, method = 'api') {
     // Check if the API key is the trial key
     if (apiKey === 'f4e8fe6f-e39e-486f-b7e7-e037d2ec216f') {
         alert("您输入的是免费试用API-Key，是公开共享的，续费后可能会被别人使用，无法充值，请点击确定获取私有API-Key。");
@@ -263,15 +265,16 @@ async function processRenewal(apiKey, amount) {
     } else if (amount >= 10) {
         bonus = Math.ceil(conversions * 0.6);
     }
-    
+
     // Show loading state on the purchase button
     const purchaseBtn = document.querySelector('.purchase-btn');
     const originalBtnText = purchaseBtn.textContent;
     purchaseBtn.textContent = '处理中...';
     purchaseBtn.disabled = true;
-    
+
     try {
         // Create the payment order via API using the provided API key for authentication
+        const resultUrl = new URL('payment-result.html', window.location.href).href;
         const response = await fetch(`${baseUrl}/payments/create`, {
             method: 'POST',
             headers: {
@@ -281,20 +284,36 @@ async function processRenewal(apiKey, amount) {
             body: JSON.stringify({
                 amount: parseFloat(amount),
                 payment_method: 'alipay',
-                return_url: window.location.href
+                method: method,
+                return_url: method === 'web' ? resultUrl : window.location.href
             })
         });
-        
+
         if (!response.ok) {
             const errorData = await response.json();
             throw new Error(errorData.detail || 'API Key 无效或创建订单失败，请检查您的 API Key 是否正确');
         }
-        
+
         const orderData = await response.json();
-        
+
+        // Handle web method (direct redirect)
+        if (method === 'web' && orderData.payment_url) {
+            // Save info for the result page
+            localStorage.setItem('pending_api_key', apiKey);
+            if (orderData.order_no) localStorage.setItem('pending_order_no', orderData.order_no);
+
+            // Show a simple message or just redirect
+            purchaseBtn.textContent = '正在前往支付...';
+
+            setTimeout(() => {
+                window.location.href = orderData.payment_url;
+            }, 500);
+            return;
+        }
+
         // Show the Alipay payment modal with the QR code
         showPaymentModal(orderData, apiKey, amount, conversions, bonus);
-        
+
     } catch (error) {
         alert('续费处理出错: ' + error.message);
     } finally {
@@ -309,7 +328,7 @@ function showPaymentModal(orderData, apiKey, amount, conversions, bonus) {
     // Create modal container
     const modal = document.createElement('div');
     modal.className = 'payment-modal';
-    
+
     // Add beforeunload event listener to warn user about refreshing during payment
     const beforeUnloadHandler = (e) => {
         e.preventDefault();
@@ -317,13 +336,13 @@ function showPaymentModal(orderData, apiKey, amount, conversions, bonus) {
         return e.returnValue;
     };
     window.addEventListener('beforeunload', beforeUnloadHandler);
-    
+
     // Store the handler in the modal so we can remove it later
     modal._beforeUnloadHandler = beforeUnloadHandler;
-    
+
     // Detect if user is on mobile
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    
+
     // If on mobile and have payment_url, we can redirect directly
     if (isMobile && orderData.payment_url) {
         // Store the order info in localStorage so we can check status if user returns to page
@@ -336,15 +355,15 @@ function showPaymentModal(orderData, apiKey, amount, conversions, bonus) {
             total: conversions + bonus,
             timestamp: new Date().getTime()
         }));
-        
+
         // Redirect to payment URL after a short delay
         setTimeout(() => {
             window.location.href = orderData.payment_url;
         }, 500);
-        
+
         return;
     }
-    
+
     // Create modal content for QR code payment
     modal.innerHTML = `
         <div class="payment-modal-content">
@@ -387,15 +406,15 @@ function showPaymentModal(orderData, apiKey, amount, conversions, bonus) {
             </div>
         </div>
     `;
-    
+
     // Add modal to the page
     document.body.appendChild(modal);
-    
+
     // Show the modal with animation
     setTimeout(() => {
         modal.style.opacity = '1';
     }, 10);
-    
+
     // Close button functionality
     const closeBtn = modal.querySelector('.close-modal');
     closeBtn.addEventListener('click', () => {
@@ -404,7 +423,7 @@ function showPaymentModal(orderData, apiKey, amount, conversions, bonus) {
             closeModal(modal);
         }
     });
-    
+
     // Close if clicking outside the modal content
     modal.addEventListener('click', (e) => {
         if (e.target === modal) {
@@ -414,7 +433,7 @@ function showPaymentModal(orderData, apiKey, amount, conversions, bonus) {
             }
         }
     });
-    
+
     // Start polling for payment status
     pollPaymentStatus(orderData.order_no, apiKey, modal);
 }
@@ -424,19 +443,19 @@ function pollPaymentStatus(orderNo, apiKey, modal) {
     let pollCount = 0;
     const maxPolls = 60; // Poll for maximum 3 minutes (60 * 3 seconds)
     const pollInterval = 3000; // Poll every 3 seconds
-    
+
     // Create an AbortController to allow stopping the polling
     const abortController = new AbortController();
     // Store the controller in the modal element so we can access it when closing
     modal._abortController = abortController;
-    
+
     const checkStatus = async () => {
         // Check if polling has been aborted
         if (abortController.signal.aborted) {
             console.log('Payment status polling was aborted');
             return;
         }
-        
+
         try {
             const response = await fetch(`${baseUrl}/payments/status/${orderNo}`, {
                 method: 'GET',
@@ -444,57 +463,57 @@ function pollPaymentStatus(orderNo, apiKey, modal) {
                     'X-API-Key': apiKey
                 }
             });
-            
+
             if (!response.ok) {
                 throw new Error('获取支付状态失败');
             }
-            
+
             const data = await response.json();
-            
+
             // If payment was successful
             if (data.status === 'success') {
                 // Update UI to show success
                 const statusElement = modal.querySelector('.payment-status');
                 const spinnerElement = modal.querySelector('.payment-progress-spinner');
-                
+
                 if (statusElement) {
                     statusElement.textContent = '支付成功！';
                     statusElement.classList.add('success');
                 }
-                
+
                 if (spinnerElement) {
                     spinnerElement.style.display = 'none';
                 }
-                
+
                 // Replace modal content with success information
                 setTimeout(() => {
                     showSuccessInformation(modal, apiKey, data);
                 }, 1500);
-                
+
                 return;
             }
-            
+
             // If payment failed
             if (data.status === 'failed') {
                 const statusElement = modal.querySelector('.payment-status');
                 const spinnerElement = modal.querySelector('.payment-progress-spinner');
-                
+
                 if (statusElement) {
                     statusElement.textContent = '支付失败';
                     statusElement.classList.add('error');
                 }
-                
+
                 if (spinnerElement) {
                     spinnerElement.style.display = 'none';
                 }
-                
+
                 return;
             }
-            
+
             // Continue polling if still pending
             if (data.status === 'pending') {
                 pollCount++;
-                
+
                 if (pollCount < maxPolls && !abortController.signal.aborted) {
                     setTimeout(checkStatus, pollInterval);
                 } else {
@@ -505,18 +524,18 @@ function pollPaymentStatus(orderNo, apiKey, modal) {
                     }
                 }
             }
-            
+
         } catch (error) {
             console.error('Error checking payment status:', error);
             pollCount++;
-            
+
             // Continue polling even with errors, within limits
             if (pollCount < maxPolls && !abortController.signal.aborted) {
                 setTimeout(checkStatus, pollInterval);
             }
         }
     };
-    
+
     // Start the polling
     checkStatus();
 }
@@ -524,7 +543,7 @@ function pollPaymentStatus(orderNo, apiKey, modal) {
 // Show success information after renewal payment
 function showSuccessInformation(modal, apiKey, paymentData) {
     const modalContent = modal.querySelector('.payment-modal-content');
-    
+
     if (modalContent) {
         modalContent.innerHTML = `
             <span class="close-modal">&times;</span>
@@ -563,23 +582,23 @@ function showSuccessInformation(modal, apiKey, paymentData) {
                 <button class="success-close-btn">完成</button>
             </div>
         `;
-        
+
         // Set up event listeners for the new elements
         const closeBtn = modalContent.querySelector('.close-modal');
         const successCloseBtn = modalContent.querySelector('.success-close-btn');
-        
+
         // Close button functionality
         if (closeBtn) {
             closeBtn.addEventListener('click', () => {
                 closeModal(modal);
             });
         }
-        
+
         // Success close button functionality
         if (successCloseBtn) {
             successCloseBtn.addEventListener('click', () => {
                 closeModal(modal);
-                
+
                 // After closing, initiate a quota check to refresh the quota display
                 checkQuotaWithApiKey(apiKey);
             });
@@ -594,13 +613,13 @@ function closeModal(modal) {
         modal._abortController.abort();
         console.log('Payment polling stopped');
     }
-    
+
     // Remove beforeunload event listener
     if (modal._beforeUnloadHandler) {
         window.removeEventListener('beforeunload', modal._beforeUnloadHandler);
         console.log('Beforeunload handler removed');
     }
-    
+
     modal.style.opacity = '0';
     setTimeout(() => {
         document.body.removeChild(modal);
@@ -610,12 +629,12 @@ function closeModal(modal) {
 // Function to check API quota
 async function checkQuota() {
     const apiKey = document.getElementById('check-api-key').value.trim();
-    
+
     if (!apiKey) {
         alert('请输入您的 API Key');
         return;
     }
-    
+
     // Call the quota check function with the API key
     checkQuotaWithApiKey(apiKey);
 }
@@ -623,7 +642,7 @@ async function checkQuota() {
 // Function to check API quota with a provided API key
 async function checkQuotaWithApiKey(apiKey) {
     const resultsDiv = document.getElementById('quota-results');
-    
+
     // Show loading state
     const checkBtn = document.querySelector('.check-quota-btn');
     const originalText = checkBtn ? checkBtn.textContent : '';
@@ -631,7 +650,7 @@ async function checkQuotaWithApiKey(apiKey) {
         checkBtn.textContent = '查询中...';
         checkBtn.disabled = true;
     }
-    
+
     try {
         const response = await fetch(`${baseUrl}/auth/quota`, {
             method: 'GET',
@@ -639,18 +658,18 @@ async function checkQuotaWithApiKey(apiKey) {
                 'X-API-Key': apiKey
             }
         });
-        
+
         if (!response.ok) {
             throw new Error(`API Key 无效或服务器错误: ${response.status}`);
         }
-        
+
         const data = await response.json();
-        
+
         // Display results
         document.getElementById('total-quota').textContent = data.total_quota;
         document.getElementById('used-quota').textContent = data.used_quota;
         document.getElementById('remaining-quota').textContent = data.remaining_quota;
-        
+
         // Format and display expiration date
         if (data.expires_at) {
             const expirationDate = new Date(data.expires_at);
@@ -659,28 +678,28 @@ async function checkQuotaWithApiKey(apiKey) {
         } else {
             document.getElementById('expiration-date').textContent = '未知';
         }
-        
+
         // Calculate percentage of remaining quota (not used quota) and update progress bar
         const percentRemaining = (data.remaining_quota / data.total_quota) * 100;
         const progressBar = document.getElementById('quota-progress');
         progressBar.style.width = `${percentRemaining}%`;
-        
+
         // Change color if running low (less than 20% remaining)
         if (data.remaining_quota < data.total_quota * 0.2) {
             progressBar.style.backgroundColor = '#FF6B6B';
         } else {
             progressBar.style.backgroundColor = '#4D6BFE';
         }
-        
+
         // Show results
         resultsDiv.style.display = 'block';
-        
+
         // Also populate the renewal form API key field if it's empty
         const renewApiKeyInput = document.getElementById('renew-api-key');
         if (renewApiKeyInput && !renewApiKeyInput.value.trim()) {
             renewApiKeyInput.value = apiKey;
         }
-        
+
     } catch (error) {
         alert(`查询失败: ${error.message}`);
         resultsDiv.style.display = 'none';
@@ -710,7 +729,7 @@ function loadApiKeyFromStorage() {
                 const apiKeyInput = document.getElementById('check-api-key');
                 if (apiKeyInput) {
                     apiKeyInput.value = data.docxApiKey;
-                    
+
                     // Also populate the renewal form API key field
                     const renewApiKeyInput = document.getElementById('renew-api-key');
                     if (renewApiKeyInput) {
@@ -723,18 +742,18 @@ function loadApiKeyFromStorage() {
         // Alternative method using localStorage for web page context
         const urlParams = new URLSearchParams(window.location.search);
         const apiKey = urlParams.get('apiKey');
-        
+
         if (apiKey) {
             const apiKeyInput = document.getElementById('check-api-key');
             if (apiKeyInput) {
                 apiKeyInput.value = apiKey;
-                
+
                 // Also populate the renewal form API key field
                 const renewApiKeyInput = document.getElementById('renew-api-key');
                 if (renewApiKeyInput) {
                     renewApiKeyInput.value = apiKey;
                 }
-                
+
                 // Auto-check quota if API key is provided via URL
                 checkQuotaWithApiKey(apiKey);
             }
