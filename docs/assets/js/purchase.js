@@ -87,6 +87,15 @@ function initThemeSystem() {
 // Set up global API base URL
 const baseUrl = 'https://api.ds.rick216.cn';
 
+// Handle browser back button (bfcache) to reset button state
+window.addEventListener('pageshow', (event) => {
+    const purchaseBtn = document.getElementById('purchase-btn');
+    if (purchaseBtn) {
+        purchaseBtn.textContent = '立即购买';
+        purchaseBtn.disabled = false;
+    }
+});
+
 // Initialize purchase form elements and event handlers
 function initPurchaseForm() {
     const customAmountContainer = document.getElementById('custom-amount-container');

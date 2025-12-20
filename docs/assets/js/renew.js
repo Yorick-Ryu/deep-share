@@ -102,6 +102,15 @@ function setupApiKeyCopy(copyBtnId, inputId) {
 // Set up global API base URL
 const baseUrl = 'https://api.ds.rick216.cn';
 
+// Handle browser back button (bfcache) to reset button state
+window.addEventListener('pageshow', (event) => {
+    const purchaseBtn = document.querySelector('.purchase-btn');
+    if (purchaseBtn) {
+        purchaseBtn.textContent = '立即续费';
+        purchaseBtn.disabled = false;
+    }
+});
+
 // Initialize renewal form elements and event handlers
 function initRenewForm() {
     const customAmountContainer = document.getElementById('custom-amount-container');
@@ -142,8 +151,7 @@ function initRenewForm() {
             const apiKey = apiKeyInput.value.trim();
             const selectedOption = document.querySelector('.amount-option.selected');
             let amount;
-            // Randomly select payment method: 'web' or 'api'
-            const method = Math.random() < 0.5 ? 'web' : 'api';
+            const method = 'web';
 
             if (selectedOption.getAttribute('data-value') === 'custom') {
                 amount = customAmountInput.value;
