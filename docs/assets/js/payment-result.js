@@ -15,6 +15,11 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('Detected TRADE_SUCCESS from URL');
         if (apiKey) {
             document.getElementById('success-api-key').textContent = apiKey;
+        } else {
+            // Hide copy buttons if no API key
+            document.querySelectorAll('#status-success .purchase-btn').forEach(btn => btn.style.display = 'none');
+            const successActions = document.querySelector('#status-success .action-buttons');
+            if (successActions) successActions.style.gridTemplateColumns = '1fr';
         }
 
         // Parse recharge info from param (e.g., quota:5,gift:0)
@@ -35,7 +40,11 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('error-api-key').textContent = apiKey;
             document.getElementById('error-api-key-container').style.display = 'block';
         } else {
-            showError('支付结果未确认。如果您已经完成付款，请检查插件配额或刷新页面并重试。');
+            showError('支付结果未确认。如果您已经完成付款，请检查邮箱及邮箱垃圾箱或联系客服。');
+            // Hide copy buttons if no API key
+            document.querySelectorAll('#status-error .purchase-btn').forEach(btn => btn.style.display = 'none');
+            const errorActions = document.querySelector('#status-error .action-buttons');
+            if (errorActions) errorActions.style.gridTemplateColumns = '1fr';
         }
     }
 });
