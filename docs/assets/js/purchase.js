@@ -286,28 +286,28 @@ async function processPayment(email, amount, method = 'api') {
 
         const orderData = await response.json();
 
-        // Handle web method (direct redirect)
-        if (method === 'web' && orderData.payment_url) {
-            // Save info for the result page
-            if (orderData.api_key) localStorage.setItem('pending_api_key', orderData.api_key);
-            if (orderData.order_no) localStorage.setItem('pending_order_no', orderData.order_no);
+        // Safety check for web method
+        if (method === 'web') {
+            if (orderData.payment_url) {
+                // Save info for the result page
+                if (orderData.api_key) localStorage.setItem('pending_api_key', orderData.api_key);
+                if (orderData.order_no) localStorage.setItem('pending_order_no', orderData.order_no);
 
-            // Show a simple message or just redirect
-            purchaseBtn.textContent = '正在前往支付...';
-
-            setTimeout(() => {
+                // Update text and skip button reset
+                purchaseBtn.textContent = '正在前往支付，请稍等...';
                 window.location.href = orderData.payment_url;
-            }, 500);
-            return;
+                return;
+            } else {
+                throw new Error('服务器未生成支付链接，请稍后重试');
+            }
         }
 
-        // Show the Alipay payment modal with the QR code (for 'api' method)
-        showPaymentModal(orderData, email, amount, conversions, bonus);
+        if (method === 'api') {
+            showPaymentModal(orderData, email, amount, conversions, bonus);
+        }
 
     } catch (error) {
         alert('支付处理出错: ' + error.message);
-    } finally {
-        // Reset button state
         purchaseBtn.textContent = originalBtnText;
         purchaseBtn.disabled = false;
     }
