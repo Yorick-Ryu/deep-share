@@ -50,7 +50,9 @@ async function convertToDocx(message, sourceButton) {
 
             // Try to open the extension popup
             try {
-                chrome.runtime.sendMessage({ action: 'openPopup' });
+                chrome.runtime.sendMessage({ action: 'openPopup' }).catch(err => {
+                    console.warn('Could not open popup automatically:', err.message);
+                });
             } catch (err) {
                 console.error('Failed to send message to open popup:', err);
             }
@@ -109,7 +111,7 @@ async function convertToDocx(message, sourceButton) {
 
         // Check error type and show appropriate message
         let errorMessage = error.message;
-        
+
         // 401 Unauthorized - Invalid/missing/expired API key
         if (error.message && (
             error.message.includes('401') ||
