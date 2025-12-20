@@ -837,16 +837,5 @@ function loadApiKeyFromStorage() {
                 }
             }
         });
-    } else {
-        // Alternative method using localStorage for web page context
-        const urlParams = new URLSearchParams(window.location.search);
-        const apiKey = urlParams.get('apiKey');
-
-        if (apiKey) {
-            const apiKeyInput = document.getElementById('check-api-key');
-            if (apiKeyInput) {
-                apiKeyInput.value = apiKey;
-            }
-        }
     }
 }

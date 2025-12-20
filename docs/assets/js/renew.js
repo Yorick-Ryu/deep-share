@@ -749,21 +749,16 @@ function loadApiKeyFromStorage() {
     } else {
         // Alternative method using localStorage for web page context
         const urlParams = new URLSearchParams(window.location.search);
-        const apiKey = urlParams.get('apiKey');
+        const ak = urlParams.get('ak');
 
-        if (apiKey) {
-            const apiKeyInput = document.getElementById('check-api-key');
-            if (apiKeyInput) {
-                apiKeyInput.value = apiKey;
-
-                // Also populate the renewal form API key field
-                const renewApiKeyInput = document.getElementById('renew-api-key');
-                if (renewApiKeyInput) {
-                    renewApiKeyInput.value = apiKey;
-                }
-
-                // Auto-check quota if API key is provided via URL
-                checkQuotaWithApiKey(apiKey);
+        // Handle obfuscated API key
+        if (ak) {
+            try {
+                // De-obfuscate: reverse then atob
+                const reversed = ak.split('').reverse().join('');
+                apiKey = atob(reversed);
+            } catch (e) {
+                console.error('Failed to decode obfuscated API Key', e);
             }
         }
     }
