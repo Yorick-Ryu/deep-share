@@ -69,7 +69,8 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
     gap: 0.75rem;
-    margin: 1rem 0;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
 }
 
 .amount-option {
@@ -206,7 +207,6 @@ code {
 
 .custom-amount-details {
     margin-top: 1rem;
-    padding: 1rem;
     background-color: #f9f9f9;
     border-radius: 6px;
 }
@@ -233,78 +233,6 @@ input[type="number"]::-webkit-outer-spin-button {
 @media (max-width: 768px) {
     .amount-options {
         grid-template-columns: repeat(2, 1fr);
-    }
-
-    .payment-methods {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-/* Payment Method Selection Styles */
-.payment-methods {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 0.75rem;
-    margin: 1rem 0;
-}
-
-.payment-method {
-    background: white;
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    padding: 1rem 0.75rem;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.payment-method:hover {
-    border-color: #4D6BFE;
-}
-
-.payment-method.selected {
-    border-color: #4D6BFE;
-    background: rgba(77, 107, 254, 0.05);
-}
-
-.method-icon {
-    color: #666;
-}
-
-.payment-method.selected .method-icon {
-    color: #4D6BFE;
-}
-
-.method-name {
-    font-weight: bold;
-    font-size: 1rem;
-}
-
-.method-desc {
-    font-size: 0.75rem;
-    color: #888;
-}
-
-@media (prefers-color-scheme: dark) {
-    .payment-method {
-        background: #2d2d2d;
-        border-color: #444;
-    }
-
-    .payment-method.selected {
-        background: rgba(77, 107, 254, 0.2);
-    }
-
-    .method-desc {
-        color: #aaa;
-    }
-
-    .method-icon {
-        color: #aaa;
     }
 }
 
