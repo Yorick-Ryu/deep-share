@@ -58,10 +58,6 @@ function showSuccess(quota, gift) {
     // Display this time's quota info
     document.getElementById('current-quota').textContent = quota + ' 次';
     document.getElementById('gift-quota').textContent = gift + ' 次';
-
-    // Clear pending storage
-    localStorage.removeItem('pending_api_key');
-    localStorage.removeItem('pending_order_no');
 }
 
 function showError(message) {
