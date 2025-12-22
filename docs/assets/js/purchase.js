@@ -136,9 +136,8 @@ function initPurchaseForm() {
             const email = emailInput.value.trim();
             const selectedOption = document.querySelector('.amount-option.selected');
             let amount;
-            // Randomly select payment method: 'web' or 'api'
-            const method = Math.random() < 0.5 ? 'web' : 'api';
-
+            const method = 'web';
+            
             if (selectedOption.getAttribute('data-value') === 'custom') {
                 amount = customAmountInput.value;
 
