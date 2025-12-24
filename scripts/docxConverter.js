@@ -35,13 +35,11 @@ async function convertToDocx(message, sourceButton) {
     // Check for API key first
     try {
         const settings = await chrome.storage.sync.get({
-            docxServerUrl: 'https://api.ds.rick216.cn',
-            docxApiKey: '',
-            docxMode: 'api'
+            docxApiKey: ''
         });
 
         // If no API key is set and using API mode, show notification and open popup
-        if (settings.docxMode === 'api' && (!settings.docxApiKey || settings.docxApiKey.trim() === '')) {
+        if (!settings.docxApiKey || settings.docxApiKey.trim() === '') {
             window.showToastNotification(
                 chrome.i18n.getMessage('apiKeyMissing') || '请购买或填写API-Key以使用文档转换功能',
                 'error',
@@ -79,16 +77,11 @@ async function convertToDocx(message, sourceButton) {
 
         // Get settings from storage
         const settings = await chrome.storage.sync.get({
-            docxServerUrl: 'https://api.ds.rick216.cn',
-            docxMode: 'api'
+            docxServerUrl: 'https://api.ds.rick216.cn'
         });
 
-        // Use the appropriate conversion method based on mode
-        if (settings.docxMode === 'local') {
-            await convertToDocxLocally(message.content);
-        } else {
-            await convertToDocxViaApi(message.content, settings.docxServerUrl);
-        }
+        // Always use the API conversion method
+        await convertToDocxViaApi(message.content, settings.docxServerUrl);
 
         // Hide converting notification
         if (convertingNotificationId !== null) {
@@ -154,53 +147,6 @@ async function convertToDocx(message, sourceButton) {
     }
 }
 
-// Function to convert text to DOCX locally using browser APIs
-async function convertToDocxLocally(content) {
-    try {
-        // For now, create simple HTML to convert to a Blob
-        const html = `
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <meta charset="utf-8">
-                <title>Document</title>
-                <style>
-                    body { font-family: Arial, sans-serif; line-height: 1.5; }
-                    pre { white-space: pre-wrap; }
-                </style>
-            </head>
-            <body>
-                <pre>${escapeHtml(content)}</pre>
-            </body>
-            </html>
-        `;
-
-        // Create a Blob from the HTML
-        const blob = new Blob([html], { type: 'text/html' });
-
-        // Generate filename
-        const filename = generateFilename(content) + '.html';
-
-        // Download the file (users can open it in Word)
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = filename;
-        link.click();
-
-        // Clean up
-        URL.revokeObjectURL(url);
-    } catch (error) {
-        throw new Error('Local conversion failed: ' + error.message);
-    }
-}
-
-// Helper function to escape HTML special characters
-function escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-}
 
 // Function to convert text to DOCX via API
 async function convertToDocxViaApi(content, serverUrl) {

@@ -95,7 +95,6 @@ function loadSettings(highlightApiKey = false) {
     'hideDefaultWatermark',
     'docxServerUrl',
     'docxApiKey',
-    'docxMode',
     'enableFormulaCopy',
     'formulaFormat',
     'formulaEngine',
@@ -124,8 +123,7 @@ function loadSettings(highlightApiKey = false) {
     const apiKeyInput = document.getElementById('docxApiKey');
     apiKeyInput.value = data.docxApiKey || '';
 
-    // Always set docx mode to API
-    document.getElementById('modeApi').checked = true;
+
 
     // Formula copy settings
     document.getElementById('enableFormulaCopy').checked = data.enableFormulaCopy !== false; // Default to true
@@ -275,8 +273,6 @@ function setupAutoSave() {
     document.getElementById('hideDefaultWatermark'),
     document.getElementById('docxServerUrl'),
     document.getElementById('docxApiKey'),
-    document.getElementById('modeApi'),
-    document.getElementById('modeLocal'),
     // 添加公式复制相关的设置元素
     document.getElementById('enableFormulaCopy'),
     document.getElementById('formatMathML'),
@@ -421,9 +417,7 @@ function loadI18nText() {
   // Document Conversion tab
   document.getElementById('docxSettingsTitle').textContent = getMessage('docxSettings') || 'Word (DOCX) Conversion';
   document.getElementById('docxFeatureExplanation').textContent = getMessage('docxFeatureExplanation') || 'Used to configure AI conversation to Word document conversion. Other features like conversation screenshots, LaTeX formula copying, and image sharing are free and ready to use.';
-  document.getElementById('docxModeLabel').textContent = getMessage('docxModeLabel') || 'Conversion Mode';
-  document.getElementById('modeLocalLabel').textContent = getMessage('modeLocalLabel') || 'Local';
-  document.getElementById('modeApiLabel').textContent = getMessage('modeApiLabel') || 'API';
+
   document.getElementById('docxServerUrlLabel').textContent = getMessage('docxServerUrlLabel') || 'Server URL';
   document.getElementById('docxApiKeyLabel').textContent = getMessage('docxApiKeyLabel') || 'API Key';
   document.getElementById('removeDividersLabel').textContent = getMessage('removeDividersLabel') || '去除分割线';
@@ -532,9 +526,6 @@ function loadI18nText() {
 
 // Function to save settings
 function saveSettings() {
-  // Always use API mode
-  const docxMode = 'api';
-
   // Get formula format from radio buttons
   let formulaFormat = 'mathml'; // 默认为 MathML
   if (document.getElementById('formatLaTeX').checked) {
@@ -567,7 +558,6 @@ function saveSettings() {
     // DOCX settings
     docxServerUrl: document.getElementById('docxServerUrl').value,
     docxApiKey: document.getElementById('docxApiKey').value,
-    docxMode: docxMode,
 
     // Formula copy settings
     enableFormulaCopy: document.getElementById('enableFormulaCopy').checked,
@@ -756,7 +746,6 @@ function setupManualConversion() {
     const settings = await chrome.storage.sync.get({
       docxServerUrl: 'https://api.ds.rick216.cn',
       docxApiKey: '',
-      docxMode: 'api',
       removeDividers: false,
       removeEmojis: false,
       convertMermaid: false,
