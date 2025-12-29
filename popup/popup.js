@@ -649,6 +649,7 @@ function checkQuota(forceRefresh = false) {
         used: data.used_quota,
         remaining: data.remaining_quota,
         expiresAt: data.expires_at,
+        email: data.email,
         lastChecked: now.toISOString()
       };
 
@@ -673,6 +674,20 @@ function displayQuotaData(data) {
   document.getElementById('totalQuota').textContent = data.total;
   document.getElementById('usedQuota').textContent = data.used;
   document.getElementById('remainingQuota').textContent = data.remaining;
+
+  // Display blurred email if available
+  const emailElement = document.getElementById('userEmail');
+  if (emailElement) {
+    if (data.email) {
+      emailElement.textContent = blurEmail(data.email);
+      emailElement.onmouseenter = () => { emailElement.textContent = data.email; };
+      emailElement.onmouseleave = () => { emailElement.textContent = blurEmail(data.email); };
+    } else {
+      emailElement.textContent = '';
+      emailElement.onmouseenter = null;
+      emailElement.onmouseleave = null;
+    }
+  }
 
   // Format and display expiration date if available
   if (data.expiresAt) {
@@ -721,6 +736,17 @@ function formatDate(date) {
       day: 'numeric'
     });
   }
+}
+
+// Helper function to blur email: a***b@example.com
+function blurEmail(email) {
+  if (!email) return '';
+  const parts = email.split('@');
+  if (parts.length !== 2) return email;
+  const [user, domain] = parts;
+  if (user.length <= 1) return '*@' + domain;
+  if (user.length === 2) return user[0] + '*@' + domain;
+  return user[0] + '***' + user[user.length - 1] + '@' + domain;
 }
 
 // Function to set up manual markdown conversion

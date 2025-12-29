@@ -5,10 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DeepSeek转Word - DeepShare</title>
-    
+
     <meta name="description" content="DeepShare在线文档转换器 - 将DeepSeek、ChatGPT、豆包等AI对话的Markdown文本转换为精美的Word文档，支持公式和表格。" />
-    <meta name="keywords" content="ChatGPT转Word,DeepSeek转Word,DeepSeek导出Word,Gemini转Word,豆包导出Word,豆包转Word,公式复制,LaTeX,Word导出,在线转换,AI对话导出" />
-    
+    <meta name="keywords"
+        content="ChatGPT转Word,DeepSeek转Word,DeepSeek导出Word,Gemini转Word,豆包导出Word,豆包转Word,公式复制,LaTeX,Word导出,在线转换,AI对话导出" />
+
     <link rel="icon" type="image/svg+xml" href="./assets/images/deepshare-icon.svg">
     <link rel="stylesheet" href="./assets/css/style.css">
     <link rel="stylesheet" href="./assets/css/converter.css">
@@ -18,11 +19,12 @@
     <header>
         <nav>
             <div class="logo">
-                    <img src="./assets/images/deepshare-icon.svg" alt="DeepShare Logo">
-                    <a href="./index.html"><span>DeepShare</span></a>
+                <img src="./assets/images/deepshare-icon.svg" alt="DeepShare Logo">
+                <a href="./index.html"><span>DeepShare</span></a>
             </div>
             <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="菜单">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="3" y1="12" x2="21" y2="12"></line>
                     <line x1="3" y1="6" x2="21" y2="6"></line>
                     <line x1="3" y1="18" x2="21" y2="18"></line>
@@ -33,7 +35,8 @@
                 <a href="https://docs.deepshare.app" target="_blank">文档</a>
                 <a href="https://github.com/Yorick-Ryu/deep-share" target="_blank" class="github-link">
                     <svg class="github-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                        <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+                        <path
+                            d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
                     </svg>
                     GitHub
                 </a>
@@ -59,7 +62,8 @@
             <!-- Converter Card -->
             <div class="converter-card">
                 <h2>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
                         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                         <polyline points="14 2 14 8 20 8"></polyline>
                         <line x1="16" y1="13" x2="8" y2="13"></line>
@@ -104,9 +108,12 @@
             <!-- Settings Card -->
             <div class="converter-card">
                 <h2>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
                         <circle cx="12" cy="12" r="3"></circle>
-                        <path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"></path>
+                        <path
+                            d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83">
+                        </path>
                     </svg>
                     转换设置
                 </h2>
@@ -143,7 +150,8 @@
                             </svg>
                         </button>
                     </div>
-                    <span class="form-hint">购买 API Key? <a href="https://ds.rick216.cn/purchase.html" target="_blank">点击此处</a></span>
+                    <span class="form-hint">购买 API Key? <a href="https://ds.rick216.cn/purchase.html"
+                            target="_blank">点击此处</a></span>
                 </div>
 
                 <div class="checkbox-group-row">
@@ -166,7 +174,9 @@
                         <input type="checkbox" id="compatMode" checked>
                         <label for="compatMode">兼容模式</label>
                         <span class="tooltip-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
                                 <circle cx="12" cy="12" r="10"></circle>
                                 <line x1="12" y1="16" x2="12" y2="12"></line>
                                 <line x1="12" y1="8" x2="12.01" y2="8"></line>
@@ -179,7 +189,10 @@
                 <!-- Quota information section -->
                 <div class="quota-section" id="quotaSection" style="display: none;">
                     <div class="quota-info">
-                        <h3>您的转换次数</h3>
+                        <div class="quota-header">
+                            <h3 id="quotaTitle">您的转换次数</h3>
+                            <span id="userEmail" class="user-email"></span>
+                        </div>
                         <div class="quota-details">
                             <div class="quota-item">
                                 <span class="quota-label">总计:</span>

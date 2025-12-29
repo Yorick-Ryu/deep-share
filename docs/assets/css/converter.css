@@ -93,7 +93,7 @@
     .tooltip-text {
         background-color: rgba(50, 50, 50, 0.95);
     }
-    
+
     .tooltip-text::after {
         border-color: transparent transparent rgba(50, 50, 50, 0.95) transparent;
     }
@@ -285,10 +285,13 @@
 }
 
 @keyframes pulse-border {
-    0%, 100% {
+
+    0%,
+    100% {
         border-color: #f44336;
         box-shadow: 0 0 0 1px #f44336;
     }
+
     50% {
         border-color: #ff7875;
         box-shadow: 0 0 0 2px rgba(244, 67, 54, 0.5);
@@ -358,10 +361,21 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
 }
 
 @keyframes fadeInOut {
-    0% { opacity: 0; }
-    20% { opacity: 1; }
-    80% { opacity: 1; }
-    100% { opacity: 0; }
+    0% {
+        opacity: 0;
+    }
+
+    20% {
+        opacity: 1;
+    }
+
+    80% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
 }
 
 .checkbox-group {
@@ -515,7 +529,9 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
 }
 
 @keyframes spin {
-    to { transform: rotate(360deg); }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 .quota-section {
@@ -524,10 +540,24 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
     border-top: 1px solid var(--border-color);
 }
 
+.quota-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
 .quota-info h3 {
-    margin: 0 0 0.75rem;
+    margin: 0;
     font-size: 0.95rem;
     color: var(--text-color);
+}
+
+.user-email {
+    font-size: 12px;
+    color: var(--text-secondary);
+    opacity: 0.7;
+    cursor: pointer;
 }
 
 .quota-details {
@@ -642,4 +672,3 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
         justify-content: center;
     }
 }
-

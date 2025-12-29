@@ -64,7 +64,7 @@ function showNotification(message, type = 'error') {
   // Create notification element
   const notification = document.createElement('div');
   notification.className = `notification ${type}`;
-  
+
   // Create icon based on type
   let iconSVG = '';
   if (type === 'error') {
@@ -360,6 +360,7 @@ async function checkQuota(forceRefresh = false) {
       used: data.used_quota,
       remaining: data.remaining_quota,
       expiresAt: data.expires_at,
+      email: data.email,
       lastChecked: now.toISOString()
     };
 
@@ -384,6 +385,20 @@ function displayQuotaData(data) {
   document.getElementById('usedQuota').textContent = data.used;
   document.getElementById('remainingQuota').textContent = data.remaining;
 
+  // Display blurred email if available
+  const emailElement = document.getElementById('userEmail');
+  if (emailElement) {
+    if (data.email) {
+      emailElement.textContent = blurEmail(data.email);
+      emailElement.onmouseenter = () => { emailElement.textContent = data.email; };
+      emailElement.onmouseleave = () => { emailElement.textContent = blurEmail(data.email); };
+    } else {
+      emailElement.textContent = '';
+      emailElement.onmouseenter = null;
+      emailElement.onmouseleave = null;
+    }
+  }
+
   // Format and display expiration date if available
   if (data.expiresAt) {
     const expirationDate = new Date(data.expiresAt);
@@ -405,6 +420,17 @@ function displayQuotaData(data) {
   }
 }
 
+
+// Helper function to blur email: a***b@example.com
+function blurEmail(email) {
+  if (!email) return '';
+  const parts = email.split('@');
+  if (parts.length !== 2) return email;
+  const [user, domain] = parts;
+  if (user.length <= 1) return '*@' + domain;
+  if (user.length === 2) return user[0] + '*@' + domain;
+  return user[0] + '***' + user[user.length - 1] + '@' + domain;
+}
 
 // Function to set up template selector
 async function setupTemplateSelector() {
@@ -462,12 +488,12 @@ function setupManualConversion() {
     // Validate input
     if (!markdownText) {
       showNotification(t('emptyMarkdownError'), 'warning');
-      
+
       // Focus on markdown input
       setTimeout(() => {
         markdownInput.focus();
       }, 100);
-      
+
       return;
     }
 
@@ -530,7 +556,7 @@ function setupManualConversion() {
     } catch (error) {
       // Show error message
       console.error('Conversion error:', error);
-      
+
       // Check if it's a 401 error (invalid API key)
       if (error.status === 401) {
         convertBtn.innerHTML = `
@@ -541,11 +567,11 @@ function setupManualConversion() {
           </svg>
           <span>${t('apiKeyInvalid')}</span>
         `;
-        
+
         // Highlight and focus on the API key input
         const apiKeyInput = document.getElementById('docxApiKey');
         apiKeyInput.classList.add('highlight-required');
-        
+
         setTimeout(() => {
           apiKeyInput.focus();
           apiKeyInput.select(); // Select all text for easy replacement
@@ -602,11 +628,11 @@ async function convertMarkdownToDocx(markdownText, apiKey, convertMermaid = fals
     const now = new Date();
     const options = {
       timeZone: 'Asia/Shanghai',
-      year: 'numeric', 
-      month: '2-digit', 
+      year: 'numeric',
+      month: '2-digit',
       day: '2-digit',
-      hour: '2-digit', 
-      minute: '2-digit', 
+      hour: '2-digit',
+      minute: '2-digit',
       second: '2-digit',
       hour12: false
     };
@@ -633,7 +659,7 @@ async function convertMarkdownToDocx(markdownText, apiKey, convertMermaid = fals
       processedContent = processedContent.replace(/9\uFE0F?\u20E3/gu, '9. ');
       // Handle special keycap ten emoji
       processedContent = processedContent.replace(/🔟/gu, '10. ');
-      
+
       // Then remove other emoji characters using regex
       processedContent = processedContent.replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F000}-\u{1F02F}\u{1F0A0}-\u{1F0FF}\u{1F100}-\u{1F64F}\u{1F680}-\u{1F6FF}\u{1F900}-\u{1F9FF}\u{1FA00}-\u{1FA6F}\u{1FA70}-\u{1FAFF}\u{FE00}-\u{FE0F}\u{1F200}-\u{1F251}]/gu, '');
     }
