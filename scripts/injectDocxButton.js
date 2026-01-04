@@ -19,15 +19,15 @@ function injectDocxButton() {
                     buttonContainers.forEach(container => {
                         // Find button groups more flexibly - look for containers with gap and align-items
                         const buttonGroup = container.querySelector('.ds-flex[style*="align-items"][style*="gap"], div[class*="ds-flex"][style*="align-items"]') || container;
-                        
+
                         // Look for copy buttons using multiple strategies
                         let copyButtons = buttonGroup.querySelectorAll('[role="button"][tabindex]');
-                        
+
                         // Fallback: look for clickable divs that might be buttons
                         if (copyButtons.length === 0) {
                             copyButtons = buttonGroup.querySelectorAll('div[tabindex][role], div[style*="cursor"][role]');
                         }
-                        
+
                         // Further fallback: look for elements with button-like characteristics
                         if (copyButtons.length === 0) {
                             copyButtons = buttonGroup.querySelectorAll('div[class*="button"], div[class*="btn"], div[style*="cursor: pointer"]');
@@ -36,41 +36,41 @@ function injectDocxButton() {
                         copyButtons.forEach(copyBtn => {
                             // More flexible check for copy button with prioritized strategies
                             // Strategy 1: .ds-icon-button class with role attribute and SVG path starting with M6.149
-                            const isStrategy1 = copyBtn.classList.contains('ds-icon-button') && 
-                                               copyBtn.hasAttribute('role') && 
-                                               copyBtn.querySelector('svg path[d^="M6.149"]');
-                            
+                            const isStrategy1 = copyBtn.classList.contains('ds-icon-button') &&
+                                copyBtn.hasAttribute('role') &&
+                                copyBtn.querySelector('svg path[d^="M6.149"]');
+
                             // Strategy 2 (most stable): First button with role="button"
                             const isStrategy2 = copyBtn === buttonGroup.querySelector('[role="button"]') ||
-                                               copyBtn === Array.from(buttonGroup.children).find(child => 
-                                                   child.hasAttribute('role') && child.getAttribute('role') === 'button');
-                            
+                                copyBtn === Array.from(buttonGroup.children).find(child =>
+                                    child.hasAttribute('role') && child.getAttribute('role') === 'button');
+
                             const isCopyButton = isStrategy1 || isStrategy2;
 
                             if (!isCopyButton) return;
 
                             // Check if this is an AI response (not a user message)
                             // Strategy: Look for distinctive patterns between user messages and AI responses
-                            
+
                             // 1. User messages have the "d29f3d7d" class in their ds-message container
                             const isUserMessage = copyBtn.closest('.d29f3d7d, [class*="d29f3d7d"]');
-                            
+
                             // 2. AI responses are in containers with "_4f9bf79" class
                             const isAIContainer = copyBtn.closest('._4f9bf79, [class*="_4f9bf79"]');
-                            
+
                             // 3. AI responses typically have markdown content nearby
                             const nearbyMarkdown = copyBtn.closest('div').querySelector('.ds-markdown') ||
-                                                 copyBtn.parentElement?.parentElement?.querySelector('.ds-markdown');
-                            
+                                copyBtn.parentElement?.parentElement?.querySelector('.ds-markdown');
+
                             // 4. Check if button is in an AI response context
                             const isAIResponse = isAIContainer || (nearbyMarkdown && !isUserMessage);
-                            
+
                             // Only inject button for AI responses
                             if (isUserMessage || !isAIResponse) {
                                 console.debug('Skipping injection - detected user message or not AI response context');
                                 return;
                             }
-                            
+
                             console.debug('Detected AI response - proceeding with button injection');
 
                             // Check if we've already added our button next to this copy button
@@ -81,17 +81,17 @@ function injectDocxButton() {
 
                             // Create the DOCX button with flexible styling to match existing buttons
                             const docxButton = document.createElement('div');
-                            
+
                             // Copy classes from the copy button to match styling
                             const copyButtonClasses = copyBtn.className;
                             docxButton.className = copyButtonClasses + ' deepseek-docx-btn';
-                            
+
                             // Copy attributes from copy button for consistency
                             docxButton.tabIndex = copyBtn.tabIndex || -1;
                             docxButton.setAttribute('role', 'button');
                             docxButton.setAttribute('aria-disabled', 'false');
                             docxButton.title = chrome.i18n.getMessage('docxButton');
-                            
+
                             // Copy styling from copy button
                             const copyButtonStyle = copyBtn.getAttribute('style') || '';
                             docxButton.style.cssText = copyButtonStyle;
@@ -107,7 +107,7 @@ function injectDocxButton() {
                             } else {
                                 iconStyle = 'font-size: 16px; width: 16px; height: 16px;';
                             }
-                            
+
                             const iconHTML = `
                                 <div class="ds-icon-button__hover-bg"></div>
                                 <div class="ds-icon" style="${iconStyle}">
@@ -121,7 +121,7 @@ function injectDocxButton() {
                                     </svg>
                                 </div>
                             `;
-                            
+
                             docxButton.innerHTML = iconHTML;
 
                             // Insert after the copy button
@@ -228,20 +228,36 @@ function injectDocxButton() {
     async function extractConversationData(copyButton) {
         // Always use assistant role for docx conversion
         let role = 'assistant';
-        
-        // console.debug('Using copy button for data extraction:', copyButton);
-        
+
         if (copyButton) {
+            let originalClipboardContent = null;
             try {
-                // Click the copy button to copy content to clipboard
+                // 1. Backup original clipboard content
+                try {
+                    originalClipboardContent = await navigator.clipboard.readText();
+                } catch (e) {
+                    console.debug('Could not backup clipboard content (this is normal if permission not granted or clipboard empty):', e);
+                }
+
+                // 2. Click the copy button to copy content to clipboard
                 copyButton.click();
-                
-                // Wait for clipboard to be populated
+
+                // 3. Wait for clipboard to be populated
                 await new Promise(resolve => setTimeout(resolve, 500));
-                
-                // Get content from clipboard
+
+                // 4. Get content from clipboard
                 const clipboardContent = await navigator.clipboard.readText();
-                
+
+                // 5. Restore original clipboard content if we successfully backed it up
+                if (originalClipboardContent !== null) {
+                    try {
+                        await navigator.clipboard.writeText(originalClipboardContent);
+                        console.debug('Clipboard content restored');
+                    } catch (e) {
+                        console.warn('Failed to restore clipboard content:', e);
+                    }
+                }
+
                 if (clipboardContent) {
                     console.debug('Successfully read AI response from clipboard');
                     return {
@@ -255,11 +271,19 @@ function injectDocxButton() {
                 }
             } catch (error) {
                 console.error('Error reading from clipboard:', error);
+
+                // Attempt restoration even on error if we had a backup
+                if (originalClipboardContent !== null) {
+                    try {
+                        await navigator.clipboard.writeText(originalClipboardContent);
+                    } catch (ex) { }
+                }
+
                 window.showToastNotification(`${chrome.i18n.getMessage('getClipboardError')}: ${error.message}`, 'error');
                 return null;
             }
         }
-        
+
         // Fallback error message if copy button isn't found
         window.showToastNotification(chrome.i18n.getMessage('getClipboardError'), 'error');
         return null;
