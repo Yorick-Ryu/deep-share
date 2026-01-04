@@ -46,14 +46,20 @@ async function convertToDocx(message, sourceButton) {
                 5000
             );
 
-            // Try to open the extension popup
-            try {
-                chrome.runtime.sendMessage({ action: 'openPopup' }).catch(err => {
-                    console.warn('Could not open popup automatically:', err.message);
-                });
-            } catch (err) {
-                console.error('Failed to send message to open popup:', err);
-            }
+            // Try to open the extension popup after a short delay to allow toast to be seen
+            setTimeout(() => {
+                try {
+                    chrome.runtime.sendMessage({
+                        action: 'openPopup',
+                        actionParam: 'apiKeyMissing',
+                        error: chrome.i18n.getMessage('apiKeyMissingShort') || '请购买或填写API-KEY'
+                    }).catch(err => {
+                        console.warn('Could not open popup automatically:', err.message);
+                    });
+                } catch (err) {
+                    console.error('Failed to send message to open popup:', err);
+                }
+            }, 1000);
             return;
         }
     } catch (error) {
@@ -112,7 +118,7 @@ async function convertToDocx(message, sourceButton) {
             error.message.includes('API Key is required') ||
             error.message.includes('Invalid or expired API key')
         )) {
-            errorMessage = chrome.i18n.getMessage('apiKeyError') || 'API-KEY填写错误，请联系客服微信：yorick_cn';
+            errorMessage = chrome.i18n.getMessage('apiKeyError') || 'API密钥填写错误，请联系客服微信：yorick_cn';
         }
         // 403 Forbidden - Quota exceeded
         else if (error.message && (
@@ -120,7 +126,7 @@ async function convertToDocx(message, sourceButton) {
             error.message.includes('Forbidden') ||
             error.message.includes('Quota exceeded')
         )) {
-            errorMessage = chrome.i18n.getMessage('quotaExceededError') || '转换次数已用完，请充值后继续使用';
+            errorMessage = chrome.i18n.getMessage('quotaExceededError') || '转换次数不足，请充值';
         }
         // Other API-related errors
         else if (error.message && (
@@ -128,10 +134,25 @@ async function convertToDocx(message, sourceButton) {
             error.message.includes('headers') ||
             error.message.includes('ISO-8859-1')
         )) {
-            errorMessage = chrome.i18n.getMessage('apiKeyError') || 'API-KEY填写错误，请联系客服微信：yorick_cn';
+            errorMessage = chrome.i18n.getMessage('apiKeyError') || 'API密钥错误，请联系客服微信：yorick_cn';
         }
 
         window.showToastNotification(errorMessage, 'error');
+
+        // Open popup with error message after delay
+        setTimeout(() => {
+            try {
+                chrome.runtime.sendMessage({
+                    action: 'openPopup',
+                    actionParam: 'apiError',
+                    error: errorMessage
+                }).catch(err => {
+                    console.warn('Could not open popup automatically:', err.message);
+                });
+            } catch (err) {
+                console.error('Failed to send message to open popup:', err);
+            }
+        }, 1000);
     } finally {
         // Re-enable the DOCX button if provided
         if (sourceButton && sourceButton instanceof Element) {

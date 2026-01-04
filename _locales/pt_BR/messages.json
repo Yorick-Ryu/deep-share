@@ -150,7 +150,10 @@
         "message": "Comprar chave API? <a href=\"https://ds.rick216.cn/purchase-en\" target=\"_blank\">Clique aqui</a>"
     },
     "apiKeyMissing": {
-        "message": "Clique no ícone da extensão para comprar ou inserir uma chave API para usar a conversão de documentos"
+        "message": "Clique no ícone da extensão para comprar e inserir uma chave API para usar a conversão de documentos"
+    },
+    "apiKeyMissingShort": {
+        "message": "Por favor, <a href=\"https://ds.rick216.cn/purchase-en\" target=\"_blank\">compre</a> e insira uma chave API"
     },
     "manualConversionExplanation": {
         "message": "Suporta Grok, Claude, Meta AI, etc. Copie sua conversa para a caixa Markdown, clique em \"Converter para documento\" para baixar um documento Word formatado com suporte a fórmulas!"
@@ -279,7 +282,7 @@
         "message": "Erro de chave API. Verifique seu e-mail ou contate o suporte: yoricker@foxmail.com"
     },
     "quotaExceededError": {
-        "message": "Cota esgotada. Por favor, recarregue sua conta para continuar."
+        "message": "Cota esgotada. Por favor, <a href=\"https://ds.rick216.cn/purchase-en\" target=\"_blank\">recarregue</a>."
     },
     "aboutTabTitle": {
         "message": "Sobre o DeepShare"
@@ -336,5 +339,3 @@
         "message": "Selecione seu idioma de exibição preferido"
     }
 }
-
-

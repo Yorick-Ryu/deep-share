@@ -7,7 +7,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Check for action parameters in the URL
   const urlParams = new URLSearchParams(window.location.search);
   const action = urlParams.get('action');
-  const highlightApiKey = action === 'apiKeyMissing';
+  const errorMsg = urlParams.get('error');
+
+  const highlightApiKey = (action === 'apiKeyMissing' || action === 'apiError');
 
   // Load language preference first, then load i18n text
   await loadLanguagePreference();
@@ -34,7 +36,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   setupTemplateSelector();
 
   // Set all i18n text
-  loadI18nText();
+  loadI18nText(errorMsg);
 });
 
 // Function to load language preference and custom locale messages
@@ -186,6 +188,13 @@ function loadSettings(highlightApiKey = false) {
         // Remove highlight when user starts typing
         apiKeyInput.addEventListener('input', function onInput() {
           apiKeyInput.classList.remove('highlight-required');
+
+          // Hide the error message if it was showing
+          const errorElement = document.getElementById('apiKeyErrorMsg');
+          if (errorElement) {
+            errorElement.style.display = 'none';
+          }
+
           apiKeyInput.removeEventListener('input', onInput);
         });
       }, 100);
@@ -405,7 +414,7 @@ function setupUIElements() {
 }
 
 // Load all i18n text
-function loadI18nText() {
+function loadI18nText(errorMsg = null) {
   // Tab labels
   document.getElementById('docxTabLabel').textContent = getMessage('docxSettings') || 'Document Conversion';
   document.getElementById('manualDocxTabLabel').textContent = getMessage('manualDocxSettings') || '手动转换文档';
@@ -420,6 +429,16 @@ function loadI18nText() {
 
   document.getElementById('docxServerUrlLabel').textContent = getMessage('docxServerUrlLabel') || 'Server URL';
   document.getElementById('docxApiKeyLabel').textContent = getMessage('docxApiKeyLabel') || 'API Key';
+
+  const errorElement = document.getElementById('apiKeyErrorMsg');
+  if (errorElement) {
+    if (errorMsg) {
+      errorElement.innerHTML = errorMsg;
+      errorElement.style.display = 'inline';
+    } else {
+      errorElement.style.display = 'none';
+    }
+  }
   document.getElementById('removeDividersLabel').textContent = getMessage('removeDividersLabel') || '去除分割线';
   document.getElementById('removeEmojisLabel').textContent = getMessage('removeEmojisLabel') || '去除emoji表情';
   document.getElementById('convertMermaidLabel').textContent = getMessage('convertMermaidLabel') || '启用Mermaid图表转换';
@@ -798,6 +817,13 @@ function setupManualConversion() {
         // Remove highlight when user starts typing
         apiKeyInput.addEventListener('input', function onInput() {
           apiKeyInput.classList.remove('highlight-required');
+
+          // Hide the error message if it was showing
+          const errorElement = document.getElementById('apiKeyErrorMsg');
+          if (errorElement) {
+            errorElement.style.display = 'none';
+          }
+
           apiKeyInput.removeEventListener('input', onInput);
         });
       }, 100);

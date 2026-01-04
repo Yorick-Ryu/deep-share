@@ -150,7 +150,10 @@
         "message": "API キーを購入しますか？<a href=\"https://ds.rick216.cn/purchase-en\" target=\"_blank\">こちらをクリック</a>"
     },
     "apiKeyMissing": {
-        "message": "文書変換機能を使用するには、拡張機能アイコンをクリックして API キーを購入または入力してください"
+        "message": "文書変換機能を使用するには、拡張機能アイコンをクリックして API キーを購入・入力してください"
+    },
+    "apiKeyMissingShort": {
+        "message": "<a href=\"https://ds.rick216.cn/purchase-en\" target=\"_blank\">APIキーを購入</a>・入力してください"
     },
     "manualConversionExplanation": {
         "message": "Grok、Claude、Meta AI などをサポート。会話を Markdown 入力ボックスにコピーし、「文書に変換」をクリックすると、数式対応の美しいフォーマットの Word 文書をダウンロードできます！"
@@ -279,7 +282,7 @@
         "message": "API キーエラー。メールを確認するか、カスタマーサービスにお問い合わせください: yoricker@foxmail.com"
     },
     "quotaExceededError": {
-        "message": "使用回数の上限に達しました。続けるにはアカウントをチャージしてください。"
+        "message": "回数不足です。<a href=\"https://ds.rick216.cn/purchase-en\" target=\"_blank\">チャージ</a>してください。"
     },
     "aboutTabTitle": {
         "message": "DeepShare について"
@@ -336,4 +339,3 @@
         "message": "お好みの表示言語を選択してください"
     }
 }
-

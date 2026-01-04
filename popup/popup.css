@@ -203,6 +203,30 @@ label {
   color: var(--text-secondary);
 }
 
+.label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.label-row label {
+  margin-bottom: 0;
+}
+
+.error-msg-inline {
+  color: var(--error-color);
+  font-size: 12px;
+  font-weight: bold;
+  animation: fadeIn 0.3s ease;
+}
+
+.error-msg-inline a {
+  color: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 /* Collapsible label styles */
 .collapsible-label {
   cursor: pointer;

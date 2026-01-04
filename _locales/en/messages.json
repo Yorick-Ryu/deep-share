@@ -150,7 +150,10 @@
         "message": "Purchase API Key? <a href=\"https://ds.rick216.cn/purchase-en\" target=\"_blank\">Click here</a>"
     },
     "apiKeyMissing": {
-        "message": "Please click the extension icon to purchase or enter an API Key to use the document conversion"
+        "message": "Please click the extension icon to purchase and enter an API Key to use the document conversion feature."
+    },
+    "apiKeyMissingShort": {
+        "message": "Please <a href=\"https://ds.rick216.cn/purchase-en\" target=\"_blank\">Purchase</a> and enter API Key"
     },
     "manualConversionExplanation": {
         "message": "Supports Grok, Claude, Meta AI, etc. Copy your conversation to the Markdown input box, click \"Convert to Document\" to download a beautifully formatted Word document with formula support!"
@@ -279,7 +282,7 @@
         "message": "API Key error. Please check your email or contact customer service: yoricker@foxmail.com"
     },
     "quotaExceededError": {
-        "message": "Quota exceeded. Please top up your account to continue."
+        "message": "Quota exceeded. Please <a href=\"https://ds.rick216.cn/purchase-en\" target=\"_blank\">top up</a>."
     },
     "aboutTabTitle": {
         "message": "About DeepShare"

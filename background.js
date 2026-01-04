@@ -8,8 +8,17 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     // Handle open popup request
     if (message.action === 'openPopup') {
         if (chrome.action && typeof chrome.action.openPopup === 'function') {
-            // Open the popup programmatically with query parameter
-            chrome.action.setPopup({ popup: 'popup/popup.html?action=apiKeyMissing' });
+            // Open the popup programmatically with query parameters
+            let popupUrl = 'popup/popup.html';
+            const params = [];
+            if (message.actionParam) params.push(`action=${message.actionParam}`);
+            if (message.error) params.push(`error=${encodeURIComponent(message.error)}`);
+
+            if (params.length > 0) {
+                popupUrl += '?' + params.join('&');
+            }
+
+            chrome.action.setPopup({ popup: popupUrl });
 
             // Open the popup
             chrome.action.openPopup().then(() => {

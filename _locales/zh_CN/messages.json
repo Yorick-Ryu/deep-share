@@ -45,7 +45,7 @@
         "message": "成功转换为Word文档！"
     },
     "docxConverting": {
-        "message": "正在转换为文档，请不要关闭此界面！"
+        "message": "正在转换为文档，请勿关闭此界面！"
     },
     "docxConversionError": {
         "message": "转换Word文档失败。请确保转换服务正在运行。"
@@ -150,7 +150,10 @@
         "message": "购买 API Key? <a href=\"https://ds.rick216.cn/purchase\" target=\"_blank\">点击此处</a>"
     },
     "apiKeyMissing": {
-        "message": "请点击拓展图标购买或填写API-Key以使用文档转换功能"
+        "message": "请点击拓展图标购买并填写API密钥以使用文档转换功能"
+    },
+    "apiKeyMissingShort": {
+        "message": "请<a href=\"https://ds.rick216.cn/purchase\" target=\"_blank\">购买</a>并填写API密钥"
     },
     "manualConversionExplanation": {
         "message": "支持豆包、元宝、Claude等，复制需要转换的对话到Markdown输入框，点击\"转换为文档\"按钮立即下载Word格式，排版精美，支持公式！<a href=\"https://docs.deepshare.app\" target=\"_blank\">点击此处</a>查看详细教程"
@@ -276,10 +279,10 @@
         "message": "复制图片到剪贴板失败"
     },
     "apiKeyError": {
-        "message": "API-KEY填写错误，请查看邮件或联系客服微信：yorick_cn"
+        "message": "API密钥错误，请查看邮件或联系客服微信：yorick_cn"
     },
     "quotaExceededError": {
-        "message": "转换次数已用完，请充值后继续使用"
+        "message": "转换次数不足，请<a href=\"https://ds.rick216.cn/renew\" target=\"_blank\">续费</a>"
     },
     "aboutTabTitle": {
         "message": "关于 DeepShare"

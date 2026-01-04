@@ -45,7 +45,7 @@
         "message": "成功轉換為Word文件！"
     },
     "docxConverting": {
-        "message": "正在轉換為文件，請不要關閉此介面！"
+        "message": "正在轉換為文件，請勿關閉此介面！"
     },
     "docxConversionError": {
         "message": "轉換Word文件失敗。請確保轉換服務正在運行。"
@@ -150,7 +150,10 @@
         "message": "購買 API Key? <a href=\"https://ds.rick216.cn/purchase-en\" target=\"_blank\">點擊此處</a>"
     },
     "apiKeyMissing": {
-        "message": "請點擊拓展圖標購買或填寫API-Key以使用文件轉換功能"
+        "message": "請點擊拓展圖標購買並填寫API金鑰以使用文件轉換功能"
+    },
+    "apiKeyMissingShort": {
+        "message": "請<a href=\"https://ds.rick216.cn/purchase-en\" target=\"_blank\">購買</a>並填寫API金鑰"
     },
     "manualConversionExplanation": {
         "message": "支援ChatGPT、豆包、Claude等，複製需要轉換的對話到Markdown輸入框，點擊「轉換為文件」按鈕立即下載Word格式，排版精美，支援公式！"
@@ -276,10 +279,10 @@
         "message": "複製圖片到剪貼簿失敗"
     },
     "apiKeyError": {
-        "message": "API-KEY填寫錯誤，請查看郵件或聯繫客服微信：yorick_cn"
+        "message": "API金鑰錯誤，請查看郵件或聯繫客服微信：yorick_cn"
     },
     "quotaExceededError": {
-        "message": "轉換次數已用完，請充值後繼續使用"
+        "message": "轉換次數不足，請<a href=\"https://ds.rick216.cn/purchase-en\" target=\"_blank\">充值</a>"
     },
     "referenceSources": {
         "message": "參考來源"

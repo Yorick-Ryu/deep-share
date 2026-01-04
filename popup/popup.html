@@ -107,7 +107,10 @@
         </div>
 
         <div class="form-group">
-          <label for="docxApiKey" id="docxApiKeyLabel">API Key</label>
+          <div class="label-row">
+            <label for="docxApiKey" id="docxApiKeyLabel">API Key</label>
+            <span id="apiKeyErrorMsg" class="error-msg-inline" style="display: none;"></span>
+          </div>
           <div class="api-key-input-wrapper">
             <input type="password" id="docxApiKey" placeholder="your-api-key">
             <button type="button" class="toggle-visibility-btn" id="toggleApiKeyVisibility" title="显示/隐藏">

@@ -192,7 +192,11 @@
         // Content
         const contentDiv = document.createElement('div');
         contentDiv.className = 'ds-toast__content';
-        contentDiv.textContent = message;
+
+        // Strip HTML tags to show only plain text in toasts (avoid raw HTML showing as text)
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = message;
+        contentDiv.textContent = tempDiv.textContent || tempDiv.innerText || message;
 
         // Close Button
         const closeDiv = document.createElement('div');
