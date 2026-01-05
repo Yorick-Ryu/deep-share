@@ -156,21 +156,29 @@ function loadSettings(highlightApiKey = false) {
     // Language preference
     document.getElementById('languageSelect').value = data.preferredLanguage || 'auto';
 
-    // If API key is set, check quota and update renewal link
+    // If API key is set, check quota and update renewal links
     if (data.docxApiKey) {
       checkQuota();
 
-      const purchaseLink = document.querySelector('.purchase-link');
-      if (purchaseLink) {
-        try {
-          // Simple obfuscation: Base64 + Reverse
-          const encodedKey = btoa(data.docxApiKey).split('').reverse().join('');
-          const baseUrl = purchaseLink.href.split('?')[0];
-          purchaseLink.href = `${baseUrl}?ak=${encodeURIComponent(encodedKey)}`;
-        } catch (e) {
-          console.error('Failed to encode API Key', e);
-        }
-      }
+      // Update renewal links with the API key
+      const updateLinks = () => {
+        const links = document.querySelectorAll('a[href*="ds.rick216.cn/renew"]');
+        links.forEach(link => {
+          try {
+            // Simple obfuscation: Base64 + Reverse
+            const encodedKey = btoa(data.docxApiKey).split('').reverse().join('');
+            const url = new URL(link.href);
+            url.searchParams.set('ak', encodedKey);
+            link.href = url.toString();
+          } catch (e) {
+            console.error('Failed to encode API Key for link:', e);
+          }
+        });
+      };
+
+      // Run immediately and also after a short delay to ensure i18n texts are loaded
+      updateLinks();
+      setTimeout(updateLinks, 100);
     }
 
     // If API key is missing and we should highlight it, add highlighting and focus

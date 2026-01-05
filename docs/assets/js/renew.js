@@ -253,7 +253,7 @@ function updateCustomAmountDetails() {
 async function processRenewal(apiKey, amount, method = 'api') {
     // Check if the API key is the trial key
     if (apiKey === 'f4e8fe6f-e39e-486f-b7e7-e037d2ec216f') {
-        alert("您输入的是免费试用API-Key，是公开共享的，续费后可能会被别人使用，无法充值，请点击确定获取私有API-Key。");
+        alert("您输入的是免费试用API密钥，无法充值，请点击确定购买专属API密钥。");
         // Redirect to the purchase page or open it in a new tab
         window.location.href = './purchase.html';
         return;
