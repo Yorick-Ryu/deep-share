@@ -10,18 +10,19 @@ document.addEventListener('DOMContentLoaded', async () => {
   const errorMsg = urlParams.get('error');
 
   const highlightApiKey = (action === 'apiKeyMissing' || action === 'apiError');
+  const forceDocxTab = (highlightApiKey || action === 'quotaExceeded');
 
   // Load language preference first, then load i18n text
   await loadLanguagePreference();
 
   // Load saved settings
-  loadSettings(highlightApiKey);
+  loadSettings(highlightApiKey, forceDocxTab);
 
   // Set up tab switching
   setupTabs();
 
   // Restore the last active tab
-  restoreLastActiveTab(highlightApiKey);
+  restoreLastActiveTab(forceDocxTab);
 
   // Set up auto-save functionality
   setupAutoSave();
@@ -91,7 +92,7 @@ function getMessage(key, substitutions) {
 }
 
 // Function to load saved settings
-function loadSettings(highlightApiKey = false) {
+function loadSettings(highlightApiKey = false, forceDocxTab = false) {
   chrome.storage.sync.get([
     'customWatermark',
     'hideDefaultWatermark',
@@ -181,13 +182,16 @@ function loadSettings(highlightApiKey = false) {
       setTimeout(updateLinks, 100);
     }
 
+    // If we should force the DOCX tab to be active
+    if (forceDocxTab) {
+      const docxTabBtn = document.querySelector('.tab-btn[data-tab="docx-tab"]');
+      if (docxTabBtn) docxTabBtn.click();
+    }
+
     // If API key is missing and we should highlight it, add highlighting and focus
-    if (highlightApiKey || (!data.docxApiKey && highlightApiKey !== false)) {
+    if (highlightApiKey) {
       // Add highlight class to API key input
       apiKeyInput.classList.add('highlight-required');
-
-      // Ensure the API key tab is active
-      document.querySelector('.tab-btn[data-tab="docx-tab"]').click();
 
       // Focus on API key input
       setTimeout(() => {
@@ -263,9 +267,9 @@ function setupTabs() {
 }
 
 // Function to restore the last active tab
-function restoreLastActiveTab(highlightApiKey) {
-  // Skip restoring tab if we should highlight API key (that already activates its tab)
-  if (highlightApiKey) {
+function restoreLastActiveTab(forceDocxTab) {
+  // Skip restoring tab if we forced a specific tab
+  if (forceDocxTab) {
     return;
   }
 

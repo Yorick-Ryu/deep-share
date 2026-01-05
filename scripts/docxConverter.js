@@ -110,6 +110,7 @@ async function convertToDocx(message, sourceButton) {
 
         // Check error type and show appropriate message
         let errorMessage = error.message;
+        let actionParam = 'apiError';
 
         // 401 Unauthorized - Invalid/missing/expired API key
         if (error.message && (
@@ -119,6 +120,7 @@ async function convertToDocx(message, sourceButton) {
             error.message.includes('Invalid or expired API key')
         )) {
             errorMessage = chrome.i18n.getMessage('apiKeyError') || 'API密钥填写错误，请联系客服微信：yorick_cn';
+            actionParam = 'apiError';
         }
         // 403 Forbidden - Quota exceeded
         else if (error.message && (
@@ -127,6 +129,7 @@ async function convertToDocx(message, sourceButton) {
             error.message.includes('Quota exceeded')
         )) {
             errorMessage = chrome.i18n.getMessage('quotaExceededError') || '转换次数不足，请充值';
+            actionParam = 'quotaExceeded';
         }
         // Other API-related errors
         else if (error.message && (
@@ -135,6 +138,7 @@ async function convertToDocx(message, sourceButton) {
             error.message.includes('ISO-8859-1')
         )) {
             errorMessage = chrome.i18n.getMessage('apiKeyError') || 'API密钥错误，请联系客服微信：yorick_cn';
+            actionParam = 'apiError';
         }
 
         window.showToastNotification(errorMessage, 'error');
@@ -144,7 +148,7 @@ async function convertToDocx(message, sourceButton) {
             try {
                 chrome.runtime.sendMessage({
                     action: 'openPopup',
-                    actionParam: 'apiError',
+                    actionParam: actionParam,
                     error: errorMessage
                 }).catch(err => {
                     console.warn('Could not open popup automatically:', err.message);
