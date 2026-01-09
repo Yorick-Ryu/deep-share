@@ -3,7 +3,7 @@
  * Injects a "导出为Word" button into the Gemini Canvas share menu
  */
 
-(function() {
+(function () {
     'use strict';
 
     let lastUrl = location.href;
@@ -13,11 +13,11 @@
     function attachShareButtonListener() {
         // 查找Canvas界面中的分享按钮
         const shareButtons = document.querySelectorAll('share-button[data-test-id="consolidated-share-button"] button[data-test-id="share-button"]');
-        
+
         shareButtons.forEach(shareButton => {
             if (!shareButton.dataset.deepshareListenerAttached) {
                 shareButton.dataset.deepshareListenerAttached = 'true';
-                
+
                 shareButton.addEventListener('click', () => {
                     console.debug('DeepShare: Share button clicked, waiting for menu...');
                     // 等待菜单加载
@@ -32,10 +32,10 @@
     function injectDocxButtonToMenu() {
         // 查找弹出的菜单内容
         const menuContents = document.querySelectorAll('.mat-mdc-menu-panel .mat-mdc-menu-content');
-        
+
         menuContents.forEach(menuContent => {
             // 检查是否已经注入过按钮
-            if (menuContent.querySelector('.deepshare-canvas-docx-button') || 
+            if (menuContent.querySelector('.deepshare-canvas-docx-button') ||
                 menuContent.querySelector('.deepshare-canvas-md-button')) {
                 console.debug('DeepShare: Buttons already exist in menu');
                 return;
@@ -43,7 +43,7 @@
 
             // 首先检查是否存在"导出到 Google 文档"按钮
             const exportToDocsButton = menuContent.querySelector('button[data-test-id="export-to-docs-button"]');
-            
+
             if (!exportToDocsButton) {
                 console.debug('DeepShare: Export to Google Docs button not found, skipping injection');
                 return;
@@ -51,7 +51,7 @@
 
             // 查找复制按钮，我们将在它后面插入
             const copyButton = menuContent.querySelector('copy-button');
-            
+
             if (!copyButton) {
                 console.debug('DeepShare: Copy button not found in menu');
                 return;
@@ -121,7 +121,7 @@
             docxButton.addEventListener('click', async (e) => {
                 e.stopPropagation();
                 e.preventDefault();
-                
+
                 try {
                     console.debug('DeepShare: Canvas DOCX button clicked');
 
@@ -134,7 +134,7 @@
 
                     if (canvasContent && canvasContent.trim()) {
                         console.debug('DeepShare: Successfully got Canvas content');
-                        
+
                         const conversationData = {
                             role: 'assistant',
                             content: canvasContent,
@@ -174,7 +174,7 @@
             mdButton.addEventListener('click', async (e) => {
                 e.stopPropagation();
                 e.preventDefault();
-                
+
                 try {
                     console.debug('DeepShare: Canvas Markdown button clicked');
 
@@ -187,7 +187,7 @@
 
                     if (canvasContent && canvasContent.trim()) {
                         console.debug('DeepShare: Successfully got Canvas content for Markdown');
-                        
+
                         // 直接下载为 Markdown 文件
                         downloadMarkdownFile(canvasContent);
 
@@ -221,24 +221,24 @@
      */
     function downloadMarkdownFile(content) {
         const filename = generateFilename(content) + '.md';
-        
+
         // 创建 Blob 对象
         const blob = new Blob([content], { type: 'text/markdown;charset=utf-8' });
-        
+
         // 创建下载链接
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
         link.download = filename;
-        
+
         // 触发下载
         document.body.appendChild(link);
         link.click();
-        
+
         // 清理
         document.body.removeChild(link);
         URL.revokeObjectURL(url);
-        
+
         console.debug(`DeepShare: Markdown file downloaded as ${filename}`);
     }
 
@@ -290,24 +290,24 @@
     async function getCanvasContent() {
         // 从Canvas编辑器中解析Markdown内容
         const editorElement = document.querySelector('#extended-response-markdown-content');
-        
+
         if (!editorElement) {
             throw new Error('无法找到Canvas编辑器');
         }
-        
+
         console.debug('DeepShare: Extracting content from Canvas DOM');
-        
+
         // 获取导出来源的设置
         const settings = await new Promise(resolve => {
             chrome.storage.sync.get({ exportGeminiSources: false }, resolve);
         });
         const shouldExportSources = settings.exportGeminiSources;
-        
+
         // 先构建来源索引映射
         const sourceIndexMap = shouldExportSources ? buildSourceIndexMap() : new Map();
-        
+
         let content = extractContentWithFormulas(editorElement, sourceIndexMap);
-        
+
         // 根据设置决定是否提取并附加深度研究来源
         if (shouldExportSources) {
             const sources = extractDeepResearchSources(sourceIndexMap);
@@ -315,7 +315,7 @@
                 content += sources;
             }
         }
-        
+
         return content;
     }
 
@@ -338,17 +338,17 @@
 
         // 获取所有来源项，按顺序对应 data-turn-source-index（从1开始）
         const items = usedSourcesDiv.querySelectorAll('browse-web-item');
-        
+
         items.forEach((item, index) => {
             const linkEl = item.querySelector('a[href]');
             if (!linkEl) return;
-            
+
             const url = linkEl.getAttribute('href');
             if (!url) return;
-            
+
             const domainEl = item.querySelector('.display-name');
             const titleEl = item.querySelector('.sub-title');
-            
+
             // data-turn-source-index 从 1 开始，所以用 index + 1 作为 key
             const sourceIndex = index + 1;
             sourceMap.set(sourceIndex, {
@@ -358,7 +358,7 @@
                 title: titleEl ? titleEl.textContent.trim() : ''
             });
         });
-        
+
         return sourceMap;
     }
 
@@ -374,7 +374,7 @@
         }
 
         let result = '';
-        
+
         // 查找"报告中使用的来源"区域
         const usedSourcesDiv = sourceListContainer.querySelector('.source-list.used-sources');
         if (usedSourcesDiv && sourceIndexMap && sourceIndexMap.size > 0) {
@@ -383,7 +383,7 @@
             // 使用 sourceIndexMap 中的来源，按 displayIndex 排序
             const sortedSources = Array.from(sourceIndexMap.values())
                 .sort((a, b) => a.displayIndex - b.displayIndex);
-            
+
             sortedSources.forEach(source => {
                 // 添加锚点 ID，用于文内引用跳转
                 // 使用尖括号包裹 URL 以处理 URL 中可能包含的括号
@@ -416,7 +416,7 @@
         if (result) {
             console.debug('DeepShare: Successfully extracted deep research sources');
         }
-        
+
         return result;
     }
 
@@ -426,20 +426,20 @@
     function extractSourcesFromList(listElement) {
         const sources = [];
         const items = listElement.querySelectorAll('browse-web-item a[href]');
-        
+
         items.forEach(item => {
             const url = item.getAttribute('href');
             if (!url) return;
-            
+
             // 跳过包含片段标识符的重复链接 (如 #:~:text=...)
             if (url.includes('#:~:text=')) return;
-            
+
             const domainEl = item.querySelector('.display-name');
             const titleEl = item.querySelector('.sub-title');
-            
+
             const domain = domainEl ? domainEl.textContent.trim() : '';
             const title = titleEl ? titleEl.textContent.trim() : '';
-            
+
             // 避免重复添加相同URL
             if (!sources.some(s => s.url === url)) {
                 sources.push({
@@ -449,7 +449,7 @@
                 });
             }
         });
-        
+
         return sources;
     }
 
@@ -558,14 +558,14 @@
                 const level = node.tagName[1];
                 const headingMark = '#'.repeat(parseInt(level));
                 result += '\n' + headingMark + ' ';
-                node.childNodes.forEach(processNode);
+                node.childNodes.forEach(n => processNode(n, indent));
                 result += '\n\n';
                 return;
             }
 
             // Handle paragraphs
             if (node.tagName === 'P') {
-                node.childNodes.forEach(processNode);
+                node.childNodes.forEach(n => processNode(n, indent));
                 result += '\n\n';
                 return;
             }
@@ -587,10 +587,10 @@
                 const lines = [];
                 const tempResult = result;
                 result = '';
-                node.childNodes.forEach(processNode);
+                node.childNodes.forEach(n => processNode(n, indent));
                 const quoteContent = result;
                 result = tempResult;
-                
+
                 // Split by lines and add > prefix
                 quoteContent.split('\n').forEach(line => {
                     if (line.trim()) {
@@ -617,7 +617,7 @@
                     let cellText = '';
                     const processCellNode = (n) => {
                         if (!n) return;
-                        
+
                         // Handle math formulas in cells
                         if (n.nodeType === Node.ELEMENT_NODE && n.classList) {
                             if (n.classList.contains('math-inline')) {
@@ -635,7 +635,7 @@
                                 }
                             }
                         }
-                        
+
                         // Handle strong/bold
                         if (n.tagName === 'STRONG') {
                             cellText += '**';
@@ -643,7 +643,7 @@
                             cellText += '**';
                             return;
                         }
-                        
+
                         // Handle emphasis/italic
                         if (n.tagName === 'EM') {
                             cellText += '*';
@@ -651,13 +651,13 @@
                             cellText += '*';
                             return;
                         }
-                        
+
                         // Handle inline code
                         if (n.tagName === 'CODE' && !n.closest('pre')) {
                             cellText += '`' + n.textContent + '`';
                             return;
                         }
-                        
+
                         // Handle links
                         if (n.tagName === 'A') {
                             const href = n.getAttribute('href');
@@ -669,31 +669,31 @@
                             }
                             return;
                         }
-                        
+
                         // Handle paragraphs in cells
                         if (n.tagName === 'P') {
                             n.childNodes.forEach(processCellNode);
                             return;
                         }
-                        
+
                         // Handle text nodes
                         if (n.nodeType === Node.TEXT_NODE) {
                             cellText += n.textContent;
                             return;
                         }
-                        
+
                         // Handle other elements with children
                         if (n.childNodes && n.childNodes.length > 0) {
                             n.childNodes.forEach(processCellNode);
                         }
                     };
-                    
+
                     cell.childNodes.forEach(processCellNode);
                     return cellText.trim();
                 };
 
                 let headerProcessed = false;
-                
+
                 // Process header from thead
                 if (thead) {
                     const headerRow = thead.querySelector('tr');
@@ -727,7 +727,7 @@
                                 return; // Skip this row, it's the header
                             }
                         }
-                        
+
                         // Process data cells
                         const cells = Array.from(row.querySelectorAll('td'));
                         if (cells.length > 0) {
@@ -747,17 +747,17 @@
                 if (listDepth === 0 && result.length > 0 && !result.endsWith('\n\n')) {
                     result += '\n';
                 }
-                
+
                 const isOrdered = node.tagName === 'OL';
                 const listItems = node.querySelectorAll(':scope > li');
-                
+
                 listDepth++;
                 const listIndent = '   '.repeat(listDepth - 1); // 3 spaces per level
-                
+
                 listItems.forEach((li, idx) => {
                     const prefix = isOrdered ? `${idx + 1}. ` : '- ';
                     result += listIndent + prefix;
-                    
+
                     // Process list item content
                     let isFirstNode = true;
                     li.childNodes.forEach(childNode => {
@@ -767,7 +767,7 @@
                             processNode(childNode, listIndent + '  ');
                             return;
                         }
-                        
+
                         // For block elements inside list items, add proper indentation
                         if (childNode.tagName === 'P') {
                             if (!isFirstNode) {
@@ -779,12 +779,12 @@
                         }
                         isFirstNode = false;
                     });
-                    
+
                     result += '\n';
                 });
-                
+
                 listDepth--;
-                
+
                 // Add newline after top-level list
                 if (listDepth === 0) {
                     result += '\n';
@@ -801,7 +801,7 @@
             // Handle strong/bold
             if (node.tagName === 'STRONG') {
                 result += '**';
-                node.childNodes.forEach(processNode);
+                node.childNodes.forEach(n => processNode(n, indent));
                 result += '**';
                 return;
             }
@@ -809,7 +809,7 @@
             // Handle emphasis/italic
             if (node.tagName === 'EM') {
                 result += '*';
-                node.childNodes.forEach(processNode);
+                node.childNodes.forEach(n => processNode(n, indent));
                 result += '*';
                 return;
             }
@@ -860,11 +860,11 @@
 
             // Handle other elements with children
             if (node.childNodes && node.childNodes.length > 0) {
-                node.childNodes.forEach(processNode);
+                node.childNodes.forEach(n => processNode(n, indent));
             }
         };
 
-        container.childNodes.forEach(processNode);
+        processNode(container);
 
         // Clean up excessive newlines
         result = result.replace(/\n{3,}/g, '\n\n').trim();
@@ -876,7 +876,7 @@
     const observer = new MutationObserver(() => {
         // 检查分享按钮
         attachShareButtonListener();
-        
+
         // 检查菜单是否已打开
         const openMenus = document.querySelectorAll('.mat-mdc-menu-panel .mat-mdc-menu-content');
         if (openMenus.length > 0) {
