@@ -201,6 +201,7 @@ label {
   display: block;
   margin-bottom: 8px;
   color: var(--text-secondary);
+  font-size: 12px;
 }
 
 .label-row {
@@ -258,6 +259,7 @@ input[type="password"] {
   box-sizing: border-box;
   background: var(--input-bg);
   color: var(--text-color);
+  font-size: 12px;
   transition: opacity 0.2s ease, max-height 0.2s ease;
 }
 
@@ -300,6 +302,7 @@ select {
   box-sizing: border-box;
   background: var(--input-bg);
   color: var(--text-color);
+  font-size: 12px;
 }
 
 button {
@@ -834,6 +837,7 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
   background: var(--input-bg);
   color: var(--text-color);
   font-family: monospace;
+  font-size: 12px;
   resize: vertical;
   box-sizing: border-box;
   min-height: 200px;
