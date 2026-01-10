@@ -144,7 +144,7 @@
         "message": "剩餘:"
     },
     "quotaTitle": {
-        "message": "您的轉換次數"
+        "message": "轉換額度"
     },
     "apiKeyHint": {
         "message": "購買 API Key? <a href=\"https://ds.rick216.cn/purchase-en\" target=\"_blank\">點擊此處</a>"
@@ -246,7 +246,7 @@
         "message": "刷新"
     },
     "purchaseQuota": {
-        "message": "購買次數"
+        "message": "續費額度"
     },
     "expirationLabel": {
         "message": "有效期至:"
@@ -282,7 +282,7 @@
         "message": "API金鑰錯誤，請查看郵件或聯繫客服微信：yorick_cn"
     },
     "quotaExceededError": {
-        "message": "轉換次數不足，請<a href=\"https://ds.rick216.cn/purchase-en\" target=\"_blank\">充值</a>"
+        "message": "轉換額度不足，請<a href=\"https://ds.rick216.cn/purchase-en\" target=\"_blank\">充值</a>"
     },
     "referenceSources": {
         "message": "參考來源"

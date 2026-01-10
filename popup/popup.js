@@ -530,7 +530,7 @@ function loadI18nText(errorMsg = null) {
     });
 
   // Quota section labels
-  document.getElementById('quotaTitle').textContent = getMessage('quotaTitle') || '您的转换次数';
+  document.getElementById('quotaTitle').textContent = getMessage('quotaTitle') || '转换额度';
   document.getElementById('totalQuotaLabel').textContent = getMessage('totalQuotaLabel') || '总计:';
   document.getElementById('usedQuotaLabel').textContent = getMessage('usedQuotaLabel') || '已用:';
   document.getElementById('remainingQuotaLabel').textContent = getMessage('remainingQuotaLabel') || '剩余:';
@@ -551,7 +551,7 @@ function loadI18nText(errorMsg = null) {
   // Update purchase link text
   const purchaseLink = document.querySelector('.purchase-link');
   if (purchaseLink) {
-    purchaseLink.textContent = getMessage('purchaseQuota') || '购买次数';
+    purchaseLink.textContent = getMessage('purchaseQuota') || '续费额度';
   }
 }
 

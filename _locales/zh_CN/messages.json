@@ -144,7 +144,7 @@
         "message": "剩余:"
     },
     "quotaTitle": {
-        "message": "您的转换次数"
+        "message": "转换额度"
     },
     "apiKeyHint": {
         "message": "购买 API Key? <a href=\"https://ds.rick216.cn/purchase\" target=\"_blank\">点击此处</a>"
@@ -246,7 +246,7 @@
         "message": "刷新"
     },
     "purchaseQuota": {
-        "message": "续费次数"
+        "message": "续费额度"
     },
     "expirationLabel": {
         "message": "有效期至:"
@@ -282,7 +282,7 @@
         "message": "API密钥错误，请查看邮件或联系客服微信：yorick_cn"
     },
     "quotaExceededError": {
-        "message": "转换次数不足，请<a href=\"https://ds.rick216.cn/renew\" target=\"_blank\">续费</a>"
+        "message": "转换额度不足，请<a href=\"https://ds.rick216.cn/renew\" target=\"_blank\">续费</a>"
     },
     "aboutTabTitle": {
         "message": "关于 DeepShare"

@@ -626,26 +626,34 @@ button:hover {
   transition: width 0.3s ease;
 }
 
-.quota-actions {
+.quota-footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-top: 12px;
 }
 
-.secondary-btn {
-  background: transparent;
-  border: 1px solid var(--primary-color);
-  color: var(--primary-color);
-  padding: 6px 12px;
-  font-size: 12px;
-  border-radius: 4px;
-  cursor: pointer;
-  width: auto;
+.quota-footer-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
-.secondary-btn:hover {
-  background: rgba(77, 107, 254, 0.1);
+.text-link-btn {
+  background: none;
+  border: none;
+  color: var(--primary-color);
+  font-size: 12px;
+  cursor: pointer;
+  padding: 0;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.text-link-btn:hover,
+.text-link-btn:active {
+  text-decoration: underline;
+  background: none;
 }
 
 .purchase-link {
@@ -778,9 +786,7 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
 .expiration-info {
   display: flex;
   justify-content: flex-start;
-  /* Changed from center to flex-start */
   align-items: center;
-  margin-top: 12px;
   font-size: 12px;
 }
 
@@ -790,7 +796,7 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
 }
 
 .expiration-value {
-  color: var (--text-secondary);
+  color: var(--text-secondary);
   font-weight: 500;
 }
 

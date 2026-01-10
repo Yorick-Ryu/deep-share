@@ -282,7 +282,7 @@
         "message": "API キーエラー。メールを確認するか、カスタマーサービスにお問い合わせください: yoricker@foxmail.com"
     },
     "quotaExceededError": {
-        "message": "回数不足です。<a href=\"https://ds.rick216.cn/purchase-en\" target=\"_blank\">チャージ</a>してください。"
+        "message": "クォータが不足しています。<a href=\"https://ds.rick216.cn/purchase-en\" target=\"_blank\">チャージ</a>してください。"
     },
     "aboutTabTitle": {
         "message": "DeepShare について"

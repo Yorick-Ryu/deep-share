@@ -144,7 +144,7 @@
         "message": "Remaining:"
     },
     "quotaTitle": {
-        "message": "Your Conversion Quota"
+        "message": "Conversion Quota"
     },
     "apiKeyHint": {
         "message": "Purchase API Key? <a href=\"https://ds.rick216.cn/purchase-en\" target=\"_blank\">Click here</a>"
