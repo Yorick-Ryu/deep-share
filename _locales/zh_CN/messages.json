@@ -239,6 +239,12 @@
     "compatModeTooltip": {
         "message": "兼容不规范的Markdown格式"
     },
+    "hardLineBreaksLabel": {
+        "message": "强制换行"
+    },
+    "hardLineBreaksTooltip": {
+        "message": "将单次换行视为硬换行"
+    },
     "getClipboardError": {
         "message": "获取内容失败"
     },

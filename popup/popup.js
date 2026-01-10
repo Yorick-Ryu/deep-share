@@ -108,6 +108,7 @@ function loadSettings(highlightApiKey = false, forceDocxTab = false) {
     'compatMode',
     'wordTemplateSelect',
     'exportGeminiSources',
+    'hardLineBreaks',
     'preferredLanguage'
   ], (data) => {
     // Watermark settings
@@ -153,6 +154,9 @@ function loadSettings(highlightApiKey = false, forceDocxTab = false) {
 
     // Gemini Deep Research sources export setting
     document.getElementById('exportGeminiSources').checked = data.exportGeminiSources === true; // Default to false
+
+    // Hard Line Breaks setting
+    document.getElementById('hardLineBreaks').checked = !!data.hardLineBreaks; // Default to false
 
     // Language preference
     document.getElementById('languageSelect').value = data.preferredLanguage || 'auto';
@@ -315,6 +319,8 @@ function setupAutoSave() {
     document.getElementById('wordTemplateSelect'),
     // Gemini settings
     document.getElementById('exportGeminiSources'),
+    // Hard Line Breaks settings
+    document.getElementById('hardLineBreaks'),
     // Language settings
     document.getElementById('languageSelect')
   ];
@@ -456,6 +462,8 @@ function loadI18nText(errorMsg = null) {
   document.getElementById('convertMermaidLabel').textContent = getMessage('convertMermaidLabel') || '启用Mermaid图表转换';
   document.getElementById('compatModeLabel').textContent = getMessage('compatModeLabel') || '兼容模式';
   document.getElementById('compatModeTooltip').textContent = getMessage('compatModeTooltip') || '兼容不规范的Markdown格式';
+  document.getElementById('hardLineBreaksLabel').textContent = getMessage('hardLineBreaksLabel') || '强制换行';
+  document.getElementById('hardLineBreaksTooltip').textContent = getMessage('hardLineBreaksTooltip') || '将源码中的单次换行视为硬换行';
 
   // Formula Copy Settings tab
   document.getElementById('formulaSettingsTitle').textContent = getMessage('formulaSettingsTitle') || 'Formula Copy Settings';
@@ -604,6 +612,7 @@ function saveSettings() {
     // Mermaid diagram conversion
     convertMermaid: document.getElementById('convertMermaid').checked,
     compatMode: document.getElementById('compatMode').checked,
+    hardLineBreaks: document.getElementById('hardLineBreaks').checked,
     lastUsedTemplate: document.getElementById('wordTemplateSelect').value,
 
     // Gemini settings
@@ -806,7 +815,8 @@ function setupManualConversion() {
       removeDividers: false,
       removeEmojis: false,
       convertMermaid: false,
-      compatMode: true
+      compatMode: true,
+      hardLineBreaks: false
     });
 
     // Check if API key is provided
@@ -852,7 +862,7 @@ function setupManualConversion() {
       `;
 
       // Call the conversion function with markdown text
-      await convertMarkdownToDocx(markdownText, settings.docxServerUrl, settings.docxApiKey, settings.removeDividers, settings.removeEmojis, settings.convertMermaid, settings.compatMode, document.getElementById('wordTemplateSelect').value);
+      await convertMarkdownToDocx(markdownText, settings.docxServerUrl, settings.docxApiKey, settings.removeDividers, settings.removeEmojis, settings.convertMermaid, settings.compatMode, document.getElementById('wordTemplateSelect').value, settings.hardLineBreaks);
 
       // Update button to show success message briefly
       convertBtn.innerHTML = `
@@ -898,7 +908,7 @@ function setupManualConversion() {
 }
 
 // Function to convert markdown text to DOCX
-async function convertMarkdownToDocx(markdownText, serverUrl, apiKey, removeDividers = false, removeEmojis = false, convertMermaid = false, compatMode = true, template) {
+async function convertMarkdownToDocx(markdownText, serverUrl, apiKey, removeDividers = false, removeEmojis = false, convertMermaid = false, compatMode = true, template, hardLineBreaks = false) {
   try {
     const url = serverUrl || 'https://api.ds.rick216.cn';
 
@@ -951,6 +961,7 @@ async function convertMarkdownToDocx(markdownText, serverUrl, apiKey, removeDivi
       remove_hr: removeDividers,
       convert_mermaid: convertMermaid,
       compat_mode: compatMode,
+      hard_line_breaks: hardLineBreaks,
       language: language
     };
 

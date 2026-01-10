@@ -239,6 +239,12 @@
     "compatModeTooltip": {
         "message": "Supports non-standard Markdown"
     },
+    "hardLineBreaksLabel": {
+        "message": "Hard Line Breaks"
+    },
+    "hardLineBreaksTooltip": {
+        "message": "Treat single line breaks as hard breaks"
+    },
     "getClipboardError": {
         "message": "Failed to get content"
     },

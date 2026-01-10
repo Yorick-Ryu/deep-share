@@ -239,6 +239,12 @@
     "compatModeTooltip": {
         "message": "非標準の Markdown をサポート"
     },
+    "hardLineBreaksLabel": {
+        "message": "強制改行"
+    },
+    "hardLineBreaksTooltip": {
+        "message": "単一の改行を強制改行として扱う"
+    },
     "getClipboardError": {
         "message": "コンテンツの取得に失敗しました"
     },

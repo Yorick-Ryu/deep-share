@@ -400,8 +400,8 @@ button:hover {
   pointer-events: none;
 }
 
-/* Adjust tooltip position when it would overflow to the right */
-.checkbox-group .tooltip-icon:last-child .tooltip-text {
+/* Alignment classes for tooltips */
+.tooltip-left-aligned .tooltip-text {
   left: auto;
   right: 0;
   transform: none;
@@ -418,11 +418,24 @@ button:hover {
   border-color: transparent transparent rgba(0, 0, 0, 0.85) transparent;
 }
 
-/* Keep arrow at the same position for right-aligned tooltips */
-.checkbox-group .tooltip-icon:last-child .tooltip-text::after {
+/* Keep arrow at the same position for left-aligned tooltips (box goes left) */
+.tooltip-left-aligned .tooltip-text::after {
   left: auto;
-  right: 3px;
+  right: 8px;
+  transform: translateX(50%);
+}
+
+/* For right-aligned tooltips (box goes right) */
+.tooltip-right-aligned .tooltip-text {
+  left: 0;
+  right: auto;
   transform: none;
+}
+
+.tooltip-right-aligned .tooltip-text::after {
+  left: 8px;
+  right: auto;
+  transform: translateX(-50%);
 }
 
 .tooltip-icon:hover .tooltip-text {

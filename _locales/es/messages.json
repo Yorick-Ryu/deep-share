@@ -239,6 +239,12 @@
     "compatModeTooltip": {
         "message": "Compatible con Markdown no estándar"
     },
+    "hardLineBreaksLabel": {
+        "message": "Saltos de línea forzados"
+    },
+    "hardLineBreaksTooltip": {
+        "message": "Trata los saltos de línea simples como saltos forzados"
+    },
     "getClipboardError": {
         "message": "Error al obtener contenido"
     },
