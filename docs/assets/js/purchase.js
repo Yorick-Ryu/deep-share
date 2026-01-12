@@ -8,6 +8,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Load API key from Chrome storage if available
     loadApiKeyFromStorage();
 
+    // Initialize FAQ accordion
+    initFAQAccordion();
+
     // Set up API key visibility toggle
     const toggleApiKeyBtn = document.getElementById('toggleQuotaApiKeyVisibility');
     const apiKeyInput = document.getElementById('check-api-key');
@@ -837,4 +840,25 @@ function loadApiKeyFromStorage() {
             }
         });
     }
+}
+
+// Initialize FAQ accordion functionality
+function initFAQAccordion() {
+    const faqCards = document.querySelectorAll('.faq-card');
+
+    faqCards.forEach((card, index) => {
+        const question = card.querySelector('.faq-question');
+
+        // If it's the last card (遇到其他问题？), expand it by default
+        if (index === faqCards.length - 1) {
+            card.classList.remove('collapsed');
+        }
+
+        if (question) {
+            question.addEventListener('click', () => {
+                // Toggle the collapsed class
+                card.classList.toggle('collapsed');
+            });
+        }
+    });
 }

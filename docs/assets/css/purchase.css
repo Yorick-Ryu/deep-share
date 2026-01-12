@@ -915,18 +915,63 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
     margin-bottom: 0.5rem;
     font-size: 1.05rem;
     color: var(--text-color);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+    transition: color 0.2s ease;
+}
+
+.api-instructions .faq-question:hover {
+    color: #4D6BFE;
+}
+
+.api-instructions .faq-question-text {
+    flex: 1;
+}
+
+.api-instructions .faq-toggle-icon {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease;
+    color: #4D6BFE;
+    flex-shrink: 0;
+    margin-left: 0.5rem;
+}
+
+.api-instructions .faq-card.collapsed .faq-toggle-icon {
+    transform: rotate(-90deg);
 }
 
 .api-instructions .faq-answer {
     font-size: 0.95rem;
     color: var(--text-secondary);
     line-height: 1.5;
+    max-height: 500px;
+    overflow: hidden;
+    transition: max-height 0.3s ease, opacity 0.3s ease, margin-top 0.3s ease;
+    opacity: 1;
+    margin-top: 0.5rem;
+}
+
+.api-instructions .faq-card.collapsed .faq-answer {
+    max-height: 0;
+    opacity: 0;
+    margin-top: 0;
 }
 
 /* Dark mode adjustments */
 @media (prefers-color-scheme: dark) {
     .api-instructions .faq-card {
         border-bottom-color: rgba(77, 107, 254, 0.3);
+    }
+
+    .api-instructions .faq-question:hover {
+        color: #6D8BFE;
     }
 }
 
