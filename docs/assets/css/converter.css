@@ -454,6 +454,31 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
     opacity: 1;
 }
 
+/* Alignment classes for tooltips */
+.tooltip-left-aligned .tooltip-text {
+    left: auto;
+    right: 0;
+    transform: none;
+}
+
+.tooltip-left-aligned .tooltip-text::after {
+    left: auto;
+    right: 8px;
+    transform: translateX(50%);
+}
+
+.tooltip-right-aligned .tooltip-text {
+    left: 0;
+    right: auto;
+    transform: none;
+}
+
+.tooltip-right-aligned .tooltip-text::after {
+    left: 8px;
+    right: auto;
+    transform: translateX(-50%);
+}
+
 /* Row container for multiple checkboxes in one line */
 .checkbox-group-row {
     display: flex;

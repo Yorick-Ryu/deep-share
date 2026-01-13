@@ -160,6 +160,7 @@ function loadSettings() {
       removeDividers: localStorage.getItem('removeDividers') === 'true',
       removeEmojis: localStorage.getItem('removeEmojis') === 'true',
       compatMode: localStorage.getItem('compatMode') !== 'false', // Default to true
+      hardLineBreaks: localStorage.getItem('hardLineBreaks') === 'true',
       lastUsedTemplate: localStorage.getItem('lastUsedTemplate') || 'templates',
       markdownText: localStorage.getItem('markdownText') || ''
     };
@@ -169,6 +170,7 @@ function loadSettings() {
     document.getElementById('removeDividers').checked = settings.removeDividers;
     document.getElementById('removeEmojis').checked = settings.removeEmojis;
     document.getElementById('compatMode').checked = settings.compatMode;
+    document.getElementById('hardLineBreaks').checked = settings.hardLineBreaks;
     document.getElementById('markdownInput').value = settings.markdownText;
 
     // If API key is set, check quota
@@ -189,6 +191,7 @@ function saveSettings() {
       removeDividers: document.getElementById('removeDividers').checked,
       removeEmojis: document.getElementById('removeEmojis').checked,
       compatMode: document.getElementById('compatMode').checked,
+      hardLineBreaks: document.getElementById('hardLineBreaks').checked,
       lastUsedTemplate: document.getElementById('wordTemplateSelect').value,
       markdownText: document.getElementById('markdownInput').value
     };
@@ -198,6 +201,7 @@ function saveSettings() {
     localStorage.setItem('removeDividers', settings.removeDividers);
     localStorage.setItem('removeEmojis', settings.removeEmojis);
     localStorage.setItem('compatMode', settings.compatMode);
+    localStorage.setItem('hardLineBreaks', settings.hardLineBreaks);
     localStorage.setItem('lastUsedTemplate', settings.lastUsedTemplate);
     localStorage.setItem('markdownText', settings.markdownText);
 
@@ -220,6 +224,7 @@ function setupAutoSave() {
     document.getElementById('removeDividers'),
     document.getElementById('removeEmojis'),
     document.getElementById('compatMode'),
+    document.getElementById('hardLineBreaks'),
     document.getElementById('wordTemplateSelect')
   ];
 
@@ -503,6 +508,7 @@ function setupManualConversion() {
     const removeDividers = document.getElementById('removeDividers').checked;
     const removeEmojis = document.getElementById('removeEmojis').checked;
     const compatMode = document.getElementById('compatMode').checked;
+    const hardLineBreaks = document.getElementById('hardLineBreaks').checked;
     const template = document.getElementById('wordTemplateSelect').value;
 
     // Check if API key is provided
@@ -534,7 +540,7 @@ function setupManualConversion() {
       `;
 
       // Call the conversion function
-      await convertMarkdownToDocx(markdownText, docxApiKey, convertMermaid, removeDividers, removeEmojis, compatMode, template);
+      await convertMarkdownToDocx(markdownText, docxApiKey, convertMermaid, removeDividers, removeEmojis, compatMode, template, hardLineBreaks);
 
       // Update button to show success message briefly
       convertBtn.innerHTML = `
@@ -617,7 +623,7 @@ function setupManualConversion() {
 }
 
 // Function to convert markdown text to DOCX
-async function convertMarkdownToDocx(markdownText, apiKey, convertMermaid = false, removeDividers = false, removeEmojis = false, compatMode = true, template) {
+async function convertMarkdownToDocx(markdownText, apiKey, convertMermaid = false, removeDividers = false, removeEmojis = false, compatMode = true, template, hardLineBreaks = false) {
   try {
 
     // Generate filename based on content
@@ -670,6 +676,7 @@ async function convertMarkdownToDocx(markdownText, apiKey, convertMermaid = fals
       convert_mermaid: convertMermaid,
       remove_hr: removeDividers,
       compat_mode: compatMode,
+      hard_line_breaks: hardLineBreaks,
       language: lang
     };
 
