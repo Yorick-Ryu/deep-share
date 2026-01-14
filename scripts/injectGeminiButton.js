@@ -309,34 +309,20 @@
             // Handle block-level math formulas
             if (node.nodeType === Node.ELEMENT_NODE && node.classList && node.classList.contains('math-block')) {
                 // Priority 1: Use data-math attribute
-                const dataMath = node.getAttribute('data-math');
+                const dataMath = node.getAttribute('data-math') ||
+                    node.querySelector('.math-src')?.textContent ||
+                    node.querySelector('annotation[encoding="application/x-tex"]')?.textContent;
+
                 if (dataMath) {
-                    // If in a list, add indent to the markers, but not the formula content
-                    if (indent) {
-                        result += '\n' + indent + '$$\n' + dataMath.trim() + '\n' + indent + '$$\n\n';
-                    } else {
-                        result += '\n$$\n' + dataMath.trim() + '\n$$\n\n';
-                    }
-                    return;
-                }
-                // Priority 2: Try .math-src element
-                const mathSrc = node.querySelector('.math-src');
-                if (mathSrc && mathSrc.textContent && mathSrc.textContent.trim()) {
-                    if (indent) {
-                        result += '\n' + indent + '$$\n' + mathSrc.textContent.trim() + '\n' + indent + '$$\n\n';
-                    } else {
-                        result += '\n$$\n' + mathSrc.textContent.trim() + '\n$$\n\n';
-                    }
-                    return;
-                }
-                // Priority 3: Fallback to KaTeX annotation
-                const mathML = node.querySelector('annotation[encoding="application/x-tex"]');
-                if (mathML && mathML.textContent) {
-                    if (indent) {
-                        result += '\n' + indent + '$$\n' + mathML.textContent.trim() + '\n' + indent + '$$\n\n';
-                    } else {
-                        result += '\n$$\n' + mathML.textContent.trim() + '\n$$\n\n';
-                    }
+                    const mathContent = dataMath.trim();
+                    // For multi-line math or when indented, each line should have the indent
+                    const indentedContent = indent ? mathContent.split('\n').map(line => indent + line).join('\n') : mathContent;
+
+                    // 只有在列表缩进中且前面紧跟空格（列表标记）时，才取消换行
+                    const isAfterListMarker = indent && result.endsWith(' ');
+                    const prefix = isAfterListMarker ? '' : '\n' + indent;
+
+                    result += prefix + '$$\n' + (indent ? indentedContent : mathContent) + '\n' + indent + '$$\n\n';
                     return;
                 }
             }
@@ -368,14 +354,14 @@
                 const level = node.tagName[1];
                 const headingMark = '#'.repeat(parseInt(level));
                 result += '\n' + headingMark + ' ';
-                node.childNodes.forEach(processNode);
+                node.childNodes.forEach(n => processNode(n, indent));
                 result += '\n\n';
                 return;
             }
 
             // Handle paragraphs
             if (node.tagName === 'P') {
-                node.childNodes.forEach(processNode);
+                node.childNodes.forEach(n => processNode(n, indent));
                 result += '\n\n';
                 return;
             }
@@ -397,7 +383,7 @@
                 const lines = [];
                 const tempResult = result;
                 result = '';
-                node.childNodes.forEach(processNode);
+                node.childNodes.forEach(n => processNode(n, indent));
                 const quoteContent = result;
                 result = tempResult;
 
@@ -633,13 +619,13 @@
                     }
                 }
 
-                result += '\n```' + language + '\n';
-                if (codeBlock) {
-                    result += codeBlock.textContent.replace(/\n$/, '');
-                } else {
-                    result += node.textContent.replace(/\n$/, '');
-                }
-                result += '\n```\n\n';
+                const content = (codeBlock ? codeBlock.textContent : node.textContent).replace(/\n$/, '');
+                const indentedContent = indent ? content.split('\n').map(line => indent + line).join('\n') : content;
+
+                const isAfterListMarker = indent && result.endsWith(' ');
+                const prefix = isAfterListMarker ? '' : '\n' + indent;
+
+                result += prefix + '```' + language + '\n' + (indent ? indentedContent : content) + '\n' + indent + '```\n\n';
                 return;
             }
 
