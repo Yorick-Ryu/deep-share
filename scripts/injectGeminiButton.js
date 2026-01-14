@@ -285,6 +285,24 @@
         let result = '';
         let listDepth = 0; // Track nesting level for lists
 
+        // Helper to check if a node is empty or only contains Gemini markers/citations
+        const isEmptyOrMarkerOnly = (node) => {
+            if (!node) return true;
+            if (node.nodeType === Node.TEXT_NODE) return !node.textContent.trim();
+            if (node.nodeType !== Node.ELEMENT_NODE) return true;
+
+            // Skip specific Gemini internal tags
+            const skipTags = ['SOURCE-FOOTNOTE', 'SOURCES-CAROUSEL-INLINE', 'BR'];
+            if (skipTags.includes(node.tagName)) return true;
+
+            // Check if it's a paragraph or span that only contains markers or whitespace
+            if (node.tagName === 'P' || node.tagName === 'SPAN') {
+                return Array.from(node.childNodes).every(isEmptyOrMarkerOnly);
+            }
+
+            return false;
+        };
+
         // Process all child nodes
         const processNode = (node, indent = '') => {
             // Skip if not a valid node
@@ -555,25 +573,34 @@
                     result += listIndent + prefix;
 
                     // Process list item content
-                    let isFirstNode = true;
+                    let contentWritten = false;
                     li.childNodes.forEach(childNode => {
                         // Skip nested lists for now, process them separately
                         if (childNode.tagName === 'UL' || childNode.tagName === 'OL') {
-                            result += '\n';
+                            if (contentWritten) result += '\n';
                             processNode(childNode, listIndent + '  ');
                             return;
                         }
 
                         // For block elements inside list items, add proper indentation
                         if (childNode.tagName === 'P') {
-                            if (!isFirstNode) {
+                            if (isEmptyOrMarkerOnly(childNode)) {
+                                // Just process the nodes without adding block structure if it's empty/markers
+                                childNode.childNodes.forEach(n => processNode(n, listIndent + '  '));
+                                return;
+                            }
+
+                            if (contentWritten) {
                                 result += '\n' + listIndent + '  ';
                             }
                             childNode.childNodes.forEach(n => processNode(n, listIndent + '  '));
+                            contentWritten = true;
                         } else {
+                            if (!isEmptyOrMarkerOnly(childNode)) {
+                                contentWritten = true;
+                            }
                             processNode(childNode, listIndent + '  ');
                         }
-                        isFirstNode = false;
                     });
 
                     result += '\n';
