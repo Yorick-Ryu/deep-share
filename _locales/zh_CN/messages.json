@@ -346,5 +346,8 @@
     },
     "languageHint": {
         "message": "选择您偏好的显示语言"
+    },
+    "networkError": {
+        "message": "转换失败，请检查网络"
     }
 }

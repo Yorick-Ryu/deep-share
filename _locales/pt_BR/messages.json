@@ -346,5 +346,8 @@
     },
     "languageHint": {
         "message": "Selecione seu idioma de exibição preferido"
+    },
+    "networkError": {
+        "message": "Falha na conversão, verifique sua rede"
     }
 }

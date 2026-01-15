@@ -111,9 +111,15 @@ async function convertToDocx(message, sourceButton) {
         // Check error type and show appropriate message
         let errorMessage = error.message;
         let actionParam = 'apiError';
+        let shouldOpenPopup = true;
 
+        // Network error - Failed to fetch
+        if (error.message && error.message.includes('Failed to fetch')) {
+            errorMessage = chrome.i18n.getMessage('networkError') || '转换失败，请检查网络';
+            shouldOpenPopup = false;
+        }
         // 401 Unauthorized - Invalid/missing/expired API key
-        if (error.message && (
+        else if (error.message && (
             error.message.includes('401') ||
             error.message.includes('Unauthorized') ||
             error.message.includes('API Key is required') ||
@@ -143,20 +149,22 @@ async function convertToDocx(message, sourceButton) {
 
         window.showToastNotification(errorMessage, 'error');
 
-        // Open popup with error message after delay
-        setTimeout(() => {
-            try {
-                chrome.runtime.sendMessage({
-                    action: 'openPopup',
-                    actionParam: actionParam,
-                    error: errorMessage
-                }).catch(err => {
-                    console.warn('Could not open popup automatically:', err.message);
-                });
-            } catch (err) {
-                console.error('Failed to send message to open popup:', err);
-            }
-        }, 1000);
+        // Open popup with error message after delay (only if not a network error)
+        if (shouldOpenPopup) {
+            setTimeout(() => {
+                try {
+                    chrome.runtime.sendMessage({
+                        action: 'openPopup',
+                        actionParam: actionParam,
+                        error: errorMessage
+                    }).catch(err => {
+                        console.warn('Could not open popup automatically:', err.message);
+                    });
+                } catch (err) {
+                    console.error('Failed to send message to open popup:', err);
+                }
+            }, 1000);
+        }
     } finally {
         // Re-enable the DOCX button if provided
         if (sourceButton && sourceButton instanceof Element) {

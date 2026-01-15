@@ -346,5 +346,8 @@
     },
     "languageHint": {
         "message": "お好みの表示言語を選択してください"
+    },
+    "networkError": {
+        "message": "変換に失敗しました。ネットワークを確認してください"
     }
 }

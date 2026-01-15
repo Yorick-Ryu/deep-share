@@ -328,5 +328,8 @@
     },
     "languageHint": {
         "message": "選擇您偏好的顯示語言"
+    },
+    "networkError": {
+        "message": "轉換失敗，請檢查網路"
     }
 }
