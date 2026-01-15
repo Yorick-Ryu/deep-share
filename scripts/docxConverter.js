@@ -111,12 +111,11 @@ async function convertToDocx(message, sourceButton) {
         // Check error type and show appropriate message
         let errorMessage = error.message;
         let actionParam = 'apiError';
-        let shouldOpenPopup = true;
+        let shouldOpenPopup = false;
 
         // Network error - Failed to fetch
         if (error.message && error.message.includes('Failed to fetch')) {
             errorMessage = chrome.i18n.getMessage('networkError') || '转换失败，请检查网络';
-            shouldOpenPopup = false;
         }
         // 401 Unauthorized - Invalid/missing/expired API key
         else if (error.message && (
@@ -127,6 +126,7 @@ async function convertToDocx(message, sourceButton) {
         )) {
             errorMessage = chrome.i18n.getMessage('apiKeyError') || 'API密钥填写错误，请联系客服微信：yorick_cn';
             actionParam = 'apiError';
+            shouldOpenPopup = true;
         }
         // 403 Forbidden - Quota exceeded
         else if (error.message && (
@@ -136,6 +136,7 @@ async function convertToDocx(message, sourceButton) {
         )) {
             errorMessage = chrome.i18n.getMessage('quotaExceededError') || '转换次数不足，请充值';
             actionParam = 'quotaExceeded';
+            shouldOpenPopup = true;
         }
         // Other API-related errors
         else if (error.message && (
@@ -145,6 +146,7 @@ async function convertToDocx(message, sourceButton) {
         )) {
             errorMessage = chrome.i18n.getMessage('apiKeyError') || 'API密钥错误，请联系客服微信：yorick_cn';
             actionParam = 'apiError';
+            shouldOpenPopup = true;
         }
 
         window.showToastNotification(errorMessage, 'error');
