@@ -45,8 +45,24 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
+/* Fix browser autofill background in dark mode */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 1000px var(--bg-secondary) inset !important;
+    -webkit-text-fill-color: var(--text-main) !important;
+    caret-color: var(--text-main);
+    transition: background-color 5000s ease-in-out 0s;
+}
+
 /* Typography */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     line-height: 1.2;
     font-weight: 700;
     letter-spacing: -0.025em;
@@ -204,7 +220,7 @@ nav {
 }
 
 .new-badge {
-    background: rgba(255,255,255,0.2);
+    background: rgba(255, 255, 255, 0.2);
     padding: 0.1rem 0.5rem;
     border-radius: 4px;
     font-weight: 600;
@@ -223,9 +239,8 @@ nav {
 }
 
 .announcement-button:hover {
-    transform: translateY(-1px);
     color: var(--primary-color);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* Main Layout */
@@ -274,7 +289,6 @@ main {
 
 .cta-button.primary:hover {
     background: var(--primary-hover);
-    transform: translateY(-2px);
     box-shadow: 0 6px 20px 0 rgba(79, 70, 229, 0.23);
 }
 
@@ -287,7 +301,6 @@ main {
 .cta-button.secondary:hover {
     border-color: var(--primary-color);
     color: var(--primary-color);
-    transform: translateY(-2px);
 }
 
 .install-note {
@@ -331,7 +344,7 @@ main {
     transform: translateY(-50%);
     background: rgba(255, 255, 255, 0.8);
     backdrop-filter: blur(4px);
-    border: 1px solid rgba(0,0,0,0.1);
+    border: 1px solid rgba(0, 0, 0, 0.1);
     width: 40px;
     height: 40px;
     border-radius: 50%;
@@ -345,11 +358,16 @@ main {
 
 .carousel-button:hover {
     background: white;
-    transform: translateY(-50%) scale(1.1);
+    transform: translateY(-50%);
 }
 
-.carousel-button.prev { left: 1rem; }
-.carousel-button.next { right: 1rem; }
+.carousel-button.prev {
+    left: 1rem;
+}
+
+.carousel-button.next {
+    right: 1rem;
+}
 
 .carousel-dots {
     position: absolute;
@@ -359,7 +377,7 @@ main {
     display: flex;
     gap: 0.5rem;
     padding: 0.5rem 1rem;
-    background: rgba(0,0,0,0.5);
+    background: rgba(0, 0, 0, 0.5);
     border-radius: 20px;
     backdrop-filter: blur(4px);
 }
@@ -368,7 +386,7 @@ main {
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: rgba(255,255,255,0.5);
+    background: rgba(255, 255, 255, 0.5);
     cursor: pointer;
     transition: all 0.2s;
 }
@@ -397,12 +415,6 @@ main {
     border: 1px solid var(--border-color);
     box-shadow: var(--card-shadow);
     transition: all 0.3s ease;
-}
-
-.feature-card:hover {
-    transform: translateY(-8px);
-    box-shadow: var(--card-hover-shadow);
-    border-color: var(--primary-color);
 }
 
 .feature-icon {
@@ -503,7 +515,7 @@ main {
 }
 
 .compatibility-table tr:hover td {
-    background: rgba(0,0,0,0.01);
+    background: rgba(0, 0, 0, 0.01);
 }
 
 .compatibility-table td:first-child {
@@ -514,7 +526,9 @@ main {
 }
 
 /* Status Badges */
-.supported, .not-supported, .partial {
+.supported,
+.not-supported,
+.partial {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -571,7 +585,8 @@ main {
 
 .video-container {
     position: relative;
-    padding-top: 56.25%; /* 16:9 Aspect Ratio */
+    padding-top: 56.25%;
+    /* 16:9 Aspect Ratio */
     height: 0;
 }
 
@@ -612,30 +627,35 @@ footer {
     :root {
         --header-height: 60px;
     }
-    
-    h1 { font-size: 2.5rem; }
-    h2 { font-size: 1.75rem; }
-    
+
+    h1 {
+        font-size: 2.5rem;
+    }
+
+    h2 {
+        font-size: 1.75rem;
+    }
+
     .hero {
         grid-template-columns: 1fr;
         text-align: center;
         margin-top: 2rem;
         gap: 3rem;
     }
-    
+
     .hero-content p {
         margin-left: auto;
         margin-right: auto;
     }
-    
+
     .cta-buttons {
         justify-content: center;
     }
-    
+
     .nav-links {
         display: none;
     }
-    
+
     .mobile-menu-btn {
         display: block;
     }
@@ -649,20 +669,21 @@ footer {
         width: 100%;
         background: var(--bg-secondary);
         padding: 2rem;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         border-bottom: 1px solid var(--border-color);
     }
-    
+
     .install-steps {
         flex-direction: column;
     }
-    
+
     .compatibility-table {
         display: block;
         overflow-x: auto;
     }
-    
-    .compatibility-table td, .compatibility-table th {
+
+    .compatibility-table td,
+    .compatibility-table th {
         white-space: nowrap;
         padding: 0.75rem;
     }

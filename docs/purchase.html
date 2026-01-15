@@ -35,37 +35,131 @@
 
         <!-- Add wrapper div for left column elements -->
         <div class="left-column-wrapper">
-            <!-- Free features section -->
-            <div class="free-features-section">
-                <h2>DeepShare大部分功能完全免费</h2>
-                <p>DeepShare是一款开源的浏览器插件，以下所有功能都是<strong>永久免费</strong>的：</p>
-
-                <div class="free-features-list">
-                    <div class="free-feature-item">一键截取DeepSeek对话内容</div>
-                    <div class="free-feature-item">分享对话为高质量图片</div>
-                    <div class="free-feature-item">导出为纯文本格式</div>
-                    <div class="free-feature-item">自定义水印</div>
-                    <div class="free-feature-item">选择性分享对话内容</div>
-                    <div class="free-feature-item">一键全选/取消全选</div>
-                    <div class="free-feature-item">一键复制LaTeX公式</div>
-                    <div class="free-feature-item">简洁无广告的界面</div>
+            <!-- Features Comparison Selection -->
+            <div class="feature-comparison-container">
+                <!-- Free Features Card -->
+                <div class="feature-card free">
+                    <span class="feature-status-badge">永久免费</span>
+                    <h3>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round" width="20" height="20">
+                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                        </svg>
+                        开源核心功能
+                    </h3>
+                    <div class="feature-grid">
+                        <div class="feature-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                                <circle cx="8.5" cy="8.5" r="1.5" />
+                                <polyline points="21 15 16 10 5 21" />
+                            </svg>
+                            DeepSeek 导出图片
+                        </div>
+                        <div class="feature-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M18 7H6l6 5-6 5h12" />
+                            </svg>
+                            复制 AI 对话的公式
+                        </div>
+                        <div class="feature-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                <polyline points="14 2 14 8 20 8" />
+                                <line x1="16" y1="13" x2="8" y2="13" />
+                                <line x1="16" y1="17" x2="8" y2="17" />
+                                <polyline points="10 9 9 9 8 9" />
+                            </svg>
+                            Gemini 导出 Markdown
+                        </div>
+                        <div class="feature-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                            </svg>
+                            简洁无广告，隐私安全
+                        </div>
+                    </div>
                 </div>
 
-                <div class="paid-feature-explanation">
-                    <p><strong>仅有 Word 文档转换功能需要付费</strong>，因为它需要使用服务器资源进行高质量排版和格式转换。您可以在下方购买转换次数。</p>
+                <!-- Pro Features Card -->
+                <div class="feature-card pro">
+                    <span class="feature-status-badge">付费增强</span>
+                    <h3>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round" width="20" height="20">
+                            <polygon
+                                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                        </svg>
+                        Word 导出增强包
+                    </h3>
+                    <div class="feature-grid">
+                        <div class="feature-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                <polyline points="14 2 14 8 20 8" />
+                                <path d="M9 15l2 2 4-4" />
+                            </svg>
+                            主流 AI 导出 Word
+                        </div>
+                        <div class="feature-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                                <line x1="3" y1="9" x2="21" y2="9" />
+                                <line x1="9" y1="21" x2="9" y2="9" />
+                            </svg>
+                            精美 Word 模版
+                        </div>
+                        <div class="feature-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                            </svg>
+                            自动化排版处理
+                        </div>
+                        <div class="feature-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path
+                                    d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                                <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+                                <line x1="12" y1="22.08" x2="12" y2="12" />
+                            </svg>
+                            MCP / Claude Skill 支持
+                        </div>
+                        <div class="feature-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M3 3h18v18H3zM3 9h18M9 3v18" />
+                            </svg>
+                            可编辑公式/表格
+                        </div>
+                        <div class="feature-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M18 6L6 18M6 6l12 12" />
+                            </svg>
+                            去除分割线/表情
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <!-- Add quota checker section -->
             <div class="quota-checker">
                 <h2>查询剩余次数</h2>
-                <p>如果您已购买转换次数，可以在此查询您的配额情况：</p>
+                <p>如果您已购买转换次数，可以在此查询配额情况：</p>
 
                 <div class="quota-form">
                     <div class="form-group">
                         <label for="check-api-key">您的API Key</label>
                         <div class="api-key-input-wrapper">
-                            <input type="password" id="check-api-key" placeholder="输入您的API Key" autocomplete="off">
+                            <input type="password" id="check-api-key" placeholder="输入API Key" autocomplete="off">
                             <button type="button" class="toggle-visibility-btn" id="toggleQuotaApiKeyVisibility"
                                 title="显示/隐藏">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
@@ -128,7 +222,7 @@
             <!-- API instructions -->
             <div class="api-instructions">
                 <h2>如何使用？</h2>
-                <p>完成购买后，我们将发送API Key给您。按照以下步骤设置您的DeepShare扩展：</p>
+                <p>完成购买后，我们将发送API Key给您。按照以下步骤设置DeepShare扩展：</p>
                 <ol style="list-style-type: none;">
                     <li><span class="step-number">1</span>在浏览器中点击DeepShare扩展图标</li>
                     <li><span class="step-number">2</span>填入您收到的API Key</li>
@@ -142,7 +236,9 @@
                 <div class="faq-card collapsed">
                     <div class="faq-question">
                         <span class="faq-question-text">为什么对话转Word文档功能需要收费？</span>
-                        <svg class="faq-toggle-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg class="faq-toggle-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
                             <polyline points="6 9 12 15 18 9"></polyline>
                         </svg>
                     </div>
@@ -152,7 +248,9 @@
                 <div class="faq-card collapsed">
                     <div class="faq-question">
                         <span class="faq-question-text">API Key有过期时间吗？</span>
-                        <svg class="faq-toggle-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg class="faq-toggle-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
                             <polyline points="6 9 12 15 18 9"></polyline>
                         </svg>
                     </div>
@@ -161,7 +259,9 @@
                 <div class="faq-card collapsed">
                     <div class="faq-question">
                         <span class="faq-question-text">忘记API Key了怎么办？</span>
-                        <svg class="faq-toggle-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg class="faq-toggle-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
                             <polyline points="6 9 12 15 18 9"></polyline>
                         </svg>
                     </div>
@@ -170,7 +270,9 @@
                 <div class="faq-card collapsed">
                     <div class="faq-question">
                         <span class="faq-question-text">付款后多久到账？</span>
-                        <svg class="faq-toggle-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg class="faq-toggle-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
                             <polyline points="6 9 12 15 18 9"></polyline>
                         </svg>
                     </div>
@@ -179,7 +281,9 @@
                 <div class="faq-card collapsed">
                     <div class="faq-question">
                         <span class="faq-question-text">捐赠用户有什么福利？</span>
-                        <svg class="faq-toggle-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg class="faq-toggle-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
                             <polyline points="6 9 12 15 18 9"></polyline>
                         </svg>
                     </div>
@@ -188,7 +292,9 @@
                 <div class="faq-card collapsed">
                     <div class="faq-question">
                         <span class="faq-question-text">付款后没有收到API-Key？</span>
-                        <svg class="faq-toggle-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg class="faq-toggle-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
                             <polyline points="6 9 12 15 18 9"></polyline>
                         </svg>
                     </div>
@@ -197,7 +303,9 @@
                 <div class="faq-card collapsed">
                     <div class="faq-question">
                         <span class="faq-question-text">有没有私有部署的方案？</span>
-                        <svg class="faq-toggle-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg class="faq-toggle-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
                             <polyline points="6 9 12 15 18 9"></polyline>
                         </svg>
                     </div>
@@ -208,7 +316,9 @@
                 <div class="faq-card">
                     <div class="faq-question">
                         <span class="faq-question-text">遇到其他问题？</span>
-                        <svg class="faq-toggle-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg class="faq-toggle-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
                             <polyline points="6 9 12 15 18 9"></polyline>
                         </svg>
                     </div>
@@ -220,7 +330,7 @@
 
         <div class="pricing-card">
 
-            <p class="feature-description">将您的DeepSeek对话一键导出为精美排版的 Word 文档，轻松分享和保存！</p>
+            <p class="feature-description">DeepSeek对话一键导出为精美排版的 Word 文档，轻松分享和保存！</p>
 
             <div class="price-tag">¥0.2 <span class="per-unit">/ 次</span></div>
 
@@ -228,7 +338,7 @@
                 <div class="form-group">
                     <div
                         style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-                        <label for="email">您的邮箱（用于绑定API Key）</label>
+                        <label for="email">您的邮箱（用于绑定并接收API Key）</label>
                         <a href="./renew.html" class="renew-link"
                             style="color: #4D6BFE; text-decoration: none; font-size: 0.9rem; white-space: nowrap;">
                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"

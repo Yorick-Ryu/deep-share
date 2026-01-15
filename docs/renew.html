@@ -36,36 +36,66 @@
         <!-- Add wrapper div for left column elements -->
         <div class="left-column-wrapper">
             <!-- Renewal explanation section -->
-            <div class="free-features-section">
-                <h2>如何续费DeepShare转换次数</h2>
-                <p>使用您已有的API Key续费，无需重新进行插件设置，续费后的次数将直接添加到您的账户中。</p>
-
-                <div class="free-features-list">
-                    <div class="free-feature-item">直接为已有账户充值</div>
-                    <div class="free-feature-item">无需重新设置插件</div>
-                    <div class="free-feature-item">自动累加转换次数</div>
-                    <div class="free-feature-item">重置一年有效期</div>
+            <!-- Features Comparison Selection -->
+            <div class="feature-comparison-container">
+                <!-- Renewal Features Card -->
+                <div class="feature-card pro">
+                    <span class="feature-status-badge">快速到账</span>
+                    <h3>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round" width="20" height="20">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                            <polyline points="14 2 14 8 20 8" />
+                            <path d="M9 15l2 2 4-4" />
+                        </svg>
+                        Word 导出次数续费
+                    </h3>
+                    <div class="feature-grid">
+                        <div class="feature-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
+                                <line x1="1" y1="10" x2="23" y2="10" />
+                            </svg>
+                            直接为已有账户充值
+                        </div>
+                        <div class="feature-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                                <polyline points="22 4 12 14.01 9 11.01" />
+                            </svg>
+                            无需重新设置插件
+                        </div>
+                        <div class="feature-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="12" y1="5" x2="12" y2="19" />
+                                <line x1="5" y1="12" x2="19" y2="12" />
+                            </svg>
+                            自动累加转换次数
+                        </div>
+                        <div class="feature-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M23 4v6h-6" />
+                                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
+                            </svg>
+                            重置一年有效期
+                        </div>
+                    </div>
                 </div>
 
-                <div class="paid-feature-explanation">
-                    <p><strong>请输入您的API Key进行续费</strong>，充值后将直接添加到您的账户中，次数和有效期将更新。</p>
-                </div>
-
-                <div class="purchase-link-wrapper" style="margin-top: 1rem; text-align: center;">
+                <div class="purchase-link-wrapper" style="text-align: center;">
                     <a href="./purchase.html" class="purchase-link"
-                        style="color: #4D6BFE; text-decoration: none; font-weight: 500; display: inline-block;">
+                        style="color: #4D6BFE; text-decoration: none; font-weight: 500; display: inline-flex; align-items: center; gap: 6px;">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            style="vertical-align: middle; margin-right: 4px;">
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <rect x="2" y="4" width="20" height="16" rx="2"></rect>
                             <path d="M12 11v4"></path>
                             <path d="M9 13h6"></path>
-                            <path d="M7 7v0"></path>
-                            <path d="M17 7v0"></path>
-                            <path d="M17 17v0"></path>
-                            <path d="M7 17v0"></path>
                         </svg>
-                        还没有API Key？前往购买页面
+                        还没有 API Key？前往购买页面
                     </a>
                 </div>
             </div>
