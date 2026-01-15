@@ -248,6 +248,9 @@
     "getClipboardError": {
         "message": "獲取內容失敗"
     },
+    "clipboardPermissionError": {
+        "message": "獲取內容失敗，請開啟讀取剪貼簿權限"
+    },
     "refreshButton": {
         "message": "刷新"
     },

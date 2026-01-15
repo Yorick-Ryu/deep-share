@@ -248,6 +248,9 @@
     "getClipboardError": {
         "message": "コンテンツの取得に失敗しました"
     },
+    "clipboardPermissionError": {
+        "message": "コンテンツの取得に失敗しました。クリップボードの読み取りを許可してください"
+    },
     "refreshButton": {
         "message": "更新"
     },

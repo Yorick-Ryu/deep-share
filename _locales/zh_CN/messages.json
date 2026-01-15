@@ -248,6 +248,9 @@
     "getClipboardError": {
         "message": "获取内容失败"
     },
+    "clipboardPermissionError": {
+        "message": "获取内容失败，请打开读取剪接板权限"
+    },
     "refreshButton": {
         "message": "刷新"
     },

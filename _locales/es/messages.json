@@ -248,6 +248,9 @@
     "getClipboardError": {
         "message": "Error al obtener contenido"
     },
+    "clipboardPermissionError": {
+        "message": "Error al obtener contenido, por favor otorga permiso para leer el portapapeles"
+    },
     "refreshButton": {
         "message": "Actualizar"
     },

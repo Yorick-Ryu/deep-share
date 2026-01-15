@@ -248,6 +248,9 @@
     "getClipboardError": {
         "message": "Falha ao obter conteúdo"
     },
+    "clipboardPermissionError": {
+        "message": "Falha ao obter conteúdo, por favor conceda permissão para ler a área de transferência"
+    },
     "refreshButton": {
         "message": "Actualizar"
     },

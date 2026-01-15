@@ -248,6 +248,9 @@
     "getClipboardError": {
         "message": "Failed to get content"
     },
+    "clipboardPermissionError": {
+        "message": "Failed to get content, please grant clipboard read permission"
+    },
     "refreshButton": {
         "message": "Refresh"
     },

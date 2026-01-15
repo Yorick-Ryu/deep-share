@@ -10,7 +10,7 @@ document.addEventListener('deepshare:saveAsDocx', async () => {
             return;
         }
         const content = messages.map(m => `**${m.role}**: \n${m.content}`).join('\n\n---\n\n');
-        
+
         // Dispatch event for docxConverter to handle
         document.dispatchEvent(new CustomEvent('deepshare:convertToDocx', {
             detail: {
@@ -24,7 +24,10 @@ document.addEventListener('deepshare:saveAsDocx', async () => {
             window.showToastNotification(chrome.i18n.getMessage('noMessageSelected') || 'Please select at least one message', 'error');
         } else {
             console.error('Error getting messages for DOCX conversion:', error);
-            window.showToastNotification('Error getting messages.', 'error');
+            const errorMessage = error.message && error.message.includes('Read permission denied')
+                ? chrome.i18n.getMessage('clipboardPermissionError')
+                : `${chrome.i18n.getMessage('getClipboardError')}: ${error.message}`;
+            window.showToastNotification(errorMessage, 'error');
         }
     }
 });
@@ -32,7 +35,7 @@ document.addEventListener('deepshare:saveAsDocx', async () => {
 async function getSelectedDeepSeekMessages() {
     const messages = [];
     const messageCheckboxes = document.querySelectorAll('.d30139ff .ds-checkbox');
-    
+
     if (messageCheckboxes.length === 0) {
         return []; // No selection interface found
     }
@@ -59,7 +62,7 @@ async function getSelectedDeepSeekMessages() {
             } else {
                 // More robust way to find copy button - multiple strategies
                 let copyButton = null;
-                
+
                 // Strategy 1: Find by .ds-icon-button class with role attribute and SVG path starting with M6.149
                 const dsIconButtons = messageDiv.querySelectorAll('.ds-icon-button[role="button"]');
                 for (const btn of dsIconButtons) {
@@ -69,7 +72,7 @@ async function getSelectedDeepSeekMessages() {
                         break;
                     }
                 }
-                
+
                 // Strategy 2 (most stable): Find by role and tabindex (fallback)
                 if (!copyButton) {
                     const buttons = messageDiv.querySelectorAll('[role="button"][tabindex]');
@@ -78,7 +81,7 @@ async function getSelectedDeepSeekMessages() {
                         copyButton = buttons[0];
                     }
                 }
-                
+
                 if (copyButton) {
                     try {
                         const content = await getContentViaCopyButton(copyButton);
@@ -90,27 +93,16 @@ async function getSelectedDeepSeekMessages() {
                         }
                     } catch (error) {
                         console.error('Failed to get content via copy button:', error);
-                        const response = messageDiv.querySelector('.ds-markdown')?.textContent.trim() || '';
-                        if (response) {
-                            messages.push({
-                                role: "Assistant",
-                                content: response
-                            });
-                        }
+                        throw error; // Direct error, no fallback
                     }
                 } else {
-                     const response = messageDiv.querySelector('.ds-markdown')?.textContent.trim() || '';
-                    if (response) {
-                        messages.push({
-                            role: "Assistant",
-                            content: response
-                        });
-                    }
+                    console.warn('Copy button not found for AI message');
+                    throw new Error('Could not find copy button to extract high-quality content');
                 }
             }
         }
     }
-    
+
     return messages;
 }
 
@@ -122,9 +114,9 @@ function getContentViaCopyButton(copyButton) {
         } catch (clipError) {
             console.warn('Could not read clipboard:', clipError.message);
         }
-        
+
         copyButton.click();
-        
+
         setTimeout(async () => {
             try {
                 const clipboardContent = await navigator.clipboard.readText();
@@ -138,8 +130,3 @@ function getContentViaCopyButton(copyButton) {
         }, 300);
     });
 }
-
-
-// This function is now standalone and not called directly by an event listener in this file.
-// It's called by the event listener for 'deepshare:saveAsDocx'
-

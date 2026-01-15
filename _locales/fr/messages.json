@@ -248,6 +248,9 @@
     "getClipboardError": {
         "message": "Échec de la récupération du contenu"
     },
+    "clipboardPermissionError": {
+        "message": "Échec de la récupération du contenu, veuillez accorder l'autorisation de lire le presse-papiers"
+    },
     "refreshButton": {
         "message": "Actualiser"
     },

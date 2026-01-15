@@ -279,7 +279,11 @@ function injectDocxButton() {
                     } catch (ex) { }
                 }
 
-                window.showToastNotification(`${chrome.i18n.getMessage('getClipboardError')}: ${error.message}`, 'error');
+                const errorMessage = error.message && error.message.includes('Read permission denied')
+                    ? chrome.i18n.getMessage('clipboardPermissionError')
+                    : `${chrome.i18n.getMessage('getClipboardError')}: ${error.message}`;
+
+                window.showToastNotification(errorMessage, 'error');
                 return null;
             }
         }
