@@ -36,10 +36,7 @@
         "message": "Guardar como Word"
     },
     "docxFeatureExplanation": {
-        "message": "Usado apenas para configurar a conversão de conversas IA para Word. Outras funções como capturas de ecrã e cópia de fórmulas são gratuitas."
-    },
-    "docxFeatureComingSoon": {
-        "message": "Funcionalidade de exportação DOCX em breve!"
+        "message": "Configurar conversão de IA para Word; capturas de ecrã e cópias de fórmulas são gratuitas e não requerem configuração."
     },
     "docxConversionSuccess": {
         "message": "Conversão para DOCX bem-sucedida!"

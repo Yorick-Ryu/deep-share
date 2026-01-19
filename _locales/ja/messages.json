@@ -36,10 +36,7 @@
         "message": "Word として保存"
     },
     "docxFeatureExplanation": {
-        "message": "AI 会話を Word 文書に変換する機能のみの設定です。会話スクリーンショットや数式コピーなどの機能は無料でご利用いただけます。"
-    },
-    "docxFeatureComingSoon": {
-        "message": "DOCX エクスポート機能は近日公開！"
+        "message": "AI会話からWordへの変換を設定します。スクリーンショットや数式コピーは無料で設定不要です。"
     },
     "docxConversionSuccess": {
         "message": "DOCX への変換に成功しました！"

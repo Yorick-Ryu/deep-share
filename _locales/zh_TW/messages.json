@@ -35,11 +35,8 @@
     "docxButton": {
         "message": "另存為Word"
     },
-    "docxFeatureComingSoon": {
-        "message": "Word文件匯出功能即將推出！"
-    },
     "docxFeatureExplanation": {
-        "message": "僅用於設定AI對話轉Word文件功能，其他功能如對話截圖和公式複製都是免費的，無需設定即可使用。"
+        "message": "配置AI對話轉Word功能，對話截圖和公式複製免費且無需配置"
     },
     "docxConversionSuccess": {
         "message": "成功轉換為Word文件！"
