@@ -83,6 +83,7 @@ body {
   border-radius: 16px;
   padding: 48px;
   box-shadow: var(--card-shadow);
+  min-width: 300px;
 }
 
 /* Welcome Section */
@@ -90,13 +91,13 @@ body {
   display: flex;
   align-items: flex-start;
   gap: 20px;
-  margin-bottom: 48px;
+  margin-bottom: 36px;
 }
 
 .logo {
   flex-shrink: 0;
-  width: 64px;
-  height: 64px;
+  width: 80px;
+  height: 80px;
   animation: scaleIn 0.5s ease-out;
 }
 
@@ -117,7 +118,7 @@ body {
 }
 
 .welcome-section h1 {
-  font-size: 32px;
+  font-size: 28px;
   font-weight: 600;
   margin-bottom: 8px;
   color: var(--text-color);
@@ -166,7 +167,7 @@ body {
   background: var(--card-bg);
   border: 2px solid var(--border-color);
   border-radius: 12px;
-  padding: 24px;
+  padding: 16px;
   transition: all 0.2s ease;
   position: relative;
   height: 100%;
@@ -207,7 +208,6 @@ body {
 .option-description {
   font-size: 14px;
   color: var(--text-secondary);
-  margin-bottom: 12px;
   flex-grow: 1;
 }
 
@@ -233,7 +233,7 @@ body {
   gap: 8px;
   padding: 16px;
   background: var(--card-hover-bg);
-  border-radius: 8px;
+  border-radius: 12px;
   font-size: 14px;
   color: var(--text-secondary);
   margin-bottom: 32px;
@@ -324,6 +324,8 @@ body {
 }
 
 .pin-icon {
+  width: 80px;
+  height: 80px;
   flex-shrink: 0;
   color: var(--primary-color);
   animation: scaleIn 0.5s ease-out;
@@ -383,7 +385,7 @@ body {
   gap: 16px;
   padding: 16px;
   background: var(--card-hover-bg);
-  border-radius: 8px;
+  border-radius: 12px;
   transition: all 0.2s ease;
 }
 
@@ -472,8 +474,8 @@ body {
   }
 
   .logo {
-    width: 48px;
-    height: 48px;
+    width: 80px;
+    height: 80px;
   }
 
   .pin-header {
@@ -481,8 +483,8 @@ body {
   }
 
   .pin-icon {
-    width: 32px;
-    height: 32px;
+    width: 80px;
+    height: 80px;
   }
 
   .pin-header-text h1 {

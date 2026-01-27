@@ -79,7 +79,7 @@ function loadI18nText() {
 
   // MathML option
   document.getElementById('mathmlDescription').textContent = getMessage('onboardingMathMLDescription') || 'Perfect for Microsoft Word users';
-  document.getElementById('mathmlRecommended').textContent = getMessage('onboardingRecommended') || 'Recommended';
+  // document.getElementById('mathmlRecommended').textContent = getMessage('onboardingRecommended') || 'Recommended';
 
   // LaTeX option
   document.getElementById('latexDescription').textContent = getMessage('onboardingLaTeXDescription') || 'For WPS, MathType, and Overleaf users';
