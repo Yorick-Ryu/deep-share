@@ -13,6 +13,7 @@ include_files=(
     "background.js"
     "icons"
     "lib"
+    "onboarding"
     "manifest.json"
     "popup"
     "scripts"
