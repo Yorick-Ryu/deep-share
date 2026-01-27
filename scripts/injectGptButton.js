@@ -356,7 +356,8 @@
             // Handle lists
             if (node.tagName === 'UL' || node.tagName === 'OL') {
                 const isOrdered = node.tagName === 'OL';
-                let index = 1;
+                // Respect the 'start' attribute for ordered lists
+                let index = (isOrdered && node.hasAttribute('start')) ? parseInt(node.getAttribute('start'), 10) : 1;
                 const listItems = Array.from(node.children).filter(child => child.tagName === 'LI');
 
                 listItems.forEach(li => {
