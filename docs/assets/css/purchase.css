@@ -766,7 +766,8 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
 }
 
 .toggle-visibility-btn,
-.copy-api-key-btn {
+.copy-api-key-btn,
+.download-api-key-btn {
     position: absolute;
     display: flex;
     align-items: center;
@@ -775,7 +776,6 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
     border: none;
     cursor: pointer;
     color: var(--text-light);
-    /* Unified to light color for subtle look */
     padding: 4px;
     height: 32px;
     width: 32px;
@@ -784,7 +784,8 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
 }
 
 .toggle-visibility-btn:hover,
-.copy-api-key-btn:hover {
+.copy-api-key-btn:hover,
+.download-api-key-btn:hover {
     background: rgba(77, 107, 254, 0.1);
     color: #4D6BFE;
 }
@@ -1512,33 +1513,6 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
     /* Make room for both buttons */
     width: 100%;
     font-family: monospace;
-}
-
-.copy-api-key-btn,
-.download-api-key-btn {
-    position: absolute;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #666;
-    padding: 4px;
-    height: 32px;
-    width: 32px;
-    border-radius: 4px;
-    transition: all 0.2s ease;
-}
-
-.copy-api-key-btn:hover,
-.download-api-key-btn:hover {
-    background: rgba(77, 107, 254, 0.1);
-    color: #4D6BFE;
-}
-
-.copy-api-key-btn {
-    right: 4px;
 }
 
 .download-api-key-btn {
