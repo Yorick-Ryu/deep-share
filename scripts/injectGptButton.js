@@ -70,7 +70,7 @@
         // Re-use the SVG from injectDocxButton.js for style consistency
         span.innerHTML = `
             <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 20px; height: 20px;">
-                <path d="M16 18H4C3.45 18 3 17.55 3 17V3C3 2.45 3.45 2 4 2H12L17 7V17C17 17.55 16.55 18 16 18Z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                <path d="M16 18H4C3.45 18 3 17.55 3 17V3C3 2.45 3.45 2 4 2H12L17 7V17C17 17.55 16.55 18 16 18Z" stroke="currentColor" stroke-width="1.25" fill="none"/>
                 <path d="M12 2V7H17" stroke="currentColor" stroke-width="1.5" fill="none"/>
                 <path d="M6 10.5H14" stroke="currentColor" stroke-width="1.5"/>
                 <path d="M6 14H12" stroke="currentColor" stroke-width="1.5"/>
