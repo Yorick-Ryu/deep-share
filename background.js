@@ -3,6 +3,21 @@
  * Handles background tasks for the extension
  */
 
+// Listen for extension installation
+chrome.runtime.onInstalled.addListener((details) => {
+    if (details.reason === 'install') {
+        // Check if onboarding has been completed
+        chrome.storage.sync.get(['onboardingCompleted'], (data) => {
+            if (!data.onboardingCompleted) {
+                // Open onboarding page on first install
+                chrome.tabs.create({
+                    url: chrome.runtime.getURL('onboarding/onboarding.html')
+                });
+            }
+        });
+    }
+});
+
 // Listen for messages from content scripts
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     // Handle open popup request

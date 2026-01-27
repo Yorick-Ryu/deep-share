@@ -182,6 +182,12 @@
     "formulaSettingsTitle": {
         "message": "Formula Copy Settings"
     },
+    "formulaCopyTutorialText": {
+        "message": "Learn more about formula copying:"
+    },
+    "formulaCopyTutorialLink": {
+        "message": "View Tutorial"
+    },
     "enableFormulaCopyLabel": {
         "message": "Enable Formula Copy"
     },
@@ -346,5 +352,62 @@
     },
     "networkError": {
         "message": "Conversion failed, please check your network"
+    },
+    "onboardingWelcomeTitle": {
+        "message": "Welcome to DeepShare!"
+    },
+    "onboardingWelcomeSubtitle": {
+        "message": "Let's choose the right formula format and pin the extension"
+    },
+    "onboardingSelectionTitle": {
+        "message": "Choose Your Formula Format"
+    },
+    "onboardingSelectionDescription": {
+        "message": "You can change this later in the extension settings"
+    },
+    "onboardingMathMLDescription": {
+        "message": "Perfect for Microsoft Word users"
+    },
+    "onboardingLaTeXDescription": {
+        "message": "For WPS, MathType, and Overleaf users"
+    },
+    "onboardingRecommended": {
+        "message": "Recommended"
+    },
+    "onboardingLearnMoreText": {
+        "message": "Learn more about formula copying:"
+    },
+    "onboardingLearnMoreLink": {
+        "message": "View Tutorial"
+    },
+    "onboardingContinue": {
+        "message": "Continue"
+    },
+    "onboardingPinTitle": {
+        "message": "Pin DeepShare to Your Toolbar"
+    },
+    "onboardingPinSubtitle": {
+        "message": "Pin the extension for quick access to settings"
+    },
+    "onboardingPinStep1": {
+        "message": "Click the puzzle icon in your browser toolbar"
+    },
+    "onboardingPinStep2": {
+        "message": "Find DeepShare and click the pin icon"
+    },
+    "onboardingPinStep3": {
+        "message": "Click the DeepShare icon anytime to access settings"
+    },
+    "onboardingFinish": {
+        "message": "Got it!"
+    },
+    "onboardingBack": {
+        "message": "Back"
+    },
+    "onboardingLearnMoreUsageText": {
+        "message": "Learn more about using the extension:"
+    },
+    "onboardingLearnMoreUsageLink": {
+        "message": "View Tutorials"
     }
 }

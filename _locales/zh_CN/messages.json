@@ -182,6 +182,12 @@
     "formulaSettingsTitle": {
         "message": "公式复制设置"
     },
+    "formulaCopyTutorialText": {
+        "message": "了解更多关于公式复制的信息："
+    },
+    "formulaCopyTutorialLink": {
+        "message": "查看教程"
+    },
     "enableFormulaCopyLabel": {
         "message": "启用公式复制功能"
     },
@@ -346,5 +352,62 @@
     },
     "networkError": {
         "message": "转换失败，请检查网络"
+    },
+    "onboardingWelcomeTitle": {
+        "message": "欢迎使用 DeepShare！"
+    },
+    "onboardingWelcomeSubtitle": {
+        "message": "让我们一起选择合适的公式格式并将插件固定"
+    },
+    "onboardingSelectionTitle": {
+        "message": "选择公式复制格式"
+    },
+    "onboardingSelectionDescription": {
+        "message": "稍后您可以在插件设置中更改此选项"
+    },
+    "onboardingMathMLDescription": {
+        "message": "适合 Microsoft Word 用户"
+    },
+    "onboardingLaTeXDescription": {
+        "message": "适合 WPS、MathType 和 Overleaf 用户"
+    },
+    "onboardingRecommended": {
+        "message": "推荐"
+    },
+    "onboardingLearnMoreText": {
+        "message": "了解更多关于公式复制的信息："
+    },
+    "onboardingLearnMoreLink": {
+        "message": "查看教程"
+    },
+    "onboardingContinue": {
+        "message": "继续"
+    },
+    "onboardingPinTitle": {
+        "message": "将 DeepShare 固定到工具栏"
+    },
+    "onboardingPinSubtitle": {
+        "message": "固定插件以便快速访问设置"
+    },
+    "onboardingPinStep1": {
+        "message": "点击浏览器工具栏中的拼图图标"
+    },
+    "onboardingPinStep2": {
+        "message": "找到 DeepShare 并点击固定图标"
+    },
+    "onboardingPinStep3": {
+        "message": "随时点击 DeepShare 图标来访问设置"
+    },
+    "onboardingFinish": {
+        "message": "知道了！"
+    },
+    "onboardingBack": {
+        "message": "返回"
+    },
+    "onboardingLearnMoreUsageText": {
+        "message": "了解更多关于插件的使用方法："
+    },
+    "onboardingLearnMoreUsageLink": {
+        "message": "查看教程"
     }
 }

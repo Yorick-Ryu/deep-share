@@ -182,6 +182,12 @@
     "formulaSettingsTitle": {
         "message": "Configurações de cópia de fórmulas"
     },
+    "formulaCopyTutorialText": {
+        "message": "Saiba mais sobre cópia de fórmulas:"
+    },
+    "formulaCopyTutorialLink": {
+        "message": "Ver tutorial"
+    },
     "enableFormulaCopyLabel": {
         "message": "Habilitar cópia de fórmulas"
     },
@@ -346,5 +352,62 @@
     },
     "networkError": {
         "message": "Falha na conversão, verifique sua rede"
+    },
+    "onboardingWelcomeTitle": {
+        "message": "Bem-vindo ao DeepShare!"
+    },
+    "onboardingWelcomeSubtitle": {
+        "message": "Vamos escolher o formato de fórmula correto e fixar a extensão"
+    },
+    "onboardingSelectionTitle": {
+        "message": "Escolha seu formato de fórmula"
+    },
+    "onboardingSelectionDescription": {
+        "message": "Você pode alterar isso depois nas configurações da extensão"
+    },
+    "onboardingMathMLDescription": {
+        "message": "Perfeito para usuários do Microsoft Word"
+    },
+    "onboardingLaTeXDescription": {
+        "message": "Para usuários do WPS, MathType e Overleaf"
+    },
+    "onboardingRecommended": {
+        "message": "Recomendado"
+    },
+    "onboardingLearnMoreText": {
+        "message": "Saiba mais sobre cópia de fórmulas:"
+    },
+    "onboardingLearnMoreLink": {
+        "message": "Ver tutorial"
+    },
+    "onboardingContinue": {
+        "message": "Continuar"
+    },
+    "onboardingPinTitle": {
+        "message": "Fixar DeepShare na barra de ferramentas"
+    },
+    "onboardingPinSubtitle": {
+        "message": "Fixe a extensão para acessar rapidamente as configurações"
+    },
+    "onboardingPinStep1": {
+        "message": "Clique no ícone de quebra-cabeça na barra de ferramentas"
+    },
+    "onboardingPinStep2": {
+        "message": "Encontre DeepShare e clique no ícone de fixar"
+    },
+    "onboardingPinStep3": {
+        "message": "Clique no ícone DeepShare a qualquer momento para acessar as configurações"
+    },
+    "onboardingFinish": {
+        "message": "Entendi!"
+    },
+    "onboardingBack": {
+        "message": "Voltar"
+    },
+    "onboardingLearnMoreUsageText": {
+        "message": "Saiba mais sobre como usar a extensão:"
+    },
+    "onboardingLearnMoreUsageLink": {
+        "message": "Ver tutoriais"
     }
 }

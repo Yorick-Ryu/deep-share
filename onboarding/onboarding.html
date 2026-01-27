@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Welcome to DeepShare</title>
+  <link rel="stylesheet" href="onboarding.css">
+</head>
+
+<body>
+  <div class="onboarding-container">
+    <div class="onboarding-content">
+      <!-- Logo and Welcome -->
+      <div class="welcome-section">
+        <img src="../icons/deepshare-icon.svg" alt="DeepShare" class="logo">
+        <div class="welcome-text">
+          <h1 id="welcomeTitle">Welcome to DeepShare!</h1>
+          <p id="welcomeSubtitle">Let's set up formula copying for your workflow</p>
+        </div>
+      </div>
+
+      <!-- Formula Format Selection -->
+      <div class="selection-section">
+        <h2 id="selectionTitle">Choose Your Formula Format</h2>
+        <p id="selectionDescription">You can change this later in the extension settings</p>
+
+        <div class="format-options">
+          <!-- MathML Option -->
+          <label class="format-option" for="formatMathML">
+            <input type="radio" id="formatMathML" name="formulaFormat" value="mathml" checked>
+            <div class="option-card">
+              <div class="option-header">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="option-icon">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="16" y1="13" x2="8" y2="13"></line>
+                  <line x1="16" y1="17" x2="8" y2="17"></line>
+                </svg>
+                <h3>MathML</h3>
+              </div>
+              <p class="option-description" id="mathmlDescription">
+                Perfect for Microsoft Word users
+              </p>
+              <div class="option-badge recommended" id="mathmlRecommended">Recommended</div>
+            </div>
+          </label>
+
+          <!-- LaTeX Option -->
+          <label class="format-option" for="formatLaTeX">
+            <input type="radio" id="formatLaTeX" name="formulaFormat" value="latex">
+            <div class="option-card">
+              <div class="option-header">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 1024 1024"
+                  fill="currentColor" stroke="none" class="option-icon">
+                  <path
+                    d="M149.333333 192a64 64 0 0 1 64-64h640v85.333333H256.789333l286.912 251.050667a64 64 0 0 1 1.642667 94.848l-4.736 4.437333L256.96 810.666667H853.333333v85.333333H213.333333a64 64 0 0 1-64-64v-11.626667a64 64 0 0 1 21.973334-48.256L469.269333 512.64 171.178667 251.818667A64 64 0 0 1 149.333333 203.648V192z">
+                  </path>
+                </svg>
+                <h3>LaTeX</h3>
+              </div>
+              <p class="option-description" id="latexDescription">
+                For WPS, MathType, and Overleaf users
+              </p>
+            </div>
+          </label>
+        </div>
+
+        <!-- Learn More Link -->
+        <div class="learn-more">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+          <span id="learnMoreText">Learn more about formula copying:</span>
+          <a href="https://docs.deepshare.app/usage/copy-formula" target="_blank" id="learnMoreLink">
+            View Tutorial
+          </a>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="action-buttons">
+        <button id="continueBtn" class="primary-btn">
+          <span id="continueText">Continue</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Pin Extension Step (Hidden by default) -->
+    <div class="onboarding-content pin-step" id="pinStep" style="display: none;">
+      <div class="pin-section">
+        <div class="pin-header">
+          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="pin-icon">
+            <path d="M12 17v5"></path>
+            <path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"></path>
+          </svg>
+          <div class="pin-header-text">
+            <h1 id="pinTitle">Pin DeepShare to Your Toolbar</h1>
+            <p id="pinSubtitle">Pin the extension for quick access to settings</p>
+          </div>
+        </div>
+
+        <!-- GIF and Instructions Container -->
+        <div class="pin-content-wrapper">
+          <!-- GIF Demo -->
+          <div class="gif-container">
+            <img src="https://flies.deepshare.app/pin-deepshare.gif" alt="Pin Extension Demo" class="demo-gif">
+          </div>
+
+          <!-- Instructions -->
+          <div class="pin-instructions">
+            <div class="instruction-item">
+              <div class="instruction-number">1</div>
+              <p id="pinStep1">Click the puzzle icon in your browser toolbar</p>
+            </div>
+            <div class="instruction-item">
+              <div class="instruction-number">2</div>
+              <p id="pinStep2">Find DeepShare and click the pin icon</p>
+            </div>
+            <div class="instruction-item">
+              <div class="instruction-number">3</div>
+              <p id="pinStep3">Click the DeepShare icon anytime to access settings</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Learn More Link -->
+        <div class="learn-more">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+          <span id="learnMoreUsageText">Learn more about using the extension:</span>
+          <a href="https://docs.deepshare.app/usage" target="_blank" id="learnMoreUsageLink">
+            View Tutorials
+          </a>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+          <button id="backBtn" class="secondary-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            <span id="backText">Back</span>
+          </button>
+          <button id="finishBtn" class="primary-btn">
+            <span id="finishText">Got it!</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="onboarding.js"></script>
+</body>
+
+</html>

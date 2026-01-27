@@ -467,6 +467,8 @@ function loadI18nText(errorMsg = null) {
 
   // Formula Copy Settings tab
   document.getElementById('formulaSettingsTitle').textContent = getMessage('formulaSettingsTitle') || 'Formula Copy Settings';
+  document.getElementById('formulaCopyTutorialText').textContent = getMessage('formulaCopyTutorialText') || '了解更多关于公式复制的信息：';
+  document.getElementById('formulaCopyTutorialLink').textContent = getMessage('formulaCopyTutorialLink') || '查看教程';
   document.getElementById('enableFormulaCopyLabel').textContent = getMessage('enableFormulaCopyLabel') || 'Enable Formula Copy';
   document.getElementById('formulaFormatLabel').textContent = getMessage('formulaFormatLabel') || 'Formula Copy Format';
   document.getElementById('formatMathMLLabel').textContent = getMessage('formatMathMLLabel') || 'MathML';

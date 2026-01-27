@@ -1,0 +1,519 @@
+:root {
+  --bg-color: #ffffff;
+  --text-color: #333333;
+  --text-secondary: #666666;
+  --border-color: #e0e0e0;
+  --primary-color: #4D6BFE;
+  --primary-hover: #3D5BEE;
+  --card-bg: #ffffff;
+  --card-hover-bg: #f8f9fa;
+  --card-selected-bg: #f0f4ff;
+  --card-selected-border: #4D6BFE;
+  --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --card-hover-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  --badge-bg: #4D6BFE;
+  --badge-text: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-color: #1e1e1e;
+    --text-color: #ffffff;
+    --text-secondary: #aaaaaa;
+    --border-color: #333333;
+    --primary-color: #6E85FF;
+    --primary-hover: #5C75FF;
+    --card-bg: #2d2d2d;
+    --card-hover-bg: #353535;
+    --card-selected-bg: #2a3552;
+    --card-selected-border: #6E85FF;
+    --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    --card-hover-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+    --badge-bg: #6E85FF;
+    --badge-text: #ffffff;
+  }
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans',
+    'Droid Sans', 'Helvetica Neue', sans-serif;
+  background: var(--bg-color);
+  color: var(--text-color);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.onboarding-container {
+  max-width: 700px;
+  width: 100%;
+  animation: fadeIn 0.5s ease-in;
+}
+
+/* Wider container for pin step */
+.onboarding-container:has(.pin-step:not([style*="display: none"])) {
+  max-width: 1000px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.onboarding-content {
+  background: var(--card-bg);
+  border-radius: 16px;
+  padding: 48px;
+  box-shadow: var(--card-shadow);
+}
+
+/* Welcome Section */
+.welcome-section {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  margin-bottom: 48px;
+}
+
+.logo {
+  flex-shrink: 0;
+  width: 64px;
+  height: 64px;
+  animation: scaleIn 0.5s ease-out;
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.welcome-text {
+  flex: 1;
+}
+
+.welcome-section h1 {
+  font-size: 32px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--text-color);
+}
+
+.welcome-section p {
+  font-size: 16px;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* Selection Section */
+.selection-section h2 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--text-color);
+}
+
+.selection-section>p {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+}
+
+/* Format Options */
+.format-options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.format-option {
+  cursor: pointer;
+  display: block;
+}
+
+.format-option input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.option-card {
+  background: var(--card-bg);
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  padding: 24px;
+  transition: all 0.2s ease;
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.option-card:hover {
+  background: var(--card-hover-bg);
+  box-shadow: var(--card-hover-shadow);
+  transform: translateY(-2px);
+}
+
+.format-option input[type="radio"]:checked+.option-card {
+  background: var(--card-selected-bg);
+  border-color: var(--card-selected-border);
+  box-shadow: 0 0 0 3px rgba(77, 107, 254, 0.1);
+}
+
+.option-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.option-icon {
+  color: var(--primary-color);
+  flex-shrink: 0;
+}
+
+.option-header h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.option-description {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+  flex-grow: 1;
+}
+
+.option-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.option-badge.recommended {
+  background: var(--badge-bg);
+  color: var(--badge-text);
+}
+
+/* Learn More */
+.learn-more {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px;
+  background: var(--card-hover-bg);
+  border-radius: 8px;
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 32px;
+}
+
+.learn-more svg {
+  flex-shrink: 0;
+  color: var(--primary-color);
+}
+
+.learn-more a {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 500;
+  transition: opacity 0.2s ease;
+}
+
+.learn-more a:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
+/* Learn More - Additional margin for pin step */
+.pin-step .learn-more {
+  margin-bottom: 24px;
+}
+
+/* Action Buttons */
+.action-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.pin-step .action-buttons {
+  justify-content: space-between;
+}
+
+.primary-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 32px;
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(77, 107, 254, 0.3);
+}
+
+.primary-btn:hover {
+  background: var(--primary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(77, 107, 254, 0.4);
+}
+
+.primary-btn:active {
+  transform: translateY(0);
+}
+
+.primary-btn svg {
+  transition: transform 0.2s ease;
+}
+
+.primary-btn:hover svg {
+  transform: translateX(2px);
+}
+
+/* Pin Extension Step */
+.pin-step {
+  margin-top: 20px;
+}
+
+.pin-section {
+  text-align: left;
+}
+
+/* Pin Header - Icon and Title Together */
+.pin-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  margin-bottom: 32px;
+}
+
+.pin-icon {
+  flex-shrink: 0;
+  color: var(--primary-color);
+  animation: scaleIn 0.5s ease-out;
+}
+
+.pin-header-text {
+  flex: 1;
+}
+
+.pin-header-text h1 {
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--text-color);
+}
+
+.pin-header-text p {
+  font-size: 16px;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* Pin Content Wrapper - GIF and Instructions Side by Side */
+.pin-content-wrapper {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 32px;
+  margin-bottom: 32px;
+  align-items: start;
+}
+
+/* GIF Container */
+.gif-container {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--card-shadow);
+  background: var(--card-hover-bg);
+  max-width: none;
+}
+
+.demo-gif {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Pin Instructions */
+.pin-instructions {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.instruction-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px;
+  background: var(--card-hover-bg);
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.instruction-item:hover {
+  background: var(--card-selected-bg);
+  transform: translateX(4px);
+}
+
+.instruction-number {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--primary-color);
+  color: white;
+  border-radius: 50%;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.instruction-item p {
+  margin: 0;
+  padding-top: 4px;
+  font-size: 15px;
+  color: var(--text-color);
+  line-height: 1.5;
+}
+
+/* Secondary Button (Back Button) */
+.secondary-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: transparent;
+  color: var(--text-color);
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.secondary-btn:hover {
+  background: var(--card-hover-bg);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+  transform: translateY(-1px);
+}
+
+.secondary-btn:active {
+  transform: translateY(0);
+}
+
+.secondary-btn svg {
+  transition: transform 0.2s ease;
+}
+
+.secondary-btn:hover svg {
+  transform: translateX(-2px);
+}
+
+/* Responsive Design */
+@media (max-width: 640px) {
+  .onboarding-content {
+    padding: 32px 24px;
+  }
+
+  .format-options {
+    grid-template-columns: 1fr;
+  }
+
+  .welcome-section {
+    gap: 12px;
+  }
+
+  .welcome-section h1 {
+    font-size: 22px;
+  }
+
+  .welcome-section p {
+    font-size: 14px;
+  }
+
+  .logo {
+    width: 48px;
+    height: 48px;
+  }
+
+  .pin-header {
+    gap: 12px;
+  }
+
+  .pin-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .pin-header-text h1 {
+    font-size: 22px;
+  }
+
+  .pin-header-text p {
+    font-size: 14px;
+  }
+
+  .pin-content-wrapper {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .instruction-item {
+    padding: 12px;
+  }
+
+  .action-buttons {
+    flex-direction: column-reverse;
+    width: 100%;
+  }
+
+  .secondary-btn,
+  .primary-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .pin-step .action-buttons {
+    flex-direction: column-reverse;
+  }
+}

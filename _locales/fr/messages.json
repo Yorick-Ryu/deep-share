@@ -182,6 +182,12 @@
     "formulaSettingsTitle": {
         "message": "Paramètres de copie de formule"
     },
+    "formulaCopyTutorialText": {
+        "message": "En savoir plus sur la copie de formules :"
+    },
+    "formulaCopyTutorialLink": {
+        "message": "Voir le tutoriel"
+    },
     "enableFormulaCopyLabel": {
         "message": "Activer la copie de formule"
     },
@@ -346,5 +352,62 @@
     },
     "networkError": {
         "message": "Échec de la conversion, veuillez vérifier votre réseau"
+    },
+    "onboardingWelcomeTitle": {
+        "message": "Bienvenue dans DeepShare !"
+    },
+    "onboardingWelcomeSubtitle": {
+        "message": "Choisissons le bon format de formule et épinglons l'extension"
+    },
+    "onboardingSelectionTitle": {
+        "message": "Choisissez votre format de formule"
+    },
+    "onboardingSelectionDescription": {
+        "message": "Vous pourrez modifier cela plus tard dans les paramètres de l'extension"
+    },
+    "onboardingMathMLDescription": {
+        "message": "Parfait pour les utilisateurs de Microsoft Word"
+    },
+    "onboardingLaTeXDescription": {
+        "message": "Pour les utilisateurs de WPS, MathType et Overleaf"
+    },
+    "onboardingRecommended": {
+        "message": "Recommandé"
+    },
+    "onboardingLearnMoreText": {
+        "message": "En savoir plus sur la copie de formules :"
+    },
+    "onboardingLearnMoreLink": {
+        "message": "Voir le tutoriel"
+    },
+    "onboardingContinue": {
+        "message": "Continuer"
+    },
+    "onboardingPinTitle": {
+        "message": "Épingler DeepShare dans votre barre d'outils"
+    },
+    "onboardingPinSubtitle": {
+        "message": "Épinglez l'extension pour accéder rapidement aux paramètres"
+    },
+    "onboardingPinStep1": {
+        "message": "Cliquez sur l'icône de puzzle dans votre barre d'outils"
+    },
+    "onboardingPinStep2": {
+        "message": "Trouvez DeepShare et cliquez sur l'icône d'épingle"
+    },
+    "onboardingPinStep3": {
+        "message": "Cliquez sur l'icône DeepShare à tout moment pour accéder aux paramètres"
+    },
+    "onboardingFinish": {
+        "message": "Compris !"
+    },
+    "onboardingBack": {
+        "message": "Retour"
+    },
+    "onboardingLearnMoreUsageText": {
+        "message": "En savoir plus sur l'utilisation de l'extension :"
+    },
+    "onboardingLearnMoreUsageLink": {
+        "message": "Voir les tutoriels"
     }
 }

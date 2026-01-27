@@ -182,6 +182,12 @@
     "formulaSettingsTitle": {
         "message": "数式コピー設定"
     },
+    "formulaCopyTutorialText": {
+        "message": "数式コピーの詳細について："
+    },
+    "formulaCopyTutorialLink": {
+        "message": "チュートリアルを見る"
+    },
     "enableFormulaCopyLabel": {
         "message": "数式コピーを有効にする"
     },
@@ -346,5 +352,62 @@
     },
     "networkError": {
         "message": "変換に失敗しました。ネットワークを確認してください"
+    },
+    "onboardingWelcomeTitle": {
+        "message": "DeepShare へようこそ！"
+    },
+    "onboardingWelcomeSubtitle": {
+        "message": "適切な数式フォーマットを選択し、拡張機能をピン留めしましょう"
+    },
+    "onboardingSelectionTitle": {
+        "message": "数式フォーマットを選択"
+    },
+    "onboardingSelectionDescription": {
+        "message": "後で拡張機能の設定から変更できます"
+    },
+    "onboardingMathMLDescription": {
+        "message": "Microsoft Word ユーザーに最適"
+    },
+    "onboardingLaTeXDescription": {
+        "message": "WPS、MathType、Overleaf ユーザー向け"
+    },
+    "onboardingRecommended": {
+        "message": "推奨"
+    },
+    "onboardingLearnMoreText": {
+        "message": "数式コピーの詳細について："
+    },
+    "onboardingLearnMoreLink": {
+        "message": "チュートリアルを見る"
+    },
+    "onboardingContinue": {
+        "message": "続ける"
+    },
+    "onboardingPinTitle": {
+        "message": "DeepShare をツールバーにピン留め"
+    },
+    "onboardingPinSubtitle": {
+        "message": "拡張機能をピン留めして設定に素早くアクセス"
+    },
+    "onboardingPinStep1": {
+        "message": "ブラウザのツールバーにあるパズルアイコンをクリック"
+    },
+    "onboardingPinStep2": {
+        "message": "DeepShare を見つけてピンアイコンをクリック"
+    },
+    "onboardingPinStep3": {
+        "message": "いつでも DeepShare アイコンをクリックして設定にアクセス"
+    },
+    "onboardingFinish": {
+        "message": "了解しました！"
+    },
+    "onboardingBack": {
+        "message": "戻る"
+    },
+    "onboardingLearnMoreUsageText": {
+        "message": "拡張機能の使用方法について詳しく："
+    },
+    "onboardingLearnMoreUsageLink": {
+        "message": "チュートリアルを見る"
     }
 }
