@@ -163,8 +163,8 @@
      * Converts KaTeX formulas to standard Markdown format
      */
     function extractContentWithFormulas(container) {
-        const markdownDiv = container.querySelector('.markdown');
-        if (!markdownDiv) return '';
+        const markdownDivs = container.querySelectorAll('.markdown');
+        if (markdownDivs.length === 0) return '';
 
         let result = '';
 
@@ -514,7 +514,10 @@
             }
         };
 
-        markdownDiv.childNodes.forEach(child => processNode(child, 0, false));
+        markdownDivs.forEach((markdownDiv, index) => {
+            if (index > 0) result += '\n\n';
+            markdownDiv.childNodes.forEach(child => processNode(child, 0, false));
+        });
 
         // Clean up excessive newlines
         result = result.replace(/\n{3,}/g, '\n\n').trim();
@@ -552,8 +555,8 @@
                 </div>
             `;
 
-            // Prepend or append? Usually consistent with Gemini we prepend to the first few actions
-            menuContent.prepend(mdButton);
+            // Append to the end of the menu
+            menuContent.append(mdButton);
 
             // Click event
             mdButton.addEventListener('click', (e) => {
