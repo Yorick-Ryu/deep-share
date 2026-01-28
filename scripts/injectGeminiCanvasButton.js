@@ -129,6 +129,9 @@
                     docxButton.setAttribute('disabled', 'true');
                     docxButton.style.opacity = '0.6';
 
+                    // 先从 DOM 提取标题（在内容转换之前）
+                    const documentTitle = getCanvasTitleFromDOM();
+
                     // 获取Canvas内容
                     const canvasContent = await getCanvasContent();
 
@@ -140,11 +143,12 @@
                             content: canvasContent,
                         };
 
-                        // 触发转换为DOCX的事件
+                        // 触发转换为DOCX的事件，包含文档标题
                         const event = new CustomEvent('deepshare:convertToDocx', {
                             detail: {
                                 messages: conversationData,
                                 sourceButton: docxButton,
+                                documentTitle: documentTitle,
                             },
                         });
                         document.dispatchEvent(event);
@@ -182,14 +186,17 @@
                     mdButton.setAttribute('disabled', 'true');
                     mdButton.style.opacity = '0.6';
 
+                    // 先从 DOM 提取标题（在内容转换之前）
+                    const documentTitle = getCanvasTitleFromDOM();
+
                     // 获取Canvas内容
                     const canvasContent = await getCanvasContent();
 
                     if (canvasContent && canvasContent.trim()) {
                         console.debug('DeepShare: Successfully got Canvas content for Markdown');
 
-                        // 直接下载为 Markdown 文件
-                        downloadMarkdownFile(canvasContent);
+                        // 直接下载为 Markdown 文件，传入提取的标题
+                        downloadMarkdownFile(canvasContent, documentTitle);
 
                         // 关闭菜单
                         setTimeout(() => {
@@ -217,10 +224,38 @@
     }
 
     /**
+     * 从 DOM 中提取文档标题
+     * 优先从 h1[data-path-to-node="0"] 获取，这是深度研究报告的主标题
+     */
+    function getCanvasTitleFromDOM() {
+        // 优先查找 h1[data-path-to-node="0"]
+        const h1Element = document.querySelector('#extended-response-markdown-content h1[data-path-to-node="0"]');
+        if (h1Element && h1Element.textContent) {
+            const title = h1Element.textContent.trim();
+            if (title) {
+                console.debug('DeepShare: Found title from h1[data-path-to-node="0"]:', title);
+                return title;
+            }
+        }
+
+        // 备选：查找任意 h1 元素
+        const anyH1 = document.querySelector('#extended-response-markdown-content h1');
+        if (anyH1 && anyH1.textContent) {
+            const title = anyH1.textContent.trim();
+            if (title) {
+                console.debug('DeepShare: Found title from h1:', title);
+                return title;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * 下载 Markdown 文件
      */
-    function downloadMarkdownFile(content) {
-        const filename = generateFilename(content) + '.md';
+    function downloadMarkdownFile(content, title = null) {
+        const filename = generateFilename(content, title) + '.md';
 
         // 创建 Blob 对象
         const blob = new Blob([content], { type: 'text/markdown;charset=utf-8' });
@@ -244,9 +279,11 @@
 
     /**
      * 生成文件名
-     * 基于内容的第一行和本地时间戳生成文件名
+     * 优先使用传入的标题，否则基于内容的第一行
+     * @param {string} content - Markdown 内容
+     * @param {string|null} title - 可选的文档标题（从 DOM 提取）
      */
-    function generateFilename(content) {
+    function generateFilename(content, title = null) {
         // 获取本地时区时间戳
         function getLocalTimestamp() {
             const now = new Date();
@@ -261,9 +298,27 @@
             return localTime;
         }
 
-        // 默认文件名
+        // 清理文件名中不允许的特殊字符，保留中文、字母、数字和下划线
+        function sanitizeFilename(name) {
+            return name.replace(/[^a-zA-Z0-9_\u4e00-\u9fa5\-]/g, '');
+        }
+
+        const timestamp = getLocalTimestamp();
+
+        // 优先使用传入的标题
+        if (title && typeof title === 'string') {
+            let filename = title.trim();
+            // 截取前50个字符（标题可以更长一些）
+            filename = filename.substring(0, 50).trim();
+            filename = sanitizeFilename(filename);
+            if (filename) {
+                console.debug('DeepShare: Using DOM title for filename:', filename);
+                return `${filename}_${timestamp}`;
+            }
+        }
+
+        // Fallback: 使用内容的第一行
         if (!content || typeof content !== 'string') {
-            const timestamp = getLocalTimestamp();
             return `document_${timestamp}`;
         }
 
@@ -273,17 +328,13 @@
 
         // 截取前10个字符
         filename = filename.substring(0, 10).trim();
-
-        // 移除文件名中不允许的特殊字符，保留中文和字母数字
-        filename = filename.replace(/[^a-zA-Z0-9_\u4e00-\u9fa5]/g, '');
+        filename = sanitizeFilename(filename);
 
         // 如果清理后为空，使用默认名
         if (!filename) {
             filename = 'document';
         }
 
-        // 添加本地时区时间戳
-        const timestamp = getLocalTimestamp();
         return `${filename}_${timestamp}`;
     }
 

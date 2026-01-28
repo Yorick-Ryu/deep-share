@@ -11,12 +11,13 @@ function initDocxConverter() {
     document.addEventListener('deepshare:convertToDocx', async (event) => {
         const message = event.detail?.messages || {};
         const sourceButton = event.detail?.sourceButton; // Get the source button
-        await convertToDocx(message, sourceButton);
+        const documentTitle = event.detail?.documentTitle || null; // Get document title if provided
+        await convertToDocx(message, sourceButton, documentTitle);
     });
 }
 
 // Function to handle the conversion process
-async function convertToDocx(message, sourceButton) {
+async function convertToDocx(message, sourceButton, documentTitle = null) {
     console.debug('Starting DOCX conversion');
 
     // Check if message is a Promise and await it
@@ -87,7 +88,7 @@ async function convertToDocx(message, sourceButton) {
         });
 
         // Always use the API conversion method
-        await convertToDocxViaApi(message.content, settings.docxServerUrl);
+        await convertToDocxViaApi(message.content, settings.docxServerUrl, documentTitle);
 
         // Hide converting notification
         if (convertingNotificationId !== null) {
@@ -184,7 +185,7 @@ async function convertToDocx(message, sourceButton) {
 
 
 // Function to convert text to DOCX via API
-async function convertToDocxViaApi(content, serverUrl) {
+async function convertToDocxViaApi(content, serverUrl, documentTitle = null) {
     try {
         // Get API settings from storage
         const settings = await chrome.storage.sync.get({
@@ -243,7 +244,7 @@ async function convertToDocxViaApi(content, serverUrl) {
 
         const body = {
             content: processedContent,
-            filename: generateFilename(content),
+            filename: generateFilename(content, documentTitle),
             remove_hr: settings.removeDividers,
             convert_mermaid: settings.convertMermaid,
             compat_mode: settings.compatMode,
@@ -273,7 +274,7 @@ async function convertToDocxViaApi(content, serverUrl) {
 
         // Download the file
         const blob = await response.blob();
-        const filename = generateFilename(content) + '.docx';
+        const filename = generateFilename(content, documentTitle) + '.docx';
 
         const downloadUrl = URL.createObjectURL(blob);
         const link = document.createElement('a');
@@ -347,7 +348,9 @@ async function checkQuota() {
 }
 
 // Helper function to generate a filename based on the clipboard content
-function generateFilename(content) {
+// @param {string} content - Markdown 内容
+// @param {string|null} title - 可选的文档标题（从 DOM 提取）
+function generateFilename(content, title = null) {
     // Helper function to get local time zone timestamp
     function getLocalTimestamp() {
         const now = new Date();
@@ -363,10 +366,27 @@ function generateFilename(content) {
         return localTime;
     }
 
-    // Default filename generation
+    // 清理文件名中不允许的特殊字符，保留中文、字母、数字和下划线
+    function sanitizeFilename(name) {
+        return name.replace(/[^a-zA-Z0-9_\u4e00-\u9fa5\-]/g, '');
+    }
+
+    const timestamp = getLocalTimestamp();
+
+    // 优先使用传入的标题
+    if (title && typeof title === 'string') {
+        let filename = title.trim();
+        // 截取前50个字符（标题可以更长一些）
+        filename = filename.substring(0, 50).trim();
+        filename = sanitizeFilename(filename);
+        if (filename) {
+            console.debug('DeepShare: Using document title for filename:', filename);
+            return `${filename}_${timestamp}`;
+        }
+    }
+
+    // Fallback: 使用内容的第一行
     if (!content || typeof content !== 'string') {
-        // Fallback if no valid content
-        const timestamp = getLocalTimestamp();
         return `document_${timestamp}`;
     }
 
@@ -376,17 +396,13 @@ function generateFilename(content) {
 
     // If first line is too long, truncate it
     filename = filename.substring(0, 10).trim();
-
-    // Remove special characters that aren't allowed in filenames
-    filename = filename.replace(/[^a-zA-Z0-9_\u4e00-\u9fa5]/g, '');
+    filename = sanitizeFilename(filename);
 
     // If filename is still empty after cleaning, use a default
     if (!filename) {
         filename = 'document';
     }
 
-    // Add timestamp with local timezone
-    const timestamp = getLocalTimestamp();
     return `${filename}_${timestamp}`;
 }
 
