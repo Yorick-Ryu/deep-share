@@ -134,6 +134,7 @@ function loadSettings(highlightApiKey = false, forceDocxTab = false) {
     const formulaFormat = data.formulaFormat || 'mathml'; // Default to MathML
     document.getElementById('formatMathML').checked = formulaFormat === 'mathml';
     document.getElementById('formatLaTeX').checked = formulaFormat === 'latex';
+    document.getElementById('formatDollarLatex').checked = formulaFormat === 'dollarLatex';
 
     // Formula engine settings
     const formulaEngine = data.formulaEngine || 'mathjax'; // Default to MathJax
@@ -302,6 +303,7 @@ function setupAutoSave() {
     document.getElementById('enableFormulaCopy'),
     document.getElementById('formatMathML'),
     document.getElementById('formatLaTeX'),
+    document.getElementById('formatDollarLatex'),
     // 添加公式转换引擎设置
     document.getElementById('engineMathJax'),
     document.getElementById('engineKaTeX'),
@@ -473,6 +475,7 @@ function loadI18nText(errorMsg = null) {
   document.getElementById('formulaFormatLabel').textContent = getMessage('formulaFormatLabel') || 'Formula Copy Format';
   document.getElementById('formatMathMLLabel').textContent = getMessage('formatMathMLLabel') || 'MathML';
   document.getElementById('formatLaTeXLabel').textContent = getMessage('formatLaTeXLabel') || 'LaTeX';
+  document.getElementById('formatDollarLatexLabel').textContent = getMessage('formatDollarLatexLabel') || 'Markdown';
   document.getElementById('formulaFormatHint').textContent = getMessage('formulaFormatHint') || 'MathML is compatible with more editors, LaTeX is for professional typesetting';
   document.getElementById('formulaEngineLabel').textContent = getMessage('formulaEngineLabel') || '转换引擎';
   document.getElementById('engineMathJaxLabel').textContent = getMessage('engineMathJaxLabel') || 'MathJax';
@@ -571,6 +574,8 @@ function saveSettings() {
   let formulaFormat = 'mathml'; // 默认为 MathML
   if (document.getElementById('formatLaTeX').checked) {
     formulaFormat = 'latex';
+  } else if (document.getElementById('formatDollarLatex').checked) {
+    formulaFormat = 'dollarLatex';
   }
 
   // Get formula engine from radio buttons

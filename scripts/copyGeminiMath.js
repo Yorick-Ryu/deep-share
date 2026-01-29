@@ -48,6 +48,9 @@ async function handleGeminiMathClick(e) {
             if (formulaSettings.formulaFormat === 'latex') {
                 // Copy raw LaTeX
                 textToCopy = latexCode;
+            } else if (formulaSettings.formulaFormat === 'dollarLatex') {
+                // Copy LaTeX wrapped in $$ for Markdown (Lark/Notion/Obsidian)
+                textToCopy = `$$${latexCode}$$`;
             } else {
                 // Convert LaTeX to MathML via background script
                 // Check if this is a block or inline formula

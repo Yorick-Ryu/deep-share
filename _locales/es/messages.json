@@ -200,8 +200,11 @@
     "formatLaTeXLabel": {
         "message": "LaTeX"
     },
+    "formatDollarLatexLabel": {
+        "message": "Markdown"
+    },
     "formulaFormatHint": {
-        "message": "El formato MathML es adecuado para Word, LaTeX es adecuado para WPS y Overleaf, etc."
+        "message": "MathML para Word, LaTeX para WPS/Overleaf, Markdown para Lark/Notion/Obsidian"
     },
     "formulaEngineLabel": {
         "message": "Motor de conversión"
@@ -370,6 +373,9 @@
     },
     "onboardingLaTeXDescription": {
         "message": "Para usuarios de WPS, MathType y Overleaf"
+    },
+    "onboardingDollarLatexDescription": {
+        "message": "Para usuarios de Lark, Notion y Obsidian"
     },
     "onboardingRecommended": {
         "message": "Recomendado"

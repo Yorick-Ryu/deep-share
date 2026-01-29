@@ -84,6 +84,9 @@ function loadI18nText() {
   // LaTeX option
   document.getElementById('latexDescription').textContent = getMessage('onboardingLaTeXDescription') || 'For WPS, MathType, and Overleaf users';
 
+  // Markdown option for Lark/Notion/Obsidian
+  document.getElementById('dollarLatexDescription').textContent = getMessage('onboardingDollarLatexDescription') || 'For Lark, Notion, and Obsidian users';
+
   // Learn more
   document.getElementById('learnMoreText').textContent = getMessage('onboardingLearnMoreText') || 'Learn more about formula copying:';
   document.getElementById('learnMoreLink').textContent = getMessage('onboardingLearnMoreLink') || 'View Tutorial';

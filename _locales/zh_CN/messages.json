@@ -200,8 +200,11 @@
     "formatLaTeXLabel": {
         "message": "LaTeX"
     },
+    "formatDollarLatexLabel": {
+        "message": "Markdown"
+    },
     "formulaFormatHint": {
-        "message": "MathML 格式适合Word，LaTeX 适合WPS和Overleaf等"
+        "message": "MathML 适合 Word，LaTeX 适合 WPS/Overleaf，Markdown 适合飞书/Notion/Obsidian"
     },
     "formulaEngineLabel": {
         "message": "转换引擎"
@@ -370,6 +373,9 @@
     },
     "onboardingLaTeXDescription": {
         "message": "适合 WPS、MathType 和 Overleaf 用户"
+    },
+    "onboardingDollarLatexDescription": {
+        "message": "适合飞书、Notion 和 Obsidian 用户"
     },
     "onboardingRecommended": {
         "message": "推荐"
