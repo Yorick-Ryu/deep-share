@@ -213,8 +213,11 @@
                     return;
                 }
 
-                const contentElement = activeMessageContainer.querySelector('message-content .model-response-text') ||
-                    activeMessageContainer.querySelector('message-content');
+                // Precisely select the main response content (not thoughts)
+                // Main response is inside: structured-content-container.model-response-text > message-content
+                const contentElement = activeMessageContainer.querySelector('.model-response-text message-content') ||
+                    activeMessageContainer.querySelector('structured-content-container.model-response-text message-content') ||
+                    activeMessageContainer.querySelector('message-content'); // Fallback for older structure
 
                 if (contentElement) {
                     const markdown = extractContentWithFormulas(contentElement);
@@ -265,8 +268,11 @@
             return null;
         }
 
-        const contentElement = messageContainer.querySelector('message-content .model-response-text') ||
-            messageContainer.querySelector('message-content');
+        // Precisely select the main response content (not thoughts)
+        // Main response is inside: structured-content-container.model-response-text > message-content
+        const contentElement = messageContainer.querySelector('.model-response-text message-content') ||
+            messageContainer.querySelector('structured-content-container.model-response-text message-content') ||
+            messageContainer.querySelector('message-content'); // Fallback for older structure
 
         if (!contentElement) {
             console.error('DeepShare: Could not find content element');
