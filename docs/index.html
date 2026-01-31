@@ -92,42 +92,31 @@
             <div class="hero-content">
                 <h1>DeepShare</h1>
                 <p>一键从AI对话导出Word文档，复制其中的公式<br>DeepSeek对话长截图</p>
-                <div class="cta-buttons">
+                <div class="cta-buttons" id="ctaButtons">
                     <a href="https://microsoftedge.microsoft.com/addons/detail/deepshare/pdccjnppfegekpnhfljbngammgfbcofm"
-                        class="cta-button primary">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="cta-button" data-browser="edge">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"
                             style="margin-right: 8px;">
-                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                            <polyline points="7 10 12 15 17 10"></polyline>
-                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                            <path d="M13.817 21.8353C13.7106 21.8384 13.6049 21.84 13.5 21.84 12.4265 21.84 11.1264 21.2191 10.0806 20.0816 9.04473 18.9549 8.30005 17.363 8.30005 15.5 8.30005 14.0815 8.81836 12.9347 9.50108 12.0942 9.55796 14.5796 11.8588 17.7 16.5 17.7 18.1779 17.7 19.2172 17.2476 19.7794 17.0029 19.9878 16.9122 20.1306 16.85 20.2161 16.85 20.4 16.85 20.5 16.95 20.5 17.15 20.5 17.3366 20.3987 17.4712 20.0742 17.9023L20.0007 18C18.5223 19.9682 16.3345 21.3732 13.817 21.8353ZM10.7016 21.9165C5.79216 21.2799 2 17.0828 2 12 2 10.7202 2.74053 9.67125 3.89749 8.91922 5.05841 8.16463 6.58675 7.75 8 7.75 10.2764 7.75 11.6347 8.51511 12.4284 9.39698 12.4785 9.45269 12.5265 9.50903 12.5725 9.56586 12.3887 9.52278 12.197 9.5 12 9.5L11.996 9.5C11.5608 9.50069 11.1518 9.61255 10.7956 9.80869 10.7171 9.84506 10.6385 9.88421 10.5603 9.92588 10.0565 10.1942 9.52919 10.587 9.04942 11.0938 8.08779 12.1096 7.30005 13.6034 7.30005 15.5 7.30005 17.637 8.15534 19.4651 9.34445 20.7584 9.75828 21.2085 10.2178 21.5991 10.7016 21.9165ZM13.8515 13.5956C14.1178 13.3151 14.5 12.9123 14.5 12 14.5 11.1394 14.1625 9.82898 13.1716 8.72802 12.1653 7.60989 10.5236 6.75 8 6.75 6.41325 6.75 4.69159 7.21037 3.35251 8.08078 3.07269 8.26266 2.80734 8.46421 2.5626 8.68489 3.93023 4.7914 7.63913 2 12 2 17.5228 2 22 6 22 10.5 22 13.3 19.8 15.35 17 15.35 15 15.35 13.6 14.7 13.6 14 13.6 13.8607 13.7092 13.7456 13.8515 13.5956Z"></path>
                         </svg>
                         Edge商店安装
                     </a>
                     <a href="https://chromewebstore.google.com/detail/omnaecaamcabmnbjnpjpecoaalfgidop"
-                        class="cta-button secondary">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="cta-button" data-browser="chrome">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"
                             style="margin-right: 8px;">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <circle cx="12" cy="12" r="4"></circle>
-                            <line x1="21.17" y1="8" x2="12" y2="8"></line>
-                            <line x1="3.95" y1="6.06" x2="8.54" y2="14"></line>
-                            <line x1="10.88" y1="21.94" x2="15.46" y2="14"></line>
+                            <path d="M9.82726 21.7633C5.34912 20.7712 2 16.7767 2 12C2 10.1779 2.48734 8.46958 3.33878 6.99834L7.62189 14.4169C8.47396 15.9571 10.1152 17 12 17C12.2023 17 12.4018 16.988 12.5978 16.9646L9.82726 21.7633ZM12 22L16.2868 14.5751C16.7396 13.8229 17 12.9419 17 12C17 10.8744 16.6281 9.83566 16.0004 9H21.5422C21.8396 9.94704 22 10.9548 22 12C22 17.5228 17.5228 22 12 22ZM14.5721 13.545C14.0473 14.4168 13.0917 15 12 15C10.8897 15 9.92024 14.3968 9.40149 13.5002L9.37313 13.4501C9.13535 13.0203 9 12.526 9 12C9 10.3431 10.3431 9 12 9C13.6569 9 15 10.3431 15 12C15 12.5465 14.8539 13.0589 14.5985 13.5002L14.5721 13.545ZM4.6322 5.23859C6.46008 3.24783 9.08432 2 12 2C15.7014 2 18.9331 4.01099 20.6622 7H12C9.93635 7 8.1647 8.25019 7.40112 10.0345L4.6322 5.23859Z"></path>
                         </svg>
                         Chrome商店安装
                     </a>
-                    <a href="https://addons.mozilla.org/firefox/addon/deepshare/" class="cta-button secondary">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    <a href="https://addons.mozilla.org/firefox/addon/deepshare/" class="cta-button" data-browser="firefox">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"
                             style="margin-right: 8px;">
-                            <path
-                                d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.1.2-2.2.5-3.3.3-1.12 1-2.2 2-3.2 1 1.1 1 2.2 1 3.3z">
-                            </path>
+                            <path d="M21.2827 8.26012C20.8473 7.213 19.9656 6.08244 19.2733 5.72516C19.7521 6.6637 20.1656 7.72752 20.2895 8.78174C19.1569 5.95869 17.2363 4.82021 15.6678 2.34173C15.4719 2.03155 15.2431 1.61425 15.1225 1.32928C12.8952 2.63386 11.972 4.91762 11.7347 6.37128C11.0465 6.41037 10.3724 6.58239 9.7497 6.87781C9.63641 6.93386 9.57928 7.07722 9.62296 7.19583C9.67063 7.33373 9.83148 7.40294 9.9644 7.34275C10.599 7.0433 11.2978 6.8858 11.9991 6.87856C13.8038 6.86599 15.517 7.86963 16.4149 9.43745C15.88 9.06171 14.9224 8.69063 13.9997 8.8511C17.6025 10.6522 16.6353 16.8547 11.6429 16.6205C9.62869 16.5384 7.69791 14.9706 7.51696 12.8904C7.51696 12.8904 7.97932 11.1676 10.8277 11.1676C11.1356 11.1676 12.0159 10.3084 12.0323 10.0592C12.0285 9.97778 10.2852 9.28436 9.60553 8.61473C9.30353 8.3172 9.01156 7.99714 8.65778 7.75909C8.42944 6.96033 8.41973 6.11491 8.62964 5.31111C7.6007 5.77968 6.7957 6.52028 6.21389 7.1742C5.81676 6.67125 5.84482 5.01215 5.86745 4.66575C4.9941 5.13081 4.22465 5.9396 3.6187 6.80337C2.59006 8.26122 1.99707 10.1738 1.99707 11.9845C1.99707 17.5158 6.46835 21.9997 12.0002 21.9997C16.9545 21.9997 21.0815 18.4032 21.8869 13.6792C22.128 11.8573 21.9935 9.97004 21.2827 8.26012Z"></path>
                         </svg>
                         Firefox商店安装
                     </a>
-                    <a href="https://extensions.quark.cn/#details/omnaecaamcabmnbjnpjpecoaalfgidop" class="cta-button secondary">
+                    <a href="https://extensions.quark.cn/#details/omnaecaamcabmnbjnpjpecoaalfgidop" class="cta-button" data-browser="quark">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 1024 1024" version="1.1"
                             style="margin-right: 8px; transform: scale(1.25);" fill="currentColor">
                             <path d="M511.713 870.4C308.797 869.15 152.515 705.454 153.6 510.484a358.4 358.4 0 1 1 716.8 3.707C868.598 716.8 704.512 870.4 511.713 870.4z m-0.225-538.767c-10.875 1.167-21.914 1.577-32.625 3.604a179.671 179.671 0 0 0 34.816 356.23c19.129-0.206 29.655-8.377 33.28-27.383 2.294-12.021 3.216-24.31 4.424-36.515 4.854-49.746 26.01-71.066 75.776-76.186 11.96-1.229 23.982-2.048 35.779-4.219 20.316-3.707 28.487-14.07 28.672-34.632 1.167-99.328-80.098-180.654-180.122-180.9z"></path>
@@ -135,7 +124,10 @@
                         夸克插件中心安装
                     </a>
                 </div>
-                <p class="install-note">⚠️ 安装后请刷新已打开的 AI 对话使插件生效</p>
+                <p class="install-note">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM11 15V17H13V15H11ZM11 7V13H13V7H11Z"></path></svg>
+                    <span>安装后请刷新 AI 对话页面使插件生效</span>
+                </p>
             </div>
             <div class="hero-image">
                 <div class="carousel">
@@ -365,7 +357,7 @@
     </footer>
     <script src="./assets/js/carousel.js"></script>
 
-    <!-- Mobile menu toggle -->
+    <!-- Mobile menu toggle & Browser detection -->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const mobileMenuBtn = document.getElementById('mobileMenuBtn');
@@ -388,6 +380,33 @@
                     link.addEventListener('click', function () {
                         navLinks.classList.remove('mobile-active');
                     });
+                });
+            }
+
+            // Browser detection for CTA buttons
+            const ctaButtons = document.getElementById('ctaButtons');
+            if (ctaButtons) {
+                const ua = navigator.userAgent;
+                let browser = 'chrome'; // default
+                if (ua.includes('Quark')) {
+                    browser = 'quark';
+                } else if (ua.includes('Edg/')) {
+                    browser = 'edge';
+                } else if (ua.includes('Firefox')) {
+                    browser = 'firefox';
+                } else if (ua.includes('Chrome')) {
+                    browser = 'chrome';
+                }
+
+                const buttons = ctaButtons.querySelectorAll('.cta-button');
+                buttons.forEach(btn => {
+                    if (btn.dataset.browser === browser) {
+                        btn.classList.add('primary');
+                        // Move primary button to first position
+                        ctaButtons.insertBefore(btn, ctaButtons.firstChild);
+                    } else {
+                        btn.classList.add('secondary');
+                    }
                 });
             }
         });

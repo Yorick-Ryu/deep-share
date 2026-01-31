@@ -258,7 +258,7 @@ main {
     align-items: center;
 }
 
-.hero-content p {
+.hero-content p:not(.install-note) {
     font-size: 1.25rem;
     color: var(--text-muted);
     margin-bottom: 2.5rem;
@@ -304,11 +304,21 @@ main {
 }
 
 .install-note {
-    font-size: 0.875rem;
-    color: var(--text-light);
-    display: flex;
+    font-size: 1.0rem;
+    color: var(--accent-color);
+    display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.4rem;
+    background: rgba(245, 158, 11, 0.1);
+    padding: 0.4rem 0.8rem;
+    border-radius: 8px;
+    border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.install-note svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
 }
 
 .hero-image {
