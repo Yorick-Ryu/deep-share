@@ -10,23 +10,42 @@ Convert Markdown text to professionally formatted Word (DOCX) documents.
 
 ## Quick Start
 
-**To convert Markdown to Word, use the conversion script**:
+**Choose the right mode based on your environment**:
 
 ```bash
-python scripts/convert.py input.md
+# URL mode: Returns download URL (for cloud/remote environments)
+python scripts/convert.py input.md --url
+
+# File mode: Saves file directly (for local environments)
+python scripts/convert.py input.md --file
 ```
 
-The script handles API authentication, calls the conversion service, and returns a download URL.
+## Choosing the Right Mode
+
+| Scenario | Mode | Command |
+|----------|------|---------|
+| Skill runs in cloud, user needs to download | `--url` | `python scripts/convert.py input.md --url` |
+| Skill runs locally, user wants file saved | `--file` | `python scripts/convert.py input.md --file` |
+| Remote execution (MCP, API, cloud agent) | `--url` | Returns URL for user to download |
+| Local execution (user's machine) | `--file` | Saves .docx directly to disk |
+
+**Decision Rule**:
+- **Use `--url`** when the skill runs in a different environment than the user (cloud, remote server, MCP server)
+- **Use `--file`** when the skill runs on the same machine where the user wants the output file
 
 ## How It Works
 
 1. **Prepare Markdown**: Ensure content is in standard Markdown format
-2. **Run Script**: Execute `scripts/convert.py` to call the conversion API
-3. **Get Result**: Receive download URL or error message
+2. **Run Script**: Execute `scripts/convert.py` with appropriate mode
+3. **Get Result**: 
+   - URL mode: Receive download URL
+   - File mode: File saved to specified location
 
 ## API Details
 
-**Endpoint**: `https://api.deepshare.app/convert-text-to-url`
+**Endpoints**:
+- URL mode: `https://api.deepshare.app/convert-text-to-url` → Returns `{"url": "..."}`
+- File mode: `https://api.deepshare.app/convert-text` → Returns DOCX file directly
 
 **Authentication**: Include header `X-API-Key: {api_key}`
 
@@ -94,44 +113,49 @@ You can configure the API key in three ways:
 - `article` - Article/report style
 - `thesis` - Academic thesis
 
-## Conversion Steps
+## Conversion Script Usage
 
-### 1. Validate Markdown Format
+### Command Line Options
 
-Before conversion, ensure:
+```bash
+python scripts/convert.py <input.md> [options]
+
+Options:
+  --url              Return download URL (default if no mode specified)
+  --file             Save file directly to disk
+  --template, -t     Template name (default: templates)
+  --language, -l     Language: zh or en (default: zh)
+  --output, -o       Output directory for file mode
+  --api-key, -k      API key (optional)
+```
+
+### Examples
+
+```bash
+# URL mode (cloud/remote environments)
+python scripts/convert.py document.md --url
+python scripts/convert.py paper.md --url --template 论文 --language zh
+
+# File mode (local environments)
+python scripts/convert.py document.md --file
+python scripts/convert.py paper.md --file --output ./docs --template thesis --language en
+
+# With custom API key
+python scripts/convert.py doc.md --url --api-key your_key
+```
+
+## Validation Before Conversion
+
+Ensure Markdown content:
 - Headers use `#` syntax
 - Lists use `-` or `1.` syntax
 - Code blocks use triple backticks
 - Math formulas use `$...$` (inline) or `$$...$$` (block)
 - Images use publicly accessible URLs
 
-### 2. Use Conversion Script
+## Response Handling
 
-**Run the conversion script** to handle API calls automatically:
-
-```bash
-python scripts/convert.py input.md [template] [language]
-```
-
-The script will:
-- Automatically select API key by priority (env → skill → trial)
-- Read and validate the Markdown file
-- Call the conversion API
-- Return the download URL or error message
-
-**Example usage**:
-```bash
-# Basic conversion
-python scripts/convert.py document.md
-
-# With specific template
-python scripts/convert.py paper.md 论文 zh
-
-# With custom API key
-python scripts/convert.py doc.md templates zh your_api_key
-```
-
-### 3. Handle Response
+### URL Mode Response
 
 **Success** (200 OK):
 ```json
@@ -140,7 +164,12 @@ python scripts/convert.py doc.md templates zh your_api_key
 }
 ```
 
-**Error Responses**:
+### File Mode Response
+
+**Success**: File saved to disk, path printed to stdout
+
+### Error Responses (Both Modes)
+
 - `401 Unauthorized` - Invalid API key
 - `403 Forbidden` - Quota exceeded → Purchase at https://ds.rick216.cn/purchase
 - `413 Payload Too Large` - Content exceeds 10MB
@@ -152,8 +181,9 @@ python scripts/convert.py doc.md templates zh your_api_key
 
 Tell user:
 1. Conversion completed successfully
-2. Provide the download URL
-3. Check which API key was used:
+2. **URL mode**: Provide the download URL
+3. **File mode**: Provide the file path where document was saved
+4. Check which API key was used:
    - **If using environment variable or Skill variable**: No reminder needed
    - **If using trial key**: Remind: "⚠️ You're using trial mode (limited quota). For stable production use, get your API key at: https://ds.rick216.cn/purchase"
 
@@ -186,26 +216,42 @@ Tell user:
 - **Line Breaks**: Use `hard_line_breaks: true` for addresses, poetry
 - **Templates**: Choose based on document type (paper, article, etc.)
 
-## Example Workflow
+## Example Workflows
 
-**User asks**: "Convert this to Word"
+### Workflow 1: Cloud Environment (URL Mode)
+
+**User asks**: "Convert this to Word" (skill running in cloud)
 
 1. Save the Markdown content to a temporary file (e.g., `temp.md`)
 
-2. Run the conversion script:
+2. Run the conversion script with URL mode:
    ```bash
-   python scripts/convert.py temp.md
+   python scripts/convert.py temp.md --url
    ```
 
-3. The script will automatically:
+3. The script will:
    - Select API key by priority (env → skill → trial)
-   - Validate the Markdown content
    - Call the conversion API
-   - Return results
+   - Return download URL
 
-4. Parse the script output:
-   - On success: Extract and provide the download URL
-   - Check if trial key was used → show purchase reminder if needed
-   - On failure: Extract error message and explain to user
+4. Provide the download URL to user
 
 5. Clean up temporary file
+
+### Workflow 2: Local Environment (File Mode)
+
+**User asks**: "Convert my notes.md to Word" (skill running locally)
+
+1. Run the conversion script with file mode:
+   ```bash
+   python scripts/convert.py notes.md --file --output ./output
+   ```
+
+2. The script will:
+   - Select API key by priority (env → skill → trial)
+   - Call the conversion API
+   - Save the DOCX file directly
+
+3. Tell user where the file was saved
+
+4. No cleanup needed - file is the output
