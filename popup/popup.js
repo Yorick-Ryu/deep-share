@@ -811,7 +811,22 @@ function setupManualConversion() {
 
     // Validate input
     if (!markdownText) {
-      alert(getMessage('emptyMarkdownError') || '请输入Markdown文本');
+      const errorMsg = getMessage('emptyMarkdownError') || '请输入Markdown文本';
+      convertBtn.disabled = true;
+      convertBtn.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="15" y1="9" x2="9" y2="15"></line>
+          <line x1="9" y1="9" x2="15" y2="15"></line>
+        </svg>
+        <span>${errorMsg}</span>
+      `;
+
+      // After a timeout, restore the original button
+      setTimeout(() => {
+        convertBtn.disabled = false;
+        convertBtn.innerHTML = originalButtonHTML;
+      }, 2000);
       return;
     }
 
@@ -828,13 +843,19 @@ function setupManualConversion() {
 
     // Check if API key is provided
     if (!settings.docxApiKey || settings.docxApiKey.trim() === '') {
-      // Show message
-      alert(getMessage('apiKeyMissing') || '请购买或填写API-Key以使用文档转换功能');
+      const apiErrorMsg = getMessage('apiKeyMissingShort') || '请购买并填写API-Key以使用文档转换功能';
 
       // Switch to document conversion tab
       const docxTabBtn = document.querySelector('.tab-btn[data-tab="docx-tab"]');
       if (docxTabBtn) {
         docxTabBtn.click();
+      }
+
+      // Show inline error message
+      const errorElement = document.getElementById('apiKeyErrorMsg');
+      if (errorElement) {
+        errorElement.innerHTML = apiErrorMsg;
+        errorElement.style.display = 'inline';
       }
 
       // Highlight and focus on the API key input
@@ -891,20 +912,86 @@ function setupManualConversion() {
     } catch (error) {
       // Show error message on button
       console.error('Conversion error:', error);
-      convertBtn.innerHTML = `
-        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;">
-          <circle cx="12" cy="12" r="10"></circle>
-          <line x1="15" y1="9" x2="9" y2="15"></line>
-          <line x1="9" y1="9" x2="15" y2="15"></line>
-        </svg>
-        <span>${error.message || '转换失败'}</span>
-      `;
 
-      // After a timeout, restore the original button
-      setTimeout(() => {
+      let errorMessage = error.message;
+      let shouldOpenSettings = false;
+
+      // Network error - Failed to fetch
+      if (error.message && error.message.includes('Failed to fetch')) {
+        errorMessage = getMessage('networkError') || '转换失败，请检查网络';
+      }
+      // 401 Unauthorized - Invalid/missing/expired API key
+      else if (error.message && (
+        error.message.includes('401') ||
+        error.message.includes('Unauthorized') ||
+        error.message.includes('API Key is required') ||
+        error.message.includes('Invalid or expired API key')
+      )) {
+        errorMessage = getMessage('apiKeyError') || 'API密钥填写错误，请联系客服微信：yorick_cn';
+        shouldOpenSettings = true;
+      }
+      // 403 Forbidden - Quota exceeded
+      else if (error.message && (
+        error.message.includes('403') ||
+        error.message.includes('Forbidden') ||
+        error.message.includes('Quota exceeded')
+      )) {
+        errorMessage = getMessage('quotaExceededError') || '转换次数不足，请充值';
+        shouldOpenSettings = true;
+      }
+      // Other API-related errors
+      else if (error.message && (
+        error.message.includes('Failed to read') ||
+        error.message.includes('headers') ||
+        error.message.includes('ISO-8859-1')
+      )) {
+        errorMessage = getMessage('apiKeyError') || 'API密钥错误，请联系客服微信：yorick_cn';
+        shouldOpenSettings = true;
+      }
+
+      if (shouldOpenSettings) {
+        // Restore button immediately for API errors
         convertBtn.disabled = false;
         convertBtn.innerHTML = originalButtonHTML;
-      }, 3000);
+
+        // Switch to document conversion tab with a shorter delay
+        setTimeout(() => {
+          const docxTabBtn = document.querySelector('.tab-btn[data-tab="docx-tab"]');
+          if (docxTabBtn) {
+            docxTabBtn.click();
+          }
+
+          // Show inline error message
+          const errorElement = document.getElementById('apiKeyErrorMsg');
+          if (errorElement) {
+            errorElement.innerHTML = errorMessage;
+            errorElement.style.display = 'inline';
+          }
+
+          // Highlight and focus on the API key input
+          const apiKeyInput = document.getElementById('docxApiKey');
+          if (apiKeyInput) {
+            apiKeyInput.classList.add('highlight-required');
+            apiKeyInput.focus();
+          }
+        }, 100);
+      } else {
+        // Show non-API error message on button
+        convertBtn.innerHTML = `
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="15" y1="9" x2="9" y2="15"></line>
+            <line x1="9" y1="9" x2="15" y2="15"></line>
+          </svg>
+          <span>${errorMessage}</span>
+        `;
+
+        // Restore the original button after 2 seconds
+        setTimeout(() => {
+          convertBtn.disabled = false;
+          convertBtn.innerHTML = originalButtonHTML;
+        }, 2000);
+      }
     }
   });
 
