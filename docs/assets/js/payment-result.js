@@ -3,12 +3,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
     const tradeStatus = urlParams.get('trade_status');
     const paramStr = urlParams.get('param');
+    const productName = urlParams.get('name');
 
     // Get stored API key from payment initiation
     const storedApiKey = localStorage.getItem('pending_api_key');
     const apiKey = storedApiKey;
 
-    console.log('Result Page Init:', { apiKey, tradeStatus, paramStr });
+    console.log('Result Page Init:', { apiKey, tradeStatus, paramStr, productName });
 
     // Trust the URL parameters directly
     if (tradeStatus === 'TRADE_SUCCESS') {
@@ -27,12 +28,12 @@ document.addEventListener('DOMContentLoaded', () => {
         let gift = 0;
         if (paramStr) {
             const quotaMatch = paramStr.match(/quota:(\d+)/);
-            if (quotaMatch) quota = quotaMatch[1];
+            if (quotaMatch) quota = parseInt(quotaMatch[1]);
             const giftMatch = paramStr.match(/gift:(\d+)/);
-            if (giftMatch) gift = giftMatch[1];
+            if (giftMatch) gift = parseInt(giftMatch[1]);
         }
 
-        showSuccess(quota, gift);
+        showSuccess(quota, gift, productName);
     } else {
         // If not successful or manually accessed without status
         if (apiKey) {
@@ -49,15 +50,27 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-function showSuccess(quota, gift) {
+function showSuccess(quota, gift, productName) {
     // Show success UI
     document.getElementById('status-checking').style.display = 'none';
     document.getElementById('status-error').style.display = 'none';
     document.getElementById('status-success').style.display = 'block';
 
-    // Display this time's quota info
-    document.getElementById('current-quota').textContent = quota + ' 次';
-    document.getElementById('gift-quota').textContent = gift + ' 次';
+    const isSubscription = (quota === 0 && gift === 0) || (productName && productName.includes('订阅'));
+
+    if (isSubscription) {
+        document.getElementById('success-message').textContent = '您的订单已完成，订阅权限已开启。';
+        document.getElementById('quota-info').style.display = 'none';
+        document.getElementById('subscription-info').style.display = 'block';
+        document.getElementById('plan-name').textContent = productName || 'DeepShare 订阅计划';
+    } else {
+        // Display this time's quota info
+        document.getElementById('success-message').textContent = '您的订单已完成，转换次数已充值到您的账户。';
+        document.getElementById('quota-info').style.display = 'flex';
+        document.getElementById('subscription-info').style.display = 'none';
+        document.getElementById('current-quota').textContent = quota + ' 次';
+        document.getElementById('gift-quota').textContent = gift + ' 次';
+    }
 }
 
 function showError(message) {

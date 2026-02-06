@@ -185,14 +185,15 @@
                 </svg>
             </div>
             <h1 class="result-title">支付成功</h1>
-            <p class="result-message">您的订单已完成，转换次数已充值到您的账户。</p>
+            <p class="result-message" id="success-message">您的订单已完成，转换次数已充值到您的账户。</p>
 
             <div class="api-key-display">
                 <div class="api-key-label">您的 API Key</div>
                 <div class="api-key-value" id="success-api-key">请查看邮箱</div>
             </div>
 
-            <div class="quota-stats" style="display: flex; justify-content: space-around; margin: 1.5rem 0;">
+            <div id="quota-info" class="quota-stats"
+                style="display: flex; justify-content: space-around; margin: 1.5rem 0;">
                 <div class="quota-stat-item">
                     <div class="quota-stat-label">本次充值</div>
                     <div class="quota-stat-value" id="current-quota"
@@ -203,6 +204,12 @@
                     <div class="quota-stat-value" id="gift-quota"
                         style="font-size: 1.5rem; font-weight: bold; color: #4D6BFE;">-</div>
                 </div>
+            </div>
+
+            <div id="subscription-info" style="display: none; margin: 1.5rem 0;">
+                <div class="quota-stat-label">已开通/续费</div>
+                <div class="quota-stat-value" id="plan-name"
+                    style="font-size: 1.5rem; font-weight: bold; color: #4D6BFE;">-</div>
             </div>
 
             <div class="action-buttons">
