@@ -576,19 +576,19 @@ button:hover {
 
 /* Quota section styles */
 .quota-section {
-  margin-top: 20px;
-  padding-top: 16px;
-  border-top: 1px solid var(--border-color);
+  margin-top: 0px;
+  padding-top: 0px;
+  /* border-top removed for seamless design */  
 }
 
 .quota-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
-.quota-info h3 {
+.quota-header h3 {
   margin: 0;
   font-size: 14px;
   color: var(--text-color);
@@ -601,40 +601,83 @@ button:hover {
   cursor: pointer;
 }
 
-.quota-details {
+/* Dual quota blocks layout */
+.quota-blocks {
   display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
+  gap: 8px;
+  margin-bottom: 8px;
 }
 
-.quota-item {
+.quota-block {
+  flex: 1;
+  background: var(--sidebar-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 7px 10px;
   display: flex;
   flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.quota-block-top {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
 }
 
-.quota-label {
+.quota-block-label {
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.quota-block-badge {
+  font-size: 10px;
+  color: var(--primary-color);
+  background: rgba(77, 107, 254, 0.1);
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.quota-block-value {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+}
+
+.quota-block-remaining {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--primary-color);
+  line-height: 1.2;
+}
+
+.quota-block-sep {
   font-size: 12px;
   color: var(--text-secondary);
-  margin-bottom: 4px;
+  margin: 0 1px;
 }
 
-.quota-value {
-  font-weight: 500;
-  font-size: 14px;
+.quota-block-value span:last-child {
+  font-size: 12px;
+  color: var(--text-secondary);
 }
 
-.quota-remaining {
-  color: var(--primary-color);
-  font-weight: bold;
+.quota-block-note {
+  font-size: 10px;
+  color: var(--text-secondary);
+  opacity: 0.7;
 }
 
+/* Progress bar (shared by both blocks) */
 .quota-progress-container {
   width: 100%;
-  height: 6px;
+  height: 4px;
   background-color: var(--border-color);
-  border-radius: 3px;
-  margin: 10px 0;
+  border-radius: 2px;
+  margin: 1px 0;
   overflow: hidden;
 }
 
@@ -642,7 +685,7 @@ button:hover {
   height: 100%;
   background-color: var(--primary-color);
   width: 0%;
-  /* Will be set dynamically by JS */
+  border-radius: 2px;
   transition: width 0.3s ease;
 }
 
@@ -650,7 +693,7 @@ button:hover {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 12px;
+  margin-top: 6px;
 }
 
 .quota-footer-actions {

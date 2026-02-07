@@ -263,6 +263,15 @@
     "purchaseQuota": {
         "message": "クォータを購入"
     },
+    "purchaseAddonQuota": {
+        "message": "追加クォータを購入"
+    },
+    "purchaseSubscription": {
+        "message": "サブスクリプションを購入"
+    },
+    "renewSubscription": {
+        "message": "サブスクリプションを更新"
+    },
     "expirationLabel": {
         "message": "有効期限:"
     },

@@ -544,9 +544,8 @@ function loadI18nText(errorMsg = null) {
 
   // Quota section labels
   document.getElementById('quotaTitle').textContent = getMessage('quotaTitle') || '转换额度';
-  document.getElementById('totalQuotaLabel').textContent = getMessage('totalQuotaLabel') || '总计:';
-  document.getElementById('usedQuotaLabel').textContent = getMessage('usedQuotaLabel') || '已用:';
-  document.getElementById('remainingQuotaLabel').textContent = getMessage('remainingQuotaLabel') || '剩余:';
+  document.getElementById('dailyQuotaLabel').textContent = getMessage('dailyQuotaLabel') || '每日配额';
+  document.getElementById('addonQuotaLabel').textContent = getMessage('addonQuotaLabel') || '按量配额';
 
   // API key hint with proper HTML handling
   const apiKeyHint = document.getElementById('apiKeyHint');
@@ -561,10 +560,15 @@ function loadI18nText(errorMsg = null) {
     refreshBtn.textContent = getMessage('refreshButton') || '刷新';
   }
 
-  // Update purchase link text
-  const purchaseLink = document.querySelector('.purchase-link');
+  // Update purchase/subscribe link text
+  const purchaseLink = document.getElementById('purchaseLink');
   if (purchaseLink) {
-    purchaseLink.textContent = getMessage('purchaseQuota') || '续费额度';
+    purchaseLink.textContent = getMessage('purchaseAddonQuota') || '购买叠加额度';
+  }
+  const subscribeLink = document.getElementById('subscribeLink');
+  if (subscribeLink) {
+    // Default text for when no subscription (will be updated by displayDualQuota if needed)
+    subscribeLink.textContent = getMessage('purchaseSubscription') || '购买订阅';
   }
 }
 
@@ -641,6 +645,85 @@ function saveSettings() {
   });
 }
 
+/**
+ * Extract a user-friendly error message from a fetch response.
+ * Tries to parse JSON { detail: "..." }, falls back to status text.
+ */
+async function extractApiError(response) {
+  try {
+    const data = await response.json();
+    if (data.detail) return data.detail;
+  } catch (_) { /* response is not JSON */ }
+  return `HTTP ${response.status}`;
+}
+
+/**
+ * Map API error messages to user-friendly Chinese text for the API Key input.
+ * Returns null if the error is not API-key related (e.g. server error).
+ */
+function mapApiKeyError(detail, statusCode) {
+  // 401 errors are always API-key related
+  if (statusCode === 401) {
+    if (detail.includes('required')) {
+      // "API Key is required"
+      return getMessage('apiKeyRequired') || 'API Key 不能为空';
+    }
+    if (detail.includes('not active')) {
+      // "User associated with this API key is not active"
+      return getMessage('apiKeyUserInactive') || '关联账户已被停用';
+    }
+    if (detail.includes('Invalid or expired')) {
+      // "Invalid or expired API key" — from get_api_key (strict check)
+      return getMessage('apiKeyExpired') || 'API Key 无效或已过期';
+    }
+    // "Invalid or disabled API key" — from get_api_key_allow_expired
+    // and any other 401 messages
+    return getMessage('apiKeyInvalid') || 'API Key 无效，请检查后重试';
+  }
+  // Network / server errors are not shown on the input
+  return null;
+}
+
+/**
+ * Show an API-key related error: display message inline, highlight the input red.
+ * The error clears automatically when the user edits the input.
+ */
+function showApiKeyQuotaError(message) {
+  const apiKeyInput = document.getElementById('docxApiKey');
+  const errorElement = document.getElementById('apiKeyErrorMsg');
+
+  if (errorElement) {
+    errorElement.textContent = message;
+    errorElement.style.display = 'inline';
+  }
+
+  apiKeyInput.classList.add('highlight-required');
+
+  // Clear error when the user starts typing (one-time listener)
+  const onInput = () => {
+    clearApiKeyQuotaError();
+    apiKeyInput.removeEventListener('input', onInput);
+  };
+  // Remove any previous listener to avoid stacking
+  apiKeyInput.removeEventListener('input', apiKeyInput._quotaErrorHandler);
+  apiKeyInput._quotaErrorHandler = onInput;
+  apiKeyInput.addEventListener('input', onInput);
+}
+
+/**
+ * Clear the API-key quota error state (hide message, remove red border).
+ */
+function clearApiKeyQuotaError() {
+  const apiKeyInput = document.getElementById('docxApiKey');
+  const errorElement = document.getElementById('apiKeyErrorMsg');
+
+  if (errorElement) {
+    errorElement.style.display = 'none';
+    errorElement.textContent = '';
+  }
+  apiKeyInput.classList.remove('highlight-required');
+}
+
 // Function to check quota
 function checkQuota(forceRefresh = false) {
   const quotaSection = document.getElementById('quotaSection');
@@ -654,8 +737,8 @@ function checkQuota(forceRefresh = false) {
   }
 
   // First try to get cached quota data
-  chrome.storage.local.get(['quotaData'], async (result) => {
-    const cachedData = result.quotaData;
+  chrome.storage.local.get(['quotaDataV2'], async (result) => {
+    const cachedData = result.quotaDataV2;
     const now = new Date();
 
     // If we have cached data and it's not a forced refresh, use it
@@ -663,66 +746,110 @@ function checkQuota(forceRefresh = false) {
       const lastChecked = new Date(cachedData.lastChecked);
       // Use cached data if it's less than 10 minutes old
       if ((now - lastChecked) < 10 * 60 * 1000) {
-        displayQuotaData(cachedData);
+        displayDualQuota(cachedData);
         return;
       }
     }
 
-    // Otherwise fetch new data
+    // Show loading state
+    quotaSection.style.display = 'block';
+
     try {
-      // Show loading state
-      document.getElementById('totalQuota').textContent = '...';
-      document.getElementById('usedQuota').textContent = '...';
-      document.getElementById('remainingQuota').textContent = '...';
-      document.getElementById('expirationDate').textContent = '...';
-      quotaSection.style.display = 'block';
+      let quotaData = null;
+      let lastApiError = null;
+      let lastStatusCode = null;
 
-      const response = await fetch(`${serverUrl}/auth/quota`, {
-        method: 'GET',
-        headers: {
-          'X-API-Key': apiKey
+      // Try new subscription quota API first
+      try {
+        const response = await fetch(`${serverUrl}/subscriptions/my/quota`, {
+          method: 'GET',
+          headers: { 'X-API-Key': apiKey }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          quotaData = {
+            email: data.email,
+            has_subscription: data.has_subscription,
+            subscription: data.subscription,
+            addon_quota: data.addon_quota,
+            lastChecked: now.toISOString()
+          };
+        } else {
+          // Save the error info for later handling
+          lastStatusCode = response.status;
+          lastApiError = await extractApiError(response);
         }
-      });
-
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status}`);
+      } catch (e) {
+        // New API not available (network error), will try old one
       }
 
-      const data = await response.json();
+      // Fallback to old quota API (only if new API didn't succeed AND didn't return a 401)
+      if (!quotaData && lastStatusCode !== 401) {
+        try {
+          const response = await fetch(`${serverUrl}/auth/quota`, {
+            method: 'GET',
+            headers: { 'X-API-Key': apiKey }
+          });
 
-      // Store quota data with timestamp
-      const quotaData = {
-        total: data.total_quota,
-        used: data.used_quota,
-        remaining: data.remaining_quota,
-        expiresAt: data.expires_at,
-        email: data.email,
-        lastChecked: now.toISOString()
-      };
+          if (response.ok) {
+            const data = await response.json();
+            quotaData = {
+              email: data.email,
+              has_subscription: false,
+              subscription: null,
+              addon_quota: {
+                total_quota: data.total_quota,
+                used_quota: data.used_quota,
+                gift_quota: 0,
+                expires_at: data.expires_at
+              },
+              lastChecked: now.toISOString()
+            };
+          } else {
+            lastStatusCode = response.status;
+            lastApiError = await extractApiError(response);
+          }
+        } catch (e) {
+          // Network error on old API too
+          lastApiError = getMessage('networkError') || '网络错误，请检查网络连接';
+          lastStatusCode = 0;
+        }
+      }
 
-      chrome.storage.local.set({ quotaData });
-      displayQuotaData(quotaData);
+      if (quotaData) {
+        // Success – clear any previous error state on the API key input
+        clearApiKeyQuotaError();
+        chrome.storage.local.set({ quotaDataV2: quotaData });
+        displayDualQuota(quotaData);
+      } else {
+        // Both APIs failed – clear stale cache and hide quota section
+        chrome.storage.local.remove('quotaDataV2');
+        quotaSection.style.display = 'none';
+
+        const friendlyMsg = mapApiKeyError(lastApiError || '', lastStatusCode || 0);
+        if (friendlyMsg) {
+          showApiKeyQuotaError(friendlyMsg);
+        } else {
+          // Server/network error – show generic message on the input
+          showApiKeyQuotaError(lastApiError || (getMessage('quotaCheckFailed') || '查询额度失败'));
+        }
+      }
 
     } catch (error) {
       console.error('Error checking quota:', error);
-      document.getElementById('totalQuota').textContent = 'Error';
-      document.getElementById('usedQuota').textContent = 'Error';
-      document.getElementById('remainingQuota').textContent = 'Error';
-      document.getElementById('expirationDate').textContent = 'Error';
+      quotaSection.style.display = 'none';
+      showApiKeyQuotaError(getMessage('networkError') || '网络错误，请检查网络连接');
     }
   });
 }
 
-// Function to display quota data
-function displayQuotaData(data) {
+// Function to display dual quota data (subscription + addon)
+function displayDualQuota(data) {
   const quotaSection = document.getElementById('quotaSection');
   quotaSection.style.display = 'block';
 
-  document.getElementById('totalQuota').textContent = data.total;
-  document.getElementById('usedQuota').textContent = data.used;
-  document.getElementById('remainingQuota').textContent = data.remaining;
-
-  // Display blurred email if available
+  // Display blurred email
   const emailElement = document.getElementById('userEmail');
   if (emailElement) {
     if (data.email) {
@@ -736,31 +863,82 @@ function displayQuotaData(data) {
     }
   }
 
-  // Format and display expiration date if available
-  if (data.expiresAt) {
-    const expirationDate = new Date(data.expiresAt);
-    document.getElementById('expirationDate').textContent = formatDate(expirationDate);
+  const subscriptionBlock = document.getElementById('subscriptionBlock');
+  const addonBlock = document.getElementById('addonBlock');
+
+  // --- Subscription daily quota ---
+  if (data.has_subscription && data.subscription) {
+    subscriptionBlock.style.display = 'flex';
+
+    const dailyQuota = data.subscription.daily_quota;
+    const usedToday = data.subscription.used_today;
+    const dailyRemaining = Math.max(0, dailyQuota - usedToday);
+
+    document.getElementById('subscriptionPlanName').textContent = data.subscription.plan_name;
+    document.getElementById('dailyRemaining').textContent = dailyRemaining;
+    document.getElementById('dailyTotal').textContent = dailyQuota;
+
+    const dailyProgress = document.getElementById('dailyProgress');
+    const dailyPercent = dailyQuota > 0 ? (dailyRemaining / dailyQuota) * 100 : 0;
+    dailyProgress.style.width = `${dailyPercent}%`;
+    dailyProgress.style.backgroundColor = dailyPercent < 20 ? '#FF6B6B' : '#4D6BFE';
+
+    // Show reset note with subscription expiry
+    const noteEl = document.getElementById('dailyResetNote');
+    const resetText = getMessage('dailyResetNote') || '每日重置';
+    if (data.subscription.expires_at) {
+      const expDate = new Date(data.subscription.expires_at);
+      noteEl.textContent = `${resetText} · 至 ${formatShortDate(expDate)}`;
+    } else {
+      noteEl.textContent = resetText;
+    }
   } else {
-    const unknownText = getMessage('unknown') || 'Unknown';
-    document.getElementById('expirationDate').textContent = unknownText;
+    subscriptionBlock.style.display = 'none';
   }
 
-  // Update expiration label if needed
-  const expirationLabel = document.getElementById('expirationLabel');
-  if (expirationLabel) {
-    expirationLabel.textContent = getMessage('expirationLabel') || '有效期至:';
+  // --- Addon pay-per-use quota ---
+  if (data.addon_quota && data.addon_quota.total_quota > 0) {
+    addonBlock.style.display = 'flex';
+
+    const total = data.addon_quota.total_quota;
+    const used = data.addon_quota.used_quota;
+    const remaining = Math.max(0, total - used);
+
+    document.getElementById('addonRemaining').textContent = remaining;
+    document.getElementById('addonTotal').textContent = total;
+
+    const addonProgress = document.getElementById('addonProgress');
+    const addonPercent = total > 0 ? (remaining / total) * 100 : 0;
+    addonProgress.style.width = `${addonPercent}%`;
+    addonProgress.style.backgroundColor = addonPercent < 20 ? '#FF6B6B' : '#4D6BFE';
+
+    if (data.addon_quota.expires_at) {
+      const expDate = new Date(data.addon_quota.expires_at);
+      document.getElementById('addonExpiry').textContent = `${getMessage('expirationShort') || '有效期至'} ${formatShortDate(expDate)}`;
+    } else {
+      document.getElementById('addonExpiry').textContent = '';
+    }
+  } else if (!data.has_subscription) {
+    // No subscription and no addon - show empty addon block
+    addonBlock.style.display = 'flex';
+    document.getElementById('addonRemaining').textContent = '0';
+    document.getElementById('addonTotal').textContent = '0';
+    document.getElementById('addonProgress').style.width = '0%';
+    document.getElementById('addonExpiry').textContent = '';
+  } else {
+    addonBlock.style.display = 'none';
   }
 
-  // Update progress bar to show remaining quota percentage instead of used
-  const progressBar = document.getElementById('quotaProgress');
-  const remainingPercentage = (data.remaining / data.total) * 100;
-  progressBar.style.width = `${remainingPercentage}%`;
-
-  // Change color if running low
-  if (data.remaining < data.total * 0.2) {
-    progressBar.style.backgroundColor = '#FF6B6B';
-  } else {
-    progressBar.style.backgroundColor = '#4D6BFE';
+  // Update footer links
+  const subscribeLink = document.getElementById('subscribeLink');
+  if (subscribeLink) {
+    // Always show the link, but change text based on subscription status
+    subscribeLink.style.display = 'inline';
+    if (data.has_subscription) {
+      subscribeLink.textContent = getMessage('renewSubscription') || '续费订阅';
+    } else {
+      subscribeLink.textContent = getMessage('purchaseSubscription') || '购买订阅';
+    }
   }
 }
 
@@ -783,6 +961,14 @@ function formatDate(date) {
       day: 'numeric'
     });
   }
+}
+
+// Helper function to format date in a compact way (YYYY-MM-DD)
+function formatShortDate(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
 }
 
 // Helper function to blur email: a***b@example.com

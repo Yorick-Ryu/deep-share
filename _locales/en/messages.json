@@ -263,6 +263,15 @@
     "purchaseQuota": {
         "message": "Purchase Quota"
     },
+    "purchaseAddonQuota": {
+        "message": "Buy Add-on Quota"
+    },
+    "purchaseSubscription": {
+        "message": "Buy Subscription"
+    },
+    "renewSubscription": {
+        "message": "Renew Subscription"
+    },
     "expirationLabel": {
         "message": "Valid until:"
     },

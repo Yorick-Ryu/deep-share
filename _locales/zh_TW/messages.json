@@ -263,6 +263,15 @@
     "purchaseQuota": {
         "message": "續費額度"
     },
+    "purchaseAddonQuota": {
+        "message": "購買疊加額度"
+    },
+    "purchaseSubscription": {
+        "message": "購買訂閱"
+    },
+    "renewSubscription": {
+        "message": "續費訂閱"
+    },
     "expirationLabel": {
         "message": "有效期至:"
     },

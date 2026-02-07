@@ -192,37 +192,49 @@
 
         <!-- Quota information section -->
         <div class="quota-section" id="quotaSection" style="display: none;">
-          <div class="quota-info">
-            <div class="quota-header">
-              <h3 id="quotaTitle">转换额度</h3>
-              <span id="userEmail" class="user-email"></span>
-            </div>
-            <div class="quota-details">
-              <div class="quota-item">
-                <span class="quota-label" id="totalQuotaLabel">总计:</span>
-                <span class="quota-value" id="totalQuota">--</span>
-              </div>
-              <div class="quota-item">
-                <span class="quota-label" id="usedQuotaLabel">已用:</span>
-                <span class="quota-value" id="usedQuota">--</span>
-              </div>
-              <div class="quota-item">
-                <span class="quota-label" id="remainingQuotaLabel">剩余:</span>
-                <span class="quota-value quota-remaining" id="remainingQuota">--</span>
-              </div>
-            </div>
+          <div class="quota-header">
+            <h3 id="quotaTitle">转换额度</h3>
+            <span id="userEmail" class="user-email"></span>
           </div>
-          <div class="quota-progress-container">
-            <div class="quota-progress" id="quotaProgress"></div>
+          <div class="quota-blocks" id="quotaBlocks">
+            <!-- Subscription daily quota -->
+            <div class="quota-block" id="subscriptionBlock" style="display: none;">
+              <div class="quota-block-top">
+                <span class="quota-block-label" id="dailyQuotaLabel">每日配额</span>
+                <span class="quota-block-badge" id="subscriptionPlanName"></span>
+              </div>
+              <div class="quota-block-value">
+                <span class="quota-block-remaining" id="dailyRemaining">--</span>
+                <span class="quota-block-sep">/</span>
+                <span id="dailyTotal">--</span>
+              </div>
+              <div class="quota-progress-container">
+                <div class="quota-progress" id="dailyProgress"></div>
+              </div>
+              <span class="quota-block-note" id="dailyResetNote">每日重置</span>
+            </div>
+            <!-- Addon pay-per-use quota -->
+            <div class="quota-block" id="addonBlock" style="display: none;">
+              <div class="quota-block-top">
+                <span class="quota-block-label" id="addonQuotaLabel">按量配额</span>
+              </div>
+              <div class="quota-block-value">
+                <span class="quota-block-remaining" id="addonRemaining">--</span>
+                <span class="quota-block-sep">/</span>
+                <span id="addonTotal">--</span>
+              </div>
+              <div class="quota-progress-container">
+                <div class="quota-progress" id="addonProgress"></div>
+              </div>
+              <span class="quota-block-note" id="addonExpiry">--</span>
+            </div>
           </div>
           <div class="quota-footer">
-            <div class="expiration-info">
-              <span class="expiration-label" id="expirationLabel">有效期至:</span>
-              <span class="expiration-value" id="expirationDate">--</span>
-            </div>
+            <button id="refreshQuota" class="text-link-btn">刷新</button>
             <div class="quota-footer-actions">
-              <button id="refreshQuota" class="text-link-btn">刷新</button>
-              <a href="https://ds.rick216.cn/renew.html" target="_blank" class="purchase-link">续费额度</a>
+              <a href="https://ds.rick216.cn/price.html" target="_blank" class="purchase-link" id="subscribeLink"
+                style="display: none;">订阅方案</a>
+              <a href="https://ds.rick216.cn/renew.html" target="_blank" class="purchase-link" id="purchaseLink">续费额度</a>
             </div>
           </div>
         </div>
