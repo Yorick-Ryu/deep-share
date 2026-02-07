@@ -1,0 +1,659 @@
+/* 订阅定价页面样式 */
+
+/* 内容布局 */
+.content {
+    max-width: 1300px;
+    margin: 100px auto 60px;
+    padding: 0 20px;
+    text-align: center;
+}
+
+.content>h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.subtitle {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+}
+
+/* 计费周期切换 */
+.billing-toggle {
+    display: none;
+    /* 大屏幕默认隐藏 */
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 4px;
+    margin-bottom: 2.5rem;
+}
+
+.toggle-btn {
+    padding: 0.6rem 1.5rem;
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.toggle-btn:hover {
+    color: var(--text-main);
+}
+
+.toggle-btn.active {
+    background: var(--primary-color);
+    color: white;
+}
+
+.toggle-btn .save-badge {
+    background: rgba(16, 185, 129, 0.2);
+    color: #10B981;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.toggle-btn.active .save-badge {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+/* 定价卡片网格 */
+.pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+    max-width: 1280px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* 方案卡片 */
+.plan-card {
+    background: var(--bg-secondary);
+    border: 2px solid var(--border-color);
+    border-radius: 20px;
+    padding: 1.75rem;
+    text-align: left;
+    position: relative;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.plan-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+}
+
+/* 推荐卡片 */
+.plan-card.featured {
+    border-color: var(--primary-color);
+    background: linear-gradient(180deg, rgba(77, 107, 254, 0.05) 0%, var(--bg-secondary) 100%);
+}
+
+.plan-card.featured:hover {
+    box-shadow: 0 12px 40px rgba(77, 107, 254, 0.15);
+}
+
+/* Ultra 卡片 */
+.plan-card.ultra {
+    border-color: #F59E0B;
+    background: linear-gradient(180deg, rgba(245, 158, 11, 0.08) 0%, var(--bg-secondary) 100%);
+}
+
+.plan-card.ultra:hover {
+    box-shadow: 0 12px 40px rgba(245, 158, 11, 0.15);
+}
+
+/* 徽章 */
+.popular-badge,
+.ultra-badge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 4px 16px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.popular-badge {
+    background: linear-gradient(135deg, #4D6BFE 0%, #818CF8 100%);
+    color: white;
+}
+
+.ultra-badge {
+    background: linear-gradient(135deg, #F59E0B 0%, #EF4444 100%);
+    color: white;
+}
+
+/* 方案头部 */
+.plan-header {
+    text-align: center;
+}
+
+/* 大屏幕时确保header高度一致 */
+@media (min-width: 1200px) {
+    .plan-header {
+        min-height: 150px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+}
+
+.plan-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    background: none;
+    -webkit-text-fill-color: unset;
+    color: var(--text-main);
+}
+
+.plan-card.ultra .plan-name {
+    background: linear-gradient(135deg, #F59E0B 0%, #EF4444 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.plan-price {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 2px;
+}
+
+.plan-price .currency {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+.plan-price .amount {
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--text-main);
+    line-height: 1;
+}
+
+.plan-price .period {
+    font-size: 1rem;
+    color: var(--text-muted);
+    margin-left: 2px;
+}
+
+.price-note {
+    font-size: 0.85rem;
+    color: var(--secondary-color);
+    margin-top: 0.5rem;
+    font-weight: 500;
+}
+
+/* 方案特性列表 */
+.plan-features {
+    margin-bottom: 1.5rem;
+    flex-grow: 1;
+}
+
+.plan-features .feature-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0;
+    color: var(--text-main);
+    font-size: 0.95rem;
+}
+
+.plan-features .feature-item svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    stroke: var(--secondary-color);
+}
+
+.plan-features .feature-item.disabled {
+    color: var(--text-light);
+}
+
+.plan-features .feature-item.disabled svg {
+    stroke: var(--text-light);
+}
+
+.plan-features .feature-item strong {
+    color: var(--primary-color);
+}
+
+/* 配额次数样式 */
+.plan-features .feature-item .quota-number {
+    font-size: 1.35em;
+    font-weight: 700;
+}
+
+/* Ultra 卡片的配额次数使用橙色 */
+.plan-card.ultra .plan-features .feature-item .quota-ultra {
+    color: #F59E0B;
+}
+
+/* 订阅按钮 */
+.subscribe-btn {
+    width: 100%;
+    padding: 0.9rem;
+    border: 2px solid var(--border-color);
+    background: transparent;
+    color: var(--text-main);
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.subscribe-btn:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    background: rgba(77, 107, 254, 0.05);
+}
+
+.subscribe-btn.primary {
+    border-color: var(--primary-color);
+    background: var(--primary-color);
+    color: white;
+}
+
+.subscribe-btn.primary:hover {
+    background: var(--primary-hover);
+    border-color: var(--primary-hover);
+}
+
+.subscribe-btn.ultra-btn {
+    border-color: #F59E0B;
+    background: linear-gradient(135deg, #F59E0B 0%, #EF4444 100%);
+    color: white;
+}
+
+.subscribe-btn.ultra-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+/* 补充说明 */
+.pricing-notes {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-top: 2rem;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 600px;
+    padding: 1.5rem;
+    background: var(--bg-secondary);
+    border-radius: 20px;
+    border: 1px solid var(--border-color);
+}
+
+.note-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.note-item svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    fill: var(--text-light);
+}
+
+.purchase-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--primary-color);
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.purchase-link:hover {
+    color: var(--primary-hover);
+}
+
+/* 订阅弹窗 */
+.subscribe-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.subscribe-modal.show {
+    opacity: 1;
+}
+
+.modal-content {
+    background: var(--bg-secondary);
+    border-radius: 20px;
+    padding: 2rem;
+    width: 90%;
+    max-width: 420px;
+    position: relative;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+}
+
+.close-modal {
+    position: absolute;
+    top: 1rem;
+    right: 1.25rem;
+    font-size: 1.75rem;
+    color: var(--text-light);
+    background: none;
+    border: none;
+    cursor: pointer;
+    line-height: 1;
+    transition: color 0.2s;
+}
+
+.close-modal:hover {
+    color: var(--text-main);
+}
+
+.modal-content h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.modal-price {
+    font-size: 1.25rem;
+    color: var(--primary-color);
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+.modal-form {
+    text-align: left;
+}
+
+.modal-form .form-group {
+    margin-bottom: 1.25rem;
+}
+
+.modal-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--text-main);
+}
+
+.modal-form input {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    font-size: 1rem;
+    background: var(--bg-secondary);
+    color: var(--text-main);
+    transition: border-color 0.2s;
+}
+
+.modal-form input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+/* 支付方式选择 */
+.payment-methods {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.payment-method {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.payment-method:hover {
+    border-color: var(--primary-color);
+}
+
+.payment-method.selected {
+    border-color: var(--primary-color);
+    background: rgba(77, 107, 254, 0.05);
+}
+
+.payment-method span {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-muted);
+}
+
+.payment-method.selected span {
+    color: var(--primary-color);
+}
+
+/* 登录切换 */
+.login-toggle {
+    text-align: center;
+    margin-bottom: 1.25rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.login-toggle a {
+    color: var(--primary-color);
+    font-weight: 500;
+    margin-left: 0.25rem;
+}
+
+.login-toggle a:hover {
+    text-decoration: underline;
+}
+
+/* API Key 输入区域 */
+.api-key-section .api-key-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.api-key-section .api-key-input-wrapper input {
+    padding-right: 40px;
+}
+
+.api-key-section .toggle-visibility-btn {
+    position: absolute;
+    right: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-light);
+    padding: 4px;
+    height: 32px;
+    width: 32px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.api-key-section .toggle-visibility-btn:hover {
+    background: rgba(77, 107, 254, 0.1);
+    color: var(--primary-color);
+}
+
+/* 确认订阅按钮 */
+.confirm-subscribe-btn {
+    width: 100%;
+    padding: 1rem;
+    border: none;
+    background: var(--primary-color);
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.confirm-subscribe-btn:hover {
+    background: var(--primary-hover);
+}
+
+.confirm-subscribe-btn:disabled {
+    background: var(--text-light);
+    cursor: not-allowed;
+}
+
+/* 响应式布局 */
+/* 大屏幕 (1200px+): 4列,显示所有卡片,隐藏切换按钮 */
+
+/* 中等屏幕 (768px-1200px): 显示切换按钮,2列 */
+@media (max-width: 1200px) {
+
+    /* 显示切换按钮 */
+    .billing-toggle {
+        display: inline-flex;
+    }
+
+    /* 2列布局 */
+    .pricing-grid {
+        grid-template-columns: repeat(2, 1fr);
+        max-width: 700px;
+    }
+
+    /* 默认隐藏所有卡片 */
+    .plan-card {
+        display: none;
+    }
+
+    /* 只显示月付卡片 (默认) */
+    .plan-card[data-period="monthly"] {
+        display: block;
+    }
+
+    /* 当切换到年付时 */
+    body.yearly-view .plan-card[data-period="monthly"] {
+        display: none;
+    }
+
+    body.yearly-view .plan-card[data-period="yearly"] {
+        display: block;
+    }
+}
+
+/* 小屏幕 (<768px): 显示切换按钮,1列 */
+@media (max-width: 768px) {
+    .content>h1 {
+        font-size: 1.75rem;
+    }
+
+    .subtitle {
+        font-size: 1rem;
+    }
+
+    /* 显示切换按钮 */
+    .billing-toggle {
+        display: inline-flex;
+        flex-direction: column;
+    }
+
+    .toggle-btn {
+        justify-content: center;
+    }
+
+    /* 1列布局 */
+    .pricing-grid {
+        grid-template-columns: 1fr;
+        max-width: 400px;
+    }
+
+    .plan-card {
+        padding: 1.5rem;
+    }
+
+    /* 默认隐藏所有卡片 */
+    .plan-card {
+        display: none;
+    }
+
+    /* 只显示月付卡片 (默认) */
+    .plan-card[data-period="monthly"] {
+        display: block;
+    }
+
+    /* 当切换到年付时 */
+    body.yearly-view .plan-card[data-period="monthly"] {
+        display: none;
+    }
+
+    body.yearly-view .plan-card[data-period="yearly"] {
+        display: block;
+    }
+
+    .pricing-notes {
+        text-align: left;
+        align-items: flex-start;
+    }
+}
+
+/* 深色模式适配 */
+@media (prefers-color-scheme: dark) {
+    .plan-card:hover {
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .plan-card.featured {
+        background: linear-gradient(180deg, rgba(77, 107, 254, 0.1) 0%, var(--bg-secondary) 100%);
+    }
+
+    .plan-card.ultra {
+        background: linear-gradient(180deg, rgba(245, 158, 11, 0.1) 0%, var(--bg-secondary) 100%);
+    }
+
+    .subscribe-btn:hover {
+        background: rgba(77, 107, 254, 0.15);
+    }
+
+    .modal-content {
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    }
+}

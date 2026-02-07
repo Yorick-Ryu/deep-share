@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>订阅方案 - DeepShare</title>
+    <link rel="icon" type="image/svg+xml" href="./assets/images/deepshare-icon.svg">
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <link rel="stylesheet" href="./assets/css/price.css">
+</head>
+
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <img src="./assets/images/deepshare-icon.svg" alt="DeepShare Logo">
+                <a href="./index.html"><span>DeepShare</span></a>
+            </div>
+            <div class="nav-links">
+                <a href="https://docs.deepshare.app" target="_blank">文档</a>
+                <a href="https://github.com/Yorick-Ryu/deep-share" target="_blank" class="github-link">
+                    <svg class="github-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path
+                            d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+                    </svg>
+                    GitHub
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="content">
+        <h1>选择适合您的订阅方案</h1>
+        <p class="subtitle">订阅后享受配额每日重置，更多次数，更低价格</p>
+
+        <!-- 计费周期切换 (仅在中小屏幕显示) -->
+        <div class="billing-toggle">
+            <button class="toggle-btn active" data-period="monthly">按月付费</button>
+            <button class="toggle-btn" data-period="yearly">
+                按年付费
+                <span class="save-badge">省更多</span>
+            </button>
+        </div>
+
+        <!-- 定价卡片区域 -->
+        <div class="pricing-grid">
+            <!-- Standard 月付 -->
+            <div class="plan-card" data-plan="standard_monthly" data-period="monthly">
+                <div class="plan-header">
+                    <h3 class="plan-name">Standard</h3>
+                    <div class="plan-price">
+                        <span class="currency">¥</span>
+                        <span class="amount">9.9</span>
+                        <span class="period">/月</span>
+                    </div>
+                </div>
+                <div class="plan-features">
+                    <div class="feature-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>每日 <strong class="quota-number">10</strong> 次导出配额</span>
+                    </div>
+                    <div class="feature-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>配额每日重置</span>
+                    </div>
+                    <div class="feature-item disabled">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                        <span>MCP 支持</span>
+                    </div>
+                    <div class="feature-item disabled">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                        <span>Agent Skill 支持</span>
+                    </div>
+                </div>
+                <button class="subscribe-btn" data-plan="standard_monthly">立即订阅</button>
+            </div>
+
+            <!-- Pro 月付 -->
+            <div class="plan-card featured" data-plan="pro_monthly" data-period="monthly">
+                <div class="popular-badge">最受欢迎</div>
+                <div class="plan-header">
+                    <h3 class="plan-name">Pro</h3>
+                    <div class="plan-price">
+                        <span class="currency">¥</span>
+                        <span class="amount">19.9</span>
+                        <span class="period">/月</span>
+                    </div>
+                </div>
+                <div class="plan-features">
+                    <div class="feature-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>每日 <strong class="quota-number">30</strong> 次导出配额</span>
+                    </div>
+                    <div class="feature-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>配额每日重置</span>
+                    </div>
+                    <div class="feature-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>MCP 支持</span>
+                    </div>
+                    <div class="feature-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>Agent Skill 支持</span>
+                    </div>
+                </div>
+                <button class="subscribe-btn primary" data-plan="pro_monthly">立即订阅</button>
+            </div>
+
+            <!-- Pro 年付 -->
+            <div class="plan-card featured" data-plan="pro_yearly" data-period="yearly">
+                <div class="popular-badge">性价比之选</div>
+                <div class="plan-header">
+                    <h3 class="plan-name">Pro</h3>
+                    <div class="plan-price">
+                        <span class="currency">¥</span>
+                        <span class="amount">168</span>
+                        <span class="period">/年</span>
+                    </div>
+                    <div class="price-note">¥14/月，省 ¥70.8</div>
+                </div>
+                <div class="plan-features">
+                    <div class="feature-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>每日 <strong class="quota-number">50</strong> 次导出配额</span>
+                    </div>
+                    <div class="feature-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>配额每日重置</span>
+                    </div>
+                    <div class="feature-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>MCP 支持</span>
+                    </div>
+                    <div class="feature-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>Agent Skill 支持</span>
+                    </div>
+                    <div class="feature-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>优先技术支持</span>
+                    </div>
+                </div>
+                <button class="subscribe-btn primary" data-plan="pro_yearly">立即订阅</button>
+            </div>
+
+            <!-- Ultra 年付 -->
+            <div class="plan-card ultra" data-plan="ultra_yearly" data-period="yearly">
+                <div class="ultra-badge">旗舰版</div>
+                <div class="plan-header">
+                    <h3 class="plan-name">Ultra</h3>
+                    <div class="plan-price">
+                        <span class="currency">¥</span>
+                        <span class="amount">299</span>
+                        <span class="period">/年</span>
+                    </div>
+                    <div class="price-note">¥24.9/月</div>
+                </div>
+                <div class="plan-features">
+                    <div class="feature-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>每日 <strong class="quota-number quota-ultra">100</strong> 次导出配额</span>
+                    </div>
+                    <div class="feature-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>配额每日重置</span>
+                    </div>
+                    <div class="feature-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>MCP 支持</span>
+                    </div>
+                    <div class="feature-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>Agent Skill 支持</span>
+                    </div>
+                    <div class="feature-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>优先技术支持</span>
+                    </div>
+                </div>
+                <button class="subscribe-btn ultra-btn" data-plan="ultra_yearly">立即订阅</button>
+            </div>
+        </div>
+
+        <!-- 补充说明 -->
+        <div class="pricing-notes">
+            <div class="note-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M12 1L21.5 6.5V11.5C21.5 16.75 18.26 21.62 12 23C5.74 21.62 2.5 16.75 2.5 11.5V6.5L12 1ZM12 3.18L4.5 7.43V11.5C4.5 15.82 7.18 19.93 12 21.3C16.82 19.93 19.5 15.82 19.5 11.5V7.43L12 3.18ZM11 15H13V17H11V15ZM11 7H13V13H11V7Z">
+                    </path>
+                </svg>
+                <span><strong>所有订阅均不会自动续费</strong>，到期后服务自动停止，您可以随时手动续订</span>
+            </div>
+            <div class="note-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20ZM13 12H17V14H11V7H13V12Z">
+                    </path>
+                </svg>
+                <span>每日配额在次日0点（北京时间）自动重置，不累加</span>
+            </div>
+            <div class="note-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M12 2C17.52 2 22 6.48 22 12C22 17.52 17.52 22 12 22C6.48 22 2 17.52 2 12C2 6.48 6.48 2 12 2ZM12 20C16.42 20 20 16.42 20 12C20 7.58 16.42 4 12 4C7.58 4 4 7.58 4 12C4 16.42 7.58 20 12 20ZM13 12V16H11V12H8L12 8L16 12H13Z">
+                    </path>
+                </svg>
+                <span>支持升级订阅，剩余时长将按照 2:1 折算到新订阅中</span>
+            </div>
+            <div class="note-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20ZM11 7H13V9H11V7ZM11 11H13V17H11V11Z">
+                    </path>
+                </svg>
+                <span>按量付费配额为叠加配额，优先消耗每日配额，再消耗叠加配额</span>
+            </div>
+            <div class="note-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M12.0049 22.0027C6.48204 22.0027 2.00488 17.5256 2.00488 12.0027C2.00488 6.4799 6.48204 2.00275 12.0049 2.00275C17.5277 2.00275 22.0049 6.4799 22.0049 12.0027C22.0049 17.5256 17.5277 22.0027 12.0049 22.0027ZM12.0049 20.0027C16.4232 20.0027 20.0049 16.421 20.0049 12.0027C20.0049 7.58447 16.4232 4.00275 12.0049 4.00275C7.5866 4.00275 4.00488 7.58447 4.00488 12.0027C4.00488 16.421 7.5866 20.0027 12.0049 20.0027ZM13.0049 13.0027H16.0049V15.0027H13.0049V17.0027H11.0049V15.0027H8.00488V13.0027H11.0049V12.0027H8.00488V10.0027H10.5907L8.46935 7.88143L9.88356 6.46721L12.0049 8.58853L14.1262 6.46721L15.5404 7.88143L13.4191 10.0027H16.0049V12.0027H13.0049V13.0027Z">
+                    </path>
+                </svg>
+                <a href="./purchase.html" class="purchase-link">
+                    <span>需要按量付费？前往购买导出次数 →</span>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- 订阅弹窗 -->
+    <div class="subscribe-modal" id="subscribeModal" style="display: none;">
+        <div class="modal-content">
+            <button class="close-modal" id="closeModal">&times;</button>
+            <h2 id="modalPlanName">订阅 Pro</h2>
+            <p class="modal-price" id="modalPrice">¥19.9/月</p>
+
+            <div class="modal-form">
+                <div class="form-group">
+                    <label for="subscribeEmail">邮箱（用于绑定账户和接收API密钥）</label>
+                    <input type="email" id="subscribeEmail" placeholder="example@email.com" required autocomplete="off">
+                </div>
+
+                <div class="form-group">
+                    <label>支付方式</label>
+                    <div class="payment-methods">
+                        <div class="payment-method selected" data-method="alipay">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"
+                                fill="#1677FF">
+                                <path
+                                    d="M21.4224 15.3576C17.5929 14.2048 15.3667 13.5176 14.744 13.296C15.312 12.32 15.768 11.2 16.064 9.976H12.8V8.872H16.8V8.192H12.8V6.344H11.264C10.984 6.344 10.952 6.592 10.952 6.592V8.184H7.2V8.864H10.952V9.968H7.88V10.584H14.104C13.88 11.36 13.576 12.096 13.216 12.76C11.808 12.296 11.024 11.976 9.304 11.816C6.048 11.504 5.296 13.296 5.176 14.392C5 16.064 6.48 17.424 8.688 17.424C10.896 17.424 12.368 16.4 13.768 14.704C14.9346 15.2619 17.1059 16.2293 20.2819 17.6062C18.4835 20.2577 15.4452 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 13.1778 21.7964 14.3081 21.4224 15.3576ZM8.432 16.368C6.096 16.368 5.728 14.888 5.848 14.272C5.968 13.656 6.648 12.856 7.952 12.856C9.448 12.856 10.784 13.24 12.392 14.016C11.256 15.496 9.872 16.368 8.432 16.368Z">
+                                </path>
+                            </svg>
+                            <span>支付宝</span>
+                        </div>
+                        <div class="payment-method" data-method="wxpay" style="display: none;">
+                            <svg viewBox="0 0 24 24" width="24" height="24">
+                                <path fill="#07C160"
+                                    d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 01.213.665l-.39 1.48c-.019.07-.048.141-.048.213 0 .163.13.295.29.295a.326.326 0 00.167-.054l1.903-1.114a.864.864 0 01.717-.098 10.16 10.16 0 002.837.403c.276 0 .543-.027.811-.05-.857-2.578.157-4.972 1.932-6.446 1.703-1.415 3.882-1.98 5.853-1.838-.576-3.583-4.196-6.348-8.596-6.348zM5.785 5.991c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 01-1.162 1.178A1.17 1.17 0 014.623 7.17c0-.651.52-1.18 1.162-1.18zm5.813 0c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 01-1.162 1.178 1.17 1.17 0 01-1.162-1.178c0-.651.52-1.18 1.162-1.18zm3.63 4.474c-2.637 0-4.78 1.634-5.467 3.867-.687 2.234.266 4.485 2.302 5.643.198.112.384.172.58.172.15 0 .268-.12.268-.268a.262.262 0 00-.044-.192l-.353-1.342a.536.536 0 01.192-.602C14.073 16.62 15.1 14.852 15.1 12.9c0-.122-.01-.242-.028-.36-1.425.09-2.747.548-3.854 1.29.167-.74.394-1.44.684-2.066.57-.124 1.16-.193 1.765-.193 3.516 0 6.371 2.14 6.371 4.778 0 1.442-.84 2.793-2.314 3.834.153.477.51 1.547.536 1.625.052.158.016.311-.09.409a.336.336 0 01-.273.1.485.485 0 01-.246-.088l-1.727-1.008a.786.786 0 00-.651-.088 9.16 9.16 0 01-2.552.36 7.667 7.667 0 01-.89-.052c-.262.56-.59 1.086-.975 1.565 1.168.46 2.47.716 3.854.716.802 0 1.577-.088 2.3-.243l1.546.908c.08.047.167.073.256.073a.376.376 0 00.372-.377.338.338 0 00-.06-.19l-.32-1.21a.543.543 0 01.176-.54c1.495-1.097 2.45-2.73 2.45-4.538 0-3.307-3.045-5.994-6.797-5.994z" />
+                            </svg>
+                            <span>微信支付</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group api-key-section" id="apiKeySection" style="display: none;">
+                    <label for="subscribeApiKey">您的 API 密钥</label>
+                    <div class="api-key-input-wrapper">
+                        <input type="password" id="subscribeApiKey" placeholder="输入 API Key" autocomplete="off">
+                        <button type="button" class="toggle-visibility-btn" id="toggleApiKeyVisibility" title="显示/隐藏">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="eye-icon">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="eye-off-icon" style="display: none;">
+                                <path
+                                    d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24">
+                                </path>
+                                <line x1="1" y1="1" x2="23" y2="23"></line>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="login-toggle">
+                    <span id="loginToggleText">已有 API Key？</span>
+                    <a href="#" id="loginToggleLink">点击登录并订阅</a>
+                </div>
+
+                <button class="confirm-subscribe-btn" id="confirmSubscribeBtn">确认订阅</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="https://github.com/Yorick-Ryu/deep-share">GitHub</a>
+                <a href="./privacy.html">隐私政策</a>
+                <a href="./terms.html">使用条款</a>
+                <a href="./purchase.html">购买次数</a>
+                <a href="./price.html">订阅方案</a>
+            </div>
+            <p class="copyright">© 2026 DeepShare. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="./assets/js/price.js"></script>
+
+    <!-- Vercel Web Analytics -->
+    <script>
+        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    </script>
+    <script defer src="/_vercel/insights/script.js"></script>
+</body>
+
+</html>
