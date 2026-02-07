@@ -33,9 +33,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Set up manual markdown conversion functionality
   setupManualConversion();
 
-  // Set up template selector
-  setupTemplateSelector();
-
   // Set all i18n text
   loadI18nText(errorMsg);
 });
@@ -220,6 +217,9 @@ function loadSettings(highlightApiKey = false, forceDocxTab = false) {
 }
 
 // Set up tab switching functionality
+// Flag to track if templates have been loaded
+let templatesLoaded = false;
+
 function setupTabs() {
   const tabButtons = Array.from(document.querySelectorAll('.tab-btn'));
 
@@ -238,6 +238,12 @@ function setupTabs() {
         tab.classList.remove('active');
       });
       document.getElementById(targetTabId).classList.add('active');
+
+      // Load templates when manual-docx-tab is first accessed
+      if (targetTabId === 'manual-docx-tab' && !templatesLoaded) {
+        templatesLoaded = true;
+        setupTemplateSelector();
+      }
 
       // Save the active tab ID to chrome.storage.sync
       chrome.storage.sync.set({ 'lastActiveTab': targetTabId });
@@ -350,8 +356,10 @@ function setupAutoSave() {
     // Reload all i18n text with the new language
     loadI18nText();
 
-    // Refresh template selector with new language
-    setupTemplateSelector();
+    // Refresh template selector with new language (only if templates have been loaded)
+    if (templatesLoaded) {
+      setupTemplateSelector();
+    }
   });
 }
 
