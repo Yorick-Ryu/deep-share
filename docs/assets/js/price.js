@@ -64,6 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initPaymentMethods();
     initLoginToggle();
     initApiKeyVisibility();
+    initModalStatePersistence();
 });
 
 /**
@@ -132,6 +133,9 @@ function openSubscribeModal(planCode) {
     modalPlanName.textContent = `订阅 ${plan.name}`;
     modalPrice.textContent = `¥${plan.price}/${plan.period}`;
 
+    // 恢复之前保存的表单状态
+    restoreModalState();
+
     // 显示弹窗
     const modal = document.getElementById('subscribeModal');
     modal.style.display = 'flex';
@@ -144,7 +148,7 @@ function openSubscribeModal(planCode) {
 }
 
 /**
- * 关闭订阅弹窗
+ * 关闭订阅弹窗（保留表单状态）
  */
 function closeSubscribeModal() {
     const modal = document.getElementById('subscribeModal');
@@ -157,11 +161,11 @@ function closeSubscribeModal() {
     // 恢复背景滚动
     document.body.style.overflow = '';
 
-    // 重置表单
-    document.getElementById('subscribeEmail').value = '';
-    document.getElementById('subscribeApiKey').value = '';
-    isLoginMode = false;
-    updateLoginToggleUI();
+    // 清除错误状态
+    clearAllErrors();
+
+    // 保存状态（关闭时持久化一次）
+    saveModalState();
 }
 
 /**
@@ -204,6 +208,7 @@ function initPaymentMethods() {
             methods.forEach(m => m.classList.remove('selected'));
             method.classList.add('selected');
             selectedPaymentMethod = method.dataset.method;
+            saveModalState();
         });
     });
 }
@@ -218,6 +223,7 @@ function initLoginToggle() {
         e.preventDefault();
         isLoginMode = !isLoginMode;
         updateLoginToggleUI();
+        saveModalState();
     });
 }
 
@@ -269,6 +275,173 @@ function initApiKeyVisibility() {
 }
 
 /**
+ * 保存弹窗表单状态到 sessionStorage
+ */
+function saveModalState() {
+    const state = {
+        email: document.getElementById('subscribeEmail').value,
+        apiKey: document.getElementById('subscribeApiKey').value,
+        isLoginMode: isLoginMode,
+        paymentMethod: selectedPaymentMethod
+    };
+    sessionStorage.setItem('subscribeModalState', JSON.stringify(state));
+}
+
+/**
+ * 从 sessionStorage 恢复弹窗表单状态
+ */
+function restoreModalState() {
+    const saved = sessionStorage.getItem('subscribeModalState');
+    if (!saved) return;
+
+    try {
+        const state = JSON.parse(saved);
+
+        // 恢复邮箱
+        if (state.email) {
+            document.getElementById('subscribeEmail').value = state.email;
+        }
+
+        // 恢复 API Key
+        if (state.apiKey) {
+            document.getElementById('subscribeApiKey').value = state.apiKey;
+        }
+
+        // 恢复登录模式
+        if (state.isLoginMode !== undefined) {
+            isLoginMode = state.isLoginMode;
+            updateLoginToggleUI();
+        }
+
+        // 恢复支付方式
+        if (state.paymentMethod) {
+            selectedPaymentMethod = state.paymentMethod;
+            const methods = document.querySelectorAll('.payment-method');
+            methods.forEach(m => {
+                m.classList.toggle('selected', m.dataset.method === selectedPaymentMethod);
+            });
+        }
+    } catch (e) {
+        console.error('恢复弹窗状态失败:', e);
+    }
+}
+
+/**
+ * 绑定表单输入事件，实时保存状态
+ */
+function initModalStatePersistence() {
+    const emailInput = document.getElementById('subscribeEmail');
+    const apiKeyInput = document.getElementById('subscribeApiKey');
+
+    emailInput.addEventListener('input', () => {
+        clearInputError(emailInput);
+        clearGeneralError();
+        saveModalState();
+    });
+    apiKeyInput.addEventListener('input', () => {
+        clearInputError(apiKeyInput);
+        clearGeneralError();
+        saveModalState();
+    });
+}
+
+/**
+ * 在输入框下方显示错误信息，并将输入框边框变红
+ */
+function showInputError(inputEl, message) {
+    clearInputError(inputEl);
+    inputEl.classList.add('input-error');
+    const errorEl = document.createElement('div');
+    errorEl.className = 'input-error-msg';
+    errorEl.textContent = message;
+    // 插入到输入框（或其包裹容器）之后
+    const wrapper = inputEl.closest('.api-key-input-wrapper') || inputEl;
+    wrapper.insertAdjacentElement('afterend', errorEl);
+}
+
+/**
+ * 清除输入框的错误状态
+ */
+function clearInputError(inputEl) {
+    inputEl.classList.remove('input-error');
+    const wrapper = inputEl.closest('.api-key-input-wrapper') || inputEl;
+    const existingError = wrapper.parentElement.querySelector('.input-error-msg');
+    if (existingError) {
+        existingError.remove();
+    }
+}
+
+/**
+ * 在确认按钮下方显示通用错误信息
+ */
+function showGeneralError(message) {
+    const el = document.getElementById('generalError');
+    el.textContent = message;
+    el.classList.add('show');
+}
+
+/**
+ * 清除通用错误信息
+ */
+function clearGeneralError() {
+    const el = document.getElementById('generalError');
+    el.textContent = '';
+    el.classList.remove('show');
+}
+
+/**
+ * 清除所有错误状态
+ */
+function clearAllErrors() {
+    clearInputError(document.getElementById('subscribeEmail'));
+    clearInputError(document.getElementById('subscribeApiKey'));
+    clearGeneralError();
+}
+
+/**
+ * API Key 模式下的错误映射规则
+ * 将接口返回的 detail 映射到对应的输入框或通用错误
+ */
+const API_KEY_ERROR_MAP = [
+    // 关键词匹配 → 显示在 API Key 输入框下（可选 display 替换显示文案）
+    { keywords: ['Invalid or disabled API key'], target: 'apiKey', display: 'API 密钥无效或已被禁用' },
+    { keywords: ['API Key', 'API key', 'api key'], target: 'apiKey' },
+    { keywords: ['测试账户'], target: 'apiKey' },
+];
+
+/**
+ * 邮箱模式下的错误映射规则
+ */
+const EMAIL_ERROR_MAP = [
+    // 关键词匹配 → 显示在邮箱输入框下
+    { keywords: ['邮箱已注册', 'API Key'], target: 'email' },
+    { keywords: ['email', 'Email'], target: 'email' },
+];
+
+/**
+ * 根据错误映射规则显示错误
+ * @param {string} message - 错误信息
+ * @param {Array} errorMap - 错误映射规则
+ * @param {HTMLElement} defaultInput - 默认的输入框元素
+ */
+function showMappedError(message, errorMap, defaultInput) {
+    clearAllErrors();
+
+    for (const rule of errorMap) {
+        if (rule.keywords.some(kw => message.includes(kw))) {
+            const inputEl = rule.target === 'apiKey'
+                ? document.getElementById('subscribeApiKey')
+                : document.getElementById('subscribeEmail');
+            showInputError(inputEl, rule.display || message);
+            return;
+        }
+    }
+
+    // 没有匹配到任何规则，显示为通用错误
+    showGeneralError(message);
+}
+
+/**
  * 处理订阅请求
  */
 async function handleSubscribe() {
@@ -276,22 +449,25 @@ async function handleSubscribe() {
     const emailInput = document.getElementById('subscribeEmail');
     const apiKeyInput = document.getElementById('subscribeApiKey');
 
+    // 清除之前的错误
+    clearAllErrors();
+
     // 验证
     if (isLoginMode) {
         const apiKey = apiKeyInput.value.trim();
         if (!apiKey) {
-            alert('请输入您的 API Key');
+            showInputError(apiKeyInput, '请输入您的 API Key');
             return;
         }
         await createSubscriptionWithApiKey(apiKey);
     } else {
         const email = emailInput.value.trim();
         if (!email) {
-            alert('请输入您的邮箱');
+            showInputError(emailInput, '请输入您的邮箱');
             return;
         }
         if (!isValidEmail(email)) {
-            alert('请输入有效的邮箱地址');
+            showInputError(emailInput, '请输入有效的邮箱地址');
             return;
         }
         await createGuestSubscription(email);
@@ -315,7 +491,7 @@ async function createSubscriptionWithApiKey(apiKey) {
 
     try {
         confirmBtn.disabled = true;
-        confirmBtn.textContent = '处理中...';
+        confirmBtn.textContent = '处理中，请稍等...';
 
         const response = await fetch(`${API_BASE_URL}/payments/subscription/create`, {
             method: 'POST',
@@ -339,6 +515,7 @@ async function createSubscriptionWithApiKey(apiKey) {
 
         // 跳转到支付页面
         if (data.payment_url) {
+            saveModalState({ modalOpen: true });
             window.location.href = data.payment_url;
         } else {
             throw new Error('未获取到支付链接');
@@ -346,7 +523,8 @@ async function createSubscriptionWithApiKey(apiKey) {
 
     } catch (error) {
         console.error('订阅错误:', error);
-        alert(error.message || '创建订阅失败，请稍后重试');
+        const msg = error.message || '创建订阅失败，请稍后重试';
+        showMappedError(msg, API_KEY_ERROR_MAP, document.getElementById('subscribeApiKey'));
         confirmBtn.disabled = false;
         confirmBtn.textContent = originalText;
     }
@@ -391,6 +569,7 @@ async function createGuestSubscription(email) {
 
         // 跳转到支付页面
         if (data.payment_url) {
+            saveModalState({ modalOpen: true });
             window.location.href = data.payment_url;
         } else {
             throw new Error('未获取到支付链接');
@@ -398,7 +577,8 @@ async function createGuestSubscription(email) {
 
     } catch (error) {
         console.error('订阅错误:', error);
-        alert(error.message || '创建订阅失败，请稍后重试');
+        const msg = error.message || '创建订阅失败，请稍后重试';
+        showMappedError(msg, EMAIL_ERROR_MAP, document.getElementById('subscribeEmail'));
         confirmBtn.disabled = false;
         confirmBtn.textContent = originalText;
     }

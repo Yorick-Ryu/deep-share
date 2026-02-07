@@ -418,7 +418,7 @@
 .modal-form input {
     width: 100%;
     padding: 0.8rem 1rem;
-    border: 1px solid var(--border-color);
+    border: 2px solid var(--border-color);
     border-radius: 10px;
     font-size: 1rem;
     background: var(--bg-secondary);
@@ -429,6 +429,36 @@
 .modal-form input:focus {
     outline: none;
     border-color: var(--primary-color);
+}
+
+/* 输入框错误状态 */
+.modal-form input.input-error {
+    border-color: #EF4444;
+}
+
+.modal-form input.input-error:focus {
+    border-color: #EF4444;
+}
+
+.input-error-msg {
+    color: #EF4444;
+    font-size: 0.8rem;
+    margin-top: 0.4rem;
+    line-height: 1.4;
+}
+
+/* 通用错误信息（按钮下方） */
+.general-error-msg {
+    color: #EF4444;
+    font-size: 0.85rem;
+    text-align: center;
+    margin-top: 0.75rem;
+    line-height: 1.4;
+    display: none;
+}
+
+.general-error-msg.show {
+    display: block;
 }
 
 /* 支付方式选择 */
