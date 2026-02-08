@@ -875,9 +875,10 @@ function displayDualQuota(data) {
   const addonBlock = document.getElementById('addonBlock');
 
   // --- Subscription daily quota ---
-  if (data.has_subscription && data.subscription) {
-    subscriptionBlock.style.display = 'flex';
+  // Always show subscription block
+  subscriptionBlock.style.display = 'flex';
 
+  if (data.has_subscription && data.subscription) {
     const dailyQuota = data.subscription.daily_quota;
     const usedToday = data.subscription.used_today;
     const dailyRemaining = Math.max(0, dailyQuota - usedToday);
@@ -901,13 +902,19 @@ function displayDualQuota(data) {
       noteEl.textContent = resetText;
     }
   } else {
-    subscriptionBlock.style.display = 'none';
+    // No subscription - show empty state
+    document.getElementById('subscriptionPlanName').textContent = '';
+    document.getElementById('dailyRemaining').textContent = '0';
+    document.getElementById('dailyTotal').textContent = '0';
+    document.getElementById('dailyProgress').style.width = '0%';
+    document.getElementById('dailyResetNote').textContent = getMessage('dailyResetNote') || '每日重置';
   }
 
   // --- Addon pay-per-use quota ---
-  if (data.addon_quota && data.addon_quota.total_quota > 0) {
-    addonBlock.style.display = 'flex';
+  // Always show addon block
+  addonBlock.style.display = 'flex';
 
+  if (data.addon_quota && data.addon_quota.total_quota > 0) {
     const total = data.addon_quota.total_quota;
     const used = data.addon_quota.used_quota;
     const remaining = Math.max(0, total - used);
@@ -926,15 +933,12 @@ function displayDualQuota(data) {
     } else {
       document.getElementById('addonExpiry').textContent = '';
     }
-  } else if (!data.has_subscription) {
-    // No subscription and no addon - show empty addon block
-    addonBlock.style.display = 'flex';
+  } else {
+    // No addon quota - show empty state
     document.getElementById('addonRemaining').textContent = '0';
     document.getElementById('addonTotal').textContent = '0';
     document.getElementById('addonProgress').style.width = '0%';
     document.getElementById('addonExpiry').textContent = '';
-  } else {
-    addonBlock.style.display = 'none';
   }
 
   // Update footer links
