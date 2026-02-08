@@ -144,7 +144,7 @@
         "message": "转换额度"
     },
     "apiKeyHint": {
-        "message": "购买 API Key? <a href=\"https://ds.rick216.cn/purchase\" target=\"_blank\">点击此处</a>"
+        "message": "购买 API密钥? <a href=\"https://ds.rick216.cn/price\" target=\"_blank\">点击此处</a>"
     },
     "apiKeyMissing": {
         "message": "请点击拓展图标购买并填写API密钥以使用文档转换功能"
