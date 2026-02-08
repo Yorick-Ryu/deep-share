@@ -56,13 +56,13 @@ function showSuccess(quota, gift, productName) {
     document.getElementById('status-error').style.display = 'none';
     document.getElementById('status-success').style.display = 'block';
 
-    const isSubscription = (quota === 0 && gift === 0) || (productName && productName.includes('订阅'));
+    const isSubscription = (quota === 0 && gift === 0) || (productName && productName.includes('套餐'));
 
     if (isSubscription) {
-        document.getElementById('success-message').textContent = '您的订单已完成，订阅权限已开启。';
+        document.getElementById('success-message').textContent = '您的订单已完成，套餐权益已开启。';
         document.getElementById('quota-info').style.display = 'none';
         document.getElementById('subscription-info').style.display = 'block';
-        document.getElementById('plan-name').textContent = productName || 'DeepShare 订阅计划';
+        document.getElementById('plan-name').textContent = productName || 'DeepShare 套餐';
     } else {
         // Display this time's quota info
         document.getElementById('success-message').textContent = '您的订单已完成，转换次数已充值到您的账户。';

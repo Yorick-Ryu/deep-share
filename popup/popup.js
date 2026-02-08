@@ -576,7 +576,7 @@ function loadI18nText(errorMsg = null) {
   const subscribeLink = document.getElementById('subscribeLink');
   if (subscribeLink) {
     // Default text for when no subscription (will be updated by displayDualQuota if needed)
-    subscribeLink.textContent = getMessage('purchaseSubscription') || '购买订阅';
+    subscribeLink.textContent = getMessage('purchaseSubscription') || '购买套餐';
   }
 }
 
@@ -943,9 +943,9 @@ function displayDualQuota(data) {
     // Always show the link, but change text based on subscription status
     subscribeLink.style.display = 'inline';
     if (data.has_subscription) {
-      subscribeLink.textContent = getMessage('renewSubscription') || '续费订阅';
+      subscribeLink.textContent = getMessage('renewSubscription') || '续费套餐';
     } else {
-      subscribeLink.textContent = getMessage('purchaseSubscription') || '购买订阅';
+      subscribeLink.textContent = getMessage('purchaseSubscription') || '购买套餐';
     }
   }
 }

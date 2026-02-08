@@ -267,10 +267,10 @@
         "message": "购买叠加额度"
     },
     "purchaseSubscription": {
-        "message": "购买订阅"
+        "message": "购买套餐"
     },
     "renewSubscription": {
-        "message": "续费订阅"
+        "message": "续费套餐"
     },
     "expirationLabel": {
         "message": "有效期至:"

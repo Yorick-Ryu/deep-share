@@ -14,7 +14,7 @@ const PLANS = {
         price: 9.9,
         period: '月',
         periodType: 'monthly',
-        dailyQuota: 10,
+        dailyQuota: 8,
         mcpEnabled: false,
         skillEnabled: false
     },
@@ -24,7 +24,7 @@ const PLANS = {
         price: 19.9,
         period: '月',
         periodType: 'monthly',
-        dailyQuota: 30,
+        dailyQuota: 20,
         mcpEnabled: true,
         skillEnabled: true
     },
@@ -56,8 +56,48 @@ let selectedPaymentMethod = 'alipay';
 let selectedPlanCode = null;
 let isLoginMode = false;
 
+/**
+ * 从 PLANS 配置更新 HTML 中的套餐详情
+ */
+function updatePlanDetails() {
+    // 获取所有方案卡片
+    const planCards = document.querySelectorAll('.plan-card');
+
+    planCards.forEach(card => {
+        const planCode = card.dataset.plan;
+        const plan = PLANS[planCode];
+
+        if (!plan) return;
+
+        // 更新套餐名称
+        const nameElement = card.querySelector('.plan-name');
+        if (nameElement) {
+            nameElement.textContent = plan.name;
+        }
+
+        // 更新价格
+        const amountElement = card.querySelector('.amount');
+        if (amountElement) {
+            amountElement.textContent = plan.price;
+        }
+
+        // 更新周期
+        const periodElement = card.querySelector('.period');
+        if (periodElement) {
+            periodElement.textContent = `/${plan.period}`;
+        }
+
+        // 更新配额数字
+        const quotaElement = card.querySelector('.quota-number');
+        if (quotaElement) {
+            quotaElement.textContent = plan.dailyQuota;
+        }
+    });
+}
+
 // 初始化
 document.addEventListener('DOMContentLoaded', () => {
+    updatePlanDetails();
     initBillingToggle();
     initPlanCards();
     initModal();
@@ -130,7 +170,7 @@ function openSubscribeModal(planCode) {
     const modalPlanName = document.getElementById('modalPlanName');
     const modalPrice = document.getElementById('modalPrice');
 
-    modalPlanName.textContent = `订阅 ${plan.name}`;
+    modalPlanName.textContent = `购买 ${plan.name} 套餐`;
     modalPrice.textContent = `¥${plan.price}/${plan.period}`;
 
     // 恢复之前保存的表单状态
@@ -239,12 +279,12 @@ function updateLoginToggleUI() {
     if (isLoginMode) {
         apiKeySection.style.display = 'block';
         toggleText.textContent = '新用户？';
-        toggleLink.textContent = '使用邮箱注册并订阅';
+        toggleLink.textContent = '使用邮箱注册';
         emailInput.parentElement.style.display = 'none';
     } else {
         apiKeySection.style.display = 'none';
         toggleText.textContent = '已有 API Key？';
-        toggleLink.textContent = '点击登录并订阅';
+        toggleLink.textContent = '点击登录';
         emailInput.parentElement.style.display = 'block';
     }
 }
@@ -510,7 +550,7 @@ async function createSubscriptionWithApiKey(apiKey) {
         const data = await response.json();
 
         if (!response.ok) {
-            throw new Error(data.detail || '创建订阅失败');
+            throw new Error(data.detail || '创建订单失败');
         }
 
         // 跳转到支付页面
@@ -522,8 +562,8 @@ async function createSubscriptionWithApiKey(apiKey) {
         }
 
     } catch (error) {
-        console.error('订阅错误:', error);
-        const msg = error.message || '创建订阅失败，请稍后重试';
+        console.error('购买错误:', error);
+        const msg = error.message || '创建订单失败，请稍后重试';
         showMappedError(msg, API_KEY_ERROR_MAP, document.getElementById('subscribeApiKey'));
         confirmBtn.disabled = false;
         confirmBtn.textContent = originalText;
@@ -558,7 +598,7 @@ async function createGuestSubscription(email) {
         const data = await response.json();
 
         if (!response.ok) {
-            throw new Error(data.detail || '创建订阅失败');
+            throw new Error(data.detail || '创建订单失败');
         }
 
         // 保存返回的 API Key（如果有）
@@ -576,8 +616,8 @@ async function createGuestSubscription(email) {
         }
 
     } catch (error) {
-        console.error('订阅错误:', error);
-        const msg = error.message || '创建订阅失败，请稍后重试';
+        console.error('购买错误:', error);
+        const msg = error.message || '创建订单失败，请稍后重试';
         showMappedError(msg, EMAIL_ERROR_MAP, document.getElementById('subscribeEmail'));
         confirmBtn.disabled = false;
         confirmBtn.textContent = originalText;
