@@ -7,12 +7,19 @@
     <title>额度卡片加载动画演示</title>
     <link rel="stylesheet" href="../popup/popup.css">
     <style>
+        html {
+            overflow-y: auto;
+            height: auto;
+        }
+
         body {
             width: 100%;
             max-width: 600px;
             margin: 40px auto;
             padding: 20px;
             font-family: system-ui, -apple-system, sans-serif;
+            overflow-y: auto;
+            min-height: 100vh;
         }
 
         .demo-container {
@@ -32,6 +39,7 @@
 
         .demo-controls {
             display: flex;
+            flex-wrap: wrap;
             gap: 12px;
             margin-bottom: 20px;
         }
@@ -45,6 +53,8 @@
             cursor: pointer;
             font-size: 14px;
             transition: background 0.2s;
+            flex: 1;
+            min-width: 140px;
         }
 
         .demo-btn:hover {
@@ -61,6 +71,12 @@
             background: var(--tab-hover-bg);
         }
 
+        .demo-btn.small {
+            padding: 8px 16px;
+            font-size: 13px;
+            min-width: 120px;
+        }
+
         .info-box {
             background: rgba(77, 107, 254, 0.1);
             border: 1px solid rgba(77, 107, 254, 0.3);
@@ -70,6 +86,17 @@
             font-size: 14px;
             color: var(--text-color);
         }
+
+        .control-group {
+            margin-bottom: 16px;
+        }
+
+        .control-group-title {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+        }
     </style>
 </head>
 
@@ -77,15 +104,34 @@
     <h1 style="text-align: center; color: var(--text-color);">额度卡片加载动画演示</h1>
 
     <div class="info-box">
-        <strong>说明:</strong> 这个页面演示了额度卡片的加载动画效果。点击下方按钮可以切换不同的状态。
+        <strong>说明:</strong> 这个页面演示了额度卡片的加载动画效果和三种不同的额度类型。点击下方按钮可以切换不同的状态。
     </div>
 
     <div class="demo-container">
         <div class="demo-title">控制面板</div>
-        <div class="demo-controls">
-            <button class="demo-btn" onclick="showLoading()">显示加载动画</button>
-            <button class="demo-btn" onclick="showData()">显示实际数据</button>
-            <button class="demo-btn secondary" onclick="simulateLoading()">模拟加载过程 (2秒)</button>
+
+        <div class="control-group">
+            <div class="control-group-title">加载状态</div>
+            <div class="demo-controls">
+                <button class="demo-btn" onclick="showLoading()">显示加载动画</button>
+                <button class="demo-btn secondary" onclick="simulateLoading()">模拟加载 (2秒)</button>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <div class="control-group-title">额度类型</div>
+            <div class="demo-controls">
+                <button class="demo-btn small secondary" onclick="showBothQuotas()">两者都有</button>
+                <button class="demo-btn small secondary" onclick="showSubscriptionOnly()">仅订阅</button>
+                <button class="demo-btn small secondary" onclick="showAddonOnly()">仅按量额度</button>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <div class="control-group-title">过期提醒</div>
+            <div class="demo-controls">
+                <button class="demo-btn small secondary" onclick="showExpiringQuota()">即将过期 (3天内)</button>
+            </div>
         </div>
     </div>
 
@@ -100,13 +146,13 @@
                     <div class="quota-loading-title"></div>
                 </div>
                 <div class="quota-loading-blocks">
-                    <div class="quota-loading-block">
+                    <div class="quota-loading-block" id="subscriptionLoadingBlock">
                         <div class="quota-loading-label"></div>
                         <div class="quota-loading-value"></div>
                         <div class="quota-loading-progress"></div>
                         <div class="quota-loading-note"></div>
                     </div>
-                    <div class="quota-loading-block">
+                    <div class="quota-loading-block" id="addonLoadingBlock">
                         <div class="quota-loading-label"></div>
                         <div class="quota-loading-value"></div>
                         <div class="quota-loading-progress"></div>
@@ -125,17 +171,18 @@
                 <div class="quota-block" id="subscriptionBlock" style="display: flex;">
                     <div class="quota-block-top">
                         <span class="quota-block-label">每日配额</span>
-                        <span class="quota-block-badge">Pro</span>
+                        <span class="quota-block-badge" id="planBadge">Pro</span>
                     </div>
                     <div class="quota-block-value">
-                        <span class="quota-block-remaining">8</span>
+                        <span class="quota-block-remaining" id="dailyRemaining">8</span>
                         <span class="quota-block-sep">/</span>
-                        <span>10</span>
+                        <span id="dailyTotal">10</span>
                     </div>
                     <div class="quota-progress-container">
-                        <div class="quota-progress" style="width: 80%; background-color: #4D6BFE;"></div>
+                        <div class="quota-progress" id="dailyProgress" style="width: 80%; background-color: #4D6BFE;">
+                        </div>
                     </div>
-                    <span class="quota-block-note">每日重置 · 至 2026-03-09</span>
+                    <span class="quota-block-note" id="dailyNote">每日重置 · 至 2026-03-09</span>
                 </div>
                 <!-- 按量配额 -->
                 <div class="quota-block" id="addonBlock" style="display: flex;">
@@ -143,24 +190,35 @@
                         <span class="quota-block-label">按量配额</span>
                     </div>
                     <div class="quota-block-value">
-                        <span class="quota-block-remaining">45</span>
+                        <span class="quota-block-remaining" id="addonRemaining">45</span>
                         <span class="quota-block-sep">/</span>
-                        <span>50</span>
+                        <span id="addonTotal">50</span>
                     </div>
                     <div class="quota-progress-container">
-                        <div class="quota-progress" style="width: 90%; background-color: #4D6BFE;"></div>
+                        <div class="quota-progress" id="addonProgress" style="width: 90%; background-color: #4D6BFE;">
+                        </div>
                     </div>
-                    <span class="quota-block-note">2026-12-31 到期</span>
+                    <span class="quota-block-note" id="addonNote">2026-12-31 到期</span>
                 </div>
             </div>
             <div class="quota-footer">
                 <button class="text-link-btn">刷新</button>
                 <div class="quota-footer-actions">
-                    <a href="#" class="purchase-link">购买套餐</a>
-                    <a href="#" class="purchase-link">续费额度</a>
+                    <a href="#" class="purchase-link" id="subscribeLink" style="display: none;">购买套餐</a>
+                    <a href="#" class="purchase-link" id="purchaseLink">购买叠加额度</a>
                 </div>
             </div>
         </div>
+    </div>
+
+    <div class="info-box">
+        <strong>三种额度类型说明:</strong>
+        <ul style="margin: 8px 0 0 0; padding-left: 20px;">
+            <li><strong>两者都有:</strong> 用户同时拥有订阅套餐和按量付费额度，加载时显示两个骨架卡片</li>
+            <li><strong>仅订阅:</strong> 用户只有订阅套餐，加载时只显示订阅骨架卡片</li>
+            <li><strong>仅按量额度:</strong> 用户只有按量付费额度，加载时只显示按量骨架卡片</li>
+            <li><strong>即将过期:</strong> 当额度离过期还有3天或更少时，日期显示为红色并加粗，提醒用户及时续费</li>
+        </ul>
     </div>
 
     <div class="info-box">
@@ -170,20 +228,38 @@
             <li>骨架屏布局与实际卡片完全一致</li>
             <li>支持浅色/深色主题自动适配</li>
             <li>动画性能优异，使用 GPU 加速</li>
+            <li><strong>智能骨架屏:</strong> 根据用户额度类型只显示对应的加载卡片</li>
         </ul>
     </div>
 
     <script>
+        // 当前显示的额度类型状态
+        let currentQuotaType = 'both'; // 'both', 'subscription', 'addon'
+
         function showLoading() {
             const quotaLoading = document.getElementById('quotaLoading');
             const quotaHeader = document.querySelector('.quota-header');
             const quotaBlocks = document.getElementById('quotaBlocks');
             const quotaFooter = document.querySelector('.quota-footer');
+            const subscriptionLoadingBlock = document.getElementById('subscriptionLoadingBlock');
+            const addonLoadingBlock = document.getElementById('addonLoadingBlock');
 
             quotaLoading.style.display = 'flex';
             quotaHeader.style.display = 'none';
             quotaBlocks.style.display = 'none';
             quotaFooter.style.display = 'none';
+
+            // 根据当前额度类型显示对应的骨架卡片
+            if (currentQuotaType === 'both') {
+                subscriptionLoadingBlock.style.display = 'flex';
+                addonLoadingBlock.style.display = 'flex';
+            } else if (currentQuotaType === 'subscription') {
+                subscriptionLoadingBlock.style.display = 'flex';
+                addonLoadingBlock.style.display = 'none';
+            } else if (currentQuotaType === 'addon') {
+                subscriptionLoadingBlock.style.display = 'none';
+                addonLoadingBlock.style.display = 'flex';
+            }
         }
 
         function showData() {
@@ -205,9 +281,142 @@
             }, 2000);
         }
 
-        // 页面加载时显示实际数据
-        window.addEventListener('DOMContentLoaded', () => {
+        // 显示两者都有
+        function showBothQuotas() {
+            currentQuotaType = 'both'; // 更新状态
+
+            const subscriptionBlock = document.getElementById('subscriptionBlock');
+            const addonBlock = document.getElementById('addonBlock');
+            const subscribeLink = document.getElementById('subscribeLink');
+            const purchaseLink = document.getElementById('purchaseLink');
+
+            subscriptionBlock.style.display = 'flex';
+            addonBlock.style.display = 'flex';
+            subscribeLink.style.display = 'inline';
+            subscribeLink.textContent = '续费套餐';
+            purchaseLink.textContent = '购买叠加额度';
+
+            // 更新订阅数据
+            document.getElementById('planBadge').textContent = 'Pro';
+            document.getElementById('dailyRemaining').textContent = '8';
+            document.getElementById('dailyTotal').textContent = '10';
+            document.getElementById('dailyProgress').style.width = '80%';
+            document.getElementById('dailyProgress').style.backgroundColor = '#4D6BFE'; // Reset color
+            document.getElementById('dailyNote').textContent = '每日重置 · 至 2026-03-09';
+
+            // 更新按量额度数据
+            document.getElementById('addonRemaining').textContent = '45';
+            document.getElementById('addonTotal').textContent = '50';
+            document.getElementById('addonProgress').style.width = '90%';
+            document.getElementById('addonProgress').style.backgroundColor = '#4D6BFE'; // Reset color
+            document.getElementById('addonNote').textContent = '2026-12-31 到期';
+
             showData();
+        }
+
+        // 仅显示订阅
+        function showSubscriptionOnly() {
+            currentQuotaType = 'subscription'; // 更新状态
+
+            const subscriptionBlock = document.getElementById('subscriptionBlock');
+            const addonBlock = document.getElementById('addonBlock');
+            const subscribeLink = document.getElementById('subscribeLink');
+            const purchaseLink = document.getElementById('purchaseLink');
+
+            subscriptionBlock.style.display = 'flex';
+            addonBlock.style.display = 'none';
+            subscribeLink.style.display = 'inline';
+            subscribeLink.textContent = '续费套餐';
+            purchaseLink.textContent = '购买叠加额度';
+
+            // 更新订阅数据 - Ultra 套餐示例
+            document.getElementById('planBadge').textContent = 'Ultra';
+            document.getElementById('dailyRemaining').textContent = '18';
+            document.getElementById('dailyTotal').textContent = '20';
+            document.getElementById('dailyProgress').style.width = '90%';
+            document.getElementById('dailyProgress').style.backgroundColor = '#4D6BFE'; // Reset color
+            document.getElementById('dailyNote').textContent = '每日重置 · 至 2026-06-15';
+
+            showData();
+        }
+
+        // 仅显示按量额度
+        function showAddonOnly() {
+            currentQuotaType = 'addon'; // 更新状态
+
+            const subscriptionBlock = document.getElementById('subscriptionBlock');
+            const addonBlock = document.getElementById('addonBlock');
+            const subscribeLink = document.getElementById('subscribeLink');
+            const purchaseLink = document.getElementById('purchaseLink');
+
+            subscriptionBlock.style.display = 'none';
+            addonBlock.style.display = 'flex';
+            subscribeLink.style.display = 'inline';
+            subscribeLink.textContent = '购买套餐';
+            purchaseLink.textContent = '购买叠加额度';
+
+            // 更新按量额度数据
+            document.getElementById('addonRemaining').textContent = '23';
+            document.getElementById('addonTotal').textContent = '100';
+            document.getElementById('addonProgress').style.width = '23%';
+            document.getElementById('addonProgress').style.backgroundColor = '#FF6B6B'; // 低额度警告色
+            document.getElementById('addonNote').textContent = '2026-08-20 到期';
+
+            showData();
+        }
+
+        // 显示即将过期的额度（3天内）
+        function showExpiringQuota() {
+            currentQuotaType = 'both'; // 更新状态
+
+            const subscriptionBlock = document.getElementById('subscriptionBlock');
+            const addonBlock = document.getElementById('addonBlock');
+            const subscribeLink = document.getElementById('subscribeLink');
+            const purchaseLink = document.getElementById('purchaseLink');
+
+            subscriptionBlock.style.display = 'flex';
+            addonBlock.style.display = 'flex';
+            subscribeLink.style.display = 'inline';
+            subscribeLink.textContent = '续费套餐';
+            purchaseLink.textContent = '购买叠加额度';
+
+            // 计算3天后的日期
+            const threeDaysLater = new Date();
+            threeDaysLater.setDate(threeDaysLater.getDate() + 3);
+            const year = threeDaysLater.getFullYear();
+            const month = String(threeDaysLater.getMonth() + 1).padStart(2, '0');
+            const day = String(threeDaysLater.getDate()).padStart(2, '0');
+            const expDateStr = `${year}-${month}-${day}`;
+
+            // 更新订阅数据 - 即将过期
+            document.getElementById('planBadge').textContent = 'Pro';
+            document.getElementById('dailyRemaining').textContent = '8';
+            document.getElementById('dailyTotal').textContent = '10';
+            document.getElementById('dailyProgress').style.width = '80%';
+            document.getElementById('dailyProgress').style.backgroundColor = '#4D6BFE';
+
+            const dailyNote = document.getElementById('dailyNote');
+            dailyNote.textContent = `每日重置 · 至 ${expDateStr}`;
+            dailyNote.style.color = '#FF6B6B'; // 红色警告
+            dailyNote.style.fontWeight = '500'; // 加粗
+
+            // 更新按量额度数据 - 即将过期
+            document.getElementById('addonRemaining').textContent = '45';
+            document.getElementById('addonTotal').textContent = '50';
+            document.getElementById('addonProgress').style.width = '90%';
+            document.getElementById('addonProgress').style.backgroundColor = '#4D6BFE';
+
+            const addonNote = document.getElementById('addonNote');
+            addonNote.textContent = `${expDateStr} 到期`;
+            addonNote.style.color = '#FF6B6B'; // 红色警告
+            addonNote.style.fontWeight = '500'; // 加粗
+
+            showData();
+        }
+
+        // 页面加载时显示两者都有
+        window.addEventListener('DOMContentLoaded', () => {
+            showBothQuotas();
         });
     </script>
 </body>

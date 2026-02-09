@@ -309,38 +309,70 @@ async function checkQuota() {
             return;
         }
 
-        // Call the quota API
-        const response = await fetch(`${url}/auth/quota`, {
-            method: 'GET',
-            headers: {
-                'X-API-Key': apiKey
-            }
-        });
+        let quotaData = null;
 
-        if (!response.ok) {
-            console.error('Failed to check quota');
-            return;
+        // Try new subscription quota API first
+        try {
+            const response = await fetch(`${url}/subscriptions/my/quota`, {
+                method: 'GET',
+                headers: { 'X-API-Key': apiKey }
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                quotaData = {
+                    email: data.email,
+                    has_subscription: data.has_subscription,
+                    subscription: data.subscription,
+                    addon_quota: data.addon_quota,
+                    lastChecked: new Date().toISOString()
+                };
+            }
+        } catch (e) {
+            // New API not available, will try old one
         }
 
-        const quotaData = await response.json();
+        // Fallback to old quota API if new API failed
+        if (!quotaData) {
+            try {
+                const response = await fetch(`${url}/auth/quota`, {
+                    method: 'GET',
+                    headers: { 'X-API-Key': apiKey }
+                });
 
-        // Store quota information in local storage for access by popup
-        chrome.storage.local.set({
-            quotaData: {
-                total: quotaData.total_quota,
-                used: quotaData.used_quota,
-                remaining: quotaData.remaining_quota,
-                lastChecked: new Date().toISOString()
+                if (response.ok) {
+                    const data = await response.json();
+                    quotaData = {
+                        email: data.email,
+                        has_subscription: false,
+                        subscription: null,
+                        addon_quota: {
+                            total_quota: data.total_quota,
+                            used_quota: data.used_quota,
+                            gift_quota: 0,
+                            expires_at: data.expires_at
+                        },
+                        lastChecked: new Date().toISOString()
+                    };
+                }
+            } catch (e) {
+                console.error('Failed to check quota with both APIs:', e);
+                return;
             }
-        });
+        }
 
-        // Notify the popup if it's open
-        chrome.runtime.sendMessage({
-            action: 'quotaUpdated',
-            data: quotaData
-        }).catch(() => {
-            // It's ok if this fails (popup might not be open)
-        });
+        if (quotaData) {
+            // Store quota information in local storage for access by popup
+            chrome.storage.local.set({ quotaDataV2: quotaData });
+
+            // Notify the popup if it's open
+            chrome.runtime.sendMessage({
+                action: 'quotaUpdated',
+                data: quotaData
+            }).catch(() => {
+                // It's ok if this fails (popup might not be open)
+            });
+        }
 
     } catch (error) {
         console.error('Error checking quota:', error);

@@ -734,8 +734,9 @@ function clearApiKeyQuotaError() {
 
 /**
  * Show the quota loading skeleton state
+ * @param {Object} cachedData - Optional cached quota data to determine which skeleton blocks to show
  */
-function showQuotaLoading() {
+function showQuotaLoading(cachedData = null) {
   const quotaSection = document.getElementById('quotaSection');
   const quotaLoading = document.getElementById('quotaLoading');
   const quotaHeader = document.querySelector('.quota-header');
@@ -748,6 +749,31 @@ function showQuotaLoading() {
   // Show loading skeleton
   if (quotaLoading) {
     quotaLoading.style.display = 'flex';
+  }
+
+  // Determine which skeleton blocks to show based on cached data
+  const subscriptionLoadingBlock = document.getElementById('subscriptionLoadingBlock');
+  const addonLoadingBlock = document.getElementById('addonLoadingBlock');
+
+  if (cachedData) {
+    // We have cached data - show only relevant skeleton blocks
+    const hasSubscription = cachedData.has_subscription && cachedData.subscription;
+    const hasAddon = cachedData.addon_quota && cachedData.addon_quota.total_quota > 0;
+
+    if (subscriptionLoadingBlock) {
+      subscriptionLoadingBlock.style.display = hasSubscription ? 'flex' : 'none';
+    }
+    if (addonLoadingBlock) {
+      addonLoadingBlock.style.display = hasAddon ? 'flex' : 'none';
+    }
+  } else {
+    // No cached data - show both skeleton blocks by default
+    if (subscriptionLoadingBlock) {
+      subscriptionLoadingBlock.style.display = 'flex';
+    }
+    if (addonLoadingBlock) {
+      addonLoadingBlock.style.display = 'flex';
+    }
   }
 
   // Hide actual content
@@ -770,10 +796,18 @@ function hideQuotaLoading() {
   const quotaHeader = document.querySelector('.quota-header');
   const quotaBlocks = document.getElementById('quotaBlocks');
   const quotaFooter = document.querySelector('.quota-footer');
+  const subscriptionLoadingBlock = document.getElementById('subscriptionLoadingBlock');
+  const addonLoadingBlock = document.getElementById('addonLoadingBlock');
 
   // Hide loading skeleton
   if (quotaLoading) {
     quotaLoading.style.display = 'none';
+  }
+  if (subscriptionLoadingBlock) {
+    subscriptionLoadingBlock.style.display = 'none';
+  }
+  if (addonLoadingBlock) {
+    addonLoadingBlock.style.display = 'none';
   }
 
   // Show actual content
@@ -816,7 +850,8 @@ function checkQuota(forceRefresh = false) {
     }
 
     // Show loading state when fetching new data
-    showQuotaLoading();
+    // Pass cached data to show relevant skeleton blocks
+    showQuotaLoading(cachedData);
 
     try {
       let quotaData = null;
@@ -935,11 +970,14 @@ function displayDualQuota(data) {
   const subscriptionBlock = document.getElementById('subscriptionBlock');
   const addonBlock = document.getElementById('addonBlock');
 
-  // --- Subscription daily quota ---
-  // Always show subscription block
-  subscriptionBlock.style.display = 'flex';
+  // Determine what quota types the user has
+  const hasSubscription = data.has_subscription && data.subscription;
+  const hasAddon = data.addon_quota && data.addon_quota.total_quota > 0;
 
-  if (data.has_subscription && data.subscription) {
+  // --- Subscription daily quota ---
+  if (hasSubscription) {
+    subscriptionBlock.style.display = 'flex';
+
     const dailyQuota = data.subscription.daily_quota;
     const usedToday = data.subscription.used_today;
     const dailyRemaining = Math.max(0, dailyQuota - usedToday);
@@ -958,24 +996,33 @@ function displayDualQuota(data) {
     const resetText = getMessage('dailyResetNote') || '每日重置';
     if (data.subscription.expires_at) {
       const expDate = new Date(data.subscription.expires_at);
+      const now = new Date();
+      const daysUntilExpiry = Math.ceil((expDate - now) / (1000 * 60 * 60 * 24));
+
       noteEl.textContent = `${resetText} · 至 ${formatShortDate(expDate)}`;
+
+      // 如果离过期还有3天或更少，显示红色
+      if (daysUntilExpiry <= 3 && daysUntilExpiry >= 0) {
+        noteEl.style.color = '#FF6B6B';
+        noteEl.style.fontWeight = '500';
+      } else {
+        noteEl.style.color = '';
+        noteEl.style.fontWeight = '';
+      }
     } else {
       noteEl.textContent = resetText;
+      noteEl.style.color = '';
+      noteEl.style.fontWeight = '';
     }
   } else {
-    // No subscription - show empty state
-    document.getElementById('subscriptionPlanName').textContent = '';
-    document.getElementById('dailyRemaining').textContent = '0';
-    document.getElementById('dailyTotal').textContent = '0';
-    document.getElementById('dailyProgress').style.width = '0%';
-    document.getElementById('dailyResetNote').textContent = getMessage('dailyResetNote') || '每日重置';
+    // Hide subscription block if user doesn't have a subscription
+    subscriptionBlock.style.display = 'none';
   }
 
   // --- Addon pay-per-use quota ---
-  // Always show addon block
-  addonBlock.style.display = 'flex';
+  if (hasAddon) {
+    addonBlock.style.display = 'flex';
 
-  if (data.addon_quota && data.addon_quota.total_quota > 0) {
     const total = data.addon_quota.total_quota;
     const used = data.addon_quota.used_quota;
     const remaining = Math.max(0, total - used);
@@ -988,30 +1035,51 @@ function displayDualQuota(data) {
     addonProgress.style.width = `${addonPercent}%`;
     addonProgress.style.backgroundColor = addonPercent < 20 ? '#FF6B6B' : '#4D6BFE';
 
+    const addonExpiryEl = document.getElementById('addonExpiry');
     if (data.addon_quota.expires_at) {
       const expDate = new Date(data.addon_quota.expires_at);
-      document.getElementById('addonExpiry').textContent = `${getMessage('expirationShort') || '有效期至'} ${formatShortDate(expDate)}`;
+      const now = new Date();
+      const daysUntilExpiry = Math.ceil((expDate - now) / (1000 * 60 * 60 * 24));
+
+      addonExpiryEl.textContent = `${formatShortDate(expDate)} 到期`;
+
+      // 如果离过期还有3天或更少，显示红色
+      if (daysUntilExpiry <= 3 && daysUntilExpiry >= 0) {
+        addonExpiryEl.style.color = '#FF6B6B';
+        addonExpiryEl.style.fontWeight = '500';
+      } else {
+        addonExpiryEl.style.color = '';
+        addonExpiryEl.style.fontWeight = '';
+      }
     } else {
-      document.getElementById('addonExpiry').textContent = '';
+      addonExpiryEl.textContent = '';
+      addonExpiryEl.style.color = '';
+      addonExpiryEl.style.fontWeight = '';
     }
   } else {
-    // No addon quota - show empty state
-    document.getElementById('addonRemaining').textContent = '0';
-    document.getElementById('addonTotal').textContent = '0';
-    document.getElementById('addonProgress').style.width = '0%';
-    document.getElementById('addonExpiry').textContent = '';
+    // Hide addon block if user doesn't have addon quota
+    addonBlock.style.display = 'none';
   }
 
-  // Update footer links
+  // Update links based on quota status
   const subscribeLink = document.getElementById('subscribeLink');
+  const purchaseLink = document.getElementById('purchaseLink');
+
   if (subscribeLink) {
-    // Always show the link, but change text based on subscription status
-    subscribeLink.style.display = 'inline';
-    if (data.has_subscription) {
+    if (hasSubscription) {
+      // User has subscription - show "续费套餐" link
+      subscribeLink.style.display = 'inline';
       subscribeLink.textContent = getMessage('renewSubscription') || '续费套餐';
     } else {
+      // User doesn't have subscription - show "购买套餐" link
+      subscribeLink.style.display = 'inline';
       subscribeLink.textContent = getMessage('purchaseSubscription') || '购买套餐';
     }
+  }
+
+  // Addon quota link always shows "购买叠加额度"
+  if (purchaseLink) {
+    purchaseLink.textContent = getMessage('purchaseAddonQuota') || '购买叠加额度';
   }
 }
 
