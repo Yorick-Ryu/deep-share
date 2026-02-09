@@ -109,6 +109,15 @@ document.addEventListener('DOMContentLoaded', () => {
     parseAndFillApiKey();
 });
 
+// 处理浏览器后退按钮（bfcache），恢复按钮状态
+window.addEventListener('pageshow', (event) => {
+    const confirmBtn = document.getElementById('confirmSubscribeBtn');
+    if (confirmBtn) {
+        confirmBtn.textContent = '确认订阅';
+        confirmBtn.disabled = false;
+    }
+});
+
 /**
  * 初始化计费周期切换
  */
@@ -738,7 +747,13 @@ async function createSubscriptionWithApiKey(apiKey) {
 
         // 跳转到支付页面
         if (data.payment_url) {
+            // 保存 API Key 和订单号供结果页使用
+            localStorage.setItem('pending_api_key', apiKey);
+            if (data.order_no) {
+                localStorage.setItem('pending_order_no', data.order_no);
+            }
             saveModalState({ modalOpen: true });
+            confirmBtn.textContent = '正在前往支付...';
             window.location.href = data.payment_url;
         } else {
             throw new Error('未获取到支付链接');
@@ -793,6 +808,7 @@ async function createGuestSubscription(email) {
         // 跳转到支付页面
         if (data.payment_url) {
             saveModalState({ modalOpen: true });
+            confirmBtn.textContent = '正在前往支付...';
             window.location.href = data.payment_url;
         } else {
             throw new Error('未获取到支付链接');
