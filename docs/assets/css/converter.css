@@ -184,7 +184,6 @@
     background: var(--card-bg);
     border-radius: 10px;
     padding: 1.5rem;
-    margin-bottom: 1.5rem;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -559,10 +558,116 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
     }
 }
 
+/* Quota section styles */
 .quota-section {
     margin-top: 1.25rem;
-    padding-top: 1.25rem;
-    border-top: 1px solid var(--border-color);
+    padding-top: 0;
+}
+
+/* Quota loading state */
+.quota-loading {
+    display: flex;
+    flex-direction: column;
+}
+
+.quota-loading-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.quota-loading-title {
+    height: 20px;
+    width: 80px;
+    background: linear-gradient(90deg, var(--card-bg) 25%, var(--border-color) 50%, var(--card-bg) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 4px;
+}
+
+.quota-loading-blocks {
+    display: flex;
+    gap: 12px;
+}
+
+.quota-loading-block {
+    flex: 1;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.quota-loading-label {
+    height: 14px;
+    width: 60px;
+    background: linear-gradient(90deg, var(--card-bg) 25%, var(--border-color) 50%, var(--card-bg) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 3px;
+}
+
+.quota-loading-value {
+    height: 24px;
+    width: 80px;
+    background: linear-gradient(90deg, var(--card-bg) 25%, var(--border-color) 50%, var(--card-bg) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 4px;
+}
+
+.quota-loading-progress {
+    width: 100%;
+    height: 6px;
+    background-color: var(--border-color);
+    border-radius: 3px;
+    overflow: hidden;
+    position: relative;
+}
+
+.quota-loading-progress::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 50%;
+    background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+    animation: loading-slide 1.5s infinite;
+}
+
+.quota-loading-note {
+    height: 15px;
+    width: 50px;
+    background: linear-gradient(90deg, var(--card-bg) 25%, var(--border-color) 50%, var(--card-bg) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 3px;
+    opacity: 0.7;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+@keyframes loading-slide {
+    0% {
+        transform: translateX(-100%);
+    }
+
+    100% {
+        transform: translateX(300%);
+    }
 }
 
 .quota-header {
@@ -572,52 +677,100 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
     margin-bottom: 0.75rem;
 }
 
-.quota-info h3 {
+.quota-header h3 {
     margin: 0;
     font-size: 0.95rem;
     color: var(--text-color);
 }
 
 .user-email {
-    font-size: 12px;
+    font-size: 14px;
     color: var(--text-secondary);
     opacity: 0.7;
     cursor: pointer;
 }
 
-.quota-details {
+/* Dual quota blocks layout */
+.quota-blocks {
     display: flex;
-    justify-content: space-around;
-    margin-bottom: 0.75rem;
+    gap: 12px;
+    margin-bottom: 12px;
 }
 
-.quota-item {
+.quota-block {
+    flex: 1;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 12px;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    gap: 6px;
+    min-width: 0;
 }
 
-.quota-label {
+.quota-block-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+}
+
+.quota-block-label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+    flex-shrink: 0;
+    margin-right: auto;
+}
+
+.quota-block-badge {
+    font-size: 0.8rem;
+    color: var(--primary-color);
+    background: rgba(77, 107, 254, 0.1);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.quota-block-value {
+    display: flex;
+    align-items: baseline;
+    gap: 2px;
+}
+
+.quota-block-remaining {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    line-height: 1.2;
+}
+
+.quota-block-sep {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin: 0 2px;
+}
+
+.quota-block-value span:last-child {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.quota-block-note {
     font-size: 0.8rem;
     color: var(--text-secondary);
-    margin-bottom: 0.2rem;
+    opacity: 0.7;
 }
 
-.quota-value {
-    font-weight: 600;
-    font-size: 1rem;
-}
-
-.quota-remaining {
-    color: var(--primary-color);
-}
-
+/* Progress bar (shared by both blocks) */
 .quota-progress-container {
     width: 100%;
     height: 6px;
     background-color: var(--border-color);
     border-radius: 3px;
-    margin: 0.75rem 0;
+    margin: 4px 0;
     overflow: hidden;
 }
 
@@ -625,47 +778,79 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
     height: 100%;
     background-color: var(--primary-color);
     width: 0%;
+    border-radius: 3px;
     transition: width 0.3s ease;
 }
 
-.expiration-info {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 0.75rem;
-    font-size: 0.85rem;
-}
-
-.expiration-label {
-    color: var(--text-secondary);
-    margin-right: 0.5rem;
-}
-
-.expiration-value {
-    color: var(--text-color);
-    font-weight: 500;
-}
-
-.quota-actions {
+.quota-footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 0.75rem;
+    margin-top: 8px;
 }
 
-.quota-actions .btn {
-    padding: 0.4rem 0.85rem;
+.quota-footer-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.text-link-btn {
+    background: none;
+    border: none;
+    color: var(--primary-color);
     font-size: 0.85rem;
+    cursor: pointer;
+    padding: 0;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.text-link-btn:hover,
+.text-link-btn:active {
+    text-decoration: underline;
+    background: none;
 }
 
 .purchase-link {
     color: var(--primary-color);
     text-decoration: none;
+    font-size: 0.85rem;
     font-weight: 500;
 }
 
 .purchase-link:hover {
     text-decoration: underline;
+}
+
+/* Label row for API key with inline error */
+.label-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 0.4rem;
+}
+
+.label-row label {
+    margin-bottom: 0;
+}
+
+.error-msg-inline {
+    color: #f44336;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+@media (max-width: 768px) {
+    .quota-blocks {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .quota-loading-blocks {
+        flex-direction: column;
+        gap: 8px;
+    }
 }
 
 .feature-explanation {
