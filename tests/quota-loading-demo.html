@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>额度卡片加载动画演示</title>
+    <link rel="stylesheet" href="../popup/popup.css">
+    <style>
+        body {
+            width: 100%;
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 20px;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+
+        .demo-container {
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+
+        .demo-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--text-color);
+        }
+
+        .demo-controls {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .demo-btn {
+            padding: 10px 20px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+
+        .demo-btn:hover {
+            background: var(--primary-hover);
+        }
+
+        .demo-btn.secondary {
+            background: var(--card-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+        }
+
+        .demo-btn.secondary:hover {
+            background: var(--tab-hover-bg);
+        }
+
+        .info-box {
+            background: rgba(77, 107, 254, 0.1);
+            border: 1px solid rgba(77, 107, 254, 0.3);
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: var(--text-color);
+        }
+    </style>
+</head>
+
+<body>
+    <h1 style="text-align: center; color: var(--text-color);">额度卡片加载动画演示</h1>
+
+    <div class="info-box">
+        <strong>说明:</strong> 这个页面演示了额度卡片的加载动画效果。点击下方按钮可以切换不同的状态。
+    </div>
+
+    <div class="demo-container">
+        <div class="demo-title">控制面板</div>
+        <div class="demo-controls">
+            <button class="demo-btn" onclick="showLoading()">显示加载动画</button>
+            <button class="demo-btn" onclick="showData()">显示实际数据</button>
+            <button class="demo-btn secondary" onclick="simulateLoading()">模拟加载过程 (2秒)</button>
+        </div>
+    </div>
+
+    <div class="demo-container">
+        <div class="demo-title">额度卡片预览</div>
+
+        <!-- 额度区域 -->
+        <div class="quota-section" id="quotaSection" style="display: block;">
+            <!-- 加载状态 -->
+            <div class="quota-loading" id="quotaLoading" style="display: none;">
+                <div class="quota-loading-header">
+                    <div class="quota-loading-title"></div>
+                </div>
+                <div class="quota-loading-blocks">
+                    <div class="quota-loading-block">
+                        <div class="quota-loading-label"></div>
+                        <div class="quota-loading-value"></div>
+                        <div class="quota-loading-progress"></div>
+                        <div class="quota-loading-note"></div>
+                    </div>
+                    <div class="quota-loading-block">
+                        <div class="quota-loading-label"></div>
+                        <div class="quota-loading-value"></div>
+                        <div class="quota-loading-progress"></div>
+                        <div class="quota-loading-note"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 实际内容 -->
+            <div class="quota-header">
+                <h3 id="quotaTitle">转换额度</h3>
+                <span id="userEmail" class="user-email">user@example.com</span>
+            </div>
+            <div class="quota-blocks" id="quotaBlocks">
+                <!-- 订阅每日配额 -->
+                <div class="quota-block" id="subscriptionBlock" style="display: flex;">
+                    <div class="quota-block-top">
+                        <span class="quota-block-label">每日配额</span>
+                        <span class="quota-block-badge">Pro</span>
+                    </div>
+                    <div class="quota-block-value">
+                        <span class="quota-block-remaining">8</span>
+                        <span class="quota-block-sep">/</span>
+                        <span>10</span>
+                    </div>
+                    <div class="quota-progress-container">
+                        <div class="quota-progress" style="width: 80%; background-color: #4D6BFE;"></div>
+                    </div>
+                    <span class="quota-block-note">每日重置 · 至 2026-03-09</span>
+                </div>
+                <!-- 按量配额 -->
+                <div class="quota-block" id="addonBlock" style="display: flex;">
+                    <div class="quota-block-top">
+                        <span class="quota-block-label">按量配额</span>
+                    </div>
+                    <div class="quota-block-value">
+                        <span class="quota-block-remaining">45</span>
+                        <span class="quota-block-sep">/</span>
+                        <span>50</span>
+                    </div>
+                    <div class="quota-progress-container">
+                        <div class="quota-progress" style="width: 90%; background-color: #4D6BFE;"></div>
+                    </div>
+                    <span class="quota-block-note">2026-12-31 到期</span>
+                </div>
+            </div>
+            <div class="quota-footer">
+                <button class="text-link-btn">刷新</button>
+                <div class="quota-footer-actions">
+                    <a href="#" class="purchase-link">购买套餐</a>
+                    <a href="#" class="purchase-link">续费额度</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="info-box">
+        <strong>技术细节:</strong>
+        <ul style="margin: 8px 0 0 0; padding-left: 20px;">
+            <li>使用 CSS 渐变动画实现闪烁效果</li>
+            <li>骨架屏布局与实际卡片完全一致</li>
+            <li>支持浅色/深色主题自动适配</li>
+            <li>动画性能优异，使用 GPU 加速</li>
+        </ul>
+    </div>
+
+    <script>
+        function showLoading() {
+            const quotaLoading = document.getElementById('quotaLoading');
+            const quotaHeader = document.querySelector('.quota-header');
+            const quotaBlocks = document.getElementById('quotaBlocks');
+            const quotaFooter = document.querySelector('.quota-footer');
+
+            quotaLoading.style.display = 'flex';
+            quotaHeader.style.display = 'none';
+            quotaBlocks.style.display = 'none';
+            quotaFooter.style.display = 'none';
+        }
+
+        function showData() {
+            const quotaLoading = document.getElementById('quotaLoading');
+            const quotaHeader = document.querySelector('.quota-header');
+            const quotaBlocks = document.getElementById('quotaBlocks');
+            const quotaFooter = document.querySelector('.quota-footer');
+
+            quotaLoading.style.display = 'none';
+            quotaHeader.style.display = 'flex';
+            quotaBlocks.style.display = 'flex';
+            quotaFooter.style.display = 'flex';
+        }
+
+        function simulateLoading() {
+            showLoading();
+            setTimeout(() => {
+                showData();
+            }, 2000);
+        }
+
+        // 页面加载时显示实际数据
+        window.addEventListener('DOMContentLoaded', () => {
+            showData();
+        });
+    </script>
+</body>
+
+</html>

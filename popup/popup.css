@@ -3,10 +3,10 @@
   --text-color: #333333;
   --text-secondary: #666666;
   --border-color: #dddddd;
-  --input-bg: #ffffff;
+  --input-bg: #f8f9fa;
   --primary-color: #4D6BFE;
   --primary-hover: #3D5BEE;
-  --card-bg: #ffffff;
+  --card-bg: #f8f9fa;
   --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   --sidebar-bg: #f8f9fa;
   --tab-active-bg: #ffffff;
@@ -20,10 +20,10 @@
     --text-color: #ffffff;
     --text-secondary: #aaaaaa;
     --border-color: #333333;
-    --input-bg: #2d2d2d;
+    --input-bg: #252525;
     --primary-color: #6E85FF;
     --primary-hover: #5C75FF;
-    --card-bg: #2d2d2d;
+    --card-bg: #252525;
     --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     --sidebar-bg: #252525;
     --tab-active-bg: #1e1e1e;
@@ -530,13 +530,13 @@ button:hover {
 }
 
 .acknowledgment {
-  padding: 16px;
-  background: linear-gradient(135deg, rgba(77, 107, 254, 0.08) 0%, rgba(77, 107, 254, 0.04) 100%);
-  border-left: 3px solid var(--primary-color);
-  border-radius: 6px;
+  padding: 8px 10px;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
   font-size: 14px;
   line-height: 1.6;
-  color: var(--text-primary);
+  color: var(--text-secondary);
   margin: 0 0 8px 0;
 }
 
@@ -578,7 +578,113 @@ button:hover {
 .quota-section {
   margin-top: 0px;
   padding-top: 0px;
-  /* border-top removed for seamless design */  
+  /* border-top removed for seamless design */
+}
+
+/* Quota loading state */
+.quota-loading {
+  display: flex;
+  flex-direction: column;
+}
+
+.quota-loading-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.quota-loading-title {
+  height: 20px;
+  width: 80px;
+  background: linear-gradient(90deg, var(--card-bg) 25%, var(--border-color) 50%, var(--card-bg) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+}
+
+.quota-loading-blocks {
+  display: flex;
+  gap: 8px;
+}
+
+.quota-loading-block {
+  flex: 1;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.quota-loading-label {
+  height: 14px;
+  width: 60px;
+  background: linear-gradient(90deg, var(--card-bg) 25%, var(--border-color) 50%, var(--card-bg) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 3px;
+}
+
+.quota-loading-value {
+  height: 20px;
+  width: 80px;
+  background: linear-gradient(90deg, var(--card-bg) 25%, var(--border-color) 50%, var(--card-bg) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+}
+
+.quota-loading-progress {
+  width: 100%;
+  height: 4px;
+  background-color: var(--border-color);
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+}
+
+.quota-loading-progress::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 50%;
+  background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+  animation: loading-slide 1.5s infinite;
+}
+
+.quota-loading-note {
+  height: 15px;
+  width: 50px;
+  background: linear-gradient(90deg, var(--card-bg) 25%, var(--border-color) 50%, var(--card-bg) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 3px;
+  opacity: 0.7;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes loading-slide {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(300%);
+  }
 }
 
 .quota-header {
@@ -610,13 +716,13 @@ button:hover {
 
 .quota-block {
   flex: 1;
-  background: var(--sidebar-bg);
+  background: var(--card-bg);
   border: 1px solid var(--border-color);
   border-radius: 8px;
-  padding: 7px 10px;
+  padding: 8px 10px;
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 4px;
   min-width: 0;
 }
 
@@ -627,7 +733,7 @@ button:hover {
 }
 
 .quota-block-label {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--text-secondary);
   font-weight: 500;
 }
@@ -648,7 +754,7 @@ button:hover {
 }
 
 .quota-block-remaining {
-  font-size: 18px;
+  font-size: 14px;
   font-weight: 700;
   color: var(--primary-color);
   line-height: 1.2;
@@ -666,7 +772,7 @@ button:hover {
 }
 
 .quota-block-note {
-  font-size: 10px;
+  font-size: 11px;
   color: var(--text-secondary);
   opacity: 0.7;
 }

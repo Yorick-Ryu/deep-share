@@ -732,6 +732,62 @@ function clearApiKeyQuotaError() {
   apiKeyInput.classList.remove('highlight-required');
 }
 
+/**
+ * Show the quota loading skeleton state
+ */
+function showQuotaLoading() {
+  const quotaSection = document.getElementById('quotaSection');
+  const quotaLoading = document.getElementById('quotaLoading');
+  const quotaHeader = document.querySelector('.quota-header');
+  const quotaBlocks = document.getElementById('quotaBlocks');
+  const quotaFooter = document.querySelector('.quota-footer');
+
+  // Show the quota section
+  quotaSection.style.display = 'block';
+
+  // Show loading skeleton
+  if (quotaLoading) {
+    quotaLoading.style.display = 'flex';
+  }
+
+  // Hide actual content
+  if (quotaHeader) {
+    quotaHeader.style.display = 'none';
+  }
+  if (quotaBlocks) {
+    quotaBlocks.style.display = 'none';
+  }
+  if (quotaFooter) {
+    quotaFooter.style.display = 'none';
+  }
+}
+
+/**
+ * Hide the quota loading skeleton state
+ */
+function hideQuotaLoading() {
+  const quotaLoading = document.getElementById('quotaLoading');
+  const quotaHeader = document.querySelector('.quota-header');
+  const quotaBlocks = document.getElementById('quotaBlocks');
+  const quotaFooter = document.querySelector('.quota-footer');
+
+  // Hide loading skeleton
+  if (quotaLoading) {
+    quotaLoading.style.display = 'none';
+  }
+
+  // Show actual content
+  if (quotaHeader) {
+    quotaHeader.style.display = 'flex';
+  }
+  if (quotaBlocks) {
+    quotaBlocks.style.display = 'flex';
+  }
+  if (quotaFooter) {
+    quotaFooter.style.display = 'flex';
+  }
+}
+
 // Function to check quota
 function checkQuota(forceRefresh = false) {
   const quotaSection = document.getElementById('quotaSection');
@@ -759,8 +815,8 @@ function checkQuota(forceRefresh = false) {
       }
     }
 
-    // Show loading state
-    quotaSection.style.display = 'block';
+    // Show loading state when fetching new data
+    showQuotaLoading();
 
     try {
       let quotaData = null;
@@ -831,7 +887,8 @@ function checkQuota(forceRefresh = false) {
         chrome.storage.local.set({ quotaDataV2: quotaData });
         displayDualQuota(quotaData);
       } else {
-        // Both APIs failed – clear stale cache and hide quota section
+        // Both APIs failed – hide loading and quota section
+        hideQuotaLoading();
         chrome.storage.local.remove('quotaDataV2');
         quotaSection.style.display = 'none';
 
@@ -846,8 +903,9 @@ function checkQuota(forceRefresh = false) {
 
     } catch (error) {
       console.error('Error checking quota:', error);
+      hideQuotaLoading();
       quotaSection.style.display = 'none';
-      showApiKeyQuotaError(getMessage('networkError') || '网络错误，请检查网络连接');
+      showApiKeyQuotaError(getMessage('networkError') || '网络错误,请检查网络连接');
     }
   });
 }
@@ -855,6 +913,9 @@ function checkQuota(forceRefresh = false) {
 // Function to display dual quota data (subscription + addon)
 function displayDualQuota(data) {
   const quotaSection = document.getElementById('quotaSection');
+
+  // Hide loading state and show actual content
+  hideQuotaLoading();
   quotaSection.style.display = 'block';
 
   // Display blurred email
