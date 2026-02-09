@@ -726,7 +726,7 @@ async function createSubscriptionWithApiKey(apiKey) {
                 plan_code: selectedPlanCode,
                 payment_method: selectedPaymentMethod,
                 method: 'web',
-                return_url: `${window.location.origin}/docs/payment-result.html`
+                return_url: `${window.location.origin}/payment-result.html`
             })
         });
 
@@ -774,7 +774,7 @@ async function createGuestSubscription(email) {
                 plan_code: selectedPlanCode,
                 payment_method: selectedPaymentMethod,
                 method: 'web',
-                return_url: `${window.location.origin}/docs/payment-result.html`
+                return_url: `${window.location.origin}/payment-result.html`
             })
         });
 
