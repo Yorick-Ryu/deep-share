@@ -4,7 +4,7 @@
  */
 
 // 配置
-const API_BASE_URL = 'https://preapi.ds.rick216.cn';
+const API_BASE_URL = 'https://api.ds.rick216.cn';
 
 // 订阅方案数据
 const PLANS = {
