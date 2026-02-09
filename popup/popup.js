@@ -159,13 +159,14 @@ function loadSettings(highlightApiKey = false, forceDocxTab = false) {
     // Language preference
     document.getElementById('languageSelect').value = data.preferredLanguage || 'auto';
 
-    // If API key is set, check quota and update renewal links
+    // If API key is set, check quota and update renewal/purchase links
     if (data.docxApiKey) {
       checkQuota();
 
-      // Update renewal links with the API key
+      // Update renewal and purchase links with the API key
       const updateLinks = () => {
-        const links = document.querySelectorAll('a[href*="ds.rick216.cn/renew"]');
+        // Select all renewal and price page links
+        const links = document.querySelectorAll('a[href*="ds.rick216.cn/renew"], a[href*="ds.rick216.cn/price"]');
         links.forEach(link => {
           try {
             // Simple obfuscation: Base64 + Reverse

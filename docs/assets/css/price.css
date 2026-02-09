@@ -518,10 +518,17 @@
 }
 
 /* API Key 输入区域 */
+.api-key-section .api-key-input-row {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
 .api-key-section .api-key-input-wrapper {
     position: relative;
     display: flex;
     align-items: center;
+    flex: 1;
 }
 
 .api-key-section .api-key-input-wrapper input {
@@ -548,6 +555,68 @@
 .api-key-section .toggle-visibility-btn:hover {
     background: rgba(77, 107, 254, 0.1);
     color: var(--primary-color);
+}
+
+/* 验证按钮 */
+.verify-api-key-btn {
+    padding: 0.8rem 1rem;
+    border: 2px solid var(--primary-color);
+    background: transparent;
+    color: var(--primary-color);
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.verify-api-key-btn:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
+.verify-api-key-btn:disabled {
+    border-color: var(--text-light);
+    color: var(--text-light);
+    cursor: not-allowed;
+}
+
+.verify-api-key-btn:disabled:hover {
+    background: transparent;
+    color: var(--text-light);
+}
+
+/* 验证结果显示区域 */
+.api-key-verify-result,
+.email-verify-result {
+    margin-top: 0.5rem;
+    padding: 0.6rem 0.8rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    line-height: 1.4;
+}
+
+.api-key-verify-result.success,
+.email-verify-result.success {
+    background: rgba(16, 185, 129, 0.1);
+    color: #10B981;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.api-key-verify-result.error,
+.email-verify-result.error {
+    background: rgba(239, 68, 68, 0.1);
+    color: #EF4444;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.api-key-verify-result.loading,
+.email-verify-result.loading {
+    background: rgba(77, 107, 254, 0.1);
+    color: var(--primary-color);
+    border: 1px solid rgba(77, 107, 254, 0.3);
 }
 
 /* 确认订阅按钮 */

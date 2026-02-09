@@ -4,7 +4,7 @@
  */
 
 // 配置
-const API_BASE_URL = 'http://127.0.0.1:8000';
+const API_BASE_URL = 'https://preapi.ds.rick216.cn';
 
 // 订阅方案数据
 const PLANS = {
@@ -104,7 +104,9 @@ document.addEventListener('DOMContentLoaded', () => {
     initPaymentMethods();
     initLoginToggle();
     initApiKeyVisibility();
+    initApiKeyVerification();
     initModalStatePersistence();
+    parseAndFillApiKey();
 });
 
 /**
@@ -181,10 +183,31 @@ function openSubscribeModal(planCode) {
     modal.style.display = 'flex';
     setTimeout(() => {
         modal.classList.add('show');
+        // 聚焦到对应的输入框
+        focusActiveInput();
     }, 10);
 
     // 禁止背景滚动
     document.body.style.overflow = 'hidden';
+}
+
+/**
+ * 聚焦到当前模式对应的输入框
+ */
+function focusActiveInput() {
+    setTimeout(() => {
+        if (isLoginMode) {
+            const apiKeyInput = document.getElementById('subscribeApiKey');
+            if (apiKeyInput) {
+                apiKeyInput.focus();
+            }
+        } else {
+            const emailInput = document.getElementById('subscribeEmail');
+            if (emailInput) {
+                emailInput.focus();
+            }
+        }
+    }, 100);
 }
 
 /**
@@ -264,6 +287,8 @@ function initLoginToggle() {
         isLoginMode = !isLoginMode;
         updateLoginToggleUI();
         saveModalState();
+        // 切换后聚焦到对应的输入框
+        focusActiveInput();
     });
 }
 
@@ -312,6 +337,152 @@ function initApiKeyVisibility() {
             eyeOffIcon.style.display = 'none';
         }
     });
+}
+
+/**
+ * 初始化 API Key 验证功能
+ */
+function initApiKeyVerification() {
+    const verifyBtn = document.getElementById('verifyApiKeyBtn');
+    const apiKeyInput = document.getElementById('subscribeApiKey');
+    const resultDiv = document.getElementById('apiKeyVerifyResult');
+
+    if (!verifyBtn || !apiKeyInput || !resultDiv) return;
+
+    verifyBtn.addEventListener('click', async () => {
+        const apiKey = apiKeyInput.value.trim();
+
+        if (!apiKey) {
+            showVerifyResult('error', '请输入 API 密钥');
+            return;
+        }
+
+        // 显示加载状态
+        verifyBtn.disabled = true;
+        verifyBtn.textContent = '验证中...';
+        showVerifyResult('loading', '正在验证...');
+
+        try {
+            const response = await fetch(`${API_BASE_URL}/subscriptions/my/quota`, {
+                method: 'GET',
+                headers: {
+                    'X-API-Key': apiKey
+                }
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                // 构建成功消息
+                let message = `验证成功！您的邮箱是 ${data.email}`;
+                
+                // 如果有订阅信息，显示套餐名称
+                if (data.has_subscription && data.subscription) {
+                    message += `，当前套餐：${data.subscription.plan_name}`;
+                }
+                
+                showVerifyResult('success', message);
+            } else {
+                const errorData = await response.json().catch(() => ({}));
+                const errorMsg = errorData.detail || `验证失败 (${response.status})`;
+                showVerifyResult('error', mapVerifyErrorMessage(errorMsg));
+            }
+        } catch (error) {
+            console.error('API Key 验证错误:', error);
+            showVerifyResult('error', '网络错误，请检查网络连接');
+        } finally {
+            verifyBtn.disabled = false;
+            verifyBtn.textContent = '验证';
+        }
+    });
+
+    // 当输入内容变化时，清除验证结果
+    apiKeyInput.addEventListener('input', () => {
+        hideVerifyResult();
+    });
+}
+
+/**
+ * 显示 API Key 验证结果
+ */
+function showVerifyResult(type, message) {
+    const resultDiv = document.getElementById('apiKeyVerifyResult');
+    const apiKeyInput = document.getElementById('subscribeApiKey');
+    if (!resultDiv) return;
+
+    resultDiv.className = 'api-key-verify-result ' + type;
+    resultDiv.textContent = message;
+    resultDiv.style.display = 'block';
+
+    // 如果是错误，输入框边框变红
+    if (type === 'error' && apiKeyInput) {
+        apiKeyInput.classList.add('input-error');
+    } else if (apiKeyInput) {
+        apiKeyInput.classList.remove('input-error');
+    }
+}
+
+/**
+ * 隐藏 API Key 验证结果
+ */
+function hideVerifyResult() {
+    const resultDiv = document.getElementById('apiKeyVerifyResult');
+    const apiKeyInput = document.getElementById('subscribeApiKey');
+    if (resultDiv) {
+        resultDiv.style.display = 'none';
+    }
+    if (apiKeyInput) {
+        apiKeyInput.classList.remove('input-error');
+    }
+}
+
+/**
+ * 显示邮箱验证结果
+ */
+function showEmailResult(type, message) {
+    const resultDiv = document.getElementById('emailVerifyResult');
+    const emailInput = document.getElementById('subscribeEmail');
+    if (!resultDiv) return;
+
+    resultDiv.className = 'email-verify-result ' + type;
+    resultDiv.textContent = message;
+    resultDiv.style.display = 'block';
+
+    // 如果是错误，输入框边框变红
+    if (type === 'error' && emailInput) {
+        emailInput.classList.add('input-error');
+    } else if (emailInput) {
+        emailInput.classList.remove('input-error');
+    }
+}
+
+/**
+ * 隐藏邮箱验证结果
+ */
+function hideEmailResult() {
+    const resultDiv = document.getElementById('emailVerifyResult');
+    const emailInput = document.getElementById('subscribeEmail');
+    if (resultDiv) {
+        resultDiv.style.display = 'none';
+    }
+    if (emailInput) {
+        emailInput.classList.remove('input-error');
+    }
+}
+
+/**
+ * 映射验证错误消息为用户友好的文本
+ */
+function mapVerifyErrorMessage(detail) {
+    if (detail.includes('Invalid or disabled API key') || detail.includes('Invalid or expired API key')) {
+        return 'API 密钥无效或已过期';
+    }
+    if (detail.includes('API Key is required') || detail.includes('required')) {
+        return '请输入 API 密钥';
+    }
+    if (detail.includes('not active')) {
+        return '关联账户已被停用';
+    }
+    return detail;
 }
 
 /**
@@ -376,11 +547,13 @@ function initModalStatePersistence() {
     emailInput.addEventListener('input', () => {
         clearInputError(emailInput);
         clearGeneralError();
+        hideEmailResult();
         saveModalState();
     });
     apiKeyInput.addEventListener('input', () => {
         clearInputError(apiKeyInput);
         clearGeneralError();
+        hideVerifyResult();
         saveModalState();
     });
 }
@@ -436,6 +609,8 @@ function clearAllErrors() {
     clearInputError(document.getElementById('subscribeEmail'));
     clearInputError(document.getElementById('subscribeApiKey'));
     clearGeneralError();
+    hideVerifyResult();
+    hideEmailResult();
 }
 
 /**
@@ -469,16 +644,24 @@ function showMappedError(message, errorMap, defaultInput) {
 
     for (const rule of errorMap) {
         if (rule.keywords.some(kw => message.includes(kw))) {
-            const inputEl = rule.target === 'apiKey'
-                ? document.getElementById('subscribeApiKey')
-                : document.getElementById('subscribeEmail');
-            showInputError(inputEl, rule.display || message);
+            if (rule.target === 'apiKey') {
+                // API Key 相关错误显示在验证结果区域
+                showVerifyResult('error', rule.display || message);
+            } else {
+                // 邮箱相关错误显示在邮箱验证结果区域
+                showEmailResult('error', rule.display || message);
+            }
             return;
         }
     }
 
-    // 没有匹配到任何规则，显示为通用错误
-    showGeneralError(message);
+    // 没有匹配到任何规则
+    // 根据当前模式显示在对应的验证结果区域
+    if (isLoginMode) {
+        showVerifyResult('error', message);
+    } else {
+        showEmailResult('error', message);
+    }
 }
 
 /**
@@ -496,18 +679,18 @@ async function handleSubscribe() {
     if (isLoginMode) {
         const apiKey = apiKeyInput.value.trim();
         if (!apiKey) {
-            showInputError(apiKeyInput, '请输入您的 API Key');
+            showVerifyResult('error', '请输入您的 API Key');
             return;
         }
         await createSubscriptionWithApiKey(apiKey);
     } else {
         const email = emailInput.value.trim();
         if (!email) {
-            showInputError(emailInput, '请输入您的邮箱');
+            showEmailResult('error', '请输入您的邮箱');
             return;
         }
         if (!isValidEmail(email)) {
-            showInputError(emailInput, '请输入有效的邮箱地址');
+            showEmailResult('error', '请输入有效的邮箱地址');
             return;
         }
         await createGuestSubscription(email);
@@ -621,5 +804,43 @@ async function createGuestSubscription(email) {
         showMappedError(msg, EMAIL_ERROR_MAP, document.getElementById('subscribeEmail'));
         confirmBtn.disabled = false;
         confirmBtn.textContent = originalText;
+    }
+}
+
+/**
+ * 解析 URL 中的加密 API Key 并自动填入输入框
+ * API Key 通过 URL 参数 'ak' 传递，使用 Base64 + Reverse 加密
+ */
+function parseAndFillApiKey() {
+    try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const encodedKey = urlParams.get('ak');
+
+        if (!encodedKey) return;
+
+        // Decode: Reverse + Base64 decode
+        const decodedKey = atob(encodedKey.split('').reverse().join(''));
+
+        if (decodedKey) {
+            // Fill the API Key input
+            const apiKeyInput = document.getElementById('subscribeApiKey');
+            if (apiKeyInput) {
+                apiKeyInput.value = decodedKey;
+            }
+
+            // Switch to login mode (API Key mode)
+            isLoginMode = true;
+            updateLoginToggleUI();
+
+            // Save the state
+            saveModalState();
+
+            // Clean up the URL (remove the ak parameter for security)
+            const url = new URL(window.location.href);
+            url.searchParams.delete('ak');
+            window.history.replaceState({}, document.title, url.toString());
+        }
+    } catch (e) {
+        console.error('Failed to decode API Key from URL:', e);
     }
 }
