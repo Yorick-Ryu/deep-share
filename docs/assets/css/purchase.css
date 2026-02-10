@@ -659,86 +659,252 @@ input[type="number"]::-webkit-outer-spin-button {
     background-color: transparent;
 }
 
-.quota-stats {
+/* Quota loading state */
+.quota-loading {
+    display: flex;
+    flex-direction: column;
+}
+
+.quota-loading-blocks {
+    display: flex;
+    gap: 12px;
+}
+
+.quota-loading-block {
+    flex: 1;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color, #e5e7eb);
+    border-radius: 8px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.quota-loading-label {
+    height: 14px;
+    width: 60px;
+    background: linear-gradient(90deg, var(--bg-secondary) 25%, var(--border-color, #e5e7eb) 50%, var(--bg-secondary) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 3px;
+}
+
+.quota-loading-value {
+    height: 24px;
+    width: 80px;
+    background: linear-gradient(90deg, var(--bg-secondary) 25%, var(--border-color, #e5e7eb) 50%, var(--bg-secondary) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 4px;
+}
+
+.quota-loading-progress {
+    width: 100%;
+    height: 6px;
+    background-color: var(--border-color, #e5e7eb);
+    border-radius: 3px;
+    overflow: hidden;
+    position: relative;
+}
+
+.quota-loading-progress::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 50%;
+    background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+    animation: loading-slide 1.5s infinite;
+}
+
+.quota-loading-note {
+    height: 15px;
+    width: 50px;
+    background: linear-gradient(90deg, var(--bg-secondary) 25%, var(--border-color, #e5e7eb) 50%, var(--bg-secondary) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 3px;
+    opacity: 0.7;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+@keyframes loading-slide {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(300%);
+    }
+}
+
+/* Quota header */
+.quota-header {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 1.5rem;
+    align-items: center;
+    margin-bottom: 0.75rem;
 }
 
-.quota-stat-item {
-    text-align: center;
+.quota-header h3 {
+    margin: 0;
+    font-size: 1rem;
+    color: var(--text-color);
+}
+
+.user-email {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    opacity: 0.7;
+    cursor: pointer;
+}
+
+/* Dual quota blocks layout */
+.quota-blocks {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.quota-block {
     flex: 1;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color, #e5e7eb);
+    border-radius: 8px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
 }
 
-.quota-stat-label {
+.quota-block-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+}
+
+.quota-block-label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    flex-shrink: 0;
+    margin-right: auto;
+}
+
+.quota-block-badge {
+    font-size: 0.8rem;
+    color: var(--primary-color);
+    background: rgba(77, 107, 254, 0.1);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.quota-block-value {
+    display: flex;
+    align-items: baseline;
+    gap: 2px;
+}
+
+.quota-block-remaining {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    line-height: 1.2;
+}
+
+.quota-block-sep {
     font-size: 0.9rem;
     color: var(--text-muted);
-    margin-bottom: 0.5rem;
+    margin: 0 2px;
 }
 
-.quota-stat-value {
-    font-size: 1.75rem;
-    font-weight: bold;
+.quota-block-value span:last-child {
+    font-size: 0.9rem;
+    color: var(--text-muted);
 }
 
-.quota-stat-value.highlight {
-    color: var(--primary-color);
+.quota-block-note {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    opacity: 0.7;
 }
 
-.quota-progress-wrapper {
-    padding: 0.5rem 0;
-}
-
-.quota-progress-bg {
-    height: 8px;
-    background-color: var(--bg-color);
-    border-radius: 4px;
+/* Progress bar (shared by both blocks) */
+.quota-progress-container {
+    width: 100%;
+    height: 6px;
+    background-color: var(--border-color, #e5e7eb);
+    border-radius: 3px;
+    margin: 4px 0;
     overflow: hidden;
 }
 
-.quota-progress-fill {
+.quota-progress {
     height: 100%;
     background-color: var(--primary-color);
-    border-radius: 4px;
     width: 0%;
-    transition: width 0.6s ease;
+    border-radius: 3px;
+    transition: width 0.3s ease;
 }
 
-/* Add styles for expiration date display */
-.quota-expiration {
+/* Quota footer */
+.quota-footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 8px;
+}
+
+.quota-footer-actions {
     display: flex;
     align-items: center;
-    justify-content: center;
-    padding-top: 0;
-    border-top: none;
+    gap: 16px;
 }
 
-.quota-expiration-label {
-    font-size: 0.9rem;
-    color: #666;
-    margin-right: 0.5rem;
-}
-
-.quota-expiration-value {
+.quota-footer .purchase-link {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-size: 0.85rem;
     font-weight: 500;
-    color: var(--text-muted);
 }
 
-/* Dark mode styles */
-@media (prefers-color-scheme: dark) {
-    .quota-expiration-label {
-        color: #aaa;
+.quota-footer .purchase-link:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .quota-blocks {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .quota-loading-blocks {
+        flex-direction: column;
+        gap: 8px;
     }
 }
 
-/* Dark mode styles for quota checker */
+/* Dark mode styles for quota */
 @media (prefers-color-scheme: dark) {
-    .quota-progress-bg {
-        background-color: #444;
+    .quota-block {
+        border-color: #374151;
     }
 
-    .quota-stat-label {
-        color: #aaa;
+    .quota-loading-block {
+        border-color: #374151;
     }
 }
 
