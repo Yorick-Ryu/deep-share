@@ -204,7 +204,7 @@ nav {
     margin-top: var(--header-height);
     background: linear-gradient(90deg, #4F46E5 0%, #818CF8 100%);
     color: white;
-    padding: 0.75rem;
+    padding: 0.5rem;
     text-align: center;
     font-size: 0.95rem;
 }
@@ -215,14 +215,14 @@ nav {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 1rem;
+    gap: 0.5rem;
     flex-wrap: wrap;
 }
 
 .new-badge {
     background: rgba(255, 255, 255, 0.2);
-    padding: 0.1rem 0.5rem;
-    border-radius: 4px;
+    padding: 0.3rem 0.5rem;
+    border-radius: 8px;
     font-weight: 600;
     font-size: 0.75rem;
     text-transform: uppercase;
@@ -231,10 +231,10 @@ nav {
 .announcement-button {
     background: white;
     color: var(--primary-color);
-    padding: 0.25rem 0.75rem;
-    border-radius: 9999px;
+    padding: 0.1rem 0.4rem;
+    border-radius: 16px;
     font-weight: 600;
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     transition: transform 0.2s;
 }
 
