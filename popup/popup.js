@@ -923,25 +923,45 @@ function checkQuota(forceRefresh = false) {
         chrome.storage.local.set({ quotaDataV2: quotaData });
         displayDualQuota(quotaData);
       } else {
-        // Both APIs failed – hide loading and quota section
+        // Both APIs failed – try to fall back to cached data
         hideQuotaLoading();
-        chrome.storage.local.remove('quotaDataV2');
-        quotaSection.style.display = 'none';
 
         const friendlyMsg = mapApiKeyError(lastApiError || '', lastStatusCode || 0);
-        if (friendlyMsg) {
-          showApiKeyQuotaError(friendlyMsg);
+
+        if (cachedData) {
+          // Use cached quota data as fallback
+          displayDualQuota(cachedData);
+          // Still show the error so the user knows the refresh failed
+          if (friendlyMsg) {
+            showApiKeyQuotaError(friendlyMsg);
+          } else {
+            showApiKeyQuotaError(lastApiError || (getMessage('quotaCheckFailed') || '查询额度失败，显示缓存数据'));
+          }
         } else {
-          // Server/network error – show generic message on the input
-          showApiKeyQuotaError(lastApiError || (getMessage('quotaCheckFailed') || '查询额度失败'));
+          // No cached data available – hide quota section
+          chrome.storage.local.remove('quotaDataV2');
+          quotaSection.style.display = 'none';
+
+          if (friendlyMsg) {
+            showApiKeyQuotaError(friendlyMsg);
+          } else {
+            showApiKeyQuotaError(lastApiError || (getMessage('quotaCheckFailed') || '查询额度失败'));
+          }
         }
       }
 
     } catch (error) {
       console.error('Error checking quota:', error);
       hideQuotaLoading();
-      quotaSection.style.display = 'none';
-      showApiKeyQuotaError(getMessage('networkError') || '网络错误,请检查网络连接');
+
+      if (cachedData) {
+        // Use cached quota data as fallback on network error
+        displayDualQuota(cachedData);
+        showApiKeyQuotaError(getMessage('networkError') || '网络错误，显示缓存数据');
+      } else {
+        quotaSection.style.display = 'none';
+        showApiKeyQuotaError(getMessage('networkError') || '网络错误，请检查网络连接');
+      }
     }
   });
 }

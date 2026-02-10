@@ -363,7 +363,7 @@
         "message": "选择您偏好的显示语言"
     },
     "networkError": {
-        "message": "转换失败，请检查网络"
+        "message": "请检查网络(如关闭代理或切换节点)后重试"
     },
     "onboardingWelcomeTitle": {
         "message": "欢迎使用 DeepShare！"
