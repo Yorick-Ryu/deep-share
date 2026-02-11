@@ -303,7 +303,7 @@
         "message": "复制图片到剪贴板失败"
     },
     "apiKeyError": {
-        "message": "API密钥错误，请查看邮件或联系客服微信：yorick_cn"
+        "message": "API密钥错误或过期，请查看邮件或联系客服微信：yorick_cn"
     },
     "quotaExceededError": {
         "message": "转换额度不足，请<a href=\"https://ds.rick216.cn/renew\" target=\"_blank\">续费</a>"

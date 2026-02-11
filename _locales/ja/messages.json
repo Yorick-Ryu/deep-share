@@ -303,7 +303,7 @@
         "message": "画像のクリップボードへのコピーに失敗しました"
     },
     "apiKeyError": {
-        "message": "API キーエラー。メールを確認するか、カスタマーサービスにお問い合わせください: yoricker@foxmail.com"
+        "message": "API キーエラーまたは期限切れ。メールを確認するか、カスタマーサービスにお問い合わせください: yoricker@foxmail.com"
     },
     "quotaExceededError": {
         "message": "クォータが不足しています。<a href=\"https://ds.rick216.cn/purchase-en\" target=\"_blank\">チャージ</a>してください。"

@@ -303,7 +303,7 @@
         "message": "Échec de la copie de l'image dans le presse-papiers"
     },
     "apiKeyError": {
-        "message": "Erreur de clé API. Veuillez vérifier votre e-mail ou contacter le service client : yoricker@foxmail.com"
+        "message": "Erreur de clé API ou expirée. Veuillez vérifier votre e-mail ou contacter le service client : yoricker@foxmail.com"
     },
     "quotaExceededError": {
         "message": "Quota épuisé. Veuillez <a href=\"https://ds.rick216.cn/purchase-en\" target=\"_blank\">recharger</a>."

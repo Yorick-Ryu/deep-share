@@ -303,7 +303,7 @@
         "message": "Falha ao copiar imagem para a área de transferência"
     },
     "apiKeyError": {
-        "message": "Erro de chave API. Verifique seu e-mail ou contate o suporte: yoricker@foxmail.com"
+        "message": "Erro de chave API ou expirada. Verifique seu e-mail ou contate o suporte: yoricker@foxmail.com"
     },
     "quotaExceededError": {
         "message": "Cota esgotada. Por favor, <a href=\"https://ds.rick216.cn/purchase-en\" target=\"_blank\">recarregue</a>."

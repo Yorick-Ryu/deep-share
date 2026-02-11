@@ -303,7 +303,7 @@
         "message": "Error al copiar imagen al portapapeles"
     },
     "apiKeyError": {
-        "message": "Error de clave API. Revisa tu correo o contacta al servicio: yoricker@foxmail.com"
+        "message": "Error de clave API o expirada. Revisa tu correo o contacta al servicio: yoricker@foxmail.com"
     },
     "quotaExceededError": {
         "message": "Cuota agotada. Por favor, <a href=\"https://ds.rick216.cn/purchase-en\" target=\"_blank\">recarga</a>."
