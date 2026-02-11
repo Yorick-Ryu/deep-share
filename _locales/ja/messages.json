@@ -272,6 +272,9 @@
     "renewSubscription": {
         "message": "サブスクリプションを更新"
     },
+    "subscriptionExpiredDays": {
+        "message": "{days} 日前に期限切れ"
+    },
     "expirationLabel": {
         "message": "有効期限:"
     },

@@ -272,6 +272,9 @@
     "renewSubscription": {
         "message": "續費訂閱"
     },
+    "subscriptionExpiredDays": {
+        "message": "已過期 {days} 天"
+    },
     "expirationLabel": {
         "message": "有效期至:"
     },

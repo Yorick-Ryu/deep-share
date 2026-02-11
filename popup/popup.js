@@ -993,6 +993,7 @@ function displayDualQuota(data) {
 
   // Determine what quota types the user has
   const hasSubscription = data.has_subscription && data.subscription;
+  const hasExpiredSubscription = !data.has_subscription && data.subscription && data.subscription.status === 'expired';
   const hasAddon = data.addon_quota && data.addon_quota.total_quota > 0;
 
   // --- Subscription daily quota ---
@@ -1035,6 +1036,26 @@ function displayDualQuota(data) {
       noteEl.style.color = '';
       noteEl.style.fontWeight = '';
     }
+  } else if (hasExpiredSubscription) {
+    // Show expired subscription info
+    subscriptionBlock.style.display = 'flex';
+
+    document.getElementById('subscriptionPlanName').textContent = data.subscription.plan_name;
+    document.getElementById('dailyRemaining').textContent = '0';
+    document.getElementById('dailyTotal').textContent = data.subscription.daily_quota;
+
+    const dailyProgress = document.getElementById('dailyProgress');
+    dailyProgress.style.width = '0%';
+    dailyProgress.style.backgroundColor = '#FF6B6B';
+
+    const noteEl = document.getElementById('dailyResetNote');
+    const expDate = new Date(data.subscription.expires_at);
+    const now = new Date();
+    const daysExpired = Math.max(1, Math.floor((now - expDate) / (1000 * 60 * 60 * 24)));
+    const expiredText = getMessage('subscriptionExpiredDays') || '已过期 {days} 天';
+    noteEl.textContent = expiredText.replace('{days}', daysExpired);
+    noteEl.style.color = '#FF6B6B';
+    noteEl.style.fontWeight = '500';
   } else {
     // Hide subscription block if user doesn't have a subscription
     subscriptionBlock.style.display = 'none';
@@ -1087,12 +1108,12 @@ function displayDualQuota(data) {
   const purchaseLink = document.getElementById('purchaseLink');
 
   if (subscribeLink) {
-    if (hasSubscription) {
-      // User has subscription - show "续费套餐" link
+    if (hasSubscription || hasExpiredSubscription) {
+      // User has active or recently expired subscription - show "续费套餐" link
       subscribeLink.style.display = 'inline';
       subscribeLink.textContent = getMessage('renewSubscription') || '续费套餐';
     } else {
-      // User doesn't have subscription - show "购买套餐" link
+      // User never had a subscription - show "购买套餐" link
       subscribeLink.style.display = 'inline';
       subscribeLink.textContent = getMessage('purchaseSubscription') || '购买套餐';
     }

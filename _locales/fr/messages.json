@@ -272,6 +272,9 @@
     "renewSubscription": {
         "message": "Renouveler l'abonnement"
     },
+    "subscriptionExpiredDays": {
+        "message": "Expiré depuis {days} jours"
+    },
     "expirationLabel": {
         "message": "Valide jusqu'au :"
     },
