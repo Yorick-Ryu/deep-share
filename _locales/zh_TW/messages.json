@@ -143,6 +143,21 @@
     "quotaTitle": {
         "message": "轉換額度"
     },
+    "dailyQuotaLabel": {
+        "message": "每日配額"
+    },
+    "addonQuotaLabel": {
+        "message": "按量配額"
+    },
+    "dailyResetNote": {
+        "message": "每日重置"
+    },
+    "subscriptionExpiryNote": {
+        "message": "每日重置 · 至 {date}"
+    },
+    "addonExpiryNote": {
+        "message": "{date} 到期"
+    },
     "apiKeyHint": {
         "message": "購買 API Key? <a href=\"https://ds.rick216.cn/purchase-en\" target=\"_blank\">點擊此處</a>"
     },

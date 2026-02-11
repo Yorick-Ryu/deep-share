@@ -143,6 +143,21 @@
     "quotaTitle": {
         "message": "Quota de conversão"
     },
+    "dailyQuotaLabel": {
+        "message": "Quota diária"
+    },
+    "addonQuotaLabel": {
+        "message": "Quota adicional"
+    },
+    "dailyResetNote": {
+        "message": "Renova diariamente"
+    },
+    "subscriptionExpiryNote": {
+        "message": "Renova diariamente · Até {date}"
+    },
+    "addonExpiryNote": {
+        "message": "Expira em {date}"
+    },
     "apiKeyHint": {
         "message": "Comprar chave API? <a href=\"https://ds.rick216.cn/purchase-en\" target=\"_blank\">Clique aqui</a>"
     },

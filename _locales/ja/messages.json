@@ -143,6 +143,21 @@
     "quotaTitle": {
         "message": "変換クォータ"
     },
+    "dailyQuotaLabel": {
+        "message": "日次クォータ"
+    },
+    "addonQuotaLabel": {
+        "message": "追加クォータ"
+    },
+    "dailyResetNote": {
+        "message": "毎日リセット"
+    },
+    "subscriptionExpiryNote": {
+        "message": "毎日リセット · {date} まで"
+    },
+    "addonExpiryNote": {
+        "message": "{date} に期限切れ"
+    },
     "apiKeyHint": {
         "message": "API キーを購入しますか？<a href=\"https://ds.rick216.cn/purchase-en\" target=\"_blank\">こちらをクリック</a>"
     },

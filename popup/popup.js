@@ -1021,7 +1021,8 @@ function displayDualQuota(data) {
       const now = new Date();
       const daysUntilExpiry = Math.ceil((expDate - now) / (1000 * 60 * 60 * 24));
 
-      noteEl.textContent = `${resetText} · 至 ${formatShortDate(expDate)}`;
+      const expiryNote = getMessage('subscriptionExpiryNote') || '每日重置 · 至 {date}';
+      noteEl.textContent = expiryNote.replace('{date}', formatShortDate(expDate));
 
       // 如果离过期还有3天或更少，显示红色
       if (daysUntilExpiry <= 3 && daysUntilExpiry >= 0) {
@@ -1083,7 +1084,8 @@ function displayDualQuota(data) {
       const now = new Date();
       const daysUntilExpiry = Math.ceil((expDate - now) / (1000 * 60 * 60 * 24));
 
-      addonExpiryEl.textContent = `${formatShortDate(expDate)} 到期`;
+      const addonExpiryNote = getMessage('addonExpiryNote') || '{date} 到期';
+      addonExpiryEl.textContent = addonExpiryNote.replace('{date}', formatShortDate(expDate));
 
       // 如果离过期还有3天或更少，显示红色
       if (daysUntilExpiry <= 3 && daysUntilExpiry >= 0) {

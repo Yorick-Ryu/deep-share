@@ -21,7 +21,12 @@ const i18n = {
     universalTemplate: '通用模版',
     validUntil: '有效期至:',
     yourQuota: '转换额度',
+    dailyQuotaLabel: '每日配额',
+    addonQuotaLabel: '按量配额',
     dailyResetNote: '每日重置',
+    subscriptionExpiryNote: '每日重置 · 至 {date}',
+    addonExpiryNote: '{date} 到期',
+    subscriptionExpiredDays: '已过期 {days} 天',
     networkError: '网络错误，请检查网络连接',
     quotaCheckFailed: '查询额度失败',
     quotaExceededError: '转换次数不足，请充值',
@@ -51,7 +56,12 @@ const i18n = {
     universalTemplate: 'Universal Template',
     validUntil: 'Valid until:',
     yourQuota: 'Conversion Quota',
+    dailyQuotaLabel: 'Daily Quota',
+    addonQuotaLabel: 'Add-on Quota',
     dailyResetNote: 'Resets daily',
+    subscriptionExpiryNote: 'Resets daily · Until {date}',
+    addonExpiryNote: 'Expires {date}',
+    subscriptionExpiredDays: 'Expired {days} days ago',
     networkError: 'Network error, please check your connection',
     quotaCheckFailed: 'Failed to check quota',
     quotaExceededError: 'Quota exceeded, please recharge',
@@ -674,7 +684,7 @@ function displayDualQuota(data) {
       const now = new Date();
       const daysUntilExpiry = Math.ceil((expDate - now) / (1000 * 60 * 60 * 24));
 
-      noteEl.textContent = `${resetText} · 至 ${formatShortDate(expDate)}`;
+      noteEl.textContent = t('subscriptionExpiryNote').replace('{date}', formatShortDate(expDate));
 
       if (daysUntilExpiry <= 3 && daysUntilExpiry >= 0) {
         noteEl.style.color = '#FF6B6B';
@@ -734,7 +744,7 @@ function displayDualQuota(data) {
       const now = new Date();
       const daysUntilExpiry = Math.ceil((expDate - now) / (1000 * 60 * 60 * 24));
 
-      addonExpiryEl.textContent = `${formatShortDate(expDate)} 到期`;
+      addonExpiryEl.textContent = t('addonExpiryNote').replace('{date}', formatShortDate(expDate));
 
       if (daysUntilExpiry <= 3 && daysUntilExpiry >= 0) {
         addonExpiryEl.style.color = '#FF6B6B';
