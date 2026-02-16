@@ -90,6 +90,7 @@ function loadI18nText() {
   // Learn more
   document.getElementById('learnMoreText').textContent = getMessage('onboardingLearnMoreText') || 'Learn more about formula copying:';
   document.getElementById('learnMoreLink').textContent = getMessage('onboardingLearnMoreLink') || 'View Tutorial';
+  document.getElementById('refreshHintText').textContent = getMessage('onboardingRefreshHint') || 'For the first installation, please refresh any open AI conversations.';
 
   // Continue button
   document.getElementById('continueText').textContent = getMessage('onboardingContinue') || 'Continue';
@@ -154,10 +155,10 @@ function handleContinue() {
     // Hide the first step and show the pin step
     const firstStep = document.querySelector('.onboarding-content:not(.pin-step)');
     const pinStep = document.getElementById('pinStep');
-    
+
     firstStep.style.display = 'none';
     pinStep.style.display = 'block';
-    
+
     // Scroll to top
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
@@ -168,10 +169,10 @@ function handleBack() {
   // Show the first step and hide the pin step
   const firstStep = document.querySelector('.onboarding-content:not(.pin-step)');
   const pinStep = document.getElementById('pinStep');
-  
+
   pinStep.style.display = 'none';
   firstStep.style.display = 'block';
-  
+
   // Scroll to top
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }

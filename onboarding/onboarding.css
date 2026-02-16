@@ -81,7 +81,7 @@ body {
 .onboarding-content {
   background: var(--card-bg);
   border-radius: 16px;
-  padding: 48px;
+  padding: 40px;
   box-shadow: var(--card-shadow);
   min-width: 300px;
 }
@@ -91,7 +91,7 @@ body {
   display: flex;
   align-items: flex-start;
   gap: 20px;
-  margin-bottom: 36px;
+  margin-bottom: 24px;
 }
 
 .logo {
@@ -231,12 +231,12 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 16px;
+  padding: 10px 16px;
   background: var(--card-hover-bg);
   border-radius: 12px;
   font-size: 14px;
   color: var(--text-secondary);
-  margin-bottom: 32px;
+  margin-bottom: 24px;
 }
 
 .learn-more svg {

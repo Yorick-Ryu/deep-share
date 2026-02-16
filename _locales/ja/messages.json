@@ -442,5 +442,8 @@
     },
     "onboardingLearnMoreUsageLink": {
         "message": "チュートリアルを見る"
+    },
+    "onboardingRefreshHint": {
+        "message": "初回使用時は、開いているAI会話を更新してください。"
     }
 }

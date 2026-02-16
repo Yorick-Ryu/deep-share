@@ -424,5 +424,8 @@
     },
     "onboardingLearnMoreUsageLink": {
         "message": "查看教學"
+    },
+    "onboardingRefreshHint": {
+        "message": "首次使用請刷新已打開的AI對話"
     }
 }

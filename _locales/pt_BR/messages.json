@@ -442,5 +442,8 @@
     },
     "onboardingLearnMoreUsageLink": {
         "message": "Ver tutoriais"
+    },
+    "onboardingRefreshHint": {
+        "message": "Para o primeiro uso, atualize quaisquer conversas de IA abertas."
     }
 }
