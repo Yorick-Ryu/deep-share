@@ -119,10 +119,9 @@ header {
 }
 
 nav {
-    max-width: 1200px;
+    max-width: 1100px;
     height: 100%;
     margin: 0 auto;
-    padding: 0 1.5rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -210,7 +209,7 @@ nav {
 }
 
 .announcement-content {
-    max-width: 1200px;
+    max-width: 1100px;
     margin: 0 auto;
     display: flex;
     justify-content: center;
@@ -250,11 +249,11 @@ main {
 
 /* Hero Section */
 .hero {
-    max-width: 1200px;
+    max-width: 1100px;
     margin: 5rem auto 8rem;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 4rem;
+    gap: 2rem;
     align-items: center;
 }
 
@@ -408,7 +407,7 @@ main {
 
 /* Features Section */
 .features {
-    max-width: 1200px;
+    max-width: 1100px;
     margin: 0 auto 8rem;
 }
 
@@ -452,7 +451,7 @@ main {
 
 /* Install Section */
 .install {
-    max-width: 1200px;
+    max-width: 1100px;
     margin: 0 auto 8rem;
     text-align: center;
 }
