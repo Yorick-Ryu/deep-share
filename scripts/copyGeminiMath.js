@@ -23,8 +23,8 @@ function enableGeminiMathCopy() {
         // Mark as processed
         element.dataset.geminiMathCopyEnabled = 'true';
 
-        // Add click event listener
-        element.addEventListener('click', handleGeminiMathClick);
+        // We no longer bind events here! They are handled globally via window capture
+        // to bypass document-level interception from other extensions like gemini-voyager.
 
         // Add cursor pointer style to indicate clickability
         updateElementStyle(element);
@@ -38,10 +38,21 @@ async function handleGeminiMathClick(e) {
         return;
     }
 
+    // 寻找最近的公式元素
+    const mathElement = e.target.closest('.math-inline, .math-block');
+    if (!mathElement) {
+        return;
+    }
+
     // Get the LaTeX code from data-math attribute
-    const latexCode = this.dataset.math;
+    const latexCode = mathElement.dataset.math;
 
     if (latexCode) {
+        // 阻止事件传播，因为我们已经确认点击在公式上了
+        // 在 window 的捕获阶段直接阻断，防止 gemini-voyager 等绑定在 document 的插件拦截
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
         try {
             let textToCopy;
             // Use the format specified in settings
@@ -54,7 +65,7 @@ async function handleGeminiMathClick(e) {
             } else {
                 // Convert LaTeX to MathML via background script
                 // Check if this is a block or inline formula
-                const isBlock = this.classList.contains('math-block');
+                const isBlock = mathElement.classList.contains('math-block');
                 textToCopy = await convertLatexToMathML(latexCode, isBlock);
             }
 
@@ -121,6 +132,9 @@ function loadSettings() {
 function initGeminiMathCopy() {
 
     console.debug('DeepShare Gemini Math copy functionality initialized');
+
+    // 绑定在 window 的捕获阶段（最高层级限制），保证先于 document 执行
+    window.addEventListener('click', handleGeminiMathClick, true);
 
     // 首先加载设置
     loadSettings();
