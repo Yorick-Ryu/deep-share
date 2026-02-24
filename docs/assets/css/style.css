@@ -274,8 +274,8 @@ main {
 .cta-button {
     display: inline-flex;
     align-items: center;
-    padding: 0.875rem 1.75rem;
-    border-radius: 12px;
+    padding: 0.75rem 1.5rem;
+    border-radius: 16px;
     font-weight: 600;
     transition: all 0.2s;
 }
@@ -310,7 +310,7 @@ main {
     gap: 0.4rem;
     background: rgba(245, 158, 11, 0.1);
     padding: 0.4rem 0.8rem;
-    border-radius: 8px;
+    border-radius: 16px;
     border: 1px solid rgba(245, 158, 11, 0.2);
 }
 
@@ -419,7 +419,7 @@ main {
 
 .feature-card {
     background: var(--bg-secondary);
-    padding: 2.5rem;
+    padding: 2.0rem;
     border-radius: 16px;
     border: 1px solid var(--border-color);
     box-shadow: var(--card-shadow);
@@ -510,7 +510,7 @@ main {
 
 .compatibility-table th {
     background: rgba(79, 70, 229, 0.05);
-    padding: 1.25rem;
+    padding: 1.0rem;
     font-weight: 600;
     text-align: center;
     color: var(--text-main);

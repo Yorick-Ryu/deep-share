@@ -451,7 +451,7 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 
-/* WeChat Payment Modal Styles */
+/* Payment Modal Styles */
 .payment-modal {
     position: fixed;
     top: 0;
@@ -532,25 +532,6 @@ input[type="number"]::-webkit-outer-spin-button {
     min-height: 24px;
 }
 
-.wechat-qrcode {
-    margin: 2rem auto;
-    max-width: 200px;
-}
-
-.wechat-qrcode img {
-    width: 100%;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.wechat-id {
-    margin-top: 0.5rem;
-    text-align: center;
-    font-weight: 500;
-    font-size: 1rem;
-    color: var(--text-main);
-}
-
 .payment-note {
     margin: 1.5rem 0;
     font-size: 0.9rem;
@@ -622,10 +603,6 @@ input[type="number"]::-webkit-outer-spin-button {
 
     .payment-note {
         color: #aaa;
-    }
-
-    .wechat-id {
-        color: #eee;
     }
 }
 
