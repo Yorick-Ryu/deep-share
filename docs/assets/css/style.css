@@ -320,6 +320,34 @@ main {
     flex-shrink: 0;
 }
 
+.product-hunt-badge {
+    margin-top: 1.5rem;
+    display: inline-block;
+}
+
+.product-hunt-badge img {
+    border-radius: 8px;
+    transition: transform 0.2s;
+}
+
+.product-hunt-badge .ph-dark {
+    display: none;
+}
+
+@media (prefers-color-scheme: dark) {
+    .product-hunt-badge .ph-light {
+        display: none;
+    }
+
+    .product-hunt-badge .ph-dark {
+        display: inline-block;
+    }
+}
+
+.product-hunt-badge:hover img {
+    transform: scale(1.02);
+}
+
 .hero-image {
     position: relative;
 }
