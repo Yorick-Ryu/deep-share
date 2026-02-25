@@ -35,6 +35,12 @@
 
         if (menuContent.querySelector('.deepshare-export-full-md')) return; // Already injected
 
+        // Skip if there's a "Share" button (indicates history list menu)
+        if (menuContent.querySelector('[data-test-id="share-button"]')) {
+            console.debug('DeepShare: Share button detected, likely a history item menu. Skipping injection.');
+            return;
+        }
+
         // Find the "Pin" button to insert after
         const pinButton = menuContent.querySelector('button[data-test-id="pin-button"]');
         const targetAnchor = pinButton || menuContent.firstElementChild;
