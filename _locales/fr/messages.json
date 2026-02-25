@@ -39,13 +39,13 @@
         "message": "Configurer la conversion IA vers Word ; les captures et copies de formules sont gratuites et sans configuration."
     },
     "docxConversionSuccess": {
-        "message": "Conversion en DOCX réussie !"
+        "message": "Enregistré avec succès en tant que document Word !"
     },
     "docxConverting": {
-        "message": "Conversion en cours, veuillez ne pas fermer cette fenêtre !"
+        "message": "Enregistrement en tant que document Word, veuillez ne pas fermer cette fenêtre !"
     },
     "docxConversionError": {
-        "message": "Échec de la conversion en DOCX. Veuillez vérifier que le service de conversion est en cours d'exécution."
+        "message": "Échec de l'enregistrement du document Word, veuillez vérifier votre réseau ou rafraîchir la page et réessayer !"
     },
     "watermarkSettings": {
         "message": "Paramètres du filigrane"

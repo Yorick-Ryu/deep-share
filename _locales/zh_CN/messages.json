@@ -39,13 +39,13 @@
         "message": "配置AI对话转Word功能，对话截图和公式复制免费且无需配置"
     },
     "docxConversionSuccess": {
-        "message": "成功转换为Word文档！"
+        "message": "成功保存为Word文档！"
     },
     "docxConverting": {
-        "message": "正在转换为文档，请勿关闭此界面！"
+        "message": "正在保存为Word文档，请勿关闭此窗口！"
     },
     "docxConversionError": {
-        "message": "转换Word文档失败。请确保转换服务正在运行。"
+        "message": "保存Word文档失败，请检查网络或刷新页面后重试！"
     },
     "watermarkSettings": {
         "message": "水印设置"

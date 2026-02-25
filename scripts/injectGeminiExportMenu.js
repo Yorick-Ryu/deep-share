@@ -79,8 +79,7 @@
         `;
 
         // Insert buttons
-        targetAnchor.insertAdjacentElement('afterend', wordButton);
-        targetAnchor.insertAdjacentElement('afterend', mdButton);
+        targetAnchor.after(wordButton, mdButton);
 
         menuContent.parentElement.dataset.deepshareExportInjected = 'true';
 

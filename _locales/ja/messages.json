@@ -39,13 +39,13 @@
         "message": "AI会話からWordへの変換を設定します。スクリーンショットや数式コピーは無料で設定不要です。"
     },
     "docxConversionSuccess": {
-        "message": "DOCX への変換に成功しました！"
+        "message": "Wordドキュメントとして保存に成功しました！"
     },
     "docxConverting": {
-        "message": "文書に変換中です。このポップアップを閉じないでください！"
+        "message": "Wordドキュメントとして保存中、このウィンドウを閉じないでください！"
     },
     "docxConversionError": {
-        "message": "DOCX への変換に失敗しました。変換サービスが実行中であることを確認してください。"
+        "message": "Wordドキュメントの保存に失敗しました。ネットワークを確認するか、ページを更新して再試行してください！"
     },
     "watermarkSettings": {
         "message": "透かし設定"

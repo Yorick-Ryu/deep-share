@@ -39,13 +39,13 @@
         "message": "Configure AI to Word conversion; screenshots and formula copying are free and require no setup."
     },
     "docxConversionSuccess": {
-        "message": "Successfully converted to DOCX!"
+        "message": "Successfully saved as Word document!"
     },
     "docxConverting": {
-        "message": "Converting to document, please do not close this popup!"
+        "message": "Saving as Word document, please do not close this window!"
     },
     "docxConversionError": {
-        "message": "Failed to convert to DOCX. Please make sure the conversion service is running."
+        "message": "Failed to save as Word document, please check your network or refresh the page and try again!"
     },
     "watermarkSettings": {
         "message": "Watermark Settings"

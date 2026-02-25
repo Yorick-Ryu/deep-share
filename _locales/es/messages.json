@@ -39,13 +39,13 @@
         "message": "Configurar conversión de IA a Word; las capturas y copias de fórmulas son gratuitas y no requieren configuración."
     },
     "docxConversionSuccess": {
-        "message": "¡Conversión a DOCX exitosa!"
+        "message": "¡Guardado como documento de Word con éxito!"
     },
     "docxConverting": {
-        "message": "Convirtiendo a documento, ¡no cierres esta ventana!"
+        "message": "Guardando como documento de Word, ¡no cierre esta ventana!"
     },
     "docxConversionError": {
-        "message": "Error al convertir a DOCX. Asegúrate de que el servicio de conversión esté funcionando."
+        "message": "Error al guardar el documento de Word, por favor compruebe su conexión o actualice la página e inténtelo de nuevo."
     },
     "watermarkSettings": {
         "message": "Configuración de marca de agua"
