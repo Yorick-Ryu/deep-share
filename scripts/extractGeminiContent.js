@@ -30,6 +30,11 @@ window.extractGeminiContentWithFormulas = function (container) {
         // Skip if not a valid node
         if (!node) return;
 
+        // Skip visually hidden elements (accessibility labels like "You said" or "你说")
+        if (node.nodeType === Node.ELEMENT_NODE && node.classList && node.classList.contains('cdk-visually-hidden')) {
+            return;
+        }
+
         // Handle source footnotes - IGNORED as per request
         if (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'SOURCE-FOOTNOTE') {
             return;
