@@ -37,7 +37,9 @@
         "https://chat.yixiaai.com/chat/?*",
         "https://www.wanzhi.com/chat/*",
         "https://www.zhihu.com/*",
-        "https://gemini.google.com/*"
+        "https://gemini.google.com/*",
+        "https://ove.chatopens.vip/*",
+        "https://navyli.com/*"
     ],
     "background": {
         "service_worker": "background.js"
@@ -160,6 +162,30 @@
                 "scripts/notifications.js",
                 "scripts/copyGeminiMath.js",
                 "scripts/docxConverter.js",
+                "scripts/extractGeminiContent.js",
+                "scripts/injectGeminiButton.js",
+                "scripts/injectGeminiCanvasButton.js",
+                "scripts/injectGeminiExportMenu.js"
+            ]
+        },
+        {
+            "matches": [
+                "https://ove.chatopens.vip/*",
+                "https://navyli.com/*"
+            ],
+            "css": [
+                "scripts/style.css"
+            ],
+            "js": [
+                "lib/mathjax-config.js",
+                "lib/mathjax4.js",
+                "lib/katex.min.js",
+                "scripts/formulaConverter.js",
+                "scripts/notifications.js",
+                "scripts/copyKatex.js",
+                "scripts/copyGeminiMath.js",
+                "scripts/docxConverter.js",
+                "scripts/injectGptButton.js",
                 "scripts/extractGeminiContent.js",
                 "scripts/injectGeminiButton.js",
                 "scripts/injectGeminiCanvasButton.js",

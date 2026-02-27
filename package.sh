@@ -4,7 +4,7 @@
 name=$(grep '"name"' manifest.json | head -n 1 | cut -d '"' -f 4 | sed 's/__MSG_extensionName__//g')
 name="DeepShare"
 version=$(grep '"version"' manifest.json | head -n 1 | cut -d '"' -f 4)
-zip_file="${name}-${version}.zip"
+zip_file="${name}-${version}-mirrored.zip"
 build_dir="build"
 
 # Files and directories to be included in the package
