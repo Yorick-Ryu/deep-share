@@ -39,7 +39,9 @@
         "https://www.zhihu.com/*",
         "https://gemini.google.com/*",
         "https://ove.chatopens.vip/*",
-        "https://navyli.com/*"
+        "https://navyli.com/*",
+        "https://aizex.net/*",
+        "https://a.memofun.net/*"
     ],
     "background": {
         "service_worker": "background.js"
@@ -171,7 +173,9 @@
         {
             "matches": [
                 "https://ove.chatopens.vip/*",
-                "https://navyli.com/*"
+                "https://navyli.com/*",
+                "https://aizex.net/*",
+                "https://a.memofun.net/*"
             ],
             "css": [
                 "scripts/style.css"
