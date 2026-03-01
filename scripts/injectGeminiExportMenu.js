@@ -131,8 +131,9 @@
         turns.forEach((turn, index) => {
             if (turn.tagName === 'USER-QUERY') {
                 const textContainer = turn.querySelector('.query-text');
-                if (textContainer) {
-                    finalMarkdown += `### User\n\n${textContainer.textContent.trim()}\n\n`;
+                if (textContainer && window.extractGeminiContentWithFormulas) {
+                    const content = window.extractGeminiContentWithFormulas(textContainer);
+                    finalMarkdown += `### User\n\n${content}\n\n`;
                 }
             } else if (turn.tagName === 'MODEL-RESPONSE') {
                 const contentContainer = turn.querySelector('.model-response-text message-content') ||
