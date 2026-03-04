@@ -266,6 +266,12 @@
     "hardLineBreaksTooltip": {
         "message": "単一の改行を強制改行として扱う"
     },
+    "disableAutoNumberingLabel": {
+        "message": "自動番号付けを無効にする"
+    },
+    "disableAutoNumberingTooltip": {
+        "message": "番号付きリストを番号付きのプレーンテキスト段落に変換"
+    },
     "getClipboardError": {
         "message": "コンテンツの取得に失敗しました"
     },

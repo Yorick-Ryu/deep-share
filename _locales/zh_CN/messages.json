@@ -266,6 +266,12 @@
     "hardLineBreaksTooltip": {
         "message": "将单次换行视为硬换行"
     },
+    "disableAutoNumberingLabel": {
+        "message": "禁用自动编号"
+    },
+    "disableAutoNumberingTooltip": {
+        "message": "有序列表转换为带数字的纯文本段落"
+    },
     "getClipboardError": {
         "message": "获取内容失败"
     },

@@ -266,6 +266,12 @@
     "hardLineBreaksTooltip": {
         "message": "Trata los saltos de línea simples como saltos forzados"
     },
+    "disableAutoNumberingLabel": {
+        "message": "Desactivar numeración automática"
+    },
+    "disableAutoNumberingTooltip": {
+        "message": "Listas ordenadas convertidas a párrafos de texto plano con numeración"
+    },
     "getClipboardError": {
         "message": "Error al obtener contenido"
     },

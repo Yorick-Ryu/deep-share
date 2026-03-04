@@ -196,6 +196,7 @@ async function convertToDocxViaApi(content, serverUrl, documentTitle = null) {
             convertMermaid: false,  // Default to false for Mermaid conversion
             compatMode: true,       // Default to true for compatibility mode
             hardLineBreaks: false,  // Default to false for hard line breaks
+            disableAutoNumbering: false, // Default to false for disable auto numbering
             lastUsedTemplate: null
         });
 
@@ -242,6 +243,11 @@ async function convertToDocxViaApi(content, serverUrl, documentTitle = null) {
         const currentLang = chrome.i18n.getUILanguage();
         const language = currentLang.startsWith('zh') ? 'zh' : 'en';
 
+        const extra_lua_filters = [];
+        if (settings.disableAutoNumbering) {
+            extra_lua_filters.push("disable-auto-numbering");
+        }
+
         const body = {
             content: processedContent,
             filename: generateFilename(content, documentTitle),
@@ -249,6 +255,7 @@ async function convertToDocxViaApi(content, serverUrl, documentTitle = null) {
             convert_mermaid: settings.convertMermaid,
             compat_mode: settings.compatMode,
             hard_line_breaks: settings.hardLineBreaks,
+            extra_lua_filters: extra_lua_filters,
             language: language
         };
 

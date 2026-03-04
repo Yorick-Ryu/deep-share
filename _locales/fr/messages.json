@@ -266,6 +266,12 @@
     "hardLineBreaksTooltip": {
         "message": "Treat single line breaks as hard breaks"
     },
+    "disableAutoNumberingLabel": {
+        "message": "Désactiver la numérotation automatique"
+    },
+    "disableAutoNumberingTooltip": {
+        "message": "Listes ordonnées converties en paragraphes de texte brut avec numérotation"
+    },
     "getClipboardError": {
         "message": "Échec de la récupération du contenu"
     },

@@ -266,6 +266,12 @@
     "hardLineBreaksTooltip": {
         "message": "Treat single line breaks as hard breaks"
     },
+    "disableAutoNumberingLabel": {
+        "message": "Disable Auto Numbering"
+    },
+    "disableAutoNumberingTooltip": {
+        "message": "Ordered lists converted to plain text with numbering"
+    },
     "getClipboardError": {
         "message": "Failed to get content"
     },

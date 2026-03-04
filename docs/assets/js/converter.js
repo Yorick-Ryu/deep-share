@@ -193,6 +193,7 @@ function loadSettings() {
       removeEmojis: localStorage.getItem('removeEmojis') === 'true',
       compatMode: localStorage.getItem('compatMode') !== 'false', // Default to true
       hardLineBreaks: localStorage.getItem('hardLineBreaks') === 'true',
+      disableAutoNumbering: localStorage.getItem('disableAutoNumbering') === 'true',
       lastUsedTemplate: localStorage.getItem('lastUsedTemplate') || 'templates',
       markdownText: localStorage.getItem('markdownText') || ''
     };
@@ -203,6 +204,7 @@ function loadSettings() {
     document.getElementById('removeEmojis').checked = settings.removeEmojis;
     document.getElementById('compatMode').checked = settings.compatMode;
     document.getElementById('hardLineBreaks').checked = settings.hardLineBreaks;
+    document.getElementById('disableAutoNumbering').checked = settings.disableAutoNumbering;
     document.getElementById('markdownInput').value = settings.markdownText;
 
     // If API key is set, check quota
@@ -224,6 +226,7 @@ function saveSettings() {
       removeEmojis: document.getElementById('removeEmojis').checked,
       compatMode: document.getElementById('compatMode').checked,
       hardLineBreaks: document.getElementById('hardLineBreaks').checked,
+      disableAutoNumbering: document.getElementById('disableAutoNumbering').checked,
       lastUsedTemplate: document.getElementById('wordTemplateSelect').value,
       markdownText: document.getElementById('markdownInput').value
     };
@@ -234,6 +237,7 @@ function saveSettings() {
     localStorage.setItem('removeEmojis', settings.removeEmojis);
     localStorage.setItem('compatMode', settings.compatMode);
     localStorage.setItem('hardLineBreaks', settings.hardLineBreaks);
+    localStorage.setItem('disableAutoNumbering', settings.disableAutoNumbering);
     localStorage.setItem('lastUsedTemplate', settings.lastUsedTemplate);
     localStorage.setItem('markdownText', settings.markdownText);
 
@@ -257,6 +261,7 @@ function setupAutoSave() {
     document.getElementById('removeEmojis'),
     document.getElementById('compatMode'),
     document.getElementById('hardLineBreaks'),
+    document.getElementById('disableAutoNumbering'),
     document.getElementById('wordTemplateSelect')
   ];
 
@@ -865,6 +870,7 @@ function setupManualConversion() {
     const removeEmojis = document.getElementById('removeEmojis').checked;
     const compatMode = document.getElementById('compatMode').checked;
     const hardLineBreaks = document.getElementById('hardLineBreaks').checked;
+    const disableAutoNumbering = document.getElementById('disableAutoNumbering').checked;
     const template = document.getElementById('wordTemplateSelect').value;
 
     // Check if API key is provided
@@ -896,7 +902,7 @@ function setupManualConversion() {
       `;
 
       // Call the conversion function
-      await convertMarkdownToDocx(markdownText, docxApiKey, convertMermaid, removeDividers, removeEmojis, compatMode, template, hardLineBreaks);
+      await convertMarkdownToDocx(markdownText, docxApiKey, convertMermaid, removeDividers, removeEmojis, compatMode, template, hardLineBreaks, disableAutoNumbering);
 
       // Update button to show success message briefly
       convertBtn.innerHTML = `
@@ -999,7 +1005,7 @@ function setupManualConversion() {
 }
 
 // Function to convert markdown text to DOCX
-async function convertMarkdownToDocx(markdownText, apiKey, convertMermaid = false, removeDividers = false, removeEmojis = false, compatMode = true, template, hardLineBreaks = false) {
+async function convertMarkdownToDocx(markdownText, apiKey, convertMermaid = false, removeDividers = false, removeEmojis = false, compatMode = true, template, hardLineBreaks = false, disableAutoNumbering = false) {
   try {
 
     // Generate filename based on content
@@ -1046,6 +1052,11 @@ async function convertMarkdownToDocx(markdownText, apiKey, convertMermaid = fals
       processedContent = processedContent.replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F000}-\u{1F02F}\u{1F0A0}-\u{1F0FF}\u{1F100}-\u{1F64F}\u{1F680}-\u{1F6FF}\u{1F900}-\u{1F9FF}\u{1FA00}-\u{1FA6F}\u{1FA70}-\u{1FAFF}\u{FE00}-\u{FE0F}\u{1F200}-\u{1F251}]/gu, '');
     }
 
+    const extra_lua_filters = [];
+    if (disableAutoNumbering) {
+      extra_lua_filters.push("disable-auto-numbering");
+    }
+
     const body = {
       content: processedContent,
       filename: filename,
@@ -1053,6 +1064,7 @@ async function convertMarkdownToDocx(markdownText, apiKey, convertMermaid = fals
       remove_hr: removeDividers,
       compat_mode: compatMode,
       hard_line_breaks: hardLineBreaks,
+      extra_lua_filters: extra_lua_filters,
       language: lang
     };
 
