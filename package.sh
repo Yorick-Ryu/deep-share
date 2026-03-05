@@ -17,6 +17,7 @@ include_files=(
     "manifest.json"
     "popup"
     "scripts"
+    "styles"
 )
 
 # Clean up previous build

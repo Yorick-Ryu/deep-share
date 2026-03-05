@@ -48,7 +48,7 @@
                 "https://chat.deepseek.com/*"
             ],
             "css": [
-                "scripts/style.css"
+                "styles/style.css"
             ],
             "js": [
                 "lib/html2canvas.min.js",
@@ -84,7 +84,7 @@
                 "https://www.wanzhi.com/chat/*"
             ],
             "css": [
-                "scripts/style.css"
+                "styles/style.css"
             ],
             "js": [
                 "lib/mathjax-config.js",
@@ -100,7 +100,7 @@
                 "https://chatgpt.com/*"
             ],
             "css": [
-                "scripts/style.css"
+                "styles/style.css"
             ],
             "js": [
                 "lib/mathjax-config.js",
@@ -118,7 +118,7 @@
                 "https://www.doubao.com/chat/*"
             ],
             "css": [
-                "scripts/style.css"
+                "styles/style.css"
             ],
             "js": [
                 "lib/mathjax-config.js",
@@ -134,7 +134,7 @@
                 "https://www.zhihu.com/*"
             ],
             "css": [
-                "scripts/style.css"
+                "styles/style.css"
             ],
             "js": [
                 "lib/mathjax-config.js",
@@ -150,7 +150,8 @@
                 "https://gemini.google.com/*"
             ],
             "css": [
-                "scripts/style.css"
+                "styles/style.css",
+                "styles/gemini.css"
             ],
             "js": [
                 "lib/mathjax-config.js",
