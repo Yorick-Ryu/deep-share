@@ -58,7 +58,7 @@
                     <path d="M20.56 18H3.44C2.65 18 2 17.37 2 16.59V7.41C2 6.63 2.65 6 3.44 6H20.56C21.35 6 22 6.63 22 7.41V16.59C22 17.37 21.35 18 20.56 18M6.81 15.19V11.53L8.73 13.88L10.65 11.53V15.19H12.58V8.81H10.65L8.73 11.16L6.81 8.81H4.89V15.19H6.81M19.69 12H17.77V8.81H15.85V12H13.92L16.81 15.28L19.69 12Z"/>
                 </svg>
             </mat-icon>
-            <span class="mat-mdc-menu-item-text"><span class="gds-body-m">${chrome.i18n.getMessage('saveAsMarkdown') || '保存为 Markdown'}</span></span>
+            <span class="mat-mdc-menu-item-text"><span class="gds-body-m">${chrome.i18n.getMessage('saveAsMarkdown')}</span></span>
             <div matripple="" class="mat-ripple mat-mdc-menu-ripple"></div>
         `;
 
@@ -74,7 +74,7 @@
                     <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
                 </svg>
             </mat-icon>
-            <span class="mat-mdc-menu-item-text"><span class="gds-body-m">${chrome.i18n.getMessage('docxButton') || '保存为Word'}</span></span>
+            <span class="mat-mdc-menu-item-text"><span class="gds-body-m">${chrome.i18n.getMessage('docxButton')}</span></span>
             <div matripple="" class="mat-ripple mat-mdc-menu-ripple"></div>
         `;
 
@@ -87,23 +87,13 @@
         mdButton.addEventListener('click', (e) => {
             e.stopPropagation();
             closeMenu();
-            const { title, markdown } = extractFullConversation();
-            downloadMarkdownFile(markdown, title);
+            toggleGeminiSelectionMode('md');
         });
 
         wordButton.addEventListener('click', (e) => {
             e.stopPropagation();
             closeMenu();
-            const { title, markdown } = extractFullConversation();
-
-            const event = new CustomEvent('deepshare:convertToDocx', {
-                detail: {
-                    messages: { content: markdown },
-                    sourceButton: wordButton,
-                    documentTitle: title
-                },
-            });
-            document.dispatchEvent(event);
+            toggleGeminiSelectionMode('docx');
         });
     }
 
@@ -112,7 +102,208 @@
         if (backdrop) backdrop.click();
     }
 
-    function extractFullConversation() {
+    let isSelectionMode = false;
+    let selectedFormat = 'md';
+    let currentConversationId = getConversationId();
+
+    function getConversationId() {
+        // Conversation ID is usually the last part of the URL path in Gemini
+        const parts = window.location.pathname.split('/');
+        return parts[parts.length - 1];
+    }
+
+    // Monitor URL changes to detect conversation switching
+    let lastHref = window.location.href;
+    const urlObserver = new MutationObserver(() => {
+        if (lastHref !== window.location.href) {
+            lastHref = window.location.href;
+            const newConvId = getConversationId();
+            if (newConvId !== currentConversationId) {
+                currentConversationId = newConvId;
+                if (isSelectionMode) {
+                    console.debug('DeepShare: Conversation changed, exiting selection mode');
+                    exitGeminiSelectionMode();
+                }
+            }
+        }
+    });
+    urlObserver.observe(document, { childList: true, subtree: true });
+
+    function toggleGeminiSelectionMode(format) {
+        if (isSelectionMode) {
+            exitGeminiSelectionMode();
+            return;
+        }
+
+        isSelectionMode = true;
+        selectedFormat = format;
+
+        const turns = document.querySelectorAll('user-query, model-response');
+        turns.forEach((turn, index) => {
+            if (turn.querySelector('.gemini-message-checkbox-wrapper')) return;
+
+            const role = turn.tagName === 'USER-QUERY' ? 'user' : 'assistant';
+            const wrapper = document.createElement('div');
+            wrapper.className = 'gemini-message-checkbox-wrapper';
+            wrapper.innerHTML = `<input type="checkbox" class="gemini-message-checkbox" data-index="${index}" data-role="${role}" checked>`;
+
+            turn.prepend(wrapper);
+            turn.classList.add('is-selected'); // 初始选中时添加类名
+
+            // Make entire turn clickable to toggle checkbox
+            turn.addEventListener('click', handleContainerClick);
+        });
+
+        // 在下一帧添加类名，触发平滑的 CSS Transition
+        requestAnimationFrame(() => {
+            document.body.classList.add('gemini-selection-mode');
+            injectSelectionBar();
+            updateSelectionCount();
+        });
+    }
+
+    function handleContainerClick(e) {
+        if (e.target.closest('.gemini-message-checkbox-wrapper')) return;
+        const checkbox = this.querySelector('.gemini-message-checkbox');
+        if (checkbox) {
+            checkbox.checked = !checkbox.checked;
+            updateSelectionCount();
+        }
+    }
+
+    function exitGeminiSelectionMode() {
+        isSelectionMode = false;
+        document.body.classList.remove('gemini-selection-mode');
+
+        document.querySelectorAll('.gemini-message-checkbox-wrapper').forEach(el => el.remove());
+        document.querySelectorAll('user-query, model-response').forEach(el => {
+            el.removeEventListener('click', handleContainerClick);
+        });
+
+        const bar = document.querySelector('.gemini-selection-bar');
+        if (bar) bar.remove();
+    }
+
+    function injectSelectionBar() {
+        if (document.querySelector('.gemini-selection-bar')) return;
+
+        const bar = document.createElement('div');
+        bar.className = 'gemini-selection-bar';
+        bar.innerHTML = `
+            <span class="gemini-bar-count">${chrome.i18n.getMessage('itemsSelected', ['0'])}</span>
+            <button class="gemini-bar-btn gemini-bar-btn--secondary select-all-toggle is-active">${chrome.i18n.getMessage('selectAllButton')}</button>
+            <button class="gemini-bar-btn gemini-bar-btn--secondary select-all-user is-active">${chrome.i18n.getMessage('selectAllQuestions')}</button>
+            <button class="gemini-bar-btn gemini-bar-btn--secondary select-all-assistant is-active">${chrome.i18n.getMessage('selectAllResponsesButton')}</button>
+            <button class="gemini-bar-btn gemini-bar-btn--primary confirm-export">${chrome.i18n.getMessage('confirmExport')}</button>
+            <button class="gemini-bar-btn gemini-bar-btn--secondary cancel-selection">${chrome.i18n.getMessage('cancelButton')}</button>
+        `;
+
+        const container = document.querySelector('chat-window');
+        container.appendChild(bar);
+
+        bar.querySelector('.select-all-toggle').addEventListener('click', () => {
+            const checkboxes = document.querySelectorAll('.gemini-message-checkbox');
+            const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+            checkboxes.forEach(cb => cb.checked = !allChecked);
+            updateSelectionCount();
+        });
+
+        bar.querySelector('.select-all-user').addEventListener('click', () => {
+            const checkboxes = document.querySelectorAll('.gemini-message-checkbox[data-role="user"]');
+            const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+            checkboxes.forEach(cb => cb.checked = !allChecked);
+            updateSelectionCount();
+        });
+
+        bar.querySelector('.select-all-assistant').addEventListener('click', () => {
+            const checkboxes = document.querySelectorAll('.gemini-message-checkbox[data-role="assistant"]');
+            const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+            checkboxes.forEach(cb => cb.checked = !allChecked);
+            updateSelectionCount();
+        });
+
+        bar.querySelector('.confirm-export').addEventListener('click', async () => {
+            const data = await chrome.storage.sync.get(['includeGeminiChatLink']);
+            const { title, markdown } = extractFullConversation(true, data.includeGeminiChatLink === true);
+
+            if (!markdown.trim() || markdown.split('\n').length < 5) { // Basic check for empty extraction
+                window.showToastNotification(chrome.i18n.getMessage('noMessageSelected'), 'error');
+                return;
+            }
+
+            if (selectedFormat === 'md') {
+                downloadMarkdownFile(markdown, title);
+            } else {
+                const event = new CustomEvent('deepshare:convertToDocx', {
+                    detail: {
+                        messages: { content: markdown },
+                        sourceButton: bar.querySelector('.confirm-export'),
+                        documentTitle: title
+                    },
+                });
+                document.dispatchEvent(event);
+            }
+            exitGeminiSelectionMode();
+        });
+
+        bar.querySelector('.cancel-selection').addEventListener('click', exitGeminiSelectionMode);
+
+        // Listen for checkbox changes to update count
+        document.addEventListener('change', (e) => {
+            if (e.target.classList.contains('gemini-message-checkbox')) {
+                updateSelectionCount();
+            }
+        });
+    }
+
+    function updateSelectionCount() {
+        const turns = document.querySelectorAll('user-query, model-response');
+        turns.forEach(turn => {
+            const cb = turn.querySelector('.gemini-message-checkbox');
+            if (cb) {
+                turn.classList.toggle('is-selected', cb.checked);
+            }
+        });
+
+        const checkboxes = document.querySelectorAll('.gemini-message-checkbox');
+        const count = Array.from(checkboxes).filter(cb => cb.checked).length;
+        const countEl = document.querySelector('.gemini-bar-count');
+        if (countEl) {
+            countEl.textContent = chrome.i18n.getMessage('itemsSelected', [count.toString()]);
+        }
+
+        const bar = document.querySelector('.gemini-selection-bar');
+        if (!bar) return;
+
+        // Update Toggle buttons
+        const allChecked = checkboxes.length > 0 && Array.from(checkboxes).every(cb => cb.checked);
+        const allToggle = bar.querySelector('.select-all-toggle');
+        if (allToggle) {
+            allToggle.classList.toggle('is-active', allChecked);
+        }
+
+        const userCheckboxes = document.querySelectorAll('.gemini-message-checkbox[data-role="user"]');
+        const allUserChecked = userCheckboxes.length > 0 && Array.from(userCheckboxes).every(cb => cb.checked);
+        const userToggle = bar.querySelector('.select-all-user');
+        if (userToggle) {
+            userToggle.classList.toggle('is-active', allUserChecked);
+        }
+
+        const assistantCheckboxes = document.querySelectorAll('.gemini-message-checkbox[data-role="assistant"]');
+        const allAssistantChecked = assistantCheckboxes.length > 0 && Array.from(assistantCheckboxes).every(cb => cb.checked);
+        const assistantToggle = bar.querySelector('.select-all-assistant');
+        if (assistantToggle) {
+            assistantToggle.classList.toggle('is-active', allAssistantChecked);
+        }
+
+        // Disable confirm-export if count is 0
+        const confirmBtn = bar.querySelector('.confirm-export');
+        if (confirmBtn) {
+            confirmBtn.disabled = count === 0;
+        }
+    }
+
+    function extractFullConversation(onlySelected = false, includeLink = false) {
         const turns = Array.from(document.querySelectorAll('user-query, model-response'));
         let finalMarkdown = '';
 
@@ -124,16 +315,27 @@
         if (!title) {
             title = document.title.replace(' - Gemini', '').trim();
         }
-        if (title === 'Gemini' || !title) title = 'Gemini Conversation';
+        if (title === 'Gemini' || !title) title = chrome.i18n.getMessage('geminiConversation');
 
         finalMarkdown += `# ${title}\n\n`;
 
-        turns.forEach((turn, index) => {
+        const selectedTurns = turns.filter(turn => {
+            if (!onlySelected) return true;
+            const checkbox = turn.querySelector('.gemini-message-checkbox');
+            return checkbox && checkbox.checked;
+        });
+
+        const hasUser = selectedTurns.some(t => t.tagName === 'USER-QUERY');
+        const hasAssistant = selectedTurns.some(t => t.tagName === 'MODEL-RESPONSE');
+        const showRoleHeaders = hasUser && hasAssistant;
+
+        selectedTurns.forEach((turn) => {
             if (turn.tagName === 'USER-QUERY') {
                 const textContainer = turn.querySelector('.query-text');
                 if (textContainer && window.extractGeminiContentWithFormulas) {
                     const content = window.extractGeminiContentWithFormulas(textContainer);
-                    finalMarkdown += `### User\n\n${content}\n\n`;
+                    if (showRoleHeaders) finalMarkdown += `**${chrome.i18n.getMessage('roleUser')}**\n\n`;
+                    finalMarkdown += `${content}\n\n`;
                 }
             } else if (turn.tagName === 'MODEL-RESPONSE') {
                 const contentContainer = turn.querySelector('.model-response-text message-content') ||
@@ -144,14 +346,17 @@
                 if (contentContainer) {
                     content = window.extractGeminiContentWithFormulas(contentContainer);
                 }
-                finalMarkdown += `### Assistant\n\n${content}\n\n`;
-                finalMarkdown += `---\n\n`;
+                if (showRoleHeaders) finalMarkdown += `**${chrome.i18n.getMessage('roleAssistant')}**\n\n`;
+                finalMarkdown += `${content}\n\n`;
+                if (showRoleHeaders) finalMarkdown += `---\n\n`;
             }
         });
 
-        // Append URL info
-        finalMarkdown += `\n*Source: ${window.location.href}*\n`;
-        finalMarkdown += `*Exported via DeepShare*\n`;
+        // Append URL info if enabled
+        if (includeLink) {
+            finalMarkdown += `\n*${chrome.i18n.getMessage('sourceConversationLabel')}: ${window.location.href}*\n`;
+            finalMarkdown += `*${chrome.i18n.getMessage('exportedViaDeepShare')}*\n`;
+        }
 
         return { title, markdown: finalMarkdown.trim() };
     }

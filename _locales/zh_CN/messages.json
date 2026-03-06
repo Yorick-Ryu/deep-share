@@ -266,6 +266,12 @@
     "hardLineBreaksTooltip": {
         "message": "将单次换行视为硬换行"
     },
+    "disableAutoNumberingLabel": {
+        "message": "禁用自动编号"
+    },
+    "disableAutoNumberingTooltip": {
+        "message": "有序列表转换为带数字的纯文本段落"
+    },
     "getClipboardError": {
         "message": "获取内容失败"
     },
@@ -367,6 +373,44 @@
     },
     "exportGeminiSourcesHint": {
         "message": "导出 Gemini 深度研究报告时包含参考来源"
+    },
+    "includeGeminiChatLinkLabel": {
+        "message": "导出对话链接"
+    },
+    "includeGeminiChatLinkHint": {
+        "message": "导出内容包含来源的对话链接"
+    },
+    "itemsSelected": {
+        "message": "已选择 $COUNT$ 项",
+        "placeholders": {
+            "COUNT": {
+                "content": "$1"
+            }
+        }
+    },
+    "selectAllQuestions": {
+        "message": "全选问题"
+    },
+    "confirmExport": {
+        "message": "确认导出"
+    },
+    "cancelButton": {
+        "message": "取消"
+    },
+    "roleUser": {
+        "message": "用户"
+    },
+    "roleAssistant": {
+        "message": "助手"
+    },
+    "exportedViaDeepShare": {
+        "message": "通过 DeepShare 导出"
+    },
+    "geminiConversation": {
+        "message": "Gemini 对话"
+    },
+    "sourceConversationLabel": {
+        "message": "来源"
     },
     "languageSettingsTitle": {
         "message": "语言"

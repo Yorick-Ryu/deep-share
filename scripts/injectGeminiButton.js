@@ -129,10 +129,16 @@
                 sourceButton.style.opacity = '0.6';
 
                 // Get message content directly from DOM
-                const messageContent = getGeminiContent(sourceButton);
+                let messageContent = getGeminiContent(sourceButton);
 
                 if (messageContent && messageContent.trim()) {
                     console.debug('Successfully extracted content from Gemini DOM');
+
+                    // Append URL if enabled
+                    const data = await chrome.storage.sync.get(['includeGeminiChatLink']);
+                    if (data.includeGeminiChatLink === true) {
+                        messageContent += `\n\n*${chrome.i18n.getMessage('sourceConversationLabel')}: ${window.location.href}*\n*${chrome.i18n.getMessage('exportedViaDeepShare')}*\n`;
+                    }
 
                     const conversationData = {
                         role: 'assistant',
@@ -206,7 +212,7 @@
             targetAnchor.parentNode.prepend(mdButton);
 
             // 点击事件
-            mdButton.addEventListener('click', (e) => {
+            mdButton.addEventListener('click', async (e) => {
                 e.stopPropagation();
                 if (!activeMessageContainer) {
                     console.error('DeepShare: No active message container found');
@@ -218,9 +224,15 @@
                 const contentElement = activeMessageContainer.querySelector('.model-response-text message-content') ||
                     activeMessageContainer.querySelector('structured-content-container.model-response-text message-content') ||
                     activeMessageContainer.querySelector('message-content'); // Fallback for older structure
-
                 if (contentElement) {
-                    const markdown = window.extractGeminiContentWithFormulas(contentElement);
+                    let markdown = window.extractGeminiContentWithFormulas(contentElement);
+
+                    // Append URL if enabled
+                    const data = await chrome.storage.sync.get(['includeGeminiChatLink']);
+                    if (data.includeGeminiChatLink === true) {
+                        markdown += `\n\n*${chrome.i18n.getMessage('sourceConversationLabel')}: ${window.location.href}*\n*${chrome.i18n.getMessage('exportedViaDeepShare')}*\n`;
+                    }
+
                     downloadMarkdownFile(markdown);
                 }
 

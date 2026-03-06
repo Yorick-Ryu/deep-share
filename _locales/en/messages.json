@@ -266,6 +266,12 @@
     "hardLineBreaksTooltip": {
         "message": "Treat single line breaks as hard breaks"
     },
+    "disableAutoNumberingLabel": {
+        "message": "Disable Auto Numbering"
+    },
+    "disableAutoNumberingTooltip": {
+        "message": "Ordered lists converted to plain text with numbering"
+    },
     "getClipboardError": {
         "message": "Failed to get content"
     },
@@ -367,6 +373,45 @@
     },
     "exportGeminiSourcesHint": {
         "message": "Include reference sources when exporting Gemini Deep Research reports"
+    },
+    "includeGeminiChatLinkLabel": {
+        "message": "Export chat link"
+    },
+    "includeGeminiChatLinkHint": {
+        "message": "Exported content includes the link to the source conversation"
+    },
+    "itemsSelected": {
+        "message": "Selected $COUNT$ items",
+        "description": "Selected count in Gemini selection bar",
+        "placeholders": {
+            "COUNT": {
+                "content": "$1"
+            }
+        }
+    },
+    "selectAllQuestions": {
+        "message": "Select All Questions"
+    },
+    "confirmExport": {
+        "message": "Confirm Export"
+    },
+    "cancelButton": {
+        "message": "Cancel"
+    },
+    "roleUser": {
+        "message": "User"
+    },
+    "roleAssistant": {
+        "message": "Assistant"
+    },
+    "exportedViaDeepShare": {
+        "message": "Exported via DeepShare"
+    },
+    "geminiConversation": {
+        "message": "Gemini Conversation"
+    },
+    "sourceConversationLabel": {
+        "message": "Source"
     },
     "languageSettingsTitle": {
         "message": "Language"

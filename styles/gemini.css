@@ -1,0 +1,288 @@
+/* Gemini DOCX Button Styles */
+.deepshare-gemini-docx-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.deepshare-gemini-docx-btn .mdc-icon-button {
+    --mat-button-text-label-text-color: var(--gem-sys-color--on-surface-variant);
+    --mat-button-text-icon-offset: 0;
+    --mat-button-text-container-height: var(--message-actions-button-size, 32px);
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    width: var(--message-actions-button-size, 32px);
+    height: var(--message-actions-button-size, 32px);
+    min-width: var(--message-actions-button-size, 32px);
+    min-height: var(--message-actions-button-size, 32px);
+    padding: 0;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    fill: currentColor;
+    color: var(--mat-button-text-label-text-color);
+    text-decoration: none;
+    cursor: pointer;
+    user-select: none;
+    border-radius: 50%;
+    overflow: visible;
+    transition: background-color 0.2s ease;
+}
+
+.deepshare-gemini-docx-btn .mat-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+    line-height: 20px;
+    color: inherit;
+    position: relative;
+    z-index: 1;
+    font-family: 'Google Symbols', 'Material Symbols Outlined', 'Material Icons', sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    letter-spacing: normal;
+    text-transform: none;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    font-feature-settings: 'liga';
+    -webkit-font-feature-settings: 'liga';
+    -webkit-font-smoothing: antialiased;
+}
+
+
+.deepshare-gemini-docx-btn .mdc-icon-button:hover {
+    background-color: var(--mat-option-hover-state-layer-color, rgba(68, 71, 70, 0.08));
+}
+
+.deepshare-gemini-docx-btn .mdc-icon-button:focus {
+    background-color: var(--mat-option-focus-state-layer-color, rgba(68, 71, 70, 0.12));
+}
+
+.deepshare-gemini-docx-btn .mdc-icon-button:active {
+    background-color: var(--mat-ripple-color, rgba(68, 71, 70, 0.16));
+}
+
+/* Dark mode specifically using system colors if preferred-color-scheme is used, 
+   but variables already handle most of it */
+@media (prefers-color-scheme: dark) {
+    .deepshare-gemini-docx-btn .mdc-icon-button:hover {
+        background-color: var(--mat-option-hover-state-layer-color, rgba(255, 255, 255, 0.08));
+    }
+}
+
+
+/* Ripple effect - ensuring circular shape */
+.deepshare-gemini-docx-btn .mdc-icon-button::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 32px;
+    height: 32px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background-color: transparent;
+    transition: background-color 0.2s ease;
+}
+
+/* Gemini selection mode styles */
+.gemini-selection-mode .conversation-container {
+    transition: background-color 0.2s ease;
+}
+
+.gemini-selection-mode user-query,
+.gemini-selection-mode model-response {
+    cursor: pointer;
+    position: relative;
+    padding-left: 48px !important;
+    display: block;
+    transition: padding-left 0.3s cubic-bezier(0.2, 0, 0, 1), background-color 0.2s ease;
+}
+
+/* 复选框进入动画 */
+@keyframes gemini-checkbox-appear {
+    from {
+        opacity: 0;
+        transform: scale(0.5) translateX(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateX(0);
+    }
+}
+
+.gemini-selection-mode user-query:hover,
+.gemini-selection-mode model-response:hover {
+    background-color: var(--gem-sys-color--surface-container, #f0f4f9);
+}
+
+.gemini-selection-mode user-query.is-selected,
+.gemini-selection-mode model-response.is-selected {
+    background-color: var(--gem-sys-color--secondary-container, #c2e7ff);
+}
+
+/* Checkbox specific to Gemini - MD3 style */
+.gemini-message-checkbox-wrapper {
+    position: absolute;
+    left: 8px;
+    top: 8px;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    transition: background-color 0.2s ease;
+    animation: gemini-checkbox-appear 0.4s cubic-bezier(0.2, 0, 0, 1) forwards;
+}
+
+.gemini-message-checkbox-wrapper:hover {
+    background-color: var(--mat-option-hover-state-layer-color, rgba(68, 71, 70, 0.08));
+}
+
+.gemini-message-checkbox {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--gem-sys-color--outline, #5f6368);
+    border-radius: 2px;
+    cursor: pointer;
+    background: transparent;
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    outline: none;
+}
+
+.gemini-message-checkbox:checked {
+    background-color: var(--gem-sys-color--primary, #6250f2);
+    border-color: var(--gem-sys-color--primary, #6250f2);
+}
+
+.gemini-message-checkbox:checked::after {
+    content: '';
+    width: 9px;
+    height: 5px;
+    border-left: 2px solid var(--gem-sys-color--on-primary, white);
+    border-bottom: 2px solid var(--gem-sys-color--on-primary, white);
+    transform: rotate(-45deg);
+    margin-top: -2px;
+}
+
+/* Floating Action Bar for Gemini - MD3 Elevated style */
+.gemini-selection-bar {
+    position: absolute;
+    bottom: 36px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    background: var(--gem-sys-color--surface-container, #fdfcfb);
+    border: none;
+    box-shadow: var(--mat-app-elevation-shadow-level-2, 0 4px 12px rgba(0, 0, 0, 0.1));
+    border-radius: 24px;
+    /* MD3 standard radius for cards/bars */
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    animation: bar-slide-up 0.5s cubic-bezier(0.05, 0.7, 0.1, 1);
+    white-space: nowrap;
+    max-width: calc(100vw - 32px);
+    overflow-x: auto;
+}
+
+.gemini-selection-bar::-webkit-scrollbar {
+    display: none;
+}
+
+@keyframes bar-slide-up {
+    from {
+        transform: translateX(-50%) translateY(100px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+    }
+}
+
+.gemini-bar-count {
+    margin-right: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--gem-sys-color--on-surface, #1f1f1f);
+    letter-spacing: 0.1px;
+}
+
+.gemini-bar-btn {
+    height: 40px;
+    padding: 0 24px;
+    border-radius: 24px;
+    border: none;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    letter-spacing: 0.1px;
+}
+
+.gemini-bar-btn--primary {
+    background-color: var(--gem-sys-color--primary, #6250f2);
+    color: var(--gem-sys-color--on-primary, #ffffff);
+}
+
+.gemini-bar-btn--primary:hover {
+    background-color: var(--gem-sys-color--primary, #5142d1);
+    background-image: linear-gradient(rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.08));
+    box-shadow: var(--mat-app-elevation-shadow-level-1, 0 1px 3px rgba(0, 0, 0, 0.15));
+}
+
+.gemini-bar-btn--secondary {
+    background-color: transparent;
+    color: var(--gem-sys-color--on-surface-variant, #444746);
+    border: 1px solid var(--gem-sys-color--outline-variant, #c4c7c5);
+}
+
+.gemini-bar-btn--secondary.is-active {
+    background-color: var(--gem-sys-color--secondary-container, #e7e0ff);
+    color: var(--gem-sys-color--on-secondary-container, #1d164d);
+    border: 1px solid transparent;
+}
+
+.gemini-bar-btn--secondary:hover {
+    background-image: linear-gradient(var(--mat-option-hover-state-layer-color, rgba(0, 0, 0, 0.08)), var(--mat-option-hover-state-layer-color, rgba(0, 0, 0, 0.08)));
+}
+
+.gemini-bar-btn:disabled {
+    cursor: default;
+    pointer-events: none;
+    background-color: var(--gem-sys-color--surface-container-high, #e9eef6) !important;
+    color: var(--gem-sys-color--outline, #747775) !important;
+    border-color: transparent !important;
+    background-image: none !important;
+    box-shadow: none !important;
+}
+
+/* Injected Menu Items Icon and Hover Styling */
+.mat-mdc-menu-item.deepshare-export-full-md .mat-icon,
+.mat-mdc-menu-item.deepshare-export-full-word .mat-icon,
+.mat-mdc-menu-item.deepshare-menu-md-button .mat-icon {
+    color: var(--mat-menu-item-icon-color, var(--gem-sys-color--on-surface-variant, #c4c7c5)) !important;
+}

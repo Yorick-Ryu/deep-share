@@ -266,6 +266,12 @@
     "hardLineBreaksTooltip": {
         "message": "Trata los saltos de línea simples como saltos forzados"
     },
+    "disableAutoNumberingLabel": {
+        "message": "Desactivar numeración automática"
+    },
+    "disableAutoNumberingTooltip": {
+        "message": "Listas ordenadas convertidas a párrafos de texto plano con numeración"
+    },
     "getClipboardError": {
         "message": "Error al obtener contenido"
     },
@@ -367,6 +373,44 @@
     },
     "exportGeminiSourcesHint": {
         "message": "Incluir fuentes de referencia al exportar informes de investigación profunda de Gemini"
+    },
+    "includeGeminiChatLinkLabel": {
+        "message": "Exportar enlace de chat"
+    },
+    "includeGeminiChatLinkHint": {
+        "message": "El contenido exportado incluye el enlace a la conversación original"
+    },
+    "itemsSelected": {
+        "message": "Seleccionado $COUNT$ elementos",
+        "placeholders": {
+            "COUNT": {
+                "content": "$1"
+            }
+        }
+    },
+    "selectAllQuestions": {
+        "message": "Seleccionar todas las preguntas"
+    },
+    "confirmExport": {
+        "message": "Confirmar exportación"
+    },
+    "cancelButton": {
+        "message": "Cancelar"
+    },
+    "roleUser": {
+        "message": "Usuario"
+    },
+    "roleAssistant": {
+        "message": "Asistente"
+    },
+    "exportedViaDeepShare": {
+        "message": "Exportado vía DeepShare"
+    },
+    "geminiConversation": {
+        "message": "Conversación de Gemini"
+    },
+    "sourceConversationLabel": {
+        "message": "Fuente"
     },
     "languageSettingsTitle": {
         "message": "Idioma"

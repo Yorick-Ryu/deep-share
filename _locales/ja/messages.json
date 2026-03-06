@@ -266,6 +266,12 @@
     "hardLineBreaksTooltip": {
         "message": "単一の改行を強制改行として扱う"
     },
+    "disableAutoNumberingLabel": {
+        "message": "自動番号付けを無効にする"
+    },
+    "disableAutoNumberingTooltip": {
+        "message": "番号付きリストを番号付きのプレーンテキスト段落に変換"
+    },
     "getClipboardError": {
         "message": "コンテンツの取得に失敗しました"
     },
@@ -367,6 +373,44 @@
     },
     "exportGeminiSourcesHint": {
         "message": "Gemini 深層研究レポートをエクスポートする際に参考ソースを含める"
+    },
+    "includeGeminiChatLinkLabel": {
+        "message": "チャットリンクをエクスポート"
+    },
+    "includeGeminiChatLinkHint": {
+        "message": "エクスポートされるコンテンツに元の会話へのリンクが含まれます"
+    },
+    "itemsSelected": {
+        "message": "$COUNT$ 個を選択済み",
+        "placeholders": {
+            "COUNT": {
+                "content": "$1"
+            }
+        }
+    },
+    "selectAllQuestions": {
+        "message": "すべての質問を選択"
+    },
+    "confirmExport": {
+        "message": "エクスポートを確認"
+    },
+    "cancelButton": {
+        "message": "キャンセル"
+    },
+    "roleUser": {
+        "message": "ユーザー"
+    },
+    "roleAssistant": {
+        "message": "アシスタント"
+    },
+    "exportedViaDeepShare": {
+        "message": "DeepShare 経由でエクスポート"
+    },
+    "geminiConversation": {
+        "message": "Gemini 会話"
+    },
+    "sourceConversationLabel": {
+        "message": "ソース"
     },
     "languageSettingsTitle": {
         "message": "言語"

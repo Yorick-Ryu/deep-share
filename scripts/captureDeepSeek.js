@@ -3,19 +3,23 @@ console.log("captureDeepSeek.js loaded");
 
 document.addEventListener('deepshare:saveAsImage', async () => {
     let notificationId = null;
+    let blobUrl = null;
     try {
         console.log('Save as long image clicked');
         notificationId = window.showToastNotification(chrome.i18n.getMessage('screenshotInitiated'), 'loading', 30000);
 
-        const dataUrl = await captureDeepSeekMessages();
+        // captureDeepSeekMessages 现在返回 Blob 而非 data URL，避免生成巨大的 base64 字符串
+        const blob = await captureDeepSeekMessages();
 
         if (notificationId !== null) {
             window.dismissToastNotification(notificationId);
         }
 
-        if (dataUrl) {
+        if (blob) {
+            // 使用 URL.createObjectURL 代替 data URL，避免主线程处理巨大的 base64 字符串
+            blobUrl = URL.createObjectURL(blob);
             const link = document.createElement('a');
-            link.href = dataUrl;
+            link.href = blobUrl;
             const now = new Date();
             const timestamp = `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')}-${now.getHours().toString().padStart(2, '0')}-${now.getMinutes().toString().padStart(2, '0')}-${now.getSeconds().toString().padStart(2, '0')}`;
             link.download = `deepseek-chat-${timestamp}.png`;
@@ -23,7 +27,7 @@ document.addEventListener('deepshare:saveAsImage', async () => {
             window.showToastNotification(chrome.i18n.getMessage('screenshotSuccess'), 'success');
 
             try {
-                const blob = await (await fetch(dataUrl)).blob();
+                // 直接使用已有的 blob，无需 fetch(dataUrl).blob() 二次转换
                 await navigator.clipboard.write([
                     new ClipboardItem({
                         [blob.type]: blob
@@ -44,6 +48,11 @@ document.addEventListener('deepshare:saveAsImage', async () => {
             window.dismissToastNotification(notificationId);
         }
         window.showToastNotification(chrome.i18n.getMessage('screenshotFailed'), 'error');
+    } finally {
+        // 释放 blob URL 避免内存泄漏
+        if (blobUrl) {
+            URL.revokeObjectURL(blobUrl);
+        }
     }
 });
 
@@ -153,14 +162,14 @@ async function captureDeepSeekMessages(customWatermark) {
 
         await new Promise(resolve => setTimeout(resolve, 100));
 
-        let dataUrl;
+        let blob;
 
         console.debug(screenshotMethod)
 
         // 根据设置选择截图方法
         if (screenshotMethod === 'domtoimage' && typeof domtoimage !== 'undefined') {
             try {
-                dataUrl = await domtoimage.toPng(container, {
+                const dataUrl = await domtoimage.toPng(container, {
                     bgcolor: backgroundColor,
                     style: {
                         'margin': '0',
@@ -174,6 +183,10 @@ async function captureDeepSeekMessages(customWatermark) {
                     },
                     skipAutoScale: true
                 });
+                // 将 data URL 转为 Blob
+                if (dataUrl) {
+                    blob = await (await fetch(dataUrl)).blob();
+                }
             } catch (e) {
                 console.error('dom-to-image failed, falling back to html2canvas', e);
                 // Fallback to html2canvas if dom-to-image fails
@@ -190,14 +203,17 @@ async function captureDeepSeekMessages(customWatermark) {
                     }
                 });
                 const img = await result.toPng();
-                dataUrl = img.src;
+                // 将 data URL 转为 Blob
+                if (img && img.src) {
+                    blob = await (await fetch(img.src)).blob();
+                }
             } catch (e) {
                 console.error('SnapDOM failed', e);
             }
         }
 
-        // 如果 dom-to-image 失败或未选择，则使用 html2canvas
-        if (!dataUrl) {
+        // 如果其他方法失败或未选择，则使用 html2canvas
+        if (!blob) {
             if (typeof html2canvas === 'undefined') {
                 throw new Error('html2canvas not loaded');
             }
@@ -212,7 +228,10 @@ async function captureDeepSeekMessages(customWatermark) {
                         element.classList.contains('ds-checkbox-wrapper');
                 }
             });
-            dataUrl = canvas.toDataURL('image/png');
+            // 使用异步的 toBlob 替代同步的 toDataURL，避免主线程阻塞
+            blob = await new Promise((resolve) => {
+                canvas.toBlob((b) => resolve(b), 'image/png');
+            });
         }
 
 
@@ -227,7 +246,7 @@ async function captureDeepSeekMessages(customWatermark) {
         container.style.position = originalPosition;
         container.style.padding = originalPadding;
 
-        return dataUrl;
+        return blob;
     } catch (error) {
         if (watermarkContainer.parentNode) {
             container.removeChild(watermarkContainer);

@@ -105,7 +105,9 @@ function loadSettings(highlightApiKey = false, forceDocxTab = false) {
     'compatMode',
     'wordTemplateSelect',
     'exportGeminiSources',
+    'includeGeminiChatLink',
     'hardLineBreaks',
+    'disableAutoNumbering',
     'preferredLanguage'
   ], (data) => {
     // Watermark settings
@@ -153,8 +155,14 @@ function loadSettings(highlightApiKey = false, forceDocxTab = false) {
     // Gemini Deep Research sources export setting
     document.getElementById('exportGeminiSources').checked = data.exportGeminiSources === true; // Default to false
 
+    // Gemini Chat Link export setting
+    document.getElementById('includeGeminiChatLink').checked = data.includeGeminiChatLink === true; // Default to false
+
     // Hard Line Breaks setting
     document.getElementById('hardLineBreaks').checked = !!data.hardLineBreaks; // Default to false
+
+    // Disable Auto Numbering setting
+    document.getElementById('disableAutoNumbering').checked = !!data.disableAutoNumbering; // Default to false
 
     // Language preference
     document.getElementById('languageSelect').value = data.preferredLanguage || 'auto';
@@ -328,8 +336,11 @@ function setupAutoSave() {
     document.getElementById('wordTemplateSelect'),
     // Gemini settings
     document.getElementById('exportGeminiSources'),
+    document.getElementById('includeGeminiChatLink'),
     // Hard Line Breaks settings
     document.getElementById('hardLineBreaks'),
+    // Disable Auto Numbering settings
+    document.getElementById('disableAutoNumbering'),
     // Language settings
     document.getElementById('languageSelect')
   ];
@@ -475,6 +486,8 @@ function loadI18nText(errorMsg = null) {
   document.getElementById('compatModeTooltip').textContent = getMessage('compatModeTooltip') || '兼容不规范的Markdown格式';
   document.getElementById('hardLineBreaksLabel').textContent = getMessage('hardLineBreaksLabel') || '强制换行';
   document.getElementById('hardLineBreaksTooltip').textContent = getMessage('hardLineBreaksTooltip') || '将源码中的单次换行视为硬换行';
+  document.getElementById('disableAutoNumberingLabel').textContent = getMessage('disableAutoNumberingLabel') || '禁用自动编号';
+  document.getElementById('disableAutoNumberingTooltip').textContent = getMessage('disableAutoNumberingTooltip') || '将有序列表转换为带有数字的普通文本段落，避免使用Word的自动编号';
 
   // Formula Copy Settings tab
   document.getElementById('formulaSettingsTitle').textContent = getMessage('formulaSettingsTitle') || 'Formula Copy Settings';
@@ -533,6 +546,8 @@ function loadI18nText(errorMsg = null) {
   document.getElementById('geminiSettingsTitle').textContent = getMessage('geminiSettingsTitle') || 'Gemini';
   document.getElementById('exportGeminiSourcesLabel').textContent = getMessage('exportGeminiSourcesLabel') || 'Export Deep Research sources';
   document.getElementById('exportGeminiSourcesHint').textContent = getMessage('exportGeminiSourcesHint') || 'Include reference sources when exporting Gemini Deep Research reports';
+  document.getElementById('includeGeminiChatLinkLabel').textContent = getMessage('includeGeminiChatLinkLabel') || 'Export chat link';
+  document.getElementById('includeGeminiChatLinkHint').textContent = getMessage('includeGeminiChatLinkHint') || 'Exported content includes the link to the source conversation';
 
   // About tab
   document.getElementById('acknowledgmentText').textContent = getMessage('acknowledgmentText') || '感谢每一位为 DeepShare 提出建议的朋友！许多功能源于用户的真实需求，让我们一起提升效率，把节省的时间留给生活。';
@@ -633,10 +648,12 @@ function saveSettings() {
     convertMermaid: document.getElementById('convertMermaid').checked,
     compatMode: document.getElementById('compatMode').checked,
     hardLineBreaks: document.getElementById('hardLineBreaks').checked,
+    disableAutoNumbering: document.getElementById('disableAutoNumbering').checked,
     lastUsedTemplate: document.getElementById('wordTemplateSelect').value,
 
     // Gemini settings
     exportGeminiSources: document.getElementById('exportGeminiSources').checked,
+    includeGeminiChatLink: document.getElementById('includeGeminiChatLink').checked,
 
     // Language settings
     preferredLanguage: document.getElementById('languageSelect').value
@@ -1209,7 +1226,8 @@ function setupManualConversion() {
       removeEmojis: false,
       convertMermaid: false,
       compatMode: true,
-      hardLineBreaks: false
+      hardLineBreaks: false,
+      disableAutoNumbering: false
     });
 
     // Check if API key is provided
@@ -1261,7 +1279,7 @@ function setupManualConversion() {
       `;
 
       // Call the conversion function with markdown text
-      await convertMarkdownToDocx(markdownText, settings.docxServerUrl, settings.docxApiKey, settings.removeDividers, settings.removeEmojis, settings.convertMermaid, settings.compatMode, document.getElementById('wordTemplateSelect').value, settings.hardLineBreaks);
+      await convertMarkdownToDocx(markdownText, settings.docxServerUrl, settings.docxApiKey, settings.removeDividers, settings.removeEmojis, settings.convertMermaid, settings.compatMode, document.getElementById('wordTemplateSelect').value, settings.hardLineBreaks, settings.disableAutoNumbering);
 
       // Update button to show success message briefly
       convertBtn.innerHTML = `
@@ -1373,7 +1391,7 @@ function setupManualConversion() {
 }
 
 // Function to convert markdown text to DOCX
-async function convertMarkdownToDocx(markdownText, serverUrl, apiKey, removeDividers = false, removeEmojis = false, convertMermaid = false, compatMode = true, template, hardLineBreaks = false) {
+async function convertMarkdownToDocx(markdownText, serverUrl, apiKey, removeDividers = false, removeEmojis = false, convertMermaid = false, compatMode = true, template, hardLineBreaks = false, disableAutoNumbering = false) {
   try {
     const url = serverUrl || 'https://api.ds.rick216.cn';
 
@@ -1420,6 +1438,11 @@ async function convertMarkdownToDocx(markdownText, serverUrl, apiKey, removeDivi
       processedContent = processedContent.replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F000}-\u{1F02F}\u{1F0A0}-\u{1F0FF}\u{1F100}-\u{1F64F}\u{1F680}-\u{1F6FF}\u{1F900}-\u{1F9FF}\u{1FA00}-\u{1FA6F}\u{1FA70}-\u{1FAFF}\u{FE00}-\u{FE0F}\u{1F200}-\u{1F251}]/gu, '');
     }
 
+    const extra_lua_filters = [];
+    if (disableAutoNumbering) {
+      extra_lua_filters.push("disable-auto-numbering");
+    }
+
     const body = {
       content: processedContent,
       filename: filename,
@@ -1427,6 +1450,7 @@ async function convertMarkdownToDocx(markdownText, serverUrl, apiKey, removeDivi
       convert_mermaid: convertMermaid,
       compat_mode: compatMode,
       hard_line_breaks: hardLineBreaks,
+      extra_lua_filters: extra_lua_filters,
       language: language
     };
 

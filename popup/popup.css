@@ -155,7 +155,7 @@ body {
 
 /* Form elements */
 .form-group {
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
 .form-group:last-child {
@@ -164,14 +164,18 @@ body {
 
 .form-hint {
   display: block;
-  margin-top: 4px;
   color: var(--text-secondary);
   font-size: 12px;
 }
 
+#languageHint,
+#apiKeyHint {
+  margin-top: 12px;
+}
+
 .feature-explanation {
-  margin-top: -8px;
-  margin-bottom: 16px;
+  margin-top: 0px;
+  margin-bottom: 12px;
   color: var(--text-secondary);
   font-size: 12px;
   line-height: 1.5;
@@ -199,7 +203,7 @@ body {
 
 label {
   display: block;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
   color: var(--text-secondary);
   font-size: 12px;
 }
@@ -319,7 +323,7 @@ button:hover {
 }
 
 .checkbox-group {
-  margin-bottom: 16px;
+  margin-bottom: 12px;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -349,7 +353,7 @@ button:hover {
 .checkbox-group-row {
   display: flex;
   gap: 12px;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
 .checkbox-group-row .checkbox-group {
@@ -463,7 +467,7 @@ button:hover {
 .radio-group {
   display: flex;
   gap: 16px;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
 .radio-option {
@@ -526,7 +530,7 @@ button:hover {
 .about-content {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
 }
 
 .acknowledgment {
@@ -691,7 +695,7 @@ button:hover {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
 .quota-header h3 {
@@ -710,8 +714,8 @@ button:hover {
 /* Dual quota blocks layout */
 .quota-blocks {
   display: flex;
-  gap: 8px;
-  margin-bottom: 8px;
+  gap: 12px;
+  margin-bottom: 12px;
 }
 
 .quota-block {
@@ -1089,9 +1093,7 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
 
 /* Settings section styles */
 .settings-section {
-  margin-bottom: 24px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 12px;
 }
 
 .settings-section:last-child {
