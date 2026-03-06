@@ -180,7 +180,7 @@
                 "https://www.techopens.com/*"
             ],
             "css": [
-                "scripts/style.css",
+                "styles/style.css",
                 "styles/gemini.css"
             ],
             "js": [
