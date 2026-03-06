@@ -380,6 +380,38 @@
     "includeGeminiChatLinkHint": {
         "message": "导出内容包含来源的对话链接"
     },
+    "itemsSelected": {
+        "message": "已选择 $COUNT$ 项",
+        "placeholders": {
+            "COUNT": {
+                "content": "$1"
+            }
+        }
+    },
+    "selectAllQuestions": {
+        "message": "全选问题"
+    },
+    "confirmExport": {
+        "message": "确认导出"
+    },
+    "cancelButton": {
+        "message": "取消"
+    },
+    "roleUser": {
+        "message": "用户"
+    },
+    "roleAssistant": {
+        "message": "助手"
+    },
+    "exportedViaDeepShare": {
+        "message": "通过 DeepShare 导出"
+    },
+    "geminiConversation": {
+        "message": "Gemini 对话"
+    },
+    "sourceConversationLabel": {
+        "message": "来源"
+    },
     "languageSettingsTitle": {
         "message": "语言"
     },

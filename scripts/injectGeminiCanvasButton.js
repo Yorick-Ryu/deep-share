@@ -373,7 +373,7 @@
 
         // 附加对话链接
         if (shouldIncludeLink) {
-            content += `\n\n*Source: ${window.location.href}*\n*Exported via DeepShare*\n`;
+            content += `\n\n*${chrome.i18n.getMessage('sourceConversationLabel')}: ${window.location.href}*\n*${chrome.i18n.getMessage('exportedViaDeepShare')}*\n`;
         }
 
         return content;

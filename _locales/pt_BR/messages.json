@@ -380,6 +380,38 @@
     "includeGeminiChatLinkHint": {
         "message": "O conteúdo exportado inclui o link para a conversa de origem"
     },
+    "itemsSelected": {
+        "message": "Selecionado $COUNT$ itens",
+        "placeholders": {
+            "COUNT": {
+                "content": "$1"
+            }
+        }
+    },
+    "selectAllQuestions": {
+        "message": "Selecionar todas as perguntas"
+    },
+    "confirmExport": {
+        "message": "Confirmar exportação"
+    },
+    "cancelButton": {
+        "message": "Cancelar"
+    },
+    "roleUser": {
+        "message": "Usuário"
+    },
+    "roleAssistant": {
+        "message": "Assistente"
+    },
+    "exportedViaDeepShare": {
+        "message": "Exportado via DeepShare"
+    },
+    "geminiConversation": {
+        "message": "Conversa do Gemini"
+    },
+    "sourceConversationLabel": {
+        "message": "Fonte"
+    },
     "languageSettingsTitle": {
         "message": "Idioma"
     },

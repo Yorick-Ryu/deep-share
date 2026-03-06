@@ -137,7 +137,7 @@
                     // Append URL if enabled
                     const data = await chrome.storage.sync.get(['includeGeminiChatLink']);
                     if (data.includeGeminiChatLink === true) {
-                        messageContent += `\n\n*Source: ${window.location.href}*\n*Exported via DeepShare*\n`;
+                        messageContent += `\n\n*${chrome.i18n.getMessage('sourceConversationLabel')}: ${window.location.href}*\n*${chrome.i18n.getMessage('exportedViaDeepShare')}*\n`;
                     }
 
                     const conversationData = {
@@ -230,7 +230,7 @@
                     // Append URL if enabled
                     const data = await chrome.storage.sync.get(['includeGeminiChatLink']);
                     if (data.includeGeminiChatLink === true) {
-                        markdown += `\n\n*Source: ${window.location.href}*\n*Exported via DeepShare*\n`;
+                        markdown += `\n\n*${chrome.i18n.getMessage('sourceConversationLabel')}: ${window.location.href}*\n*${chrome.i18n.getMessage('exportedViaDeepShare')}*\n`;
                     }
 
                     downloadMarkdownFile(markdown);

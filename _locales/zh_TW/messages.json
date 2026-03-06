@@ -362,6 +362,38 @@
     "includeGeminiChatLinkHint": {
         "message": "匯出內容包含來源的對話連結"
     },
+    "itemsSelected": {
+        "message": "已選擇 $COUNT$ 項",
+        "placeholders": {
+            "COUNT": {
+                "content": "$1"
+            }
+        }
+    },
+    "selectAllQuestions": {
+        "message": "全選問題"
+    },
+    "confirmExport": {
+        "message": "確認匯出"
+    },
+    "cancelButton": {
+        "message": "取消"
+    },
+    "roleUser": {
+        "message": "用戶"
+    },
+    "roleAssistant": {
+        "message": "助手"
+    },
+    "exportedViaDeepShare": {
+        "message": "透過 DeepShare 匯出"
+    },
+    "geminiConversation": {
+        "message": "Gemini 對話"
+    },
+    "sourceConversationLabel": {
+        "message": "來源"
+    },
     "languageSettingsTitle": {
         "message": "語言"
     },

@@ -380,6 +380,38 @@
     "includeGeminiChatLinkHint": {
         "message": "エクスポートされるコンテンツに元の会話へのリンクが含まれます"
     },
+    "itemsSelected": {
+        "message": "$COUNT$ 個を選択済み",
+        "placeholders": {
+            "COUNT": {
+                "content": "$1"
+            }
+        }
+    },
+    "selectAllQuestions": {
+        "message": "すべての質問を選択"
+    },
+    "confirmExport": {
+        "message": "エクスポートを確認"
+    },
+    "cancelButton": {
+        "message": "キャンセル"
+    },
+    "roleUser": {
+        "message": "ユーザー"
+    },
+    "roleAssistant": {
+        "message": "アシスタント"
+    },
+    "exportedViaDeepShare": {
+        "message": "DeepShare 経由でエクスポート"
+    },
+    "geminiConversation": {
+        "message": "Gemini 会話"
+    },
+    "sourceConversationLabel": {
+        "message": "ソース"
+    },
     "languageSettingsTitle": {
         "message": "言語"
     },

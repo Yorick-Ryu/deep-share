@@ -58,7 +58,7 @@
                     <path d="M20.56 18H3.44C2.65 18 2 17.37 2 16.59V7.41C2 6.63 2.65 6 3.44 6H20.56C21.35 6 22 6.63 22 7.41V16.59C22 17.37 21.35 18 20.56 18M6.81 15.19V11.53L8.73 13.88L10.65 11.53V15.19H12.58V8.81H10.65L8.73 11.16L6.81 8.81H4.89V15.19H6.81M19.69 12H17.77V8.81H15.85V12H13.92L16.81 15.28L19.69 12Z"/>
                 </svg>
             </mat-icon>
-            <span class="mat-mdc-menu-item-text"><span class="gds-body-m">${chrome.i18n.getMessage('saveAsMarkdown') || '保存为 Markdown'}</span></span>
+            <span class="mat-mdc-menu-item-text"><span class="gds-body-m">${chrome.i18n.getMessage('saveAsMarkdown')}</span></span>
             <div matripple="" class="mat-ripple mat-mdc-menu-ripple"></div>
         `;
 
@@ -74,7 +74,7 @@
                     <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
                 </svg>
             </mat-icon>
-            <span class="mat-mdc-menu-item-text"><span class="gds-body-m">${chrome.i18n.getMessage('docxButton') || '保存为Word'}</span></span>
+            <span class="mat-mdc-menu-item-text"><span class="gds-body-m">${chrome.i18n.getMessage('docxButton')}</span></span>
             <div matripple="" class="mat-ripple mat-mdc-menu-ripple"></div>
         `;
 
@@ -190,12 +190,12 @@
         const bar = document.createElement('div');
         bar.className = 'gemini-selection-bar';
         bar.innerHTML = `
-            <span class="gemini-bar-count">已选择 0 项</span>
-            <button class="gemini-bar-btn gemini-bar-btn--secondary select-all-toggle is-active">全选</button>
-            <button class="gemini-bar-btn gemini-bar-btn--secondary select-all-user is-active">全选问题</button>
-            <button class="gemini-bar-btn gemini-bar-btn--secondary select-all-assistant is-active">全选回答</button>
-            <button class="gemini-bar-btn gemini-bar-btn--primary confirm-export">确认导出</button>
-            <button class="gemini-bar-btn gemini-bar-btn--secondary cancel-selection">取消</button>
+            <span class="gemini-bar-count">${chrome.i18n.getMessage('itemsSelected', ['0'])}</span>
+            <button class="gemini-bar-btn gemini-bar-btn--secondary select-all-toggle is-active">${chrome.i18n.getMessage('selectAllButton')}</button>
+            <button class="gemini-bar-btn gemini-bar-btn--secondary select-all-user is-active">${chrome.i18n.getMessage('selectAllQuestions')}</button>
+            <button class="gemini-bar-btn gemini-bar-btn--secondary select-all-assistant is-active">${chrome.i18n.getMessage('selectAllResponsesButton')}</button>
+            <button class="gemini-bar-btn gemini-bar-btn--primary confirm-export">${chrome.i18n.getMessage('confirmExport')}</button>
+            <button class="gemini-bar-btn gemini-bar-btn--secondary cancel-selection">${chrome.i18n.getMessage('cancelButton')}</button>
         `;
 
         const container = document.querySelector('chat-window');
@@ -227,7 +227,7 @@
             const { title, markdown } = extractFullConversation(true, data.includeGeminiChatLink === true);
 
             if (!markdown.trim() || markdown.split('\n').length < 5) { // Basic check for empty extraction
-                window.showToastNotification('请至少选择一条消息', 'error');
+                window.showToastNotification(chrome.i18n.getMessage('noMessageSelected'), 'error');
                 return;
             }
 
@@ -269,7 +269,7 @@
         const count = Array.from(checkboxes).filter(cb => cb.checked).length;
         const countEl = document.querySelector('.gemini-bar-count');
         if (countEl) {
-            countEl.textContent = `已选择 ${count} 项`;
+            countEl.textContent = chrome.i18n.getMessage('itemsSelected', [count.toString()]);
         }
 
         const bar = document.querySelector('.gemini-selection-bar');
@@ -315,7 +315,7 @@
         if (!title) {
             title = document.title.replace(' - Gemini', '').trim();
         }
-        if (title === 'Gemini' || !title) title = 'Gemini Conversation';
+        if (title === 'Gemini' || !title) title = chrome.i18n.getMessage('geminiConversation');
 
         finalMarkdown += `# ${title}\n\n`;
 
@@ -334,7 +334,7 @@
                 const textContainer = turn.querySelector('.query-text');
                 if (textContainer && window.extractGeminiContentWithFormulas) {
                     const content = window.extractGeminiContentWithFormulas(textContainer);
-                    if (showRoleHeaders) finalMarkdown += `**User**\n\n`;
+                    if (showRoleHeaders) finalMarkdown += `**${chrome.i18n.getMessage('roleUser')}**\n\n`;
                     finalMarkdown += `${content}\n\n`;
                 }
             } else if (turn.tagName === 'MODEL-RESPONSE') {
@@ -346,7 +346,7 @@
                 if (contentContainer) {
                     content = window.extractGeminiContentWithFormulas(contentContainer);
                 }
-                if (showRoleHeaders) finalMarkdown += `**Assistant**\n\n`;
+                if (showRoleHeaders) finalMarkdown += `**${chrome.i18n.getMessage('roleAssistant')}**\n\n`;
                 finalMarkdown += `${content}\n\n`;
                 if (showRoleHeaders) finalMarkdown += `---\n\n`;
             }
@@ -354,8 +354,8 @@
 
         // Append URL info if enabled
         if (includeLink) {
-            finalMarkdown += `\n*Source: ${window.location.href}*\n`;
-            finalMarkdown += `*Exported via DeepShare*\n`;
+            finalMarkdown += `\n*${chrome.i18n.getMessage('sourceConversationLabel')}: ${window.location.href}*\n`;
+            finalMarkdown += `*${chrome.i18n.getMessage('exportedViaDeepShare')}*\n`;
         }
 
         return { title, markdown: finalMarkdown.trim() };
