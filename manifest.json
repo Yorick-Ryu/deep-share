@@ -41,7 +41,8 @@
         "https://ove.chatopens.vip/*",
         "https://navyli.com/*",
         "https://aizex.net/*",
-        "https://a.memofun.net/*"
+        "https://a.memofun.net/*",
+        "https://www.techopens.com/*"
     ],
     "background": {
         "service_worker": "background.js"
@@ -175,10 +176,12 @@
                 "https://ove.chatopens.vip/*",
                 "https://navyli.com/*",
                 "https://aizex.net/*",
-                "https://a.memofun.net/*"
+                "https://a.memofun.net/*",
+                "https://www.techopens.com/*"
             ],
             "css": [
-                "scripts/style.css"
+                "scripts/style.css",
+                "styles/gemini.css"
             ],
             "js": [
                 "lib/mathjax-config.js",
