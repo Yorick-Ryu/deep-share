@@ -412,12 +412,22 @@
 
         <div class="settings-section">
           <h3 class="settings-section-title" id="geminiSettingsTitle">Gemini</h3>
-          <div class="checkbox-group">
-            <input type="checkbox" id="exportGeminiSources">
-            <label for="exportGeminiSources" id="exportGeminiSourcesLabel">Export Deep Research sources</label>
+          <div class="form-group">
+            <div class="checkbox-group">
+              <input type="checkbox" id="includeGeminiChatLink">
+              <label for="includeGeminiChatLink" id="includeGeminiChatLinkLabel">Export chat link</label>
+            </div>
+            <span class="form-hint" id="includeGeminiChatLinkHint">Exported content includes the link to the source
+              conversation</span>
           </div>
-          <span class="form-hint" id="exportGeminiSourcesHint">Include reference sources when exporting Gemini Deep
-            Research reports</span>
+          <div class="form-group">
+            <div class="checkbox-group">
+              <input type="checkbox" id="exportGeminiSources">
+              <label for="exportGeminiSources" id="exportGeminiSourcesLabel">Export Deep Research sources</label>
+            </div>
+            <span class="form-hint" id="exportGeminiSourcesHint">Include reference sources when exporting Gemini Deep
+              Research reports</span>
+          </div>
         </div>
       </div>
 

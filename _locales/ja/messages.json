@@ -374,6 +374,12 @@
     "exportGeminiSourcesHint": {
         "message": "Gemini 深層研究レポートをエクスポートする際に参考ソースを含める"
     },
+    "includeGeminiChatLinkLabel": {
+        "message": "チャットリンクをエクスポート"
+    },
+    "includeGeminiChatLinkHint": {
+        "message": "エクスポートされるコンテンツに元の会話へのリンクが含まれます"
+    },
     "languageSettingsTitle": {
         "message": "言語"
     },

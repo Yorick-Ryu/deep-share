@@ -105,6 +105,7 @@ function loadSettings(highlightApiKey = false, forceDocxTab = false) {
     'compatMode',
     'wordTemplateSelect',
     'exportGeminiSources',
+    'includeGeminiChatLink',
     'hardLineBreaks',
     'disableAutoNumbering',
     'preferredLanguage'
@@ -153,6 +154,9 @@ function loadSettings(highlightApiKey = false, forceDocxTab = false) {
 
     // Gemini Deep Research sources export setting
     document.getElementById('exportGeminiSources').checked = data.exportGeminiSources === true; // Default to false
+
+    // Gemini Chat Link export setting
+    document.getElementById('includeGeminiChatLink').checked = data.includeGeminiChatLink === true; // Default to false
 
     // Hard Line Breaks setting
     document.getElementById('hardLineBreaks').checked = !!data.hardLineBreaks; // Default to false
@@ -332,6 +336,7 @@ function setupAutoSave() {
     document.getElementById('wordTemplateSelect'),
     // Gemini settings
     document.getElementById('exportGeminiSources'),
+    document.getElementById('includeGeminiChatLink'),
     // Hard Line Breaks settings
     document.getElementById('hardLineBreaks'),
     // Disable Auto Numbering settings
@@ -541,6 +546,8 @@ function loadI18nText(errorMsg = null) {
   document.getElementById('geminiSettingsTitle').textContent = getMessage('geminiSettingsTitle') || 'Gemini';
   document.getElementById('exportGeminiSourcesLabel').textContent = getMessage('exportGeminiSourcesLabel') || 'Export Deep Research sources';
   document.getElementById('exportGeminiSourcesHint').textContent = getMessage('exportGeminiSourcesHint') || 'Include reference sources when exporting Gemini Deep Research reports';
+  document.getElementById('includeGeminiChatLinkLabel').textContent = getMessage('includeGeminiChatLinkLabel') || 'Export chat link';
+  document.getElementById('includeGeminiChatLinkHint').textContent = getMessage('includeGeminiChatLinkHint') || 'Exported content includes the link to the source conversation';
 
   // About tab
   document.getElementById('acknowledgmentText').textContent = getMessage('acknowledgmentText') || '感谢每一位为 DeepShare 提出建议的朋友！许多功能源于用户的真实需求，让我们一起提升效率，把节省的时间留给生活。';
@@ -646,6 +653,7 @@ function saveSettings() {
 
     // Gemini settings
     exportGeminiSources: document.getElementById('exportGeminiSources').checked,
+    includeGeminiChatLink: document.getElementById('includeGeminiChatLink').checked,
 
     // Language settings
     preferredLanguage: document.getElementById('languageSelect').value

@@ -129,7 +129,7 @@
         "message": "請至少選擇一則對話"
     },
     "sponsorTabLabel": {
-        "message": "贊助"
+        "message": "關於"
     },
     "totalQuotaLabel": {
         "message": "總計:"
@@ -355,6 +355,12 @@
     },
     "exportGeminiSourcesHint": {
         "message": "匯出 Gemini 深度研究報告時包含參考來源"
+    },
+    "includeGeminiChatLinkLabel": {
+        "message": "匯出對話連結"
+    },
+    "includeGeminiChatLinkHint": {
+        "message": "匯出內容包含來源的對話連結"
     },
     "languageSettingsTitle": {
         "message": "語言"

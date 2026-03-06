@@ -374,6 +374,12 @@
     "exportGeminiSourcesHint": {
         "message": "导出 Gemini 深度研究报告时包含参考来源"
     },
+    "includeGeminiChatLinkLabel": {
+        "message": "导出对话链接"
+    },
+    "includeGeminiChatLinkHint": {
+        "message": "导出内容包含来源的对话链接"
+    },
     "languageSettingsTitle": {
         "message": "语言"
     },

@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "default_locale": "en",
     "name": "__MSG_extensionName__",
-    "version": "1.6.5",
+    "version": "1.6.6",
     "description": "__MSG_extensionDescription__",
     "icons": {
         "16": "icons/icon16.png",
@@ -150,7 +150,6 @@
                 "https://gemini.google.com/*"
             ],
             "css": [
-                "styles/style.css",
                 "styles/gemini.css"
             ],
             "js": [

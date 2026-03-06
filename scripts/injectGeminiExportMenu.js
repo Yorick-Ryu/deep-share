@@ -222,8 +222,9 @@
             updateSelectionCount();
         });
 
-        bar.querySelector('.confirm-export').addEventListener('click', () => {
-            const { title, markdown } = extractFullConversation(true);
+        bar.querySelector('.confirm-export').addEventListener('click', async () => {
+            const data = await chrome.storage.sync.get(['includeGeminiChatLink']);
+            const { title, markdown } = extractFullConversation(true, data.includeGeminiChatLink === true);
 
             if (!markdown.trim() || markdown.split('\n').length < 5) { // Basic check for empty extraction
                 window.showToastNotification('请至少选择一条消息', 'error');
@@ -302,7 +303,7 @@
         }
     }
 
-    function extractFullConversation(onlySelected = false) {
+    function extractFullConversation(onlySelected = false, includeLink = false) {
         const turns = Array.from(document.querySelectorAll('user-query, model-response'));
         let finalMarkdown = '';
 
@@ -351,9 +352,11 @@
             }
         });
 
-        // Append URL info
-        finalMarkdown += `\n*Source: ${window.location.href}*\n`;
-        finalMarkdown += `*Exported via DeepShare*\n`;
+        // Append URL info if enabled
+        if (includeLink) {
+            finalMarkdown += `\n*Source: ${window.location.href}*\n`;
+            finalMarkdown += `*Exported via DeepShare*\n`;
+        }
 
         return { title, markdown: finalMarkdown.trim() };
     }

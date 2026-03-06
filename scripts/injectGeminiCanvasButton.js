@@ -348,11 +348,15 @@
 
         console.debug('DeepShare: Extracting content from Canvas DOM');
 
-        // 获取导出来源的设置
-        const settings = await new Promise(resolve => {
-            chrome.storage.sync.get({ exportGeminiSources: false }, resolve);
+        // 获取设置
+        const data = await new Promise(resolve => {
+            chrome.storage.sync.get({
+                exportGeminiSources: false,
+                includeGeminiChatLink: false
+            }, resolve);
         });
-        const shouldExportSources = settings.exportGeminiSources;
+        const shouldExportSources = data.exportGeminiSources;
+        const shouldIncludeLink = data.includeGeminiChatLink;
 
         // 先构建来源索引映射
         const sourceIndexMap = shouldExportSources ? buildSourceIndexMap() : new Map();
@@ -365,6 +369,11 @@
             if (sources) {
                 content += sources;
             }
+        }
+
+        // 附加对话链接
+        if (shouldIncludeLink) {
+            content += `\n\n*Source: ${window.location.href}*\n*Exported via DeepShare*\n`;
         }
 
         return content;

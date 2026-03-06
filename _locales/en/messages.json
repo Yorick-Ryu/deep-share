@@ -374,6 +374,12 @@
     "exportGeminiSourcesHint": {
         "message": "Include reference sources when exporting Gemini Deep Research reports"
     },
+    "includeGeminiChatLinkLabel": {
+        "message": "Export chat link"
+    },
+    "includeGeminiChatLinkHint": {
+        "message": "Exported content includes the link to the source conversation"
+    },
     "languageSettingsTitle": {
         "message": "Language"
     },
