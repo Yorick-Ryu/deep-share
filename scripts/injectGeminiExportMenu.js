@@ -137,7 +137,6 @@
 
         isSelectionMode = true;
         selectedFormat = format;
-        document.body.classList.add('gemini-selection-mode');
 
         const turns = document.querySelectorAll('user-query, model-response');
         turns.forEach((turn, index) => {
@@ -149,13 +148,18 @@
             wrapper.innerHTML = `<input type="checkbox" class="gemini-message-checkbox" data-index="${index}" data-role="${role}" checked>`;
 
             turn.prepend(wrapper);
+            turn.classList.add('is-selected'); // 初始选中时添加类名
 
             // Make entire turn clickable to toggle checkbox
             turn.addEventListener('click', handleContainerClick);
         });
 
-        injectSelectionBar();
-        updateSelectionCount();
+        // 在下一帧添加类名，触发平滑的 CSS Transition
+        requestAnimationFrame(() => {
+            document.body.classList.add('gemini-selection-mode');
+            injectSelectionBar();
+            updateSelectionCount();
+        });
     }
 
     function handleContainerClick(e) {
@@ -252,6 +256,14 @@
     }
 
     function updateSelectionCount() {
+        const turns = document.querySelectorAll('user-query, model-response');
+        turns.forEach(turn => {
+            const cb = turn.querySelector('.gemini-message-checkbox');
+            if (cb) {
+                turn.classList.toggle('is-selected', cb.checked);
+            }
+        });
+
         const checkboxes = document.querySelectorAll('.gemini-message-checkbox');
         const count = Array.from(checkboxes).filter(cb => cb.checked).length;
         const countEl = document.querySelector('.gemini-bar-count');
@@ -281,6 +293,12 @@
         const assistantToggle = bar.querySelector('.select-all-assistant');
         if (assistantToggle) {
             assistantToggle.classList.toggle('is-active', allAssistantChecked);
+        }
+
+        // Disable confirm-export if count is 0
+        const confirmBtn = bar.querySelector('.confirm-export');
+        if (confirmBtn) {
+            confirmBtn.disabled = count === 0;
         }
     }
 

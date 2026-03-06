@@ -104,19 +104,37 @@
     position: relative;
     padding-left: 48px !important;
     display: block;
-    transition: background-color 0.2s ease;
+    transition: padding-left 0.3s cubic-bezier(0.2, 0, 0, 1), background-color 0.2s ease;
+}
+
+/* 复选框进入动画 */
+@keyframes gemini-checkbox-appear {
+    from {
+        opacity: 0;
+        transform: scale(0.5) translateX(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateX(0);
+    }
 }
 
 .gemini-selection-mode user-query:hover,
 .gemini-selection-mode model-response:hover {
-    background-color: var(--mat-option-hover-state-layer-color, rgba(68, 71, 70, 0.04));
+    background-color: var(--gem-sys-color--surface-container, #f0f4f9);
+}
+
+.gemini-selection-mode user-query.is-selected,
+.gemini-selection-mode model-response.is-selected {
+    background-color: var(--gem-sys-color--secondary-container, #c2e7ff);
 }
 
 /* Checkbox specific to Gemini - MD3 style */
 .gemini-message-checkbox-wrapper {
     position: absolute;
-    left: 12px;
-    top: 18px;
+    left: 8px;
+    top: 8px;
     z-index: 10;
     display: flex;
     align-items: center;
@@ -125,6 +143,7 @@
     height: 40px;
     border-radius: 50%;
     transition: background-color 0.2s ease;
+    animation: gemini-checkbox-appear 0.4s cubic-bezier(0.2, 0, 0, 1) forwards;
 }
 
 .gemini-message-checkbox-wrapper:hover {
@@ -166,14 +185,14 @@
 /* Floating Action Bar for Gemini - MD3 Elevated style */
 .gemini-selection-bar {
     position: absolute;
-    bottom: 24px;
+    bottom: 36px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 1000;
     background: var(--gem-sys-color--surface-container, #fdfcfb);
     border: none;
     box-shadow: var(--mat-app-elevation-shadow-level-2, 0 4px 12px rgba(0, 0, 0, 0.1));
-    border-radius: 16px;
+    border-radius: 24px;
     /* MD3 standard radius for cards/bars */
     padding: 12px 16px;
     display: flex;
@@ -212,7 +231,7 @@
 .gemini-bar-btn {
     height: 40px;
     padding: 0 24px;
-    border-radius: 20px;
+    border-radius: 24px;
     border: none;
     font-size: 14px;
     font-weight: 500;
@@ -249,6 +268,16 @@
 
 .gemini-bar-btn--secondary:hover {
     background-image: linear-gradient(var(--mat-option-hover-state-layer-color, rgba(0, 0, 0, 0.08)), var(--mat-option-hover-state-layer-color, rgba(0, 0, 0, 0.08)));
+}
+
+.gemini-bar-btn:disabled {
+    cursor: default;
+    pointer-events: none;
+    background-color: var(--gem-sys-color--surface-container-high, #e9eef6) !important;
+    color: var(--gem-sys-color--outline, #747775) !important;
+    border-color: transparent !important;
+    background-image: none !important;
+    box-shadow: none !important;
 }
 
 /* Injected Menu Items Icon and Hover Styling */
