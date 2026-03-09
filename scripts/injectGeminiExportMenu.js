@@ -560,6 +560,15 @@
 
     async function autoLoadAllHistory(textEl) {
         console.debug('DeepShare: Starting auto-load of conversation history...');
+
+        // Fast-path: If the conversation currently has 10 or fewer turns, 
+        // it's almost certainly not truncated, so skip the auto-load entirely.
+        const currentTurns = document.querySelectorAll('user-query, model-response').length;
+        if (currentTurns <= 10) {
+            console.debug('DeepShare: Conversation has 10 or fewer turns. Skipping auto-load.');
+            return;
+        }
+
         let attempt = 0;
         const maxAttempts = 50;
 

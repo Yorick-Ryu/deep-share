@@ -226,6 +226,9 @@
     font-weight: 500;
     color: var(--gem-sys-color--on-surface, #1f1f1f);
     letter-spacing: 0.1px;
+    min-width: 120px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
 }
 
 .gemini-bar-btn {
