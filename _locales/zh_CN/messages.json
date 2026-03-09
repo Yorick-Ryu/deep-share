@@ -125,6 +125,9 @@
     "unselectAllButton": {
         "message": "取消全选"
     },
+    "loadingHistory": {
+        "message": "正在加载..."
+    },
     "noMessageSelected": {
         "message": "请至少选择一条对话"
     },

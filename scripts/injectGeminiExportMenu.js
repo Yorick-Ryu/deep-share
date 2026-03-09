@@ -84,16 +84,16 @@
         menuContent.parentElement.dataset.deepshareExportInjected = 'true';
 
         // Click Handlers
-        mdButton.addEventListener('click', (e) => {
+        mdButton.addEventListener('click', async (e) => {
             e.stopPropagation();
             closeMenu();
-            toggleGeminiSelectionMode('md');
+            await toggleGeminiSelectionMode('md');
         });
 
-        wordButton.addEventListener('click', (e) => {
+        wordButton.addEventListener('click', async (e) => {
             e.stopPropagation();
             closeMenu();
-            toggleGeminiSelectionMode('docx');
+            await toggleGeminiSelectionMode('docx');
         });
     }
 
@@ -129,7 +129,7 @@
     });
     urlObserver.observe(document, { childList: true, subtree: true });
 
-    function toggleGeminiSelectionMode(format) {
+    async function toggleGeminiSelectionMode(format) {
         if (isSelectionMode) {
             exitGeminiSelectionMode();
             return;
@@ -138,6 +138,20 @@
         isSelectionMode = true;
         selectedFormat = format;
 
+        // Phase 1: Inject selection bar in "loading" state
+        const loadingTextEl = injectLoadingSelectionBar();
+
+        try {
+            // Wait for all history to be pulled into the DOM
+            await autoLoadAllHistory(loadingTextEl);
+        } finally {
+            // Proceed even if auto-load had issues
+        }
+
+        if (!isSelectionMode) return; // User might have navigated away during load
+
+        // Phase 2: Inject selection UI (checkboxes) into all loaded turns
+        document.body.classList.add('gemini-selection-mode');
         const turns = document.querySelectorAll('user-query, model-response');
         turns.forEach((turn, index) => {
             if (turn.querySelector('.gemini-message-checkbox-wrapper')) return;
@@ -154,10 +168,9 @@
             turn.addEventListener('click', handleContainerClick);
         });
 
-        // 在下一帧添加类名，触发平滑的 CSS Transition
+        // Phase 3: Transition the selection bar from "loading" state to "active" state
         requestAnimationFrame(() => {
-            document.body.classList.add('gemini-selection-mode');
-            injectSelectionBar();
+            transitionSelectionBarToActive();
             updateSelectionCount();
         });
     }
@@ -184,22 +197,68 @@
         if (bar) bar.remove();
     }
 
-    function injectSelectionBar() {
-        if (document.querySelector('.gemini-selection-bar')) return;
+    function injectLoadingSelectionBar() {
+        let bar = document.querySelector('.gemini-selection-bar');
+        if (bar) bar.remove();
 
-        const bar = document.createElement('div');
-        bar.className = 'gemini-selection-bar';
+        bar = document.createElement('div');
+        bar.className = 'gemini-selection-bar is-loading';
+
         bar.innerHTML = `
-            <span class="gemini-bar-count">${chrome.i18n.getMessage('itemsSelected', ['0'])}</span>
-            <button class="gemini-bar-btn gemini-bar-btn--secondary select-all-toggle is-active">${chrome.i18n.getMessage('selectAllButton')}</button>
-            <button class="gemini-bar-btn gemini-bar-btn--secondary select-all-user is-active">${chrome.i18n.getMessage('selectAllQuestions')}</button>
-            <button class="gemini-bar-btn gemini-bar-btn--secondary select-all-assistant is-active">${chrome.i18n.getMessage('selectAllResponsesButton')}</button>
-            <button class="gemini-bar-btn gemini-bar-btn--primary confirm-export">${chrome.i18n.getMessage('confirmExport')}</button>
-            <button class="gemini-bar-btn gemini-bar-btn--secondary cancel-selection">${chrome.i18n.getMessage('cancelButton')}</button>
+            <mat-spinner role="progressbar" class="mat-mdc-progress-spinner mdc-circular-progress mat-primary mdc-circular-progress--indeterminate" style="width: 24px; height: 24px;">
+                <div class="mdc-circular-progress__indeterminate-container">
+                    <div class="mdc-circular-progress__spinner-layer">
+                        <div class="mdc-circular-progress__circle-clipper mdc-circular-progress__circle-left">
+                            <svg class="mdc-circular-progress__indeterminate-circle-graphic" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="18" stroke-dasharray="113.097" stroke-dashoffset="56.549" stroke-width="4"></circle></svg>
+                        </div>
+                        <div class="mdc-circular-progress__gap-patch">
+                            <svg class="mdc-circular-progress__indeterminate-circle-graphic" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="18" stroke-dasharray="113.097" stroke-dashoffset="56.549" stroke-width="4"></circle></svg>
+                        </div>
+                        <div class="mdc-circular-progress__circle-clipper mdc-circular-progress__circle-right">
+                            <svg class="mdc-circular-progress__indeterminate-circle-graphic" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="18" stroke-dasharray="113.097" stroke-dashoffset="56.549" stroke-width="4"></circle></svg>
+                        </div>
+                    </div>
+                </div>
+            </mat-spinner>
+            <span class="gemini-bar-loading-text">${chrome.i18n.getMessage('loadingHistory') || 'Loading History...'}</span>
         `;
 
-        const container = document.querySelector('chat-window');
+        // Add spinner animation keyframes if not present
+        if (!document.getElementById('gemini-export-keyframes')) {
+            const style = document.createElement('style');
+            style.id = 'gemini-export-keyframes';
+            style.textContent = `@keyframes gemini-export-spin { to { transform: rotate(360deg); } }`;
+            document.head.appendChild(style);
+        }
+
+        const container = document.querySelector('chat-window') || document.body;
         container.appendChild(bar);
+
+        return bar.querySelector('.gemini-bar-loading-text');
+    }
+
+    function transitionSelectionBarToActive() {
+        const bar = document.querySelector('.gemini-selection-bar');
+        if (!bar) return;
+
+        // Animate the bar expansion using the CSS class
+        bar.classList.remove('is-loading');
+        bar.classList.add('is-active');
+
+        // Replace content with actual controls
+        bar.innerHTML = `
+            <span class="gemini-bar-count">${chrome.i18n.getMessage('itemsSelected', ['0'])}</span>
+            <button class="gemini-bar-btn gemini-bar-btn--secondary select-all-toggle is-active" style="opacity: 0; transition: opacity 0.5s ease 0.2s;">${chrome.i18n.getMessage('selectAllButton')}</button>
+            <button class="gemini-bar-btn gemini-bar-btn--secondary select-all-user is-active" style="opacity: 0; transition: opacity 0.5s ease 0.3s;">${chrome.i18n.getMessage('selectAllQuestions')}</button>
+            <button class="gemini-bar-btn gemini-bar-btn--secondary select-all-assistant is-active" style="opacity: 0; transition: opacity 0.5s ease 0.4s;">${chrome.i18n.getMessage('selectAllResponsesButton')}</button>
+            <button class="gemini-bar-btn gemini-bar-btn--primary confirm-export" style="opacity: 0; transition: opacity 0.5s ease 0.5s;">${chrome.i18n.getMessage('confirmExport')}</button>
+            <button class="gemini-bar-btn gemini-bar-btn--secondary cancel-selection" style="opacity: 0; transition: opacity 0.5s ease 0.6s;">${chrome.i18n.getMessage('cancelButton')}</button>
+        `;
+
+        // Trigger reflow then fade in buttons
+        requestAnimationFrame(() => {
+            bar.querySelectorAll('.gemini-bar-btn').forEach(btn => btn.style.opacity = '1');
+        });
 
         bar.querySelector('.select-all-toggle').addEventListener('click', () => {
             const checkboxes = document.querySelectorAll('.gemini-message-checkbox');
@@ -222,9 +281,17 @@
             updateSelectionCount();
         });
 
-        bar.querySelector('.confirm-export').addEventListener('click', async () => {
+        bar.querySelector('.confirm-export').addEventListener('click', async (e) => {
+            const btn = e.target;
+            const originalText = btn.textContent;
+            btn.disabled = true;
+            // History is already loaded by toggleGeminiSelectionMode, no need to show loading text here.
+
             const data = await chrome.storage.sync.get(['includeGeminiChatLink']);
             const { title, markdown } = extractFullConversation(true, data.includeGeminiChatLink === true);
+
+            btn.disabled = false;
+            btn.textContent = originalText;
 
             if (!markdown.trim() || markdown.split('\n').length < 5) { // Basic check for empty extraction
                 window.showToastNotification(chrome.i18n.getMessage('noMessageSelected'), 'error');
@@ -248,12 +315,16 @@
 
         bar.querySelector('.cancel-selection').addEventListener('click', exitGeminiSelectionMode);
 
-        // Listen for checkbox changes to update count
-        document.addEventListener('change', (e) => {
-            if (e.target.classList.contains('gemini-message-checkbox')) {
-                updateSelectionCount();
-            }
-        });
+        // Listen for checkbox changes to update count setup happens once in transitionSelectionBarToActive,
+        // but we need to make sure we don't bind this event listener multiple times.
+        if (!document.body.dataset.geminiSelectionListenerBound) {
+            document.body.dataset.geminiSelectionListenerBound = 'true';
+            document.addEventListener('change', (e) => {
+                if (e.target.classList.contains('gemini-message-checkbox')) {
+                    updateSelectionCount();
+                }
+            });
+        }
     }
 
     function updateSelectionCount() {
@@ -385,5 +456,141 @@
         if (!title) return `gemini_conversation_${timestamp}`;
         const cleanTitle = title.replace(/[^a-zA-Z0-9_\u4e00-\u9fa5\-]/g, '').substring(0, 50).trim();
         return `${cleanTitle || 'gemini_conversation'}_${timestamp}`;
+    }
+
+    // --- Auto-Load Logic ---
+
+    function getFingerprintSelectors() {
+        return [
+            '.user-query-bubble-with-background',
+            '.user-query-bubble-container',
+            '.user-query-container',
+            'user-query-content .user-query-bubble-with-background',
+            'div[aria-label="User message"]',
+            'article[data-author="user"]',
+            'article[data-turn="user"]',
+            '[data-message-author-role="user"]',
+            'div[role="listitem"][data-user="true"]',
+            '[aria-label="Gemini response"]',
+            '[data-message-author-role="assistant"]',
+            '[data-message-author-role="model"]',
+            'article[data-author="assistant"]',
+            'article[data-turn="assistant"]',
+            'article[data-turn="model"]',
+            '.model-response', 'model-response',
+            '.response-container',
+            'div[role="listitem"]:not([data-user="true"])'
+        ];
+    }
+
+    function hashString(input) {
+        let h = 2166136261 >>> 0;
+        for (let i = 0; i < input.length; i++) {
+            h ^= input.charCodeAt(i);
+            h = Math.imul(h, 16777619);
+        }
+        return (h >>> 0).toString(36);
+    }
+
+    function computeDOMFingerprint() {
+        const selector = getFingerprintSelectors().join(',');
+        const nodes = Array.from(document.querySelectorAll(selector));
+
+        // Filter out nodes that are descendants of other matched nodes
+        const topLevel = [];
+        for (const el of nodes) {
+            const parent = el.parentElement;
+            if (parent && parent.closest(selector)) continue;
+            topLevel.push(el);
+        }
+
+        const texts = [];
+        for (let i = 0; i < topLevel.length && texts.length < 10; i++) {
+            const t = String(topLevel[i].textContent || '').replace(/\\s+/g, ' ').trim();
+            if (t) texts.push(t);
+        }
+
+        const signature = hashString(texts.join('|'));
+        return { signature, count: topLevel.length };
+    }
+
+    // Click the top node to trigger loading more history
+    function clickTopNode() {
+        const selector = getFingerprintSelectors().join(',');
+        const nodes = Array.from(document.querySelectorAll(selector));
+
+        const topLevel = [];
+        for (const el of nodes) {
+            const parent = el.parentElement;
+            if (parent && parent.closest(selector)) continue;
+            topLevel.push(el);
+        }
+
+        if (topLevel.length > 0) {
+            const topNode = topLevel[0];
+            try {
+                topNode.scrollIntoView({ behavior: 'auto', block: 'center' });
+                const opts = { bubbles: true, cancelable: true, view: window };
+                topNode.dispatchEvent(new MouseEvent('mousedown', opts));
+                topNode.dispatchEvent(new MouseEvent('mouseup', opts));
+                topNode.click();
+                return true;
+            } catch (e) {
+                console.warn('DeepShare: Failed to click top node', e);
+            }
+        }
+        return false;
+    }
+
+    async function waitForDOMChange(beforeFingerprint, timeoutMs = 6000) {
+        return new Promise((resolve) => {
+            const start = Date.now();
+            const pollInterval = setInterval(() => {
+                const current = computeDOMFingerprint();
+                if (current.signature !== beforeFingerprint.signature || current.count !== beforeFingerprint.count) {
+                    clearInterval(pollInterval);
+                    resolve(true); // Changed
+                } else if (Date.now() - start > timeoutMs) {
+                    clearInterval(pollInterval);
+                    resolve(false); // Timed out without change
+                }
+            }, 100);
+        });
+    }
+
+    async function autoLoadAllHistory(textEl) {
+        console.debug('DeepShare: Starting auto-load of conversation history...');
+        let attempt = 0;
+        const maxAttempts = 50;
+
+        while (attempt < maxAttempts) {
+            attempt++;
+            const beforeFingerprint = computeDOMFingerprint();
+
+            const clicked = clickTopNode();
+            if (!clicked) {
+                console.debug('DeepShare: Could not find top node to click, stopping auto-load.');
+                break;
+            }
+
+            if (textEl) {
+                // Ensure text is kept static without count
+                textEl.textContent = chrome.i18n.getMessage('loadingHistory') || 'Loading history...';
+            }
+
+            // Wait up to 3 seconds for the DOM to change
+            console.debug(`DeepShare: Simulation click ${attempt}, waiting for DOM change...`);
+            const changed = await waitForDOMChange(beforeFingerprint, 3000);
+
+            if (!changed) {
+                console.debug('DeepShare: DOM did not change after click. Assuming all history is loaded.');
+                break;
+            }
+
+            // Wait a little bit extra to ensure DOM settles after change
+            await new Promise(r => setTimeout(r, 500));
+        }
+
+        console.debug('DeepShare: Finished auto-load sequence.');
     }
 })();

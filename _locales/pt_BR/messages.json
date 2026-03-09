@@ -125,6 +125,9 @@
     "unselectAllButton": {
         "message": "Desmarcar tudo"
     },
+    "loadingHistory": {
+        "message": "Carregando..."
+    },
     "noMessageSelected": {
         "message": "Por favor selecione pelo menos uma mensagem"
     },
