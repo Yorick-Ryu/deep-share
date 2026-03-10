@@ -6,7 +6,7 @@ document.addEventListener('deepshare:saveAsDocx', async () => {
     try {
         const messages = await getSelectedDeepSeekMessages();
         if (messages.length === 0) {
-            window.showToastNotification(chrome.i18n.getMessage('noMessageSelected') || 'Please select at least one message', 'error');
+            window.showToastNotification(chrome.i18n?.getMessage('noMessageSelected') || 'Please select at least one message', 'error');
             return;
         }
         const content = messages.map(m => `**${m.role}**: \n${m.content}`).join('\n\n---\n\n');
@@ -21,12 +21,12 @@ document.addEventListener('deepshare:saveAsDocx', async () => {
 
     } catch (error) {
         if (error.message === 'NO_SELECTION') {
-            window.showToastNotification(chrome.i18n.getMessage('noMessageSelected') || 'Please select at least one message', 'error');
+            window.showToastNotification(chrome.i18n?.getMessage('noMessageSelected') || 'Please select at least one message', 'error');
         } else {
             console.error('Error getting messages for DOCX conversion:', error);
             const errorMessage = error.message && error.message.includes('Read permission denied')
-                ? chrome.i18n.getMessage('clipboardPermissionError')
-                : `${chrome.i18n.getMessage('getClipboardError')}: ${error.message}`;
+                ? chrome.i18n?.getMessage('clipboardPermissionError')
+                : `${chrome.i18n?.getMessage('getClipboardError')}: ${error.message}`;
             window.showToastNotification(errorMessage, 'error');
         }
     }

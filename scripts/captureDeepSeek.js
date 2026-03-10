@@ -6,7 +6,7 @@ document.addEventListener('deepshare:saveAsImage', async () => {
     let blobUrl = null;
     try {
         console.log('Save as long image clicked');
-        notificationId = window.showToastNotification(chrome.i18n.getMessage('screenshotInitiated'), 'loading', 30000);
+        notificationId = window.showToastNotification(chrome.i18n?.getMessage('screenshotInitiated'), 'loading', 30000);
 
         // captureDeepSeekMessages 现在返回 Blob 而非 data URL，避免生成巨大的 base64 字符串
         const blob = await captureDeepSeekMessages();
@@ -24,7 +24,7 @@ document.addEventListener('deepshare:saveAsImage', async () => {
             const timestamp = `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')}-${now.getHours().toString().padStart(2, '0')}-${now.getMinutes().toString().padStart(2, '0')}-${now.getSeconds().toString().padStart(2, '0')}`;
             link.download = `deepseek-chat-${timestamp}.png`;
             link.click();
-            window.showToastNotification(chrome.i18n.getMessage('screenshotSuccess'), 'success');
+            window.showToastNotification(chrome.i18n?.getMessage('screenshotSuccess'), 'success');
 
             try {
                 // 直接使用已有的 blob，无需 fetch(dataUrl).blob() 二次转换
@@ -33,21 +33,21 @@ document.addEventListener('deepshare:saveAsImage', async () => {
                         [blob.type]: blob
                     })
                 ]);
-                window.showToastNotification(chrome.i18n.getMessage('imageCopied'), 'success');
+                window.showToastNotification(chrome.i18n?.getMessage('imageCopied'), 'success');
             } catch (copyError) {
                 console.error('Failed to copy image to clipboard:', copyError);
-                window.showToastNotification(chrome.i18n.getMessage('imageCopyFailed'), 'error');
+                window.showToastNotification(chrome.i18n?.getMessage('imageCopyFailed'), 'error');
             }
         } else {
             // The error is already logged in captureDeepSeekMessages, just show notification
-            window.showToastNotification(chrome.i18n.getMessage('screenshotFailed'), 'error');
+            window.showToastNotification(chrome.i18n?.getMessage('screenshotFailed'), 'error');
         }
     } catch (error) {
         console.error('Error during save as image:', error);
         if (notificationId !== null) {
             window.dismissToastNotification(notificationId);
         }
-        window.showToastNotification(chrome.i18n.getMessage('screenshotFailed'), 'error');
+        window.showToastNotification(chrome.i18n?.getMessage('screenshotFailed'), 'error');
     } finally {
         // 释放 blob URL 避免内存泄漏
         if (blobUrl) {
@@ -123,7 +123,7 @@ async function captureDeepSeekMessages(customWatermark) {
         font-size: 13px;
         color: #666;
     `;
-    defaultWatermark.innerHTML = chrome.i18n.getMessage('defaultWatermark');
+    defaultWatermark.innerHTML = chrome.i18n?.getMessage('defaultWatermark');
 
     if (customWatermark) {
         const customWatermarkEl = document.createElement('div');

@@ -35,7 +35,7 @@ function removeAllCopySuccessNotifications() {
         if (contentEl && (
             contentEl.textContent === '复制成功' || 
             contentEl.textContent === 'Copied' || 
-            contentEl.textContent === chrome.i18n.getMessage('copied')
+            contentEl.textContent === chrome.i18n?.getMessage('copied')
         )) {
             if (toast.parentNode) {
                 console.debug('移除已存在的复制成功通知');
@@ -54,7 +54,7 @@ function removeAllCopySuccessNotifications() {
                     contentEl.textContent === 'Copied!' || 
                     contentEl.textContent.includes('Copied') || 
                     contentEl.textContent.includes('复制') || 
-                    contentEl.textContent === chrome.i18n.getMessage('copied')
+                    contentEl.textContent === chrome.i18n?.getMessage('copied')
                 )) {
                     if (toast.parentNode) {
                         console.debug('移除容器中的复制成功通知');
@@ -89,7 +89,7 @@ const toastObserver = new MutationObserver((mutations) => {
                         if (contentEl && (
                             contentEl.textContent === '复制成功' || 
                             contentEl.textContent === 'Copied' || 
-                            contentEl.textContent === chrome.i18n.getMessage('copied')
+                            contentEl.textContent === chrome.i18n?.getMessage('copied')
                         )) {
                             if (node.parentNode) {
                                 console.debug('拦截到了复制成功通知，已移除');
@@ -108,7 +108,7 @@ const toastObserver = new MutationObserver((mutations) => {
                                 contentEl.textContent === 'Copied' || 
                                 contentEl.textContent.includes('copy') || 
                                 contentEl.textContent.includes('复制') || 
-                                contentEl.textContent === chrome.i18n.getMessage('copied')
+                                contentEl.textContent === chrome.i18n?.getMessage('copied')
                             )) {
                                 if (toast.parentNode) {
                                     console.debug('拦截到子元素中的复制成功通知，已移除');
@@ -227,11 +227,11 @@ const handleShareClick = async () => {
             }
         } catch (error) {
             console.error('Screenshot failed:', error);
-            loadingEl.textContent = chrome.i18n.getMessage('generateFailed');
+            loadingEl.textContent = chrome.i18n?.getMessage('generateFailed');
         }
     } catch (error) {
         if (error.message === 'NO_SELECTION') {
-            alert(chrome.i18n.getMessage('noMessageSelected'));
+            alert(chrome.i18n?.getMessage('noMessageSelected'));
             return;
         }
         console.error('Share failed:', error);

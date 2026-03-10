@@ -90,7 +90,7 @@ function injectDocxButton() {
                             docxButton.tabIndex = copyBtn.tabIndex || -1;
                             docxButton.setAttribute('role', 'button');
                             docxButton.setAttribute('aria-disabled', 'false');
-                            docxButton.title = chrome.i18n.getMessage('docxButton');
+                            docxButton.title = chrome.i18n?.getMessage('docxButton');
 
                             // Copy styling from copy button
                             const copyButtonStyle = copyBtn.getAttribute('style') || '';
@@ -266,7 +266,7 @@ function injectDocxButton() {
                     };
                 } else {
                     console.warn('Clipboard content was empty after clicking copy button');
-                    window.showToastNotification(chrome.i18n.getMessage('getClipboardError'), 'error');
+                    window.showToastNotification(chrome.i18n?.getMessage('getClipboardError'), 'error');
                     return null;
                 }
             } catch (error) {
@@ -280,8 +280,8 @@ function injectDocxButton() {
                 }
 
                 const errorMessage = error.message && error.message.includes('Read permission denied')
-                    ? chrome.i18n.getMessage('clipboardPermissionError')
-                    : `${chrome.i18n.getMessage('getClipboardError')}: ${error.message}`;
+                    ? chrome.i18n?.getMessage('clipboardPermissionError')
+                    : `${chrome.i18n?.getMessage('getClipboardError')}: ${error.message}`;
 
                 window.showToastNotification(errorMessage, 'error');
                 return null;
@@ -289,7 +289,7 @@ function injectDocxButton() {
         }
 
         // Fallback error message if copy button isn't found
-        window.showToastNotification(chrome.i18n.getMessage('getClipboardError'), 'error');
+        window.showToastNotification(chrome.i18n?.getMessage('getClipboardError'), 'error');
         return null;
     }
 

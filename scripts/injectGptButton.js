@@ -62,7 +62,7 @@
         // Create the DOCX button
         const docxButton = document.createElement('button');
         docxButton.className = 'text-token-text-secondary hover:bg-token-bg-secondary rounded-lg deepshare-docx-btn';
-        docxButton.setAttribute('aria-label', chrome.i18n.getMessage('docxButton') || 'Save as Word document');
+        docxButton.setAttribute('aria-label', chrome.i18n?.getMessage('docxButton') || 'Save as Word document');
 
         const span = document.createElement('span');
         span.className = 'touch:w-10 flex h-8 w-8 items-center justify-center';
@@ -149,11 +149,11 @@
                     });
                     document.dispatchEvent(event);
                 } else {
-                    window.showToastNotification(chrome.i18n.getMessage('getClipboardError'), 'error');
+                    window.showToastNotification(chrome.i18n?.getMessage('getClipboardError'), 'error');
                 }
             } catch (error) {
                 console.error('Error getting content from ChatGPT:', error);
-                window.showToastNotification(`${chrome.i18n.getMessage('getClipboardError')}: ${error.message}`, 'error');
+                window.showToastNotification(`${chrome.i18n?.getMessage('getClipboardError')}: ${error.message}`, 'error');
             }
         });
     }
@@ -552,7 +552,7 @@
                     </svg>
                 </div>
                 <div class="flex min-w-0 grow items-center gap-2.5">
-                    <div class="truncate">${chrome.i18n.getMessage('saveAsMarkdown') || 'Save as Markdown'}</div>
+                    <div class="truncate">${chrome.i18n?.getMessage('saveAsMarkdown') || 'Save as Markdown'}</div>
                 </div>
             `;
 

@@ -83,10 +83,10 @@ async function handleFormulaClick(e) {
             await navigator.clipboard.writeText(textToCopy);
 
             // Show visual feedback with localized message
-            window.showToastNotification(chrome.i18n.getMessage('formulaCopied'), 'success');
+            window.showToastNotification(chrome.i18n?.getMessage('formulaCopied'), 'success');
         } catch (error) {
             console.error('Failed to copy formula:', error);
-            window.showToastNotification(chrome.i18n.getMessage('copyFailed'), 'error');
+            window.showToastNotification(chrome.i18n?.getMessage('copyFailed'), 'error');
         }
     }
 }
@@ -95,7 +95,7 @@ async function handleFormulaClick(e) {
 function updateElementStyle(element) {
     if (formulaSettings.enableFormulaCopy) {
         element.style.cursor = 'pointer';
-        element.title = chrome.i18n.getMessage('clickToCopyFormula');
+        element.title = chrome.i18n?.getMessage('clickToCopyFormula');
         
         // 创建并应用悬停样式
         // 使用CSS类来处理悬停效果，统一只对SVG应用背景色
