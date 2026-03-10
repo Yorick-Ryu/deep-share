@@ -317,3 +317,29 @@
     font-size: 14px;
     letter-spacing: 0.2px;
 }
+
+/* Gemini Math formula copy functionality styles */
+.math-inline[data-gemini-math-copy-enabled="true"] {
+    position: relative;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+
+.math-block[data-gemini-math-copy-enabled="true"] {
+    position: relative;
+    border-radius: 16px;
+    transition: background-color 0.2s ease;
+}
+
+.math-inline[data-gemini-math-copy-enabled="true"]:hover,
+.math-block[data-gemini-math-copy-enabled="true"]:hover {
+    background-color: var(--mat-option-hover-state-layer-color, rgba(68, 71, 70, 0.08));
+}
+
+@media (prefers-color-scheme: dark) {
+
+    .math-inline[data-gemini-math-copy-enabled="true"]:hover,
+    .math-block[data-gemini-math-copy-enabled="true"]:hover {
+        background-color: var(--mat-option-hover-state-layer-color, rgba(255, 255, 255, 0.08));
+    }
+}
