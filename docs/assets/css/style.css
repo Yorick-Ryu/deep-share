@@ -174,7 +174,7 @@ nav {
     background: var(--bg-secondary);
     border: 1px solid var(--border-color);
     color: var(--text-main) !important;
-    border-radius: 6px;
+    border-radius: 12px;
     font-size: 0.85rem;
     transition: all 0.2s;
 }
