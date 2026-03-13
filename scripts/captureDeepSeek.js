@@ -27,12 +27,8 @@ document.addEventListener('deepshare:saveAsImage', async () => {
             window.showToastNotification(chrome.i18n?.getMessage('screenshotSuccess'), 'success');
 
             try {
-                // 直接使用已有的 blob，无需 fetch(dataUrl).blob() 二次转换
-                await navigator.clipboard.write([
-                    new ClipboardItem({
-                        [blob.type]: blob
-                    })
-                ]);
+                // Wait for focus before clipboard write to avoid NotAllowedError.
+                await copyImageToClipboard(blob);
                 window.showToastNotification(chrome.i18n?.getMessage('imageCopied'), 'success');
             } catch (copyError) {
                 console.error('Failed to copy image to clipboard:', copyError);
@@ -56,11 +52,56 @@ document.addEventListener('deepshare:saveAsImage', async () => {
     }
 });
 
-async function captureDeepSeekMessages(customWatermark) {
-    const container = document.querySelector('.dad65929');
-    if (!container) return null;
+async function copyImageToClipboard(blob) {
+    await waitForDocumentFocus(300);
+    await writeImageToClipboard(blob);
+}
 
-    const messages = document.querySelectorAll('.dad65929 > div[class]');
+async function writeImageToClipboard(blob) {
+    await navigator.clipboard.write([
+        new ClipboardItem({
+            [blob.type]: blob
+        })
+    ]);
+}
+
+function waitForDocumentFocus(timeoutMs) {
+    if (document.hasFocus()) return Promise.resolve(true);
+
+    return new Promise((resolve) => {
+        const onFocus = () => {
+            cleanup();
+            resolve(true);
+        };
+        const timer = setTimeout(() => {
+            cleanup();
+            resolve(document.hasFocus());
+        }, timeoutMs);
+        const cleanup = () => {
+            window.removeEventListener('focus', onFocus, true);
+            clearTimeout(timer);
+        };
+
+        window.addEventListener('focus', onFocus, true);
+    });
+}
+
+async function captureDeepSeekMessages(customWatermark) {
+    const messageSelector = '._9663006, ._4f9bf79._43c05b5, ._4f9bf79.d7dc56a8._43c05b5';
+    const messageNodes = Array.from(document.querySelectorAll(messageSelector));
+    const container = document.querySelector('.dad65929') || messageNodes[0]?.parentElement || null;
+
+    if (!container) {
+        console.error('Screenshot failed: conversation container not found');
+        return null;
+    }
+
+    if (messageNodes.length === 0) {
+        console.error('Screenshot failed: no messages found');
+        return null;
+    }
+
+    const messages = messageNodes;
     const selectedIndices = new Set();
     let selectionMode = false;
 
@@ -75,8 +116,9 @@ async function captureDeepSeekMessages(customWatermark) {
         });
     }
 
-    // If in selection mode, hide unselected messages
-    if (selectionMode) {
+    // If at least one message is selected, hide unselected messages.
+    // If none selected, keep full conversation to avoid empty captures.
+    if (selectionMode && selectedIndices.size > 0) {
         messages.forEach((messageDiv, index) => {
             if (!selectedIndices.has(index)) {
                 messageDiv.style.display = 'none';
@@ -164,8 +206,6 @@ async function captureDeepSeekMessages(customWatermark) {
 
         let blob;
 
-        console.debug(screenshotMethod)
-
         // 根据设置选择截图方法
         if (screenshotMethod === 'domtoimage' && typeof domtoimage !== 'undefined') {
             try {
@@ -229,32 +269,34 @@ async function captureDeepSeekMessages(customWatermark) {
                 }
             });
             // 使用异步的 toBlob 替代同步的 toDataURL，避免主线程阻塞
-            blob = await new Promise((resolve) => {
-                canvas.toBlob((b) => resolve(b), 'image/png');
+            blob = await new Promise((resolve, reject) => {
+                canvas.toBlob((b) => {
+                    if (b) {
+                        resolve(b);
+                        return;
+                    }
+                    reject(new Error('canvas.toBlob returned null'));
+                }, 'image/png');
             });
         }
 
 
-        // Restore hidden conversations
+        return blob;
+    } catch (error) {
+        console.error('Screenshot failed:', error);
+        return null;
+    } finally {
+        // Restore hidden conversations even when capture fails.
         if (selectionMode) {
             messages.forEach(messageDiv => {
                 messageDiv.style.display = '';
             });
         }
-
-        container.removeChild(watermarkContainer);
-        container.style.position = originalPosition;
-        container.style.padding = originalPadding;
-
-        return blob;
-    } catch (error) {
         if (watermarkContainer.parentNode) {
             container.removeChild(watermarkContainer);
         }
         container.style.position = originalPosition;
         container.style.padding = originalPadding;
-        console.error('Screenshot failed:', error);
-        return null;
     }
 }
 
