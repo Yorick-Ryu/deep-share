@@ -105,6 +105,10 @@ async function captureDeepSeekMessages(customWatermark) {
     const selectedIndices = new Set();
     let selectionMode = false;
 
+    // Ensure long screenshot starts from the top of the conversation.
+    scrollToTopForCapture(container);
+    await new Promise(resolve => setTimeout(resolve, 120));
+
     // Determine which messages are selected
     const messageCheckboxes = document.querySelectorAll('.d30139ff .ds-checkbox');
     if (messageCheckboxes.length > 0) {
@@ -297,6 +301,23 @@ async function captureDeepSeekMessages(customWatermark) {
         }
         container.style.position = originalPosition;
         container.style.padding = originalPadding;
+    }
+}
+
+function scrollToTopForCapture(container) {
+    window.scrollTo({ top: 0, behavior: 'auto' });
+    document.documentElement.scrollTo({ top: 0, behavior: 'auto' });
+    document.body.scrollTo({ top: 0, behavior: 'auto' });
+    if (container && typeof container.scrollTo === 'function') {
+        container.scrollTo({ top: 0, behavior: 'auto' });
+    }
+
+    let parent = container?.parentElement || null;
+    while (parent) {
+        if (typeof parent.scrollTo === 'function') {
+            parent.scrollTo({ top: 0, behavior: 'auto' });
+        }
+        parent = parent.parentElement;
     }
 }
 
