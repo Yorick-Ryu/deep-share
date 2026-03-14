@@ -6,10 +6,22 @@
     'use strict';
     console.debug('DeepShare: Initializing Gemini full conversation export menu');
 
+    // State to track if the last clicked menu button was in the main header (not sidebar)
+    let isHeaderMenuClicked = false;
+
     // Attach listener to the document to catch clicks on the menu button
     document.addEventListener('click', (e) => {
         const menuBtn = e.target.closest('button[data-test-id="conversation-actions-menu-icon-button"], button[data-test-id="actions-menu-button"]');
         if (menuBtn) {
+            // Exclude sidebar history menu: check if button is inside sidebar-related containers
+            const isSidebar = !!menuBtn.closest('.conversation-actions-container, .side-nav-opened, nav, [data-test-id="sidebar"]');
+            
+            if (isSidebar) {
+                isHeaderMenuClicked = false;
+                return;
+            }
+
+            isHeaderMenuClicked = true;
             // Menu was clicked, wait for it to appear
             setTimeout(injectExportOptions, 100);
         }
@@ -19,6 +31,8 @@
     const observer = new MutationObserver((mutations) => {
         for (const mutation of mutations) {
             if (mutation.addedNodes.length) {
+                if (!isHeaderMenuClicked) continue; // Only inject if it's the header menu
+
                 const menuPanel = document.querySelector('.mat-mdc-menu-panel.conversation-actions-menu, .mat-mdc-menu-panel.conversation-actions-menu-panel');
                 if (menuPanel && !menuPanel.dataset.deepshareExportInjected) {
                     injectExportOptions();
@@ -30,6 +44,8 @@
     observer.observe(document.body, { childList: true, subtree: true });
 
     function injectExportOptions() {
+        if (!isHeaderMenuClicked) return; // Guard clause for injection
+
         const menuContent = document.querySelector('.mat-mdc-menu-panel.conversation-actions-menu .mat-mdc-menu-content, .mat-mdc-menu-panel.conversation-actions-menu-panel .mat-mdc-menu-content');
         if (!menuContent) return;
 
