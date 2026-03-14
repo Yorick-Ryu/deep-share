@@ -14,7 +14,13 @@ window.extractGeminiContentWithFormulas = function (container) {
         if (node.nodeType !== Node.ELEMENT_NODE) return true;
 
         // Skip specific Gemini internal tags
-        const skipTags = ['SOURCE-FOOTNOTE', 'SOURCES-CAROUSEL-INLINE', 'BR'];
+        const skipTags = [
+            'SOURCE-FOOTNOTE', 
+            'SOURCES-CAROUSEL-INLINE', 
+            'SOURCES-LIST', 
+            'PROCESSING-STATE', 
+            'BR'
+        ];
         if (skipTags.includes(node.tagName)) return true;
 
         // Check if it's a paragraph or span that only contains markers or whitespace
@@ -30,19 +36,36 @@ window.extractGeminiContentWithFormulas = function (container) {
         // Skip if not a valid node
         if (!node) return;
 
-        // Skip visually hidden elements (accessibility labels like "You said" or "你说")
-        if (node.nodeType === Node.ELEMENT_NODE && node.classList && node.classList.contains('cdk-visually-hidden')) {
+        // 跳过不可见元素（可访问性标签及显式隐藏的元素）
+        if (node.nodeType === Node.ELEMENT_NODE) {
+            if (node.classList.contains('cdk-visually-hidden') || 
+                node.style.display === 'none' || 
+                node.getAttribute('aria-hidden') === 'true') {
+                return;
+            }
+        }
+
+        // 跳过 Gemini 的内部组件、来源标注、执行状态等
+        const internalTagsToSkip = [
+            'SOURCE-FOOTNOTE', 
+            'SOURCES-CAROUSEL-INLINE', 
+            'SOURCES-LIST', 
+            'SOURCES-ACCORDION',
+            'PROCESSING-STATE',
+            'SENSITIVE-MEMORIES-BANNER',
+            'MESSAGE-ACTIONS',
+            'BARD-MESSAGES-ACTIONS'
+        ];
+        if (node.nodeType === Node.ELEMENT_NODE && internalTagsToSkip.includes(node.tagName)) {
             return;
         }
 
-        // Handle source footnotes - IGNORED as per request
-        if (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'SOURCE-FOOTNOTE') {
-            return;
-        }
-
-        // Handle sources-carousel-inline - IGNORED
-        if (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'SOURCES-CAROUSEL-INLINE') {
-            return;
+        // 处理 Gemini 的 code-block 组件：如果是工具执行/分析过程则跳过
+        if (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'CODE-BLOCK') {
+            const header = node.querySelector('.code-block-decoration');
+            const hasAnalysisLabel = header && (header.textContent.includes('显示代码') || header.textContent.includes('代码输出'));
+            const isAnalysis = node.querySelector('.toggle-code, [data-test-id="toggle-code-button"]') || hasAnalysisLabel;
+            if (isAnalysis) return;
         }
 
         // Handle response-element wrappers
