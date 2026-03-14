@@ -8,7 +8,7 @@
 
     // Attach listener to the document to catch clicks on the menu button
     document.addEventListener('click', (e) => {
-        const menuBtn = e.target.closest('button[data-test-id="conversation-actions-menu-icon-button"]');
+        const menuBtn = e.target.closest('button[data-test-id="conversation-actions-menu-icon-button"], button[data-test-id="actions-menu-button"]');
         if (menuBtn) {
             // Menu was clicked, wait for it to appear
             setTimeout(injectExportOptions, 100);
@@ -19,7 +19,7 @@
     const observer = new MutationObserver((mutations) => {
         for (const mutation of mutations) {
             if (mutation.addedNodes.length) {
-                const menuPanel = document.querySelector('.mat-mdc-menu-panel.conversation-actions-menu');
+                const menuPanel = document.querySelector('.mat-mdc-menu-panel.conversation-actions-menu, .mat-mdc-menu-panel.conversation-actions-menu-panel');
                 if (menuPanel && !menuPanel.dataset.deepshareExportInjected) {
                     injectExportOptions();
                 }
@@ -30,21 +30,37 @@
     observer.observe(document.body, { childList: true, subtree: true });
 
     function injectExportOptions() {
-        const menuContent = document.querySelector('.mat-mdc-menu-panel.conversation-actions-menu .mat-mdc-menu-content');
+        const menuContent = document.querySelector('.mat-mdc-menu-panel.conversation-actions-menu .mat-mdc-menu-content, .mat-mdc-menu-panel.conversation-actions-menu-panel .mat-mdc-menu-content');
         if (!menuContent) return;
 
         if (menuContent.querySelector('.deepshare-export-full-md')) return; // Already injected
 
-        // Skip if there's a "Share" button (indicates history list menu)
-        if (menuContent.querySelector('[data-test-id="share-button"]')) {
-            console.debug('DeepShare: Share button detected, likely a history item menu. Skipping injection.');
-            return;
-        }
-
         // Find the "Pin" button to insert after
         const pinButton = menuContent.querySelector('button[data-test-id="pin-button"]');
-        const targetAnchor = pinButton || menuContent.firstElementChild;
+        // Find the "Share" button as a fallback anchor
+        const shareButton = menuContent.querySelector('button[data-test-id="share-button"]');
+        
+        const targetAnchor = pinButton || shareButton || menuContent.firstElementChild;
         if (!targetAnchor) return;
+
+        // Dynamic class detection to match native styling (bold vs normal)
+        let iconClass = 'menu-icon';
+        let textClass = 'menu-text';
+        
+        const existingIcon = targetAnchor.querySelector('mat-icon');
+        const existingText = targetAnchor.querySelector('.mat-mdc-menu-item-text span');
+        
+        if (existingIcon) {
+            // If the existing icon uses gds-icon-l, it's likely the non-bold version
+            if (existingIcon.classList.contains('gds-icon-l')) iconClass = 'gds-icon-l';
+            else if (existingIcon.classList.contains('menu-icon')) iconClass = 'menu-icon';
+        }
+        
+        if (existingText) {
+            // If the existing text uses gds-body-m, it's likely the non-bold version
+            if (existingText.classList.contains('gds-body-m')) textClass = 'gds-body-m';
+            else if (existingText.classList.contains('menu-text')) textClass = 'menu-text';
+        }
 
         // --- Create Export to Markdown Button
         const mdButton = document.createElement('button');
@@ -53,12 +69,12 @@
         mdButton.setAttribute('tabindex', '0');
         mdButton.setAttribute('aria-disabled', 'false');
         mdButton.innerHTML = `
-            <mat-icon role="img" fonticon="file_download" class="mat-icon notranslate gds-icon-l google-symbols mat-ligature-font mat-icon-no-color" aria-hidden="true" data-mat-icon-type="font" data-mat-icon-name="file_download">
+            <mat-icon role="img" fonticon="file_download" class="mat-icon notranslate ${iconClass} google-symbols mat-ligature-font mat-icon-no-color" aria-hidden="true" data-mat-icon-type="font" data-mat-icon-name="file_download">
                 <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" style="width: 20px; height: 20px;">
                     <path d="M20.56 18H3.44C2.65 18 2 17.37 2 16.59V7.41C2 6.63 2.65 6 3.44 6H20.56C21.35 6 22 6.63 22 7.41V16.59C22 17.37 21.35 18 20.56 18M6.81 15.19V11.53L8.73 13.88L10.65 11.53V15.19H12.58V8.81H10.65L8.73 11.16L6.81 8.81H4.89V15.19H6.81M19.69 12H17.77V8.81H15.85V12H13.92L16.81 15.28L19.69 12Z"/>
                 </svg>
             </mat-icon>
-            <span class="mat-mdc-menu-item-text"><span class="gds-body-m">${chrome.i18n?.getMessage('saveAsMarkdown')}</span></span>
+            <span class="mat-mdc-menu-item-text"><span class="${textClass}">${chrome.i18n?.getMessage('saveAsMarkdown')}</span></span>
             <div matripple="" class="mat-ripple mat-mdc-menu-ripple"></div>
         `;
 
@@ -69,12 +85,12 @@
         wordButton.setAttribute('tabindex', '0');
         wordButton.setAttribute('aria-disabled', 'false');
         wordButton.innerHTML = `
-            <mat-icon role="img" fonticon="description" class="mat-icon notranslate gds-icon-l google-symbols mat-ligature-font mat-icon-no-color" aria-hidden="true" data-mat-icon-type="font" data-mat-icon-name="description">
+            <mat-icon role="img" fonticon="description" class="mat-icon notranslate ${iconClass} google-symbols mat-ligature-font mat-icon-no-color" aria-hidden="true" data-mat-icon-type="font" data-mat-icon-name="description">
                 <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" style="width: 20px; height: 20px;">
                     <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
                 </svg>
             </mat-icon>
-            <span class="mat-mdc-menu-item-text"><span class="gds-body-m">${chrome.i18n?.getMessage('docxButton')}</span></span>
+            <span class="mat-mdc-menu-item-text"><span class="${textClass}">${chrome.i18n?.getMessage('docxButton')}</span></span>
             <div matripple="" class="mat-ripple mat-mdc-menu-ripple"></div>
         `;
 
