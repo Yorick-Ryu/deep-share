@@ -13,8 +13,8 @@
     document.addEventListener('click', (e) => {
         const menuBtn = e.target.closest('button[data-test-id="conversation-actions-menu-icon-button"], button[data-test-id="actions-menu-button"]');
         if (menuBtn) {
-            // Exclude sidebar history menu: check if button is inside sidebar-related containers
-            const isSidebar = !!menuBtn.closest('.conversation-actions-container, .side-nav-opened, nav, [data-test-id="sidebar"]');
+            // Exclude sidebar history menu and bot/GEM lists: check if button is inside sidebar-related containers
+            const isSidebar = !!menuBtn.closest('.conversation-actions-container, .side-nav-opened, nav, [data-test-id="sidebar"], .bot-list-item, .bot-item, .my-stuff-side-nav');
             
             if (isSidebar) {
                 isHeaderMenuClicked = false;
