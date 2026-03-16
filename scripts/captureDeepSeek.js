@@ -223,6 +223,7 @@ async function captureDeepSeekMessages(customWatermark) {
                         // 过滤掉不需要的元素
                         return !(node.classList &&
                             (node.classList.contains('fab07e97') ||
+                                node.classList.contains('ad950ab7') ||
                                 node.classList.contains('ds-checkbox-wrapper')));
                     },
                     skipAutoScale: true
@@ -243,6 +244,7 @@ async function captureDeepSeekMessages(customWatermark) {
                     filter: (element) => {
                         if (!element.classList) return true;
                         return !(element.classList.contains('fab07e97') ||
+                            element.classList.contains('ad950ab7') ||
                             element.classList.contains('ds-checkbox-wrapper'));
                     }
                 });
@@ -269,6 +271,7 @@ async function captureDeepSeekMessages(customWatermark) {
                 allowTaint: true,
                 ignoreElements: (element) => {
                     return element.classList.contains('fab07e97') ||
+                        element.classList.contains('ad950ab7') ||
                         element.classList.contains('ds-checkbox-wrapper');
                 }
             });
