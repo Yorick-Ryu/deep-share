@@ -323,6 +323,9 @@
     "screenshotFailed": {
         "message": "Falha na captura, tentar atualizar?"
     },
+    "conversationTooLong": {
+        "message": "A conversa é longa demais para ser capturada em uma única imagem. Por favor, selecione menos mensagens e tente novamente."
+    },
     "imageCopied": {
         "message": "Imagem copiada para a área de transferência"
     },

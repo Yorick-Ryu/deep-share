@@ -43,7 +43,12 @@ document.addEventListener('deepshare:saveAsImage', async () => {
         if (notificationId !== null) {
             window.dismissToastNotification(notificationId);
         }
-        window.showToastNotification(chrome.i18n?.getMessage('screenshotFailed'), 'error');
+        
+        let message = chrome.i18n?.getMessage('screenshotFailed');
+        if (error.message && error.message.includes('too long')) {
+            message = chrome.i18n?.getMessage('conversationTooLong') || message;
+        }
+        window.showToastNotification(message, 'error');
     } finally {
         // 释放 blob URL 避免内存泄漏
         if (blobUrl) {
@@ -264,34 +269,78 @@ async function captureDeepSeekMessages(customWatermark) {
                 throw new Error('html2canvas not loaded');
             }
 
-            const canvas = await html2canvas(container, {
-                backgroundColor: backgroundColor,
-                useCORS: true,
-                scale: window.devicePixelRatio,
-                allowTaint: true,
-                ignoreElements: (element) => {
-                    return element.classList.contains('fab07e97') ||
-                        element.classList.contains('ad950ab7') ||
-                        element.classList.contains('ds-checkbox-wrapper');
+            // 获取容器高度，判断是否需要降低 scale
+            const containerHeight = container.offsetHeight;
+            let scale = window.devicePixelRatio || 1;
+            
+            // 安全限制：大多数浏览器 canvas 最大高度为 32767 或 65535
+            // 我们保守一点，如果缩放后的高度超过 30000 像素，就强制降低 scale
+            if (containerHeight * scale > 30000) {
+                scale = Math.max(1, 30000 / containerHeight);
+                console.warn(`Conversation is too long (${containerHeight}px). Reducing scale to ${scale} to avoid browser limits.`);
+            }
+
+            async function tryCapture(currentScale) {
+                try {
+                    const canvas = await html2canvas(container, {
+                        backgroundColor: backgroundColor,
+                        useCORS: true,
+                        scale: currentScale,
+                        allowTaint: true,
+                        ignoreElements: (element) => {
+                            return element.classList.contains('fab07e97') ||
+                                element.classList.contains('ad950ab7') ||
+                                element.classList.contains('ds-checkbox-wrapper');
+                        }
+                    });
+
+                    return new Promise((resolve) => {
+                        canvas.toBlob((b) => {
+                            resolve(b);
+                        }, 'image/png');
+                    });
+                } catch (e) {
+                    console.error(`html2canvas failed at scale ${currentScale}:`, e);
+                    return null;
                 }
-            });
-            // 使用异步的 toBlob 替代同步的 toDataURL，避免主线程阻塞
-            blob = await new Promise((resolve, reject) => {
-                canvas.toBlob((b) => {
-                    if (b) {
-                        resolve(b);
-                        return;
-                    }
-                    reject(new Error('canvas.toBlob returned null'));
-                }, 'image/png');
-            });
+            }
+
+            blob = await tryCapture(scale);
+
+            // 如果失败且 scale > 1，尝试以 scale: 1 再次捕获
+            if (!blob && scale > 1) {
+                console.warn('Screenshot failed at high resolution, retrying at standard resolution...');
+                blob = await tryCapture(1);
+            }
+
+            // 如果仍然失败（可能是由于极其长的对话），再次尝试更小的 scale
+            if (!blob) {
+                console.warn('Screenshot still failing, trying with 0.75 scale...');
+                blob = await tryCapture(0.75);
+            }
+            
+            // 如果仍然失败，抛出错误
+            if (!blob) {
+                if (containerHeight > 15000) {
+                    throw new Error('Conversation too long: canvas height limit exceeded');
+                } else {
+                    throw new Error('canvas.toBlob returned null');
+                }
+            }
         }
 
 
         return blob;
     } catch (error) {
         console.error('Screenshot failed:', error);
-        return null;
+        // 如果是 canvas 转换失败且容器确实很高，重新抛出一个包含 "too long" 的错误
+        if (error.message && (error.message.includes('canvas.toBlob') || error.message.includes('html2canvas'))) {
+            const containerHeight = container ? container.offsetHeight : 0;
+            if (containerHeight > 15000 && !error.message.includes('too long')) {
+                throw new Error('Conversation too long: The content exceeds browser canvas limits.');
+            }
+        }
+        throw error;
     } finally {
         // Restore hidden conversations even when capture fails.
         if (selectionMode) {

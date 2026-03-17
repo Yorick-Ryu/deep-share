@@ -67,11 +67,9 @@ function injectDocxButton() {
 
                             // Only inject button for AI responses
                             if (isUserMessage || !isAIResponse) {
-                                console.debug('Skipping injection - detected user message or not AI response context');
                                 return;
                             }
 
-                            console.debug('Detected AI response - proceeding with button injection');
 
                             // Check if we've already added our button next to this copy button
                             const nextSibling = copyBtn.nextElementSibling;

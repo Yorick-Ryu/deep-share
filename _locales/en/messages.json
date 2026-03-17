@@ -323,6 +323,9 @@
     "screenshotFailed": {
         "message": "Screenshot failed, try refreshing?"
     },
+    "conversationTooLong": {
+        "message": "The conversation is too long to capture as a single image. Please select fewer messages and try again."
+    },
     "imageCopied": {
         "message": "Image copied to clipboard"
     },

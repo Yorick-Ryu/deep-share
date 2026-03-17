@@ -323,6 +323,9 @@
     "screenshotFailed": {
         "message": "スクリーンショットに失敗しました。更新してみてください"
     },
+    "conversationTooLong": {
+        "message": "会話が長すぎて1枚の画像としてキャプチャできません。メッセージを少なく選択して、もう一度お試しください。"
+    },
     "imageCopied": {
         "message": "画像をクリップボードにコピーしました"
     },

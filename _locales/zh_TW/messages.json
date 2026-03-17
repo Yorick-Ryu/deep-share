@@ -323,6 +323,9 @@
     "screenshotFailed": {
         "message": "截圖失敗，刷新一下試試？"
     },
+    "conversationTooLong": {
+        "message": "對話內容太長，超出了瀏覽器的限制，請透過「選擇對話」功能分段截圖。"
+    },
     "imageCopied": {
         "message": "圖片已複製到剪貼簿"
     },
