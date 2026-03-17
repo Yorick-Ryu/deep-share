@@ -419,7 +419,6 @@ function generateFilename(content, title = null) {
         filename = filename.substring(0, 50).trim();
         filename = sanitizeFilename(filename);
         if (filename) {
-            console.debug('DeepShare: Using document title for filename:', filename);
             return `${filename}_${timestamp}`;
         }
     }

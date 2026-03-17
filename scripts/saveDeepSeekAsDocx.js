@@ -176,10 +176,15 @@ async function collectAllMessagesViaScroll(signal) {
 
         if (collectedMessages.size === prevSize) {
             stuckCount++;
-            scrollContainer.scrollTo({
-                top: scrollContainer.scrollTop + scrollContainer.clientHeight,
-                behavior: 'smooth'
-            });
+            const lastEl = findLastCollectedElement(collectedMessages);
+            if (lastEl) {
+                lastEl.scrollIntoView({ behavior: 'smooth', block: 'end' });
+            } else {
+                scrollContainer.scrollTo({
+                    top: scrollContainer.scrollTop + scrollContainer.clientHeight,
+                    behavior: 'smooth'
+                });
+            }
             await waitForScrollEnd(scrollContainer, 1500);
             await waitForDomSettle(300);
             continue;
