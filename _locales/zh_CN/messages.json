@@ -495,5 +495,8 @@
     },
     "onboardingRefreshHint": {
         "message": "首次使用请刷新已打开的AI对话"
+    },
+    "scrollCollecting": {
+        "message": "正在滚动读取对话内容，请勿操作..."
     }
 }

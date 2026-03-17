@@ -495,5 +495,8 @@
     },
     "onboardingRefreshHint": {
         "message": "Para el primer uso, por favor actualice cualquier conversación de IA abierta."
+    },
+    "scrollCollecting": {
+        "message": "Desplazando para recopilar mensajes, por favor espere..."
     }
 }

@@ -495,5 +495,8 @@
     },
     "onboardingRefreshHint": {
         "message": "初回使用時は、開いているAI会話を更新してください。"
+    },
+    "scrollCollecting": {
+        "message": "スクロールしてメッセージを収集しています。しばらくお待ちください..."
     }
 }

@@ -477,5 +477,8 @@
     },
     "onboardingRefreshHint": {
         "message": "首次使用請刷新已打開的AI對話"
+    },
+    "scrollCollecting": {
+        "message": "正在捲動讀取對話內容，請勿操作..."
     }
 }

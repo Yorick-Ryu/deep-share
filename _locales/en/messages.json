@@ -496,5 +496,8 @@
     },
     "onboardingRefreshHint": {
         "message": "For first-time use, please refresh any open AI conversations."
+    },
+    "scrollCollecting": {
+        "message": "Scrolling to collect messages, please wait..."
     }
 }

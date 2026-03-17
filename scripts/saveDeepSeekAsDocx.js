@@ -155,56 +155,66 @@ async function collectAllMessagesViaScroll(signal) {
         );
     }
 
+    const scrollNotificationId = window.showToastNotification(
+        chrome.i18n?.getMessage('scrollCollecting') || 'Scrolling to collect messages...',
+        'loading',
+        60000
+    );
+
     scrollContainer.scrollTop = 0;
     await waitForDomSettle(400);
 
     let stuckCount = 0;
     const MAX_STUCK = 5;
 
-    while (stuckCount < MAX_STUCK) {
-        throwIfAborted(signal);
+    try {
+        while (stuckCount < MAX_STUCK) {
+            throwIfAborted(signal);
 
-        const prevSize = collectedMessages.size;
-        await collectVisibleMessages(collectedMessages);
+            const prevSize = collectedMessages.size;
+            await collectVisibleMessages(collectedMessages);
 
-        const maxScroll = scrollContainer.scrollHeight - scrollContainer.clientHeight;
-        if (scrollContainer.scrollTop >= maxScroll - 5) {
-            break;
-        }
+            const maxScroll = scrollContainer.scrollHeight - scrollContainer.clientHeight;
+            if (scrollContainer.scrollTop >= maxScroll - 5) {
+                break;
+            }
 
-        throwIfAborted(signal);
+            throwIfAborted(signal);
 
-        if (collectedMessages.size === prevSize) {
-            stuckCount++;
-            const lastEl = findLastCollectedElement(collectedMessages);
-            if (lastEl) {
-                lastEl.scrollIntoView({ behavior: 'smooth', block: 'end' });
+            if (collectedMessages.size === prevSize) {
+                stuckCount++;
+                const lastEl = findLastCollectedElement(collectedMessages);
+                if (lastEl) {
+                    lastEl.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                } else {
+                    scrollContainer.scrollTo({
+                        top: scrollContainer.scrollTop + scrollContainer.clientHeight,
+                        behavior: 'smooth'
+                    });
+                }
+                await waitForScrollEnd(scrollContainer, 1500);
+                await waitForDomSettle(300);
+                continue;
+            }
+
+            stuckCount = 0;
+
+            const lastElement = findLastCollectedElement(collectedMessages);
+            if (lastElement) {
+                lastElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                await waitForScrollEnd(scrollContainer, 2000);
+                await waitForDomSettle(300);
             } else {
                 scrollContainer.scrollTo({
                     top: scrollContainer.scrollTop + scrollContainer.clientHeight,
                     behavior: 'smooth'
                 });
+                await waitForScrollEnd(scrollContainer, 2000);
+                await waitForDomSettle(300);
             }
-            await waitForScrollEnd(scrollContainer, 1500);
-            await waitForDomSettle(300);
-            continue;
         }
-
-        stuckCount = 0;
-
-        const lastElement = findLastCollectedElement(collectedMessages);
-        if (lastElement) {
-            lastElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            await waitForScrollEnd(scrollContainer, 2000);
-            await waitForDomSettle(300);
-        } else {
-            scrollContainer.scrollTo({
-                top: scrollContainer.scrollTop + scrollContainer.clientHeight,
-                behavior: 'smooth'
-            });
-            await waitForScrollEnd(scrollContainer, 2000);
-            await waitForDomSettle(300);
-        }
+    } finally {
+        window.dismissToastNotification?.(scrollNotificationId);
     }
 
     const sortedEntries = Array.from(collectedMessages.entries())
