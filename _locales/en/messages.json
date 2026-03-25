@@ -333,7 +333,7 @@
         "message": "Failed to copy image to clipboard"
     },
     "apiKeyError": {
-        "message": "API Key error or expired. Please check your email or contact customer service: yoricker@foxmail.com"
+        "message": "API Key error or expired. Please check your email or contact customer service: contact@deepshare.app"
     },
     "quotaExceededError": {
         "message": "Quota exceeded. Please <a href=\"https://ds.rick216.cn/purchase-en\" target=\"_blank\">top up</a>."

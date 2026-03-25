@@ -16,4 +16,4 @@ To test the Word document export functionality:
 
 Thank you for installing and testing our DeepShare browser extension. Designed specifically for AI users, we strive to provide the best conversation sharing and export experience, especially for handling mathematical formulas.
 
-Email us at: yoricker@foxmail.com
+Email us at: contact@deepshare.app
