@@ -36,7 +36,7 @@ document.addEventListener('deepshare:saveAsDocx', async () => {
             setButtonDisabled(imageBtn, false);
             return;
         }
-        const content = messages.map(m => `**${m.role}**: \n${m.content}`).join('\n\n---\n\n');
+        const content = messages.map(m => `**${m.role}**: \n\n${m.content}`).join('\n\n---\n\n');
 
         const documentTitle = document.querySelector('.afa34042')?.textContent?.trim() || null;
 
