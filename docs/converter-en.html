@@ -227,37 +227,72 @@
 
                 <!-- Quota information section -->
                 <div class="quota-section" id="quotaSection" style="display: none;">
-                    <div class="quota-info">
-                        <div class="quota-header">
-                            <h3 id="quotaTitle">Your Conversion Quota</h3>
-                            <span id="userEmail" class="user-email"></span>
+                    <!-- Loading state -->
+                    <div class="quota-loading" id="quotaLoading" style="display: none;">
+                        <div class="quota-loading-header">
+                            <div class="quota-loading-title"></div>
                         </div>
-                        <div class="quota-details">
-                            <div class="quota-item">
-                                <span class="quota-label">Total:</span>
-                                <span class="quota-value" id="totalQuota">--</span>
+                        <div class="quota-loading-blocks">
+                            <div class="quota-loading-block" id="subscriptionLoadingBlock">
+                                <div class="quota-loading-label"></div>
+                                <div class="quota-loading-value"></div>
+                                <div class="quota-loading-progress"></div>
+                                <div class="quota-loading-note"></div>
                             </div>
-                            <div class="quota-item">
-                                <span class="quota-label">Used:</span>
-                                <span class="quota-value" id="usedQuota">--</span>
-                            </div>
-                            <div class="quota-item">
-                                <span class="quota-label">Remaining:</span>
-                                <span class="quota-value quota-remaining" id="remainingQuota">--</span>
+                            <div class="quota-loading-block" id="addonLoadingBlock">
+                                <div class="quota-loading-label"></div>
+                                <div class="quota-loading-value"></div>
+                                <div class="quota-loading-progress"></div>
+                                <div class="quota-loading-note"></div>
                             </div>
                         </div>
                     </div>
-                    <div class="quota-progress-container">
-                        <div class="quota-progress" id="quotaProgress"></div>
+
+                    <div class="quota-header">
+                        <h3 id="quotaTitle">Your Conversion Quota</h3>
+                        <span id="userEmail" class="user-email"></span>
                     </div>
-                    <div class="expiration-info">
-                        <span class="expiration-label">Valid until:</span>
-                        <span class="expiration-value" id="expirationDate">--</span>
+                    <div class="quota-blocks" id="quotaBlocks">
+                        <!-- Subscription daily quota -->
+                        <div class="quota-block" id="subscriptionBlock" style="display: none;">
+                            <div class="quota-block-top">
+                                <span class="quota-block-label" id="dailyQuotaLabel">Daily Quota</span>
+                                <span class="quota-block-badge" id="subscriptionPlanName"></span>
+                            </div>
+                            <div class="quota-block-value">
+                                <span class="quota-block-remaining" id="dailyRemaining">--</span>
+                                <span class="quota-block-sep">/</span>
+                                <span id="dailyTotal">--</span>
+                            </div>
+                            <div class="quota-progress-container">
+                                <div class="quota-progress" id="dailyProgress"></div>
+                            </div>
+                            <span class="quota-block-note" id="dailyResetNote">Resets daily</span>
+                        </div>
+                        <!-- Addon pay-per-use quota -->
+                        <div class="quota-block" id="addonBlock" style="display: none;">
+                            <div class="quota-block-top">
+                                <span class="quota-block-label" id="addonQuotaLabel">Add-on Quota</span>
+                            </div>
+                            <div class="quota-block-value">
+                                <span class="quota-block-remaining" id="addonRemaining">--</span>
+                                <span class="quota-block-sep">/</span>
+                                <span id="addonTotal">--</span>
+                            </div>
+                            <div class="quota-progress-container">
+                                <div class="quota-progress" id="addonProgress"></div>
+                            </div>
+                            <span class="quota-block-note" id="addonExpiry">--</span>
+                        </div>
                     </div>
-                    <div class="quota-actions">
-                        <button id="refreshQuota" class="btn btn-secondary">Refresh</button>
-                        <a href="https://ds.rick216.cn/purchase-en.html" target="_blank" class="purchase-link">Purchase
-                            Quota</a>
+                    <div class="quota-footer">
+                        <button id="refreshQuota" class="text-link-btn">Refresh</button>
+                        <div class="quota-footer-actions">
+                            <a href="https://ds.rick216.cn/price-en.html" target="_blank" class="purchase-link"
+                                id="subscribeLink" style="display: none;">Buy Plan</a>
+                            <a href="https://ds.rick216.cn/purchase-en.html" target="_blank" class="purchase-link"
+                                id="purchaseLink">Buy Addon Quota</a>
+                        </div>
                     </div>
                 </div>
             </div>
