@@ -1,28 +1,24 @@
-一鍵從DeepSeek、ChatGPT、Grok等AI對話匯出排版精美的Word文件，複製其中的公式；支援DeepSeek長對話截圖分享。
+一鍵從Gemini、DeepSeek、ChatGPT、Grok等AI對話匯出排版精美的Word文件；複製AI對話公式；DeepSeek對話長截圖；Gemini DeepResearch匯出Markdown或Word文件。
 
-DeepSeek轉Word、ChatGPT轉Word、Gemini轉Word、Grok轉Word
+DeepSeek轉Word、Gemini轉Word、ChatGPT轉Word、Grok轉Word
 
 🆓 免費功能
+- 複製Gemini、DeepSeek、ChatGPT、Grok等AI對話的公式（點擊公式即可複製）
 - DeepSeek對話長截圖，可自訂浮水印，選擇單條或多條對話
-- 複製DeepSeek、ChatGPT、Gemini、Grok的公式（點擊公式直接複製）
+- Gemini DeepResearch匯出Markdown
 - 簡潔美觀的介面，無廣告干擾
-- 開源透明的前端程式碼，安全可靠
+- 開源前端程式碼，安全可靠
 
 💎 進階功能
-Word文件匯出：將對話轉換為DOCX格式，完美保留數學公式格式、表格和Mermaid圖表
+AI對話匯出Word文件，完美保留數學公式、表格、自動生成側邊目錄
 定價：
-標準價格：單次轉換$0.05
-限時優惠：多買多送，實際均價低至$0.02/次
-
-📱 平台相容性
-DeepSeek：完全支援公式複製、一鍵匯出Word、對話截圖
-ChatGPT、Gemini：支援公式複製、一鍵匯出Word
-Grok：支援公式複製、手動匯出Word
-元寶、Kimi等10+AI平台：支援手動匯出Word
+- Standard：$4.9/月 (每日8次)
+- Pro：$9.9/月 (每日20次)
+- Pro年付：$49.9/年 (每日50次)
+- Ultra：$99.9/年 (每日100次)
 
 🚀 為什麼選擇 DeepShare？
-為數學、科研工作者優化的公式處理
+為數學、科研工作者優化的公式处理，支持LaTex、MathML格式
+精調的Word文件樣式，完美保留數學公式、表格、自動生成側邊目錄
 簡單高效的操作流程
-乾淨專業的分享效果
-全面的匯出選項滿足不同場景需求
-立即安裝，體驗更智慧的 AI 對話分享方式！
+立即安裝，體驗更智慧的 AI 對話匯出方式！
