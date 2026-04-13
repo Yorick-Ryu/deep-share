@@ -599,7 +599,13 @@ function loadI18nText(errorMsg = null) {
   // Update purchase/subscribe link text
   const purchaseLink = document.getElementById('purchaseLink');
   if (purchaseLink) {
-    purchaseLink.textContent = getMessage('purchaseAddonQuota') || '购买叠加额度';
+    const isChineseLang = !(getMessage('pricePageUrl') || '').includes('/en/');
+    if (isChineseLang) {
+      purchaseLink.textContent = getMessage('purchaseAddonQuota') || '购买叠加额度';
+      purchaseLink.style.display = '';
+    } else {
+      purchaseLink.style.display = 'none';
+    }
   }
   const subscribeLink = document.getElementById('subscribeLink');
   if (subscribeLink) {
@@ -1173,9 +1179,15 @@ function displayDualQuota(data) {
     }
   }
 
-  // Addon quota link always shows "购买叠加额度"
+  // Addon quota link only shown for Chinese users
   if (purchaseLink) {
-    purchaseLink.textContent = getMessage('purchaseAddonQuota') || '购买叠加额度';
+    const isChineseLang = !(getMessage('pricePageUrl') || '').includes('/en/');
+    if (isChineseLang) {
+      purchaseLink.textContent = getMessage('purchaseAddonQuota') || '购买叠加额度';
+      purchaseLink.style.display = '';
+    } else {
+      purchaseLink.style.display = 'none';
+    }
   }
 }
 

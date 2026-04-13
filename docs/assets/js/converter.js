@@ -805,7 +805,13 @@ function displayDualQuota(data) {
   }
 
   if (purchaseLink) {
-    purchaseLink.textContent = t('purchaseAddonQuota');
+    const isChineseLang = !t('pricePageUrl').includes('/en/');
+    if (isChineseLang) {
+      purchaseLink.textContent = t('purchaseAddonQuota');
+      purchaseLink.style.display = '';
+    } else {
+      purchaseLink.style.display = 'none';
+    }
   }
 }
 
