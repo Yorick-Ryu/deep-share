@@ -6,6 +6,7 @@
 const API_BASE_URL = 'https://preapi.ds.rick216.cn';
 
 // Plan definitions (USD pricing, Creem payment)
+// sortOrder must match the backend SubscriptionPlan.sort_order column
 const PLANS = {
     standard_monthly: {
         code: 'standard_monthly',
@@ -14,6 +15,7 @@ const PLANS = {
         period: 'mo',
         periodType: 'monthly',
         dailyQuota: 8,
+        sortOrder: 1,
         mcpEnabled: false,
         skillEnabled: false
     },
@@ -24,6 +26,7 @@ const PLANS = {
         period: 'mo',
         periodType: 'monthly',
         dailyQuota: 20,
+        sortOrder: 2,
         mcpEnabled: true,
         skillEnabled: true
     },
@@ -34,6 +37,7 @@ const PLANS = {
         period: 'yr',
         periodType: 'yearly',
         dailyQuota: 50,
+        sortOrder: 3,
         mcpEnabled: true,
         skillEnabled: true
     },
@@ -44,6 +48,7 @@ const PLANS = {
         period: 'yr',
         periodType: 'yearly',
         dailyQuota: 100,
+        sortOrder: 4,
         mcpEnabled: true,
         skillEnabled: true
     }
@@ -53,6 +58,9 @@ let currentPeriod = 'monthly';
 const selectedPaymentMethod = 'creem';
 let selectedPlanCode = null;
 let isLoginMode = false;
+// Cached quota response keyed by API key — avoids extra fetch on confirm
+let cachedQuotaData = null;
+let cachedQuotaApiKey = null;
 
 /**
  * Sync plan details from PLANS config into the HTML cards
@@ -86,6 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initApiKeyVerification();
     initModalStatePersistence();
     parseAndFillApiKey();
+    initCancelModal();
 });
 
 // Restore button text after browser back navigation (bfcache)
@@ -243,6 +252,8 @@ function initApiKeyVerification() {
 
             if (response.ok) {
                 const data = await response.json();
+                cachedQuotaData = data;
+                cachedQuotaApiKey = apiKey;
                 let message = `Verified! Your account email is ${data.email}`;
                 if (data.has_subscription && data.subscription) {
                     message += ` · Current plan: ${data.subscription.plan_name}`;
@@ -355,6 +366,8 @@ function initModalStatePersistence() {
         clearGeneralError();
         hideVerifyResult();
         saveModalState();
+        cachedQuotaData = null;
+        cachedQuotaApiKey = null;
     });
 }
 
@@ -382,8 +395,8 @@ function showGeneralError(message) {
 
 function clearGeneralError() {
     const el = document.getElementById('generalError');
-    el.textContent = '';
-    el.classList.remove('show');
+    el.innerHTML = '';
+    el.classList.remove('show', 'has-action', 'success');
 }
 
 function clearAllErrors() {
@@ -456,23 +469,76 @@ function isValidEmail(email) {
 async function createSubscriptionWithApiKey(apiKey) {
     const confirmBtn = document.getElementById('confirmSubscribeBtn');
     const originalText = confirmBtn.textContent;
-    try {
-        confirmBtn.disabled = true;
-        confirmBtn.textContent = 'Processing, please wait...';
+    confirmBtn.disabled = true;
+    confirmBtn.textContent = 'Processing, please wait...';
 
+    try {
+        // Fetch subscription status if not already cached for this key
+        if (!cachedQuotaData || cachedQuotaApiKey !== apiKey) {
+            const quotaRes = await fetch(`${API_BASE_URL}/subscriptions/my/quota`, {
+                headers: { 'X-API-Key': apiKey }
+            });
+            if (quotaRes.ok) {
+                cachedQuotaData = await quotaRes.json();
+                cachedQuotaApiKey = apiKey;
+            }
+        }
+
+        const targetPlan = PLANS[selectedPlanCode];
+        const currentSub = cachedQuotaData?.subscription;
+        const currentPlanCode = currentSub?.plan_code;
+        const currentPlan = currentPlanCode ? PLANS[currentPlanCode] : null;
+        const hasActiveCreemSub = cachedQuotaData?.has_subscription &&
+            currentSub?.status === 'active' &&
+            currentPlanCode;
+
+        // Route to upgrade if user has an active subscription and target plan is higher
+        if (hasActiveCreemSub && currentPlan && targetPlan &&
+            targetPlan.sortOrder > currentPlan.sortOrder) {
+            await upgradeSubscription(apiKey, currentPlan, targetPlan, confirmBtn, originalText);
+            return;
+        }
+
+        // Same plan checks
+        if (hasActiveCreemSub && currentPlanCode === selectedPlanCode) {
+            confirmBtn.disabled = false;
+            confirmBtn.textContent = originalText;
+            // These cases are also blocked by the backend; handle gracefully here
+            showGeneralError(`You already have an active ${targetPlan?.name || ''} subscription. No need to purchase again.`);
+            return;
+        }
+
+        // Proceed with normal checkout creation
         const response = await fetch(`${API_BASE_URL}/payments/creem/subscription/create`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'X-API-KEY': apiKey
             },
-            body: JSON.stringify({
-                plan_code: selectedPlanCode,
-            })
+            body: JSON.stringify({ plan_code: selectedPlanCode })
         });
 
         const data = await response.json();
-        if (!response.ok) throw new Error(data.detail || 'Failed to create order');
+        if (!response.ok) {
+            const code = data.detail?.code;
+            const message = data.detail?.message || data.detail || 'Failed to create order';
+
+            if (code === 'ALREADY_SUBSCRIBED') {
+                showGeneralError(message);
+                confirmBtn.disabled = false;
+                confirmBtn.textContent = originalText;
+                return;
+            }
+
+            if (code === 'RESUME_REQUIRED') {
+                showResumePrompt(apiKey, message);
+                confirmBtn.disabled = false;
+                confirmBtn.textContent = originalText;
+                return;
+            }
+
+            throw new Error(message);
+        }
 
         if (data.checkout_url) {
             localStorage.setItem('pending_api_key', apiKey);
@@ -488,6 +554,77 @@ async function createSubscriptionWithApiKey(apiKey) {
         showMappedError(msg, API_KEY_ERROR_MAP);
         confirmBtn.disabled = false;
         confirmBtn.textContent = originalText;
+    }
+}
+
+async function upgradeSubscription(apiKey, currentPlan, targetPlan, confirmBtn, originalText) {
+    confirmBtn.textContent = 'Upgrading, please wait...';
+    try {
+        const response = await fetch(`${API_BASE_URL}/subscriptions/my/upgrade`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-API-KEY': apiKey
+            },
+            body: JSON.stringify({ plan_code: targetPlan.code })
+        });
+
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.detail || 'Upgrade failed');
+
+        // Show success in modal — no checkout redirect needed
+        const el = document.getElementById('generalError');
+        el.innerHTML = `<span>Successfully upgraded from <strong>${currentPlan.name}</strong> to <strong>${targetPlan.name}</strong>! The difference will be charged immediately by Creem.</span>`;
+        el.classList.add('show', 'success');
+        confirmBtn.disabled = false;
+        confirmBtn.textContent = originalText;
+        cachedQuotaData = null;
+    } catch (error) {
+        showMappedError(error.message || 'Upgrade failed. Please try again.', API_KEY_ERROR_MAP);
+        confirmBtn.disabled = false;
+        confirmBtn.textContent = originalText;
+    }
+}
+
+function showResumePrompt(apiKey, message) {
+    const el = document.getElementById('generalError');
+    el.innerHTML = `
+        <span>${message || 'Your subscription is still active but auto-renewal is off.'}</span>
+        <button class="resume-renewal-btn" id="resumeRenewalBtn">Re-enable Auto-Renewal</button>
+    `;
+    el.classList.add('show', 'has-action');
+    document.getElementById('resumeRenewalBtn').addEventListener('click', () => resumeSubscription(apiKey));
+}
+
+async function resumeSubscription(apiKey) {
+    const resumeBtn = document.getElementById('resumeRenewalBtn');
+    if (resumeBtn) {
+        resumeBtn.disabled = true;
+        resumeBtn.textContent = 'Processing...';
+    }
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/subscriptions/my/resume`, {
+            method: 'POST',
+            headers: { 'X-API-KEY': apiKey }
+        });
+
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.detail || 'Failed to resume subscription');
+
+        const el = document.getElementById('generalError');
+        el.innerHTML = '<span>Auto-renewal has been re-enabled successfully!</span>';
+        el.classList.remove('has-action');
+        el.classList.add('show', 'success');
+        setTimeout(() => closeSubscribeModal(), 2500);
+    } catch (error) {
+        const el = document.getElementById('generalError');
+        el.innerHTML = `<span>${error.message || 'Failed to resume. Please try again.'}</span>`;
+        el.classList.remove('has-action');
+        if (resumeBtn) {
+            resumeBtn.disabled = false;
+            resumeBtn.textContent = 'Re-enable Auto-Renewal';
+        }
     }
 }
 
@@ -527,6 +664,209 @@ async function createGuestSubscription(email) {
         showMappedError(msg, EMAIL_ERROR_MAP);
         confirmBtn.disabled = false;
         confirmBtn.textContent = originalText;
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Cancel modal
+// ---------------------------------------------------------------------------
+
+function initCancelModal() {
+    document.getElementById('openCancelModalLink').addEventListener('click', e => {
+        e.preventDefault();
+        openCancelModal();
+    });
+    document.getElementById('closeCancelModal').addEventListener('click', closeCancelModal);
+    const modal = document.getElementById('cancelModal');
+    modal.addEventListener('click', e => { if (e.target === modal) closeCancelModal(); });
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && modal.style.display === 'flex') closeCancelModal();
+    });
+    document.getElementById('confirmCancelBtn').addEventListener('click', handleCancel);
+    initCancelApiKeySync();
+    initCancelApiKeyVerification();
+    initCancelApiKeyVisibility();
+}
+
+function openCancelModal() {
+    // Pre-fill from subscribe modal's API key input, or fall back to sessionStorage
+    let subscribeKey = document.getElementById('subscribeApiKey').value;
+    if (!subscribeKey) {
+        try {
+            const saved = JSON.parse(sessionStorage.getItem('subscribeModalStateEn') || '{}');
+            subscribeKey = saved.apiKey || '';
+        } catch { /* ignore */ }
+    }
+    if (subscribeKey) {
+        document.getElementById('cancelApiKey').value = subscribeKey;
+    }
+    clearCancelErrors();
+    const modal = document.getElementById('cancelModal');
+    modal.style.display = 'flex';
+    setTimeout(() => {
+        modal.classList.add('show');
+        document.getElementById('cancelApiKey').focus();
+    }, 10);
+    document.body.style.overflow = 'hidden';
+}
+
+function closeCancelModal() {
+    const modal = document.getElementById('cancelModal');
+    modal.classList.remove('show');
+    setTimeout(() => { modal.style.display = 'none'; }, 300);
+    document.body.style.overflow = '';
+    clearCancelErrors();
+}
+
+function clearCancelErrors() {
+    const errEl = document.getElementById('cancelGeneralError');
+    errEl.innerHTML = '';
+    errEl.classList.remove('show', 'has-action', 'success');
+    const resultEl = document.getElementById('cancelApiKeyVerifyResult');
+    resultEl.style.display = 'none';
+    resultEl.className = 'api-key-verify-result';
+    document.getElementById('cancelApiKey').classList.remove('input-error');
+}
+
+/** Keep cancel modal and subscribe modal API key inputs in sync */
+function initCancelApiKeySync() {
+    const cancelInput = document.getElementById('cancelApiKey');
+    const subscribeInput = document.getElementById('subscribeApiKey');
+
+    cancelInput.addEventListener('input', () => {
+        subscribeInput.value = cancelInput.value;
+        cachedQuotaData = null;
+        cachedQuotaApiKey = null;
+        clearCancelErrors();
+    });
+
+    // Sync subscribe → cancel when subscribe modal key changes (already done via saveModalState,
+    // but also reflect live here for when cancel modal opens)
+    subscribeInput.addEventListener('input', () => {
+        cancelInput.value = subscribeInput.value;
+    });
+}
+
+function initCancelApiKeyVisibility() {
+    const toggleBtn = document.getElementById('toggleCancelApiKeyVisibility');
+    const input = document.getElementById('cancelApiKey');
+    if (!toggleBtn || !input) return;
+    toggleBtn.addEventListener('click', () => {
+        const eyeIcon = toggleBtn.querySelector('.eye-icon');
+        const eyeOffIcon = toggleBtn.querySelector('.eye-off-icon');
+        if (input.type === 'password') {
+            input.type = 'text';
+            eyeIcon.style.display = 'none';
+            eyeOffIcon.style.display = 'block';
+        } else {
+            input.type = 'password';
+            eyeIcon.style.display = 'block';
+            eyeOffIcon.style.display = 'none';
+        }
+    });
+}
+
+function initCancelApiKeyVerification() {
+    const verifyBtn = document.getElementById('verifyCancelApiKeyBtn');
+    const input = document.getElementById('cancelApiKey');
+    const resultDiv = document.getElementById('cancelApiKeyVerifyResult');
+    if (!verifyBtn || !input || !resultDiv) return;
+
+    verifyBtn.addEventListener('click', async () => {
+        const apiKey = input.value.trim();
+        if (!apiKey) {
+            showCancelVerifyResult('error', 'Please enter your API key');
+            return;
+        }
+        verifyBtn.disabled = true;
+        verifyBtn.textContent = 'Verifying...';
+        showCancelVerifyResult('loading', 'Verifying...');
+        try {
+            const response = await fetch(`${API_BASE_URL}/subscriptions/my/quota`, {
+                headers: { 'X-API-Key': apiKey }
+            });
+            if (response.ok) {
+                const data = await response.json();
+                cachedQuotaData = data;
+                cachedQuotaApiKey = apiKey;
+                const sub = data.has_subscription ? data.subscription : null;
+                if (!sub || sub.status !== 'active') {
+                    showCancelVerifyResult('error', 'No active subscription found for this API key');
+                    return;
+                }
+                if (sub.auto_renew === false) {
+                    const expiresAt = new Date(sub.expires_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+                    showCancelVerifyResult('error', `Auto-renewal is already disabled. Your ${sub.plan_name} subscription expires on ${expiresAt}.`);
+                    document.getElementById('confirmCancelBtn').disabled = true;
+                    return;
+                }
+                document.getElementById('confirmCancelBtn').disabled = false;
+                const expiresAt = new Date(sub.expires_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+                showCancelVerifyResult('success', `Verified: ${data.email} · ${sub.plan_name} · expires ${expiresAt}`);
+            } else {
+                const errorData = await response.json().catch(() => ({}));
+                showCancelVerifyResult('error', mapVerifyErrorMessage(errorData.detail || `Verification failed (${response.status})`));
+            }
+        } catch {
+            showCancelVerifyResult('error', 'Network error. Please check your connection.');
+        } finally {
+            verifyBtn.disabled = false;
+            verifyBtn.textContent = 'Verify';
+        }
+    });
+
+    input.addEventListener('input', () => {
+        resultDiv.style.display = 'none';
+        input.classList.remove('input-error');
+        document.getElementById('confirmCancelBtn').disabled = false;
+    });
+}
+
+function showCancelVerifyResult(type, message) {
+    const resultDiv = document.getElementById('cancelApiKeyVerifyResult');
+    const input = document.getElementById('cancelApiKey');
+    if (!resultDiv) return;
+    resultDiv.className = 'api-key-verify-result ' + type;
+    resultDiv.textContent = message;
+    resultDiv.style.display = 'block';
+    if (input) input.classList.toggle('input-error', type === 'error');
+}
+
+async function handleCancel() {
+    const apiKey = document.getElementById('cancelApiKey').value.trim();
+    if (!apiKey) {
+        showCancelVerifyResult('error', 'Please enter your API key');
+        return;
+    }
+
+    const confirmBtn = document.getElementById('confirmCancelBtn');
+    const errEl = document.getElementById('cancelGeneralError');
+    confirmBtn.disabled = true;
+    confirmBtn.textContent = 'Processing...';
+    errEl.innerHTML = '';
+    errEl.classList.remove('show', 'success');
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/subscriptions/my/cancel`, {
+            method: 'POST',
+            headers: { 'X-API-KEY': apiKey }
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.detail?.message || data.detail || 'Cancellation failed');
+
+        const expiresAt = data.expires_at
+            ? new Date(data.expires_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+            : '';
+        errEl.innerHTML = `<span>Auto-renewal cancelled. Your subscription remains active until <strong>${expiresAt}</strong>.</span>`;
+        errEl.classList.add('show', 'success');
+        confirmBtn.textContent = 'Done';
+        cachedQuotaData = null;
+        setTimeout(() => closeCancelModal(), 3000);
+    } catch (error) {
+        errEl.textContent = error.message || 'Cancellation failed. Please try again.';
+        errEl.classList.add('show');
+        confirmBtn.disabled = false;
+        confirmBtn.textContent = 'Cancel Auto-Renewal';
     }
 }
 

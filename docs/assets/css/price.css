@@ -461,6 +461,47 @@
     display: block;
 }
 
+.general-error-msg.show.has-action {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+    color: #92400E;
+    background: #FEF3C7;
+    border: 1px solid #FCD34D;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+}
+
+.general-error-msg.show.success {
+    color: #065F46;
+    background: #D1FAE5;
+    border: 1px solid #6EE7B7;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+}
+
+.resume-renewal-btn {
+    padding: 0.45rem 1.2rem;
+    background: #F59E0B;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.resume-renewal-btn:hover {
+    background: #D97706;
+}
+
+.resume-renewal-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
 /* 支付方式选择 */
 .payment-methods {
     display: flex;
@@ -640,6 +681,36 @@
 .confirm-subscribe-btn:disabled {
     background: var(--text-light);
     cursor: not-allowed;
+}
+
+.cancel-confirm-btn {
+    background: #EF4444;
+}
+
+.cancel-confirm-btn:hover {
+    background: #DC2626;
+}
+
+.cancel-confirm-btn:disabled {
+    background: var(--text-light);
+}
+
+.cancel-link {
+    color: var(--primary-color);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.cancel-link:hover {
+    color: #EF4444;
+}
+
+.cancel-modal-subtitle {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    font-weight: 400;
 }
 
 /* 响应式布局 */
