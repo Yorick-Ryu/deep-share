@@ -460,7 +460,7 @@ async function createSubscriptionWithApiKey(apiKey) {
         confirmBtn.disabled = true;
         confirmBtn.textContent = 'Processing, please wait...';
 
-        const response = await fetch(`${API_BASE_URL}/payments/subscription/create`, {
+        const response = await fetch(`${API_BASE_URL}/payments/creem/subscription/create`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -468,23 +468,20 @@ async function createSubscriptionWithApiKey(apiKey) {
             },
             body: JSON.stringify({
                 plan_code: selectedPlanCode,
-                payment_method: 'creem',
-                method: 'web',
-                return_url: `${window.location.origin}/payment-result.html`
             })
         });
 
         const data = await response.json();
         if (!response.ok) throw new Error(data.detail || 'Failed to create order');
 
-        if (data.payment_url) {
+        if (data.checkout_url) {
             localStorage.setItem('pending_api_key', apiKey);
             if (data.order_no) localStorage.setItem('pending_order_no', data.order_no);
             saveModalState();
             confirmBtn.textContent = 'Redirecting to checkout...';
-            window.location.href = data.payment_url;
+            window.location.href = data.checkout_url;
         } else {
-            throw new Error('Payment URL not returned');
+            throw new Error('Checkout URL not returned');
         }
     } catch (error) {
         const msg = error.message || 'Failed to create order. Please try again.';
@@ -501,15 +498,12 @@ async function createGuestSubscription(email) {
         confirmBtn.disabled = true;
         confirmBtn.textContent = 'Processing...';
 
-        const response = await fetch(`${API_BASE_URL}/payments/subscription/guest-create`, {
+        const response = await fetch(`${API_BASE_URL}/payments/creem/subscription/guest-create`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 email,
                 plan_code: selectedPlanCode,
-                payment_method: 'creem',
-                method: 'web',
-                return_url: `${window.location.origin}/payment-result.html`
             })
         });
 
@@ -521,12 +515,12 @@ async function createGuestSubscription(email) {
             localStorage.setItem('pending_order_no', data.order_no);
         }
 
-        if (data.payment_url) {
+        if (data.checkout_url) {
             saveModalState();
             confirmBtn.textContent = 'Redirecting to checkout...';
-            window.location.href = data.payment_url;
+            window.location.href = data.checkout_url;
         } else {
-            throw new Error('Payment URL not returned');
+            throw new Error('Checkout URL not returned');
         }
     } catch (error) {
         const msg = error.message || 'Failed to create order. Please try again.';
