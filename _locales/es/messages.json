@@ -162,13 +162,13 @@
         "message": "Expira {date}"
     },
     "apiKeyHint": {
-        "message": "¿Comprar clave API? <a href=\"https://ds.rick216.cn/purchase-en\" target=\"_blank\">Haz clic aquí</a>"
+        "message": "¿Comprar clave API? <a href=\"https://ds.rick216.cn/en/price.html\" target=\"_blank\">Haz clic aquí</a>"
     },
     "apiKeyMissing": {
         "message": "Haz clic en el icono de la extensión para comprar e ingresar una clave API para usar la conversión de documentos"
     },
     "apiKeyMissingShort": {
-        "message": "Por favor, <a href=\"https://ds.rick216.cn/purchase-en\" target=\"_blank\">compra</a> e ingresa una clave API"
+        "message": "Por favor, <a href=\"https://ds.rick216.cn/en/price.html\" target=\"_blank\">compra</a> e ingresa una clave API"
     },
     "manualConversionExplanation": {
         "message": "Compatible con Grok, Claude, Meta AI, etc. Copia tu conversación al cuadro Markdown, haz clic en \"Convertir a documento\" para descargar un documento Word con formato elegante y soporte de fórmulas."
@@ -336,7 +336,7 @@
         "message": "Error de clave API o expirada. Revisa tu correo o contacta al servicio: contact@deepshare.app"
     },
     "quotaExceededError": {
-        "message": "Cuota agotada. Por favor, <a href=\"https://ds.rick216.cn/purchase-en\" target=\"_blank\">recarga</a>."
+        "message": "Cuota agotada. Por favor, <a href=\"https://ds.rick216.cn/en/price.html\" target=\"_blank\">recarga</a>."
     },
     "aboutTabTitle": {
         "message": "Acerca de DeepShare"

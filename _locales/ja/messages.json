@@ -162,13 +162,13 @@
         "message": "{date} に期限切れ"
     },
     "apiKeyHint": {
-        "message": "API キーを購入しますか？<a href=\"https://ds.rick216.cn/purchase-en\" target=\"_blank\">こちらをクリック</a>"
+        "message": "API キーを購入しますか？<a href=\"https://ds.rick216.cn/en/price.html\" target=\"_blank\">こちらをクリック</a>"
     },
     "apiKeyMissing": {
         "message": "文書変換機能を使用するには、拡張機能アイコンをクリックして API キーを購入・入力してください"
     },
     "apiKeyMissingShort": {
-        "message": "<a href=\"https://ds.rick216.cn/purchase-en\" target=\"_blank\">APIキーを購入</a>・入力してください"
+        "message": "<a href=\"https://ds.rick216.cn/en/price.html\" target=\"_blank\">APIキーを購入</a>・入力してください"
     },
     "manualConversionExplanation": {
         "message": "Grok、Claude、Meta AI などをサポート。会話を Markdown 入力ボックスにコピーし、「文書に変換」をクリックすると、数式対応の美しいフォーマットの Word 文書をダウンロードできます！"
@@ -336,7 +336,7 @@
         "message": "API キーエラーまたは期限切れ。メールを確認するか、カスタマーサービスにお問い合わせください: contact@deepshare.app"
     },
     "quotaExceededError": {
-        "message": "クォータが不足しています。<a href=\"https://ds.rick216.cn/purchase-en\" target=\"_blank\">チャージ</a>してください。"
+        "message": "クォータが不足しています。<a href=\"https://ds.rick216.cn/en/price.html\" target=\"_blank\">チャージ</a>してください。"
     },
     "aboutTabTitle": {
         "message": "DeepShare について"
