@@ -263,17 +263,26 @@
     "compatModeTooltip": {
         "message": "相容不規範的Markdown格式"
     },
+    "compatModeDocUrl": {
+        "message": "https://docs.deepshare.app/en/faq/compat-mode"
+    },
     "hardLineBreaksLabel": {
         "message": "強制換行"
     },
     "hardLineBreaksTooltip": {
         "message": "將源碼中的單次換行視為硬換行"
     },
+    "hardLineBreaksDocUrl": {
+        "message": "https://docs.deepshare.app/en/faq/hard-line-breaks"
+    },
     "disableAutoNumberingLabel": {
         "message": "禁用自動編號"
     },
     "disableAutoNumberingTooltip": {
         "message": "有序列表轉換為帶數字的純文本段落"
+    },
+    "disableAutoNumberingDocUrl": {
+        "message": "https://docs.deepshare.app/en/faq/disable-auto-numbering"
     },
     "getClipboardError": {
         "message": "獲取內容失敗"
@@ -486,5 +495,8 @@
     },
     "scrollCollecting": {
         "message": "正在捲動讀取對話內容，請勿操作..."
+    },
+    "documentationUrl": {
+        "message": "https://docs.deepshare.app/en"
     }
 }

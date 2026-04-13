@@ -484,10 +484,16 @@ function loadI18nText(errorMsg = null) {
   document.getElementById('convertMermaidLabel').textContent = getMessage('convertMermaidLabel') || '启用Mermaid图表转换';
   document.getElementById('compatModeLabel').textContent = getMessage('compatModeLabel') || '兼容模式';
   document.getElementById('compatModeTooltip').textContent = getMessage('compatModeTooltip') || '兼容不规范的Markdown格式';
+  const compatModeDocUrl = getMessage('compatModeDocUrl');
+  if (compatModeDocUrl) document.getElementById('compatModeDocLink').href = compatModeDocUrl;
   document.getElementById('hardLineBreaksLabel').textContent = getMessage('hardLineBreaksLabel') || '强制换行';
   document.getElementById('hardLineBreaksTooltip').textContent = getMessage('hardLineBreaksTooltip') || '将源码中的单次换行视为硬换行';
+  const hardLineBreaksDocUrl = getMessage('hardLineBreaksDocUrl');
+  if (hardLineBreaksDocUrl) document.getElementById('hardLineBreaksDocLink').href = hardLineBreaksDocUrl;
   document.getElementById('disableAutoNumberingLabel').textContent = getMessage('disableAutoNumberingLabel') || '禁用自动编号';
   document.getElementById('disableAutoNumberingTooltip').textContent = getMessage('disableAutoNumberingTooltip') || '将有序列表转换为带有数字的普通文本段落，避免使用Word的自动编号';
+  const disableAutoNumberingDocUrl = getMessage('disableAutoNumberingDocUrl');
+  if (disableAutoNumberingDocUrl) document.getElementById('disableAutoNumberingDocLink').href = disableAutoNumberingDocUrl;
 
   // Formula Copy Settings tab
   document.getElementById('formulaSettingsTitle').textContent = getMessage('formulaSettingsTitle') || 'Formula Copy Settings';
@@ -553,6 +559,12 @@ function loadI18nText(errorMsg = null) {
   document.getElementById('acknowledgmentText').textContent = getMessage('acknowledgmentText') || '感谢每一位为 DeepShare 提出建议的朋友！许多功能源于用户的真实需求，让我们一起提升效率，把节省的时间留给生活。';
   document.getElementById('versionLabel').textContent = getMessage('versionLabel') || 'Version:';
   document.getElementById('documentationLabel').textContent = getMessage('documentationLabel') || 'Documentation:';
+  const documentationUrl = getMessage('documentationUrl');
+  if (documentationUrl) {
+    const documentationLink = document.getElementById('documentationLink');
+    documentationLink.href = documentationUrl;
+    documentationLink.textContent = documentationUrl;
+  }
   document.getElementById('githubLabel').textContent = getMessage('githubLabel') || 'GitHub:';
   document.getElementById('developerEmailLabel').textContent = getMessage('developerEmailLabel') || 'Developer Email:';
 

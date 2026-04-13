@@ -263,17 +263,26 @@
     "compatModeTooltip": {
         "message": "Compatible con Markdown no estándar"
     },
+    "compatModeDocUrl": {
+        "message": "https://docs.deepshare.app/en/faq/compat-mode"
+    },
     "hardLineBreaksLabel": {
         "message": "Saltos de línea forzados"
     },
     "hardLineBreaksTooltip": {
         "message": "Trata los saltos de línea simples como saltos forzados"
     },
+    "hardLineBreaksDocUrl": {
+        "message": "https://docs.deepshare.app/en/faq/hard-line-breaks"
+    },
     "disableAutoNumberingLabel": {
         "message": "Desactivar numeración automática"
     },
     "disableAutoNumberingTooltip": {
         "message": "Listas ordenadas convertidas a párrafos de texto plano con numeración"
+    },
+    "disableAutoNumberingDocUrl": {
+        "message": "https://docs.deepshare.app/en/faq/disable-auto-numbering"
     },
     "getClipboardError": {
         "message": "Error al obtener contenido"
@@ -352,6 +361,9 @@
     },
     "documentationLabel": {
         "message": "Documentación:"
+    },
+    "documentationUrl": {
+        "message": "https://docs.deepshare.app/en"
     },
     "githubLabel": {
         "message": "GitHub:"

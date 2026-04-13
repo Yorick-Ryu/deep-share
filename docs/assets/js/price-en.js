@@ -3,7 +3,7 @@
  * Handles billing cycle toggle, plan selection, and Creem payment flow
  */
 
-const API_BASE_URL = 'https://preapi.ds.rick216.cn';
+const API_BASE_URL = 'https://api.ds.rick216.cn';
 
 // Plan definitions (USD pricing, Creem payment)
 // sortOrder must match the backend SubscriptionPlan.sort_order column
