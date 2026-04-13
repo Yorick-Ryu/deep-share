@@ -95,6 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initModalStatePersistence();
     parseAndFillApiKey();
     initCancelModal();
+    handleManageParam();
 });
 
 // Restore button text after browser back navigation (bfcache)
@@ -683,6 +684,7 @@ function initCancelModal() {
         if (e.key === 'Escape' && modal.style.display === 'flex') closeCancelModal();
     });
     document.getElementById('confirmCancelBtn').addEventListener('click', handleCancel);
+    document.getElementById('confirmResumeInManageBtn').addEventListener('click', handleResumeInManage);
     initCancelApiKeySync();
     initCancelApiKeyVerification();
     initCancelApiKeyVisibility();
@@ -701,6 +703,9 @@ function openCancelModal() {
         document.getElementById('cancelApiKey').value = subscribeKey;
     }
     clearCancelErrors();
+    // Hide action buttons until verification
+    document.getElementById('confirmCancelBtn').style.display = 'none';
+    document.getElementById('confirmResumeInManageBtn').style.display = 'none';
     const modal = document.getElementById('cancelModal');
     modal.style.display = 'flex';
     setTimeout(() => {
@@ -726,6 +731,8 @@ function clearCancelErrors() {
     resultEl.style.display = 'none';
     resultEl.className = 'api-key-verify-result';
     document.getElementById('cancelApiKey').classList.remove('input-error');
+    document.getElementById('confirmCancelBtn').style.display = 'none';
+    document.getElementById('confirmResumeInManageBtn').style.display = 'none';
 }
 
 /** Keep cancel modal and subscribe modal API key inputs in sync */
@@ -781,6 +788,8 @@ function initCancelApiKeyVerification() {
         verifyBtn.disabled = true;
         verifyBtn.textContent = 'Verifying...';
         showCancelVerifyResult('loading', 'Verifying...');
+        document.getElementById('confirmCancelBtn').style.display = 'none';
+        document.getElementById('confirmResumeInManageBtn').style.display = 'none';
         try {
             const response = await fetch(`${API_BASE_URL}/subscriptions/my/quota`, {
                 headers: { 'X-API-Key': apiKey }
@@ -794,15 +803,22 @@ function initCancelApiKeyVerification() {
                     showCancelVerifyResult('error', 'No active subscription found for this API key');
                     return;
                 }
-                if (sub.auto_renew === false) {
-                    const expiresAt = new Date(sub.expires_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-                    showCancelVerifyResult('error', `Auto-renewal is already disabled. Your ${sub.plan_name} subscription expires on ${expiresAt}.`);
-                    document.getElementById('confirmCancelBtn').disabled = true;
-                    return;
-                }
-                document.getElementById('confirmCancelBtn').disabled = false;
                 const expiresAt = new Date(sub.expires_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-                showCancelVerifyResult('success', `Verified: ${data.email} · ${sub.plan_name} · expires ${expiresAt}`);
+                const autoRenewStatus = sub.auto_renew ? 'Auto-renewal: on' : 'Auto-renewal: off';
+                showCancelVerifyResult('success', `Verified: ${data.email} · ${sub.plan_name} · expires ${expiresAt} · ${autoRenewStatus}`);
+
+                // Show the appropriate action button based on auto_renew status
+                const cancelBtn = document.getElementById('confirmCancelBtn');
+                const resumeBtn = document.getElementById('confirmResumeInManageBtn');
+                if (sub.auto_renew === false) {
+                    resumeBtn.style.display = 'block';
+                    resumeBtn.disabled = false;
+                    resumeBtn.textContent = 'Re-enable Auto-Renewal';
+                } else {
+                    cancelBtn.style.display = 'block';
+                    cancelBtn.disabled = false;
+                    cancelBtn.textContent = 'Cancel Auto-Renewal';
+                }
             } else {
                 const errorData = await response.json().catch(() => ({}));
                 showCancelVerifyResult('error', mapVerifyErrorMessage(errorData.detail || `Verification failed (${response.status})`));
@@ -818,7 +834,8 @@ function initCancelApiKeyVerification() {
     input.addEventListener('input', () => {
         resultDiv.style.display = 'none';
         input.classList.remove('input-error');
-        document.getElementById('confirmCancelBtn').disabled = false;
+        document.getElementById('confirmCancelBtn').style.display = 'none';
+        document.getElementById('confirmResumeInManageBtn').style.display = 'none';
     });
 }
 
@@ -861,12 +878,45 @@ async function handleCancel() {
         errEl.classList.add('show', 'success');
         confirmBtn.textContent = 'Done';
         cachedQuotaData = null;
-        setTimeout(() => closeCancelModal(), 3000);
     } catch (error) {
         errEl.textContent = error.message || 'Cancellation failed. Please try again.';
         errEl.classList.add('show');
         confirmBtn.disabled = false;
         confirmBtn.textContent = 'Cancel Auto-Renewal';
+    }
+}
+
+async function handleResumeInManage() {
+    const apiKey = document.getElementById('cancelApiKey').value.trim();
+    if (!apiKey) {
+        showCancelVerifyResult('error', 'Please enter your API key');
+        return;
+    }
+
+    const resumeBtn = document.getElementById('confirmResumeInManageBtn');
+    const errEl = document.getElementById('cancelGeneralError');
+    resumeBtn.disabled = true;
+    resumeBtn.textContent = 'Processing...';
+    errEl.innerHTML = '';
+    errEl.classList.remove('show', 'success');
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/subscriptions/my/resume`, {
+            method: 'POST',
+            headers: { 'X-API-KEY': apiKey }
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.detail || 'Failed to re-enable auto-renewal');
+
+        errEl.innerHTML = '<span>Auto-renewal has been re-enabled successfully!</span>';
+        errEl.classList.add('show', 'success');
+        resumeBtn.textContent = 'Done';
+        cachedQuotaData = null;
+    } catch (error) {
+        errEl.textContent = error.message || 'Failed to re-enable. Please try again.';
+        errEl.classList.add('show');
+        resumeBtn.disabled = false;
+        resumeBtn.textContent = 'Re-enable Auto-Renewal';
     }
 }
 
@@ -876,7 +926,8 @@ async function handleCancel() {
  */
 function parseAndFillApiKey() {
     try {
-        const encodedKey = new URLSearchParams(window.location.search).get('ak');
+        const params = new URLSearchParams(window.location.search);
+        const encodedKey = params.get('ak');
         if (!encodedKey) return;
 
         const decodedKey = atob(encodedKey.split('').reverse().join(''));
@@ -895,5 +946,27 @@ function parseAndFillApiKey() {
         window.history.replaceState({}, document.title, url.toString());
     } catch {
         // ignore decode errors
+    }
+}
+
+/**
+ * If ?manage=1 is in the URL, auto-open the manage subscription modal.
+ * Must be called after parseAndFillApiKey so the API key is already pre-filled
+ * in subscribeApiKey, which openCancelModal copies into cancelApiKey.
+ */
+function handleManageParam() {
+    try {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('manage') !== '1') return;
+
+        // Remove ?manage= from URL
+        const url = new URL(window.location.href);
+        url.searchParams.delete('manage');
+        window.history.replaceState({}, document.title, url.toString());
+
+        // Open manage modal (will copy ak from subscribeApiKey automatically)
+        openCancelModal();
+    } catch {
+        // ignore errors
     }
 }

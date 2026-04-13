@@ -296,6 +296,12 @@
     "renewSubscription": {
         "message": "Renouveler l'abonnement"
     },
+    "manageSubscription": {
+        "message": "Gérer l'abonnement"
+    },
+    "pricePageUrl": {
+        "message": "https://ds.rick216.cn/en/price.html"
+    },
     "subscriptionExpiredDays": {
         "message": "Expiré depuis {days} jours"
     },

@@ -296,6 +296,12 @@
     "renewSubscription": {
         "message": "续费套餐"
     },
+    "manageSubscription": {
+        "message": "管理订阅"
+    },
+    "pricePageUrl": {
+        "message": "https://ds.rick216.cn/price.html"
+    },
     "subscriptionExpiredDays": {
         "message": "已过期 {days} 天"
     },

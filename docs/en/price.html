@@ -273,7 +273,7 @@
                         d="M12 1L21.5 6.5V11.5C21.5 16.75 18.26 21.62 12 23C5.74 21.62 2.5 16.75 2.5 11.5V6.5L12 1ZM12 3.18L4.5 7.43V11.5C4.5 15.82 7.18 19.93 12 21.3C16.82 19.93 19.5 15.82 19.5 11.5V7.43L12 3.18ZM11 15H13V17H11V15ZM11 7H13V13H11V7Z">
                     </path>
                 </svg>
-                <span><strong>All plans auto-renew by default.</strong> You can <a href="#" id="openCancelModalLink" class="cancel-link">cancel</a> anytime before the next billing date</span>
+                <span><strong>All plans auto-renew by default.</strong> You can <a href="#" id="openCancelModalLink" class="cancel-link">manage</a> your subscription anytime</span>
             </div>
             <div class="note-item">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
@@ -384,12 +384,12 @@
         </div>
     </div>
 
-    <!-- Cancel modal -->
+    <!-- Manage subscription modal -->
     <div class="subscribe-modal" id="cancelModal" style="display: none;">
         <div class="modal-content">
             <button class="close-modal" id="closeCancelModal">&times;</button>
-            <h2>Cancel Auto-Renewal</h2>
-            <p class="modal-price cancel-modal-subtitle">Your subscription stays active until the expiry date</p>
+            <h2>Manage Subscription</h2>
+            <p class="modal-price cancel-modal-subtitle">Cancel or re-enable auto-renewal for your subscription</p>
 
             <div class="modal-form">
                 <div class="form-group api-key-section">
@@ -417,7 +417,8 @@
                     <div class="api-key-verify-result" id="cancelApiKeyVerifyResult" style="display: none;"></div>
                 </div>
 
-                <button class="confirm-subscribe-btn cancel-confirm-btn" id="confirmCancelBtn">Cancel Auto-Renewal</button>
+                <button class="confirm-subscribe-btn cancel-confirm-btn" id="confirmCancelBtn" style="display: none;">Cancel Auto-Renewal</button>
+                <button class="confirm-subscribe-btn" id="confirmResumeInManageBtn" style="display: none;">Re-enable Auto-Renewal</button>
                 <div class="general-error-msg" id="cancelGeneralError"></div>
             </div>
         </div>

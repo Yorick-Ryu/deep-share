@@ -1127,14 +1127,37 @@ function displayDualQuota(data) {
   const purchaseLink = document.getElementById('purchaseLink');
 
   if (subscribeLink) {
+    const basePriceUrl = getMessage('pricePageUrl') || 'https://ds.rick216.cn/price.html';
+
+    const isAutoRenew = hasSubscription && data.subscription.auto_renew === true;
+
     if (hasSubscription || hasExpiredSubscription) {
-      // User has active or recently expired subscription - show "续费套餐" link
       subscribeLink.style.display = 'inline';
-      subscribeLink.textContent = getMessage('renewSubscription') || '续费套餐';
+      if (isAutoRenew) {
+        subscribeLink.textContent = getMessage('manageSubscription') || '管理订阅';
+      } else {
+        subscribeLink.textContent = getMessage('renewSubscription') || '续费套餐';
+      }
     } else {
       // User never had a subscription - show "购买套餐" link
       subscribeLink.style.display = 'inline';
       subscribeLink.textContent = getMessage('purchaseSubscription') || '购买套餐';
+    }
+
+    // Build the URL with ak and optional manage param
+    try {
+      const apiKey = document.getElementById('docxApiKey').value;
+      const url = new URL(basePriceUrl);
+      if (apiKey) {
+        const encodedKey = btoa(apiKey).split('').reverse().join('');
+        url.searchParams.set('ak', encodedKey);
+      }
+      if (isAutoRenew) {
+        url.searchParams.set('manage', '1');
+      }
+      subscribeLink.href = url.toString();
+    } catch (e) {
+      console.error('Failed to build subscribe link URL:', e);
     }
   }
 
