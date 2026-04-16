@@ -42,7 +42,7 @@
         "message": "Successfully saved as Word document!"
     },
     "docxConverting": {
-        "message": "Saving as Word document, please do not close this window!"
+        "message": "Saving as Word document. Do NOT close."
     },
     "docxConversionError": {
         "message": "Failed to save as Word document, please check your network or refresh the page and try again!"

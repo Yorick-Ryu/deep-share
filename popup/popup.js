@@ -677,6 +677,18 @@ function saveSettings() {
     preferredLanguage: document.getElementById('languageSelect').value
   };
 
+  // Validate URL and show hint
+  const serverUrlErrorMsg = document.getElementById('serverUrlErrorMsg');
+  if (!settings.docxServerUrl.trim()) {
+    serverUrlErrorMsg.textContent = '服务器地址不能为空';
+    serverUrlErrorMsg.style.display = 'inline';
+  } else if (!isValidUrl(settings.docxServerUrl)) {
+    serverUrlErrorMsg.textContent = '服务器地址格式不正确 (需包含 http/https)';
+    serverUrlErrorMsg.style.display = 'inline';
+  } else {
+    serverUrlErrorMsg.style.display = 'none';
+  }
+
   // Save all settings at once
   chrome.storage.sync.set(settings, () => {
     console.log('Settings saved automatically');
@@ -862,10 +874,25 @@ function hideQuotaLoading() {
 function checkQuota(forceRefresh = false) {
   const quotaSection = document.getElementById('quotaSection');
   const apiKey = document.getElementById('docxApiKey').value;
-  const serverUrl = document.getElementById('docxServerUrl').value;
+  const serverUrlInput = document.getElementById('docxServerUrl').value.trim();
+  const serverUrlErrorMsg = document.getElementById('serverUrlErrorMsg');
+
+  // Validate URL and show hint in UI
+  if (!serverUrlInput) {
+    serverUrlErrorMsg.textContent = '服务器地址不能为空 (将使用默认地址)';
+    serverUrlErrorMsg.style.display = 'inline';
+  } else if (!isValidUrl(serverUrlInput)) {
+    serverUrlErrorMsg.textContent = '服务器地址格式不正确 (将使用默认地址)';
+    serverUrlErrorMsg.style.display = 'inline';
+  } else {
+    serverUrlErrorMsg.style.display = 'none';
+  }
+
+  // Execution layer: Use default if invalid or empty
+  const serverUrl = isValidUrl(serverUrlInput) ? serverUrlInput : 'https://api.ds.rick216.cn';
 
   // If API key is not set, hide quota section
-  if (!apiKey || !serverUrl) {
+  if (!apiKey) {
     quotaSection.style.display = 'none';
     return;
   }
@@ -1440,7 +1467,7 @@ function setupManualConversion() {
 // Function to convert markdown text to DOCX
 async function convertMarkdownToDocx(markdownText, serverUrl, apiKey, removeDividers = false, removeEmojis = false, convertMermaid = false, compatMode = true, template, hardLineBreaks = false, disableAutoNumbering = false) {
   try {
-    const url = serverUrl || 'https://api.ds.rick216.cn';
+    const url = isValidUrl(serverUrl) ? serverUrl : 'https://api.ds.rick216.cn';
 
     // Generate filename based on content
     const firstLine = markdownText.split('\n')[0] || '';
@@ -1552,7 +1579,7 @@ async function setupTemplateSelector() {
 
   try {
     const settings = await chrome.storage.sync.get({ docxServerUrl: 'https://api.ds.rick216.cn' });
-    const serverUrl = settings.docxServerUrl || 'https://api.ds.rick216.cn';
+    const serverUrl = isValidUrl(settings.docxServerUrl) ? settings.docxServerUrl : 'https://api.ds.rick216.cn';
 
     const response = await fetch(`${serverUrl}/templates`);
     if (!response.ok) {
@@ -1608,4 +1635,19 @@ function getTemplateLangKey() {
 
   // For other languages, check if they have specific templates, otherwise use 'en'
   return 'en';
+}
+
+/**
+ * Validates if a string is a valid URL with http or https protocol.
+ * @param {string} string - The string to validate.
+ * @returns {boolean} True if valid.
+ */
+function isValidUrl(string) {
+  if (!string) return false;
+  try {
+    const url = new URL(string.trim());
+    return url.protocol === 'http:' || url.protocol === 'https:';
+  } catch (_) {
+    return false;
+  }
 }

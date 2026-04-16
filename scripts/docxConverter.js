@@ -200,7 +200,8 @@ async function convertToDocxViaApi(content, serverUrl, documentTitle = null) {
             lastUsedTemplate: null
         });
 
-        const url = serverUrl || settings.docxServerUrl || 'https://api.ds.rick216.cn';
+        const rawUrl = serverUrl || settings.docxServerUrl || 'https://api.ds.rick216.cn';
+        const url = isValidUrl(rawUrl) ? rawUrl : 'https://api.ds.rick216.cn';
         const apiKey = settings.docxApiKey;
 
         // Ensure API key is provided
@@ -308,11 +309,12 @@ async function checkQuota() {
             docxApiKey: ''
         });
 
-        const url = settings.docxServerUrl;
+        const rawUrl = settings.docxServerUrl;
         const apiKey = settings.docxApiKey;
+        const url = isValidUrl(rawUrl) ? rawUrl : 'https://api.ds.rick216.cn';
 
-        // If not configured, exit quietly
-        if (!apiKey || !url) {
+        // If no API key, exit quietly
+        if (!apiKey) {
             return;
         }
 
@@ -446,3 +448,16 @@ function generateFilename(content, title = null) {
 
 // Initialize the module
 initDocxConverter();
+
+/**
+ * Validates if a string is a valid URL with http or https protocol.
+ */
+function isValidUrl(string) {
+    if (!string) return false;
+    try {
+        const url = new URL(string.trim());
+        return url.protocol === 'http:' || url.protocol === 'https:';
+    } catch (_) {
+        return false;
+    }
+}
