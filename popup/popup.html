@@ -100,7 +100,10 @@
           use.</p>
 
         <div class="form-group">
-          <label for="docxServerUrl" id="docxServerUrlLabel" class="collapsible-label">Server URL</label>
+          <div class="label-row">
+            <label for="docxServerUrl" id="docxServerUrlLabel" class="collapsible-label">Server URL</label>
+            <span id="serverUrlErrorMsg" class="error-msg-inline" style="display: none;"></span>
+          </div>
           <input type="text" id="docxServerUrl" placeholder="https://api.ds.rick216.cn">
         </div>
 
@@ -160,7 +163,7 @@
             <input type="checkbox" id="compatMode" checked>
             <label for="compatMode" id="compatModeLabel"></label>
             <a href="https://docs.deepshare.app/faq/compat-mode" target="_blank"
-              class="tooltip-icon tooltip-left-aligned" style="cursor: pointer;">
+              id="compatModeDocLink" class="tooltip-icon tooltip-left-aligned" style="cursor: pointer;">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="12" cy="12" r="10"></circle>
@@ -178,7 +181,7 @@
             <input type="checkbox" id="hardLineBreaks">
             <label for="hardLineBreaks" id="hardLineBreaksLabel"></label>
             <a href="https://docs.deepshare.app/faq/hard-line-breaks" target="_blank"
-              class="tooltip-icon tooltip-right-aligned" style="cursor: pointer;">
+              id="hardLineBreaksDocLink" class="tooltip-icon tooltip-right-aligned" style="cursor: pointer;">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="12" cy="12" r="10"></circle>
@@ -192,7 +195,7 @@
             <input type="checkbox" id="disableAutoNumbering">
             <label for="disableAutoNumbering" id="disableAutoNumberingLabel"></label>
             <a href="https://docs.deepshare.app/faq/disable-auto-numbering" target="_blank"
-              class="tooltip-icon tooltip-left-aligned" style="cursor: pointer;">
+              id="disableAutoNumberingDocLink" class="tooltip-icon tooltip-left-aligned" style="cursor: pointer;">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="12" cy="12" r="10"></circle>
@@ -447,7 +450,7 @@
 
           <div class="about-item">
             <label id="documentationLabel">Documentation:</label>
-            <a href="https://docs.deepshare.app" target="_blank" class="about-link">
+            <a href="https://docs.deepshare.app" target="_blank" class="about-link" id="documentationLink">
               https://docs.deepshare.app
             </a>
           </div>
@@ -461,8 +464,8 @@
 
           <div class="about-item">
             <label id="developerEmailLabel">Developer Email:</label>
-            <a href="mailto:yoricker@foxmail.com" class="about-link">
-              yoricker@foxmail.com
+            <a href="mailto:contact@deepshare.app" class="about-link">
+              contact@deepshare.app
             </a>
           </div>
         </div>

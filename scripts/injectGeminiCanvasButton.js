@@ -63,7 +63,7 @@
             const docxButtonWrapper = document.createElement('deepshare-docx-button');
             docxButtonWrapper.className = 'deepshare-canvas-docx-button ng-star-inserted';
             docxButtonWrapper.setAttribute('data-test-id', 'deepshare-docx-button');
-            docxButtonWrapper.setAttribute('aria-label', chrome.i18n.getMessage('docxButton') || '导出为 Word');
+            docxButtonWrapper.setAttribute('aria-label', chrome.i18n?.getMessage('docxButton') || '导出为 Word');
 
             // 创建按钮元素
             const docxButton = document.createElement('button');
@@ -80,7 +80,7 @@
                         <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
                     </svg>
                 </mat-icon>
-                <span class="mat-mdc-menu-item-text"> ${chrome.i18n.getMessage('docxButton') || 'Save as Word'}</span>
+                <span class="mat-mdc-menu-item-text"> ${chrome.i18n?.getMessage('docxButton') || 'Save as Word'}</span>
                 <div matripple="" class="mat-ripple mat-mdc-menu-ripple"></div>
             `;
 
@@ -90,7 +90,7 @@
             const mdButtonWrapper = document.createElement('deepshare-md-button');
             mdButtonWrapper.className = 'deepshare-canvas-md-button ng-star-inserted';
             mdButtonWrapper.setAttribute('data-test-id', 'deepshare-md-button');
-            mdButtonWrapper.setAttribute('aria-label', chrome.i18n.getMessage('saveAsMarkdown') || 'Save as Markdown');
+            mdButtonWrapper.setAttribute('aria-label', chrome.i18n?.getMessage('saveAsMarkdown') || 'Save as Markdown');
 
             // 创建Markdown按钮元素
             const mdButton = document.createElement('button');
@@ -107,7 +107,7 @@
                         <path d="M20.56 18H3.44C2.65 18 2 17.37 2 16.59V7.41C2 6.63 2.65 6 3.44 6H20.56C21.35 6 22 6.63 22 7.41V16.59C22 17.37 21.35 18 20.56 18M6.81 15.19V11.53L8.73 13.88L10.65 11.53V15.19H12.58V8.81H10.65L8.73 11.16L6.81 8.81H4.89V15.19H6.81M19.69 12H17.77V8.81H15.85V12H13.92L16.81 15.28L19.69 12Z"/>
                     </svg>
                 </mat-icon>
-                <span class="mat-mdc-menu-item-text"> ${chrome.i18n.getMessage('saveAsMarkdown') || 'Save as Markdown'}</span>
+                <span class="mat-mdc-menu-item-text"> ${chrome.i18n?.getMessage('saveAsMarkdown') || 'Save as Markdown'}</span>
                 <div matripple="" class="mat-ripple mat-mdc-menu-ripple"></div>
             `;
 
@@ -162,11 +162,11 @@
                         }, 100);
                     } else {
                         console.warn('DeepShare: Canvas content was empty');
-                        window.showToastNotification(chrome.i18n.getMessage('getClipboardError') || '无法获取内容', 'error');
+                        window.showToastNotification(chrome.i18n?.getMessage('getClipboardError') || '无法获取内容', 'error');
                     }
                 } catch (error) {
                     console.error('DeepShare: Error getting Canvas content:', error);
-                    window.showToastNotification(`${chrome.i18n.getMessage('getClipboardError') || '获取内容失败'}: ${error.message}`, 'error');
+                    window.showToastNotification(`${chrome.i18n?.getMessage('getClipboardError') || '获取内容失败'}: ${error.message}`, 'error');
                 } finally {
                     // 重新启用按钮
                     docxButton.removeAttribute('disabled');
@@ -207,11 +207,11 @@
                         }, 100);
                     } else {
                         console.warn('DeepShare: Canvas content was empty');
-                        window.showToastNotification(chrome.i18n.getMessage('getClipboardError') || '无法获取内容', 'error');
+                        window.showToastNotification(chrome.i18n?.getMessage('getClipboardError') || '无法获取内容', 'error');
                     }
                 } catch (error) {
                     console.error('DeepShare: Error getting Canvas content:', error);
-                    window.showToastNotification(`${chrome.i18n.getMessage('getClipboardError') || '获取内容失败'}: ${error.message}`, 'error');
+                    window.showToastNotification(`${chrome.i18n?.getMessage('getClipboardError') || '获取内容失败'}: ${error.message}`, 'error');
                 } finally {
                     // 重新启用按钮
                     mdButton.removeAttribute('disabled');
@@ -373,7 +373,7 @@
 
         // 附加对话链接
         if (shouldIncludeLink) {
-            content += `\n\n*${chrome.i18n.getMessage('sourceConversationLabel')}: ${window.location.href}*\n*${chrome.i18n.getMessage('exportedViaDeepShare')}*\n`;
+            content += `\n\n*${chrome.i18n?.getMessage('sourceConversationLabel')}: ${window.location.href}*\n*${chrome.i18n?.getMessage('exportedViaDeepShare')}*\n`;
         }
 
         return content;
@@ -438,7 +438,7 @@
         // 查找"报告中使用的来源"区域
         const usedSourcesDiv = sourceListContainer.querySelector('.source-list.used-sources');
         if (usedSourcesDiv && sourceIndexMap && sourceIndexMap.size > 0) {
-            const referenceTitle = chrome.i18n.getMessage('referenceSources') || 'References';
+            const referenceTitle = chrome.i18n?.getMessage('referenceSources') || 'References';
             result += `\n\n### ${referenceTitle}\n\n`;
             // 使用 sourceIndexMap 中的来源，按 displayIndex 排序
             const sortedSources = Array.from(sourceIndexMap.values())
@@ -460,7 +460,7 @@
         if (unusedSourcesDiv) {
             const unusedSources = extractSourcesFromList(unusedSourcesDiv);
             if (unusedSources.length > 0) {
-                const unusedTitle = chrome.i18n.getMessage('unusedSources') || 'Sources Reviewed but Not Used';
+                const unusedTitle = chrome.i18n?.getMessage('unusedSources') || 'Sources Reviewed but Not Used';
                 result += `\n### ${unusedTitle}\n\n`;
                 unusedSources.forEach((source, index) => {
                     // 使用尖括号包裹 URL 以处理 URL 中可能包含的括号

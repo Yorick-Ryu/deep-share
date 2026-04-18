@@ -125,6 +125,9 @@
     "unselectAllButton": {
         "message": "取消全选"
     },
+    "loadingHistory": {
+        "message": "正在加载..."
+    },
     "noMessageSelected": {
         "message": "请至少选择一条对话"
     },
@@ -168,7 +171,7 @@
         "message": "请<a href=\"https://ds.rick216.cn/price\" target=\"_blank\">购买</a>并填写API密钥"
     },
     "manualConversionExplanation": {
-        "message": "支持豆包、元宝、Claude等，复制需要转换的对话到Markdown输入框，点击\"转换为文档\"按钮立即下载Word格式，排版精美，支持公式！<a href=\"https://docs.deepshare.app\" target=\"_blank\">点击此处</a>查看详细教程"
+        "message": "支持豆包、元宝、Claude等，复制需要转换的对话到Markdown输入框，点击\"转换为文档\"按钮立即下载Word格式，排版精美，支持公式！<a href=\"https://docs.deepshare.app/usage\" target=\"_blank\">点击此处</a>查看详细教程"
     },
     "manualConversionTitle": {
         "message": "手动转换文档"
@@ -260,17 +263,26 @@
     "compatModeTooltip": {
         "message": "兼容不规范的Markdown格式"
     },
+    "compatModeDocUrl": {
+        "message": "https://docs.deepshare.app/faq/compat-mode"
+    },
     "hardLineBreaksLabel": {
         "message": "强制换行"
     },
     "hardLineBreaksTooltip": {
         "message": "将单次换行视为硬换行"
     },
+    "hardLineBreaksDocUrl": {
+        "message": "https://docs.deepshare.app/faq/hard-line-breaks"
+    },
     "disableAutoNumberingLabel": {
         "message": "禁用自动编号"
     },
     "disableAutoNumberingTooltip": {
         "message": "有序列表转换为带数字的纯文本段落"
+    },
+    "disableAutoNumberingDocUrl": {
+        "message": "https://docs.deepshare.app/faq/disable-auto-numbering"
     },
     "getClipboardError": {
         "message": "获取内容失败"
@@ -292,6 +304,12 @@
     },
     "renewSubscription": {
         "message": "续费套餐"
+    },
+    "manageSubscription": {
+        "message": "管理订阅"
+    },
+    "pricePageUrl": {
+        "message": "https://ds.rick216.cn/price.html"
     },
     "subscriptionExpiredDays": {
         "message": "已过期 {days} 天"
@@ -320,6 +338,9 @@
     "screenshotFailed": {
         "message": "截图失败，刷新一下试试？"
     },
+    "conversationTooLong": {
+        "message": "对话内容太长，超出了浏览器的限制，请通过“选择对话”功能分段截图。"
+    },
     "imageCopied": {
         "message": "图片已复制到剪贴板"
     },
@@ -340,6 +361,9 @@
     },
     "documentationLabel": {
         "message": "官方文档:"
+    },
+    "documentationUrl": {
+        "message": "https://docs.deepshare.app"
     },
     "githubLabel": {
         "message": "GitHub:"
@@ -489,5 +513,8 @@
     },
     "onboardingRefreshHint": {
         "message": "首次使用请刷新已打开的AI对话"
+    },
+    "scrollCollecting": {
+        "message": "正在滚动读取对话内容，请勿操作..."
     }
 }

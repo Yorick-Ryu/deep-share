@@ -33,7 +33,9 @@ const i18n = {
     apiKeyError: 'API密钥错误或过期，请联系客服微信：yorick_cn',
     purchaseSubscription: '购买套餐',
     renewSubscription: '续费套餐',
+    manageSubscription: '管理订阅',
     purchaseAddonQuota: '购买叠加额度',
+    pricePageUrl: 'https://ds.rick216.cn/price.html',
     dateFormat: (date) => {
       const year = date.getFullYear();
       const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -68,7 +70,9 @@ const i18n = {
     apiKeyError: 'API key error or expired, please contact support',
     purchaseSubscription: 'Buy Plan',
     renewSubscription: 'Renew Plan',
+    manageSubscription: 'Manage Subscription',
     purchaseAddonQuota: 'Buy Addon Quota',
+    pricePageUrl: 'https://ds.rick216.cn/en/price.html',
     dateFormat: (date) => {
       return date.toLocaleDateString('en-US', {
         year: 'numeric',
@@ -772,17 +776,42 @@ function displayDualQuota(data) {
   const purchaseLink = document.getElementById('purchaseLink');
 
   if (subscribeLink) {
+    const isAutoRenew = hasSubscription && data.subscription.auto_renew === true;
+    const basePriceUrl = t('pricePageUrl');
+
     if (hasSubscription || hasExpiredSubscription) {
       subscribeLink.style.display = 'inline';
-      subscribeLink.textContent = t('renewSubscription');
+      subscribeLink.textContent = isAutoRenew ? t('manageSubscription') : t('renewSubscription');
     } else {
       subscribeLink.style.display = 'inline';
       subscribeLink.textContent = t('purchaseSubscription');
     }
+
+    // Build URL with ak and optional manage param
+    try {
+      const apiKey = document.getElementById('docxApiKey')?.value;
+      const url = new URL(basePriceUrl);
+      if (apiKey) {
+        const encodedKey = btoa(apiKey).split('').reverse().join('');
+        url.searchParams.set('ak', encodedKey);
+      }
+      if (isAutoRenew) {
+        url.searchParams.set('manage', '1');
+      }
+      subscribeLink.href = url.toString();
+    } catch (e) {
+      console.error('Failed to build subscribe link URL:', e);
+    }
   }
 
   if (purchaseLink) {
-    purchaseLink.textContent = t('purchaseAddonQuota');
+    const isChineseLang = !t('pricePageUrl').includes('/en/');
+    if (isChineseLang) {
+      purchaseLink.textContent = t('purchaseAddonQuota');
+      purchaseLink.style.display = '';
+    } else {
+      purchaseLink.style.display = 'none';
+    }
   }
 }
 

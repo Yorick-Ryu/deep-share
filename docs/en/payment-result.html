@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Result - DeepShare</title>
+    <link rel="icon" type="image/svg+xml" href="../assets/images/deepshare-icon.svg">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/purchase.css">
+    <style>
+        .result-container {
+            max-width: 560px;
+            margin: 100px auto;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.07);
+        }
+
+        .result-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .success-icon { background-color: rgba(77, 107, 254, 0.1); color: #4D6BFE; }
+        .error-icon   { background-color: rgba(255, 107, 107, 0.1); color: #FF6B6B; }
+        .pending-icon { background-color: rgba(0, 0, 0, 0.05);      color: #888; }
+
+        .result-title {
+            font-size: 1.75rem;
+            font-weight: bold;
+            margin-bottom: 0.75rem;
+            color: #333;
+        }
+
+        .result-message {
+            color: #666;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .help-message {
+            color: #888;
+            margin-top: 1.25rem;
+            line-height: 1.6;
+            font-size: 0.875rem;
+        }
+
+        /* API Key display */
+        .api-key-display {
+            background-color: #f8f9ff;
+            border: 1px dashed #4D6BFE;
+            padding: 1rem 1.25rem;
+            border-radius: 10px;
+            margin: 1.5rem 0;
+        }
+
+        .api-key-label {
+            font-size: 0.75rem;
+            color: #4D6BFE;
+            margin-bottom: 0.4rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+
+        .api-key-value {
+            font-family: monospace;
+            font-size: 1rem;
+            color: #333;
+            word-break: break-all;
+        }
+
+        /* Subscription info card */
+        .subscription-card {
+            background: linear-gradient(135deg, #f0f3ff 0%, #e8edff 100%);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin: 1.5rem 0;
+            text-align: left;
+        }
+
+        .subscription-card-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.3rem 0;
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        .subscription-card-row strong {
+            color: #333;
+        }
+
+        .plan-badge {
+            display: inline-block;
+            background: #4D6BFE;
+            color: white;
+            padding: 0.2rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        /* Action buttons */
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            margin-top: 1.75rem;
+        }
+
+        .secondary-btn {
+            background: #f0f2f5;
+            color: #333;
+            border: none;
+            padding: 0.8rem 1.25rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .secondary-btn:hover { background: #e4e6e9; }
+
+        /* Steps guide */
+        .steps-guide {
+            text-align: left;
+            margin: 1.5rem 0 0;
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 1rem 1.25rem;
+        }
+
+        .steps-guide-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #444;
+            margin-bottom: 0.75rem;
+        }
+
+        .step-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.6rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+            color: #555;
+            line-height: 1.5;
+        }
+
+        .step-num {
+            flex-shrink: 0;
+            width: 20px;
+            height: 20px;
+            background: #4D6BFE;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 700;
+            margin-top: 1px;
+        }
+
+        /* Loader */
+        .loader {
+            border: 4px solid #f0f0f0;
+            border-top: 4px solid #4D6BFE;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            animation: spin 0.9s linear infinite;
+            margin: 0 auto 1.5rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Dark mode */
+        @media (prefers-color-scheme: dark) {
+            .result-container   { background: #2d2d2d; }
+            .result-title       { color: #fff; }
+            .result-message     { color: #aaa; }
+            .api-key-display    { background: #1e1e1e; }
+            .api-key-value      { color: #eee; }
+            .secondary-btn      { background: #3d3d3d; color: #eee; }
+            .subscription-card  { background: linear-gradient(135deg, #252836 0%, #1e2130 100%); }
+            .subscription-card-row { color: #aaa; }
+            .subscription-card-row strong { color: #ddd; }
+            .steps-guide        { background: #222; }
+            .steps-guide-title  { color: #ccc; }
+            .step-item          { color: #aaa; }
+            .loader             { border-color: #444; border-top-color: #4D6BFE; }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <img src="../assets/images/deepshare-icon.svg" alt="DeepShare Logo">
+                <a href="../index-en.html"><span>DeepShare</span></a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Checking state -->
+        <div class="result-container" id="status-checking">
+            <div class="loader"></div>
+            <h1 class="result-title">Verifying payment…</h1>
+            <p class="result-message">Please wait while we confirm your subscription status.</p>
+        </div>
+
+        <!-- Success state -->
+        <div class="result-container" id="status-success" style="display: none;">
+            <div class="result-icon success-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+            </div>
+            <h1 class="result-title">Payment Successful!</h1>
+            <p class="result-message">Your order is confirmed. Copy your API key below and enter it in the DeepShare extension.</p>
+
+            <div class="api-key-display">
+                <div class="api-key-label">Your API Key</div>
+                <div class="api-key-value" id="success-api-key">Check your email</div>
+            </div>
+
+            <p class="result-message" style="font-size: 0.875rem; color: #888; margin-bottom: 0;">
+                ⏱ Subscription activation may take a few minutes. If features are not available immediately, please wait and try again shortly.
+            </p>
+
+            <div class="action-buttons">
+                <a href="../en/price.html" class="secondary-btn">Back to Plans</a>
+                <button class="purchase-btn" onclick="copyApiKey('success-api-key', this)">Copy API Key</button>
+            </div>
+
+            <div class="steps-guide">
+                <div class="steps-guide-title">How to activate your subscription</div>
+                <div class="step-item">
+                    <span class="step-num">1</span>
+                    <span>Click the DeepShare icon in your browser toolbar</span>
+                </div>
+                <div class="step-item">
+                    <span class="step-num">2</span>
+                    <span>Enter your API Key in the settings panel</span>
+                </div>
+                <div class="step-item">
+                    <span class="step-num">3</span>
+                    <span>Click "Export to Word" in any AI conversation — enjoy!</span>
+                </div>
+            </div>
+
+            <p class="help-message">
+                Need help? Email us: <strong>contact@deepshare.app</strong>
+            </p>
+        </div>
+
+        <!-- Pending / Error state -->
+        <div class="result-container" id="status-error" style="display: none;">
+            <div class="result-icon error-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+            </div>
+            <h1 class="result-title">Payment Not Confirmed</h1>
+            <p class="result-message" id="error-message">
+                We couldn't automatically confirm your payment. If you have completed the checkout,
+                please check your email (including spam) or contact us.
+            </p>
+
+            <div class="api-key-display" id="error-api-key-container" style="display: none;">
+                <div class="api-key-label">Associated API Key</div>
+                <div class="api-key-value" id="error-api-key">—</div>
+            </div>
+
+            <div class="action-buttons">
+                <a href="../en/price.html" class="secondary-btn">Back to Plans</a>
+                <button class="purchase-btn" id="error-copy-btn" onclick="copyApiKey('error-api-key', this)" style="display: none;">Copy API Key</button>
+            </div>
+
+            <p class="help-message">
+                Need help? Email us: <strong>contact@deepshare.app</strong>
+            </p>
+        </div>
+    </main>
+
+    <script src="../assets/js/payment-result-en.js"></script>
+</body>
+
+</html>

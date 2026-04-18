@@ -125,6 +125,9 @@
     "unselectAllButton": {
         "message": "Deseleccionar todo"
     },
+    "loadingHistory": {
+        "message": "Cargando..."
+    },
     "noMessageSelected": {
         "message": "Por favor selecciona al menos un mensaje"
     },
@@ -159,13 +162,13 @@
         "message": "Expira {date}"
     },
     "apiKeyHint": {
-        "message": "¿Comprar clave API? <a href=\"https://ds.rick216.cn/purchase-en\" target=\"_blank\">Haz clic aquí</a>"
+        "message": "¿Comprar clave API? <a href=\"https://ds.rick216.cn/en/price.html\" target=\"_blank\">Haz clic aquí</a>"
     },
     "apiKeyMissing": {
         "message": "Haz clic en el icono de la extensión para comprar e ingresar una clave API para usar la conversión de documentos"
     },
     "apiKeyMissingShort": {
-        "message": "Por favor, <a href=\"https://ds.rick216.cn/purchase-en\" target=\"_blank\">compra</a> e ingresa una clave API"
+        "message": "Por favor, <a href=\"https://ds.rick216.cn/en/price.html\" target=\"_blank\">compra</a> e ingresa una clave API"
     },
     "manualConversionExplanation": {
         "message": "Compatible con Grok, Claude, Meta AI, etc. Copia tu conversación al cuadro Markdown, haz clic en \"Convertir a documento\" para descargar un documento Word con formato elegante y soporte de fórmulas."
@@ -260,17 +263,26 @@
     "compatModeTooltip": {
         "message": "Compatible con Markdown no estándar"
     },
+    "compatModeDocUrl": {
+        "message": "https://docs.deepshare.app/en/faq/compat-mode"
+    },
     "hardLineBreaksLabel": {
         "message": "Saltos de línea forzados"
     },
     "hardLineBreaksTooltip": {
         "message": "Trata los saltos de línea simples como saltos forzados"
     },
+    "hardLineBreaksDocUrl": {
+        "message": "https://docs.deepshare.app/en/faq/hard-line-breaks"
+    },
     "disableAutoNumberingLabel": {
         "message": "Desactivar numeración automática"
     },
     "disableAutoNumberingTooltip": {
         "message": "Listas ordenadas convertidas a párrafos de texto plano con numeración"
+    },
+    "disableAutoNumberingDocUrl": {
+        "message": "https://docs.deepshare.app/en/faq/disable-auto-numbering"
     },
     "getClipboardError": {
         "message": "Error al obtener contenido"
@@ -292,6 +304,12 @@
     },
     "renewSubscription": {
         "message": "Renovar suscripción"
+    },
+    "manageSubscription": {
+        "message": "Gestionar suscripción"
+    },
+    "pricePageUrl": {
+        "message": "https://ds.rick216.cn/en/price.html"
     },
     "subscriptionExpiredDays": {
         "message": "Expirado hace {days} días"
@@ -320,6 +338,9 @@
     "screenshotFailed": {
         "message": "Error en la captura, ¿intentar refrescar?"
     },
+    "conversationTooLong": {
+        "message": "La conversación es demasiado larga para ser capturada en una sola imagen. Por favor, seleccione menos mensajes e inténtelo de nuevo."
+    },
     "imageCopied": {
         "message": "Imagen copiada al portapapeles"
     },
@@ -327,10 +348,10 @@
         "message": "Error al copiar imagen al portapapeles"
     },
     "apiKeyError": {
-        "message": "Error de clave API o expirada. Revisa tu correo o contacta al servicio: yoricker@foxmail.com"
+        "message": "Error de clave API o expirada. Revisa tu correo o contacta al servicio: contact@deepshare.app"
     },
     "quotaExceededError": {
-        "message": "Cuota agotada. Por favor, <a href=\"https://ds.rick216.cn/purchase-en\" target=\"_blank\">recarga</a>."
+        "message": "Cuota agotada. Por favor, <a href=\"https://ds.rick216.cn/en/price.html\" target=\"_blank\">recarga</a>."
     },
     "aboutTabTitle": {
         "message": "Acerca de DeepShare"
@@ -340,6 +361,9 @@
     },
     "documentationLabel": {
         "message": "Documentación:"
+    },
+    "documentationUrl": {
+        "message": "https://docs.deepshare.app/en"
     },
     "githubLabel": {
         "message": "GitHub:"
@@ -489,5 +513,8 @@
     },
     "onboardingRefreshHint": {
         "message": "Para el primer uso, por favor actualice cualquier conversación de IA abierta."
+    },
+    "scrollCollecting": {
+        "message": "Desplazando para recopilar mensajes, por favor espere..."
     }
 }

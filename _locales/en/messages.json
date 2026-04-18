@@ -42,7 +42,7 @@
         "message": "Successfully saved as Word document!"
     },
     "docxConverting": {
-        "message": "Saving as Word document, please do not close this window!"
+        "message": "Saving as Word document. Do NOT close."
     },
     "docxConversionError": {
         "message": "Failed to save as Word document, please check your network or refresh the page and try again!"
@@ -125,6 +125,9 @@
     "unselectAllButton": {
         "message": "Unselect All"
     },
+    "loadingHistory": {
+        "message": "Loading..."
+    },
     "noMessageSelected": {
         "message": "Please select at least one message"
     },
@@ -159,13 +162,13 @@
         "message": "Expires {date}"
     },
     "apiKeyHint": {
-        "message": "Purchase API Key? <a href=\"https://ds.rick216.cn/purchase-en\" target=\"_blank\">Click here</a>"
+        "message": "Purchase API Key? <a href=\"https://ds.rick216.cn/en/price.html\" target=\"_blank\">Click here</a>"
     },
     "apiKeyMissing": {
         "message": "Please click the extension icon to purchase and enter an API Key to use the document conversion feature."
     },
     "apiKeyMissingShort": {
-        "message": "Please <a href=\"https://ds.rick216.cn/purchase-en\" target=\"_blank\">Purchase</a> and enter API Key"
+        "message": "Please <a href=\"https://ds.rick216.cn/en/price.html\" target=\"_blank\">Purchase</a> and enter API Key"
     },
     "manualConversionExplanation": {
         "message": "Supports Grok, Claude, Meta AI, etc. Copy your conversation to the Markdown input box, click \"Convert to Document\" to download a beautifully formatted Word document with formula support!"
@@ -260,17 +263,26 @@
     "compatModeTooltip": {
         "message": "Supports non-standard Markdown"
     },
+    "compatModeDocUrl": {
+        "message": "https://docs.deepshare.app/en/faq/compat-mode"
+    },
     "hardLineBreaksLabel": {
         "message": "Hard Line Breaks"
     },
     "hardLineBreaksTooltip": {
         "message": "Treat single line breaks as hard breaks"
     },
+    "hardLineBreaksDocUrl": {
+        "message": "https://docs.deepshare.app/en/faq/hard-line-breaks"
+    },
     "disableAutoNumberingLabel": {
         "message": "Disable Auto Numbering"
     },
     "disableAutoNumberingTooltip": {
         "message": "Ordered lists converted to plain text with numbering"
+    },
+    "disableAutoNumberingDocUrl": {
+        "message": "https://docs.deepshare.app/en/faq/disable-auto-numbering"
     },
     "getClipboardError": {
         "message": "Failed to get content"
@@ -292,6 +304,12 @@
     },
     "renewSubscription": {
         "message": "Renew Subscription"
+    },
+    "manageSubscription": {
+        "message": "Manage Subscription"
+    },
+    "pricePageUrl": {
+        "message": "https://ds.rick216.cn/en/price.html"
     },
     "subscriptionExpiredDays": {
         "message": "Expired {days} days ago"
@@ -320,6 +338,9 @@
     "screenshotFailed": {
         "message": "Screenshot failed, try refreshing?"
     },
+    "conversationTooLong": {
+        "message": "The conversation is too long to capture as a single image. Please select fewer messages and try again."
+    },
     "imageCopied": {
         "message": "Image copied to clipboard"
     },
@@ -327,10 +348,10 @@
         "message": "Failed to copy image to clipboard"
     },
     "apiKeyError": {
-        "message": "API Key error or expired. Please check your email or contact customer service: yoricker@foxmail.com"
+        "message": "API Key error or expired. Please check your email or contact customer service: contact@deepshare.app"
     },
     "quotaExceededError": {
-        "message": "Quota exceeded. Please <a href=\"https://ds.rick216.cn/purchase-en\" target=\"_blank\">top up</a>."
+        "message": "Quota exceeded. Please <a href=\"https://ds.rick216.cn/en/price.html\" target=\"_blank\">top up</a>."
     },
     "aboutTabTitle": {
         "message": "About DeepShare"
@@ -340,6 +361,9 @@
     },
     "documentationLabel": {
         "message": "Documentation:"
+    },
+    "documentationUrl": {
+        "message": "https://docs.deepshare.app/en"
     },
     "githubLabel": {
         "message": "GitHub:"
@@ -490,5 +514,8 @@
     },
     "onboardingRefreshHint": {
         "message": "For first-time use, please refresh any open AI conversations."
+    },
+    "scrollCollecting": {
+        "message": "Scrolling to collect messages, please wait..."
     }
 }

@@ -42,7 +42,7 @@ async function convertToDocx(message, sourceButton, documentTitle = null) {
         // If no API key is set and using API mode, show notification and open popup
         if (!settings.docxApiKey || settings.docxApiKey.trim() === '') {
             window.showToastNotification(
-                chrome.i18n.getMessage('apiKeyMissing') || '请购买或填写API-Key以使用文档转换功能',
+                chrome.i18n?.getMessage('apiKeyMissing') || '请购买或填写API-Key以使用文档转换功能',
                 'error',
                 5000
             );
@@ -50,10 +50,10 @@ async function convertToDocx(message, sourceButton, documentTitle = null) {
             // Try to open the extension popup after a short delay to allow toast to be seen
             setTimeout(() => {
                 try {
-                    chrome.runtime.sendMessage({
+                    chrome.runtime?.sendMessage({
                         action: 'openPopup',
                         actionParam: 'apiKeyMissing',
-                        error: chrome.i18n.getMessage('apiKeyMissingShort') || '请购买或填写API-KEY'
+                        error: chrome.i18n?.getMessage('apiKeyMissingShort') || '请购买或填写API-KEY'
                     }).catch(err => {
                         console.warn('Could not open popup automatically:', err.message);
                     });
@@ -75,12 +75,12 @@ async function convertToDocx(message, sourceButton, documentTitle = null) {
         sourceButton.style.pointerEvents = 'none';
         sourceButton.setAttribute('disabled', 'true');
         // Store original title and update with converting message
-        sourceButton._originalTitle = sourceButton.title || chrome.i18n.getMessage('docxButton');
-        sourceButton.title = chrome.i18n.getMessage('docxConverting');
+        sourceButton._originalTitle = sourceButton.title || chrome.i18n?.getMessage('docxButton');
+        sourceButton.title = chrome.i18n?.getMessage('docxConverting');
     }
 
     try {
-        convertingNotificationId = window.showToastNotification(chrome.i18n.getMessage('docxConverting'), 'loading', 30000); // 30s timeout as max
+        convertingNotificationId = window.showToastNotification(chrome.i18n?.getMessage('docxConverting'), 'loading', 30000); // 30s timeout as max
 
         // Get settings from storage
         const settings = await chrome.storage.sync.get({
@@ -98,7 +98,7 @@ async function convertToDocx(message, sourceButton, documentTitle = null) {
         // Show success notification
         // Show success notification with a slight delay to avoid UI stutter
         setTimeout(() => {
-            window.showToastNotification(chrome.i18n.getMessage('docxConversionSuccess'), 'success');
+            window.showToastNotification(chrome.i18n?.getMessage('docxConversionSuccess'), 'success');
         }, 300);
 
     } catch (error) {
@@ -116,7 +116,7 @@ async function convertToDocx(message, sourceButton, documentTitle = null) {
 
         // Network error - Failed to fetch
         if (error.message && error.message.includes('Failed to fetch')) {
-            errorMessage = chrome.i18n.getMessage('networkError') || '转换失败，请检查网络';
+            errorMessage = chrome.i18n?.getMessage('networkError') || '转换失败，请检查网络';
         }
         // 401 Unauthorized - Invalid/missing/expired API key
         else if (error.message && (
@@ -125,7 +125,7 @@ async function convertToDocx(message, sourceButton, documentTitle = null) {
             error.message.includes('API Key is required') ||
             error.message.includes('Invalid or expired API key')
         )) {
-            errorMessage = chrome.i18n.getMessage('apiKeyError') || 'API密钥填写错误，请联系客服微信：yorick_cn';
+            errorMessage = chrome.i18n?.getMessage('apiKeyError') || 'API密钥填写错误，请联系客服微信：yorick_cn';
             actionParam = 'apiError';
             shouldOpenPopup = true;
         }
@@ -135,7 +135,7 @@ async function convertToDocx(message, sourceButton, documentTitle = null) {
             error.message.includes('Forbidden') ||
             error.message.includes('Quota exceeded')
         )) {
-            errorMessage = chrome.i18n.getMessage('quotaExceededError') || '转换次数不足，请充值';
+            errorMessage = chrome.i18n?.getMessage('quotaExceededError') || '转换次数不足，请充值';
             actionParam = 'quotaExceeded';
             shouldOpenPopup = true;
         }
@@ -145,7 +145,7 @@ async function convertToDocx(message, sourceButton, documentTitle = null) {
             error.message.includes('headers') ||
             error.message.includes('ISO-8859-1')
         )) {
-            errorMessage = chrome.i18n.getMessage('apiKeyError') || 'API密钥错误，请联系客服微信：yorick_cn';
+            errorMessage = chrome.i18n?.getMessage('apiKeyError') || 'API密钥错误，请联系客服微信：yorick_cn';
             actionParam = 'apiError';
             shouldOpenPopup = true;
         }
@@ -156,7 +156,7 @@ async function convertToDocx(message, sourceButton, documentTitle = null) {
         if (shouldOpenPopup) {
             setTimeout(() => {
                 try {
-                    chrome.runtime.sendMessage({
+                    chrome.runtime?.sendMessage({
                         action: 'openPopup',
                         actionParam: actionParam,
                         error: errorMessage
@@ -200,7 +200,8 @@ async function convertToDocxViaApi(content, serverUrl, documentTitle = null) {
             lastUsedTemplate: null
         });
 
-        const url = serverUrl || settings.docxServerUrl || 'https://api.ds.rick216.cn';
+        const rawUrl = serverUrl || settings.docxServerUrl || 'https://api.ds.rick216.cn';
+        const url = isValidUrl(rawUrl) ? rawUrl : 'https://api.ds.rick216.cn';
         const apiKey = settings.docxApiKey;
 
         // Ensure API key is provided
@@ -308,11 +309,12 @@ async function checkQuota() {
             docxApiKey: ''
         });
 
-        const url = settings.docxServerUrl;
+        const rawUrl = settings.docxServerUrl;
         const apiKey = settings.docxApiKey;
+        const url = isValidUrl(rawUrl) ? rawUrl : 'https://api.ds.rick216.cn';
 
-        // If not configured, exit quietly
-        if (!apiKey || !url) {
+        // If no API key, exit quietly
+        if (!apiKey) {
             return;
         }
 
@@ -373,7 +375,7 @@ async function checkQuota() {
             chrome.storage.local.set({ quotaDataV2: quotaData });
 
             // Notify the popup if it's open
-            chrome.runtime.sendMessage({
+            chrome.runtime?.sendMessage({
                 action: 'quotaUpdated',
                 data: quotaData
             }).catch(() => {
@@ -419,7 +421,6 @@ function generateFilename(content, title = null) {
         filename = filename.substring(0, 50).trim();
         filename = sanitizeFilename(filename);
         if (filename) {
-            console.debug('DeepShare: Using document title for filename:', filename);
             return `${filename}_${timestamp}`;
         }
     }
@@ -447,3 +448,16 @@ function generateFilename(content, title = null) {
 
 // Initialize the module
 initDocxConverter();
+
+/**
+ * Validates if a string is a valid URL with http or https protocol.
+ */
+function isValidUrl(string) {
+    if (!string) return false;
+    try {
+        const url = new URL(string.trim());
+        return url.protocol === 'http:' || url.protocol === 'https:';
+    } catch (_) {
+        return false;
+    }
+}

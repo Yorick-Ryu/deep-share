@@ -73,10 +73,10 @@ async function handleGeminiMathClick(e) {
             await navigator.clipboard.writeText(textToCopy);
 
             // Show visual feedback with localized message using the toast notification
-            window.showToastNotification(chrome.i18n.getMessage('formulaCopied'), 'success');
+            window.showToastNotification(chrome.i18n?.getMessage('formulaCopied'), 'success');
         } catch (error) {
             console.error('Failed to copy formula:', error);
-            window.showToastNotification(chrome.i18n.getMessage('copyFailed'), 'error');
+            window.showToastNotification(chrome.i18n?.getMessage('copyFailed'), 'error');
         }
     }
 }
@@ -85,7 +85,7 @@ async function handleGeminiMathClick(e) {
 function updateElementStyle(element) {
     if (formulaSettings.enableFormulaCopy) {
         element.style.cursor = 'pointer';
-        element.title = chrome.i18n.getMessage('clickToCopyFormula');
+        element.title = chrome.i18n?.getMessage('clickToCopyFormula');
     } else {
         element.style.cursor = '';
         element.title = '';

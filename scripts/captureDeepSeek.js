@@ -6,7 +6,7 @@ document.addEventListener('deepshare:saveAsImage', async () => {
     let blobUrl = null;
     try {
         console.log('Save as long image clicked');
-        notificationId = window.showToastNotification(chrome.i18n.getMessage('screenshotInitiated'), 'loading', 30000);
+        notificationId = window.showToastNotification(chrome.i18n?.getMessage('screenshotInitiated'), 'loading', 30000);
 
         // captureDeepSeekMessages 现在返回 Blob 而非 data URL，避免生成巨大的 base64 字符串
         const blob = await captureDeepSeekMessages();
@@ -24,30 +24,31 @@ document.addEventListener('deepshare:saveAsImage', async () => {
             const timestamp = `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')}-${now.getHours().toString().padStart(2, '0')}-${now.getMinutes().toString().padStart(2, '0')}-${now.getSeconds().toString().padStart(2, '0')}`;
             link.download = `deepseek-chat-${timestamp}.png`;
             link.click();
-            window.showToastNotification(chrome.i18n.getMessage('screenshotSuccess'), 'success');
+            window.showToastNotification(chrome.i18n?.getMessage('screenshotSuccess'), 'success');
 
             try {
-                // 直接使用已有的 blob，无需 fetch(dataUrl).blob() 二次转换
-                await navigator.clipboard.write([
-                    new ClipboardItem({
-                        [blob.type]: blob
-                    })
-                ]);
-                window.showToastNotification(chrome.i18n.getMessage('imageCopied'), 'success');
+                // Wait for focus before clipboard write to avoid NotAllowedError.
+                await copyImageToClipboard(blob);
+                window.showToastNotification(chrome.i18n?.getMessage('imageCopied'), 'success');
             } catch (copyError) {
                 console.error('Failed to copy image to clipboard:', copyError);
-                window.showToastNotification(chrome.i18n.getMessage('imageCopyFailed'), 'error');
+                window.showToastNotification(chrome.i18n?.getMessage('imageCopyFailed'), 'error');
             }
         } else {
             // The error is already logged in captureDeepSeekMessages, just show notification
-            window.showToastNotification(chrome.i18n.getMessage('screenshotFailed'), 'error');
+            window.showToastNotification(chrome.i18n?.getMessage('screenshotFailed'), 'error');
         }
     } catch (error) {
         console.error('Error during save as image:', error);
         if (notificationId !== null) {
             window.dismissToastNotification(notificationId);
         }
-        window.showToastNotification(chrome.i18n.getMessage('screenshotFailed'), 'error');
+        
+        let message = chrome.i18n?.getMessage('screenshotFailed');
+        if (error.message && error.message.includes('too long')) {
+            message = chrome.i18n?.getMessage('conversationTooLong') || message;
+        }
+        window.showToastNotification(message, 'error');
     } finally {
         // 释放 blob URL 避免内存泄漏
         if (blobUrl) {
@@ -56,13 +57,62 @@ document.addEventListener('deepshare:saveAsImage', async () => {
     }
 });
 
-async function captureDeepSeekMessages(customWatermark) {
-    const container = document.querySelector('.dad65929');
-    if (!container) return null;
+async function copyImageToClipboard(blob) {
+    await waitForDocumentFocus(300);
+    await writeImageToClipboard(blob);
+}
 
-    const messages = document.querySelectorAll('.dad65929 > div[class]');
+async function writeImageToClipboard(blob) {
+    await navigator.clipboard.write([
+        new ClipboardItem({
+            [blob.type]: blob
+        })
+    ]);
+}
+
+function waitForDocumentFocus(timeoutMs) {
+    if (document.hasFocus()) return Promise.resolve(true);
+
+    return new Promise((resolve) => {
+        const onFocus = () => {
+            cleanup();
+            resolve(true);
+        };
+        const timer = setTimeout(() => {
+            cleanup();
+            resolve(document.hasFocus());
+        }, timeoutMs);
+        const cleanup = () => {
+            window.removeEventListener('focus', onFocus, true);
+            clearTimeout(timer);
+        };
+
+        window.addEventListener('focus', onFocus, true);
+    });
+}
+
+async function captureDeepSeekMessages(customWatermark) {
+    const messageSelector = '._9663006, ._4f9bf79._43c05b5, ._4f9bf79.d7dc56a8._43c05b5';
+    const messageNodes = Array.from(document.querySelectorAll(messageSelector));
+    const container = document.querySelector('.dad65929') || messageNodes[0]?.parentElement || null;
+
+    if (!container) {
+        console.error('Screenshot failed: conversation container not found');
+        return null;
+    }
+
+    if (messageNodes.length === 0) {
+        console.error('Screenshot failed: no messages found');
+        return null;
+    }
+
+    const messages = messageNodes;
     const selectedIndices = new Set();
     let selectionMode = false;
+
+    // Ensure long screenshot starts from the top of the conversation.
+    scrollToTopForCapture(container);
+    await new Promise(resolve => setTimeout(resolve, 120));
 
     // Determine which messages are selected
     const messageCheckboxes = document.querySelectorAll('.d30139ff .ds-checkbox');
@@ -75,8 +125,9 @@ async function captureDeepSeekMessages(customWatermark) {
         });
     }
 
-    // If in selection mode, hide unselected messages
-    if (selectionMode) {
+    // If at least one message is selected, hide unselected messages.
+    // If none selected, keep full conversation to avoid empty captures.
+    if (selectionMode && selectedIndices.size > 0) {
         messages.forEach((messageDiv, index) => {
             if (!selectedIndices.has(index)) {
                 messageDiv.style.display = 'none';
@@ -123,7 +174,7 @@ async function captureDeepSeekMessages(customWatermark) {
         font-size: 13px;
         color: #666;
     `;
-    defaultWatermark.innerHTML = chrome.i18n.getMessage('defaultWatermark');
+    defaultWatermark.innerHTML = chrome.i18n?.getMessage('defaultWatermark');
 
     if (customWatermark) {
         const customWatermarkEl = document.createElement('div');
@@ -164,8 +215,6 @@ async function captureDeepSeekMessages(customWatermark) {
 
         let blob;
 
-        console.debug(screenshotMethod)
-
         // 根据设置选择截图方法
         if (screenshotMethod === 'domtoimage' && typeof domtoimage !== 'undefined') {
             try {
@@ -179,6 +228,7 @@ async function captureDeepSeekMessages(customWatermark) {
                         // 过滤掉不需要的元素
                         return !(node.classList &&
                             (node.classList.contains('fab07e97') ||
+                                node.classList.contains('ad950ab7') ||
                                 node.classList.contains('ds-checkbox-wrapper')));
                     },
                     skipAutoScale: true
@@ -199,6 +249,7 @@ async function captureDeepSeekMessages(customWatermark) {
                     filter: (element) => {
                         if (!element.classList) return true;
                         return !(element.classList.contains('fab07e97') ||
+                            element.classList.contains('ad950ab7') ||
                             element.classList.contains('ds-checkbox-wrapper'));
                     }
                 });
@@ -218,43 +269,107 @@ async function captureDeepSeekMessages(customWatermark) {
                 throw new Error('html2canvas not loaded');
             }
 
-            const canvas = await html2canvas(container, {
-                backgroundColor: backgroundColor,
-                useCORS: true,
-                scale: window.devicePixelRatio,
-                allowTaint: true,
-                ignoreElements: (element) => {
-                    return element.classList.contains('fab07e97') ||
-                        element.classList.contains('ds-checkbox-wrapper');
+            // 获取容器高度，判断是否需要降低 scale
+            const containerHeight = container.offsetHeight;
+            let scale = window.devicePixelRatio || 1;
+            
+            // 安全限制：大多数浏览器 canvas 最大高度为 32767 或 65535
+            // 我们保守一点，如果缩放后的高度超过 30000 像素，就强制降低 scale
+            if (containerHeight * scale > 30000) {
+                scale = Math.max(1, 30000 / containerHeight);
+                console.warn(`Conversation is too long (${containerHeight}px). Reducing scale to ${scale} to avoid browser limits.`);
+            }
+
+            async function tryCapture(currentScale) {
+                try {
+                    const canvas = await html2canvas(container, {
+                        backgroundColor: backgroundColor,
+                        useCORS: true,
+                        scale: currentScale,
+                        allowTaint: true,
+                        ignoreElements: (element) => {
+                            return element.classList.contains('fab07e97') ||
+                                element.classList.contains('ad950ab7') ||
+                                element.classList.contains('ds-checkbox-wrapper');
+                        }
+                    });
+
+                    return new Promise((resolve) => {
+                        canvas.toBlob((b) => {
+                            resolve(b);
+                        }, 'image/png');
+                    });
+                } catch (e) {
+                    console.error(`html2canvas failed at scale ${currentScale}:`, e);
+                    return null;
                 }
-            });
-            // 使用异步的 toBlob 替代同步的 toDataURL，避免主线程阻塞
-            blob = await new Promise((resolve) => {
-                canvas.toBlob((b) => resolve(b), 'image/png');
-            });
+            }
+
+            blob = await tryCapture(scale);
+
+            // 如果失败且 scale > 1，尝试以 scale: 1 再次捕获
+            if (!blob && scale > 1) {
+                console.warn('Screenshot failed at high resolution, retrying at standard resolution...');
+                blob = await tryCapture(1);
+            }
+
+            // 如果仍然失败（可能是由于极其长的对话），再次尝试更小的 scale
+            if (!blob) {
+                console.warn('Screenshot still failing, trying with 0.75 scale...');
+                blob = await tryCapture(0.75);
+            }
+            
+            // 如果仍然失败，抛出错误
+            if (!blob) {
+                if (containerHeight > 15000) {
+                    throw new Error('Conversation too long: canvas height limit exceeded');
+                } else {
+                    throw new Error('canvas.toBlob returned null');
+                }
+            }
         }
 
 
-        // Restore hidden conversations
+        return blob;
+    } catch (error) {
+        console.error('Screenshot failed:', error);
+        // 如果是 canvas 转换失败且容器确实很高，重新抛出一个包含 "too long" 的错误
+        if (error.message && (error.message.includes('canvas.toBlob') || error.message.includes('html2canvas'))) {
+            const containerHeight = container ? container.offsetHeight : 0;
+            if (containerHeight > 15000 && !error.message.includes('too long')) {
+                throw new Error('Conversation too long: The content exceeds browser canvas limits.');
+            }
+        }
+        throw error;
+    } finally {
+        // Restore hidden conversations even when capture fails.
         if (selectionMode) {
             messages.forEach(messageDiv => {
                 messageDiv.style.display = '';
             });
         }
-
-        container.removeChild(watermarkContainer);
-        container.style.position = originalPosition;
-        container.style.padding = originalPadding;
-
-        return blob;
-    } catch (error) {
         if (watermarkContainer.parentNode) {
             container.removeChild(watermarkContainer);
         }
         container.style.position = originalPosition;
         container.style.padding = originalPadding;
-        console.error('Screenshot failed:', error);
-        return null;
+    }
+}
+
+function scrollToTopForCapture(container) {
+    window.scrollTo({ top: 0, behavior: 'auto' });
+    document.documentElement.scrollTo({ top: 0, behavior: 'auto' });
+    document.body.scrollTo({ top: 0, behavior: 'auto' });
+    if (container && typeof container.scrollTo === 'function') {
+        container.scrollTo({ top: 0, behavior: 'auto' });
+    }
+
+    let parent = container?.parentElement || null;
+    while (parent) {
+        if (typeof parent.scrollTo === 'function') {
+            parent.scrollTo({ top: 0, behavior: 'auto' });
+        }
+        parent = parent.parentElement;
     }
 }
 

@@ -125,6 +125,9 @@
     "unselectAllButton": {
         "message": "取消全選"
     },
+    "loadingHistory": {
+        "message": "正在載入..."
+    },
     "noMessageSelected": {
         "message": "請至少選擇一則對話"
     },
@@ -159,13 +162,13 @@
         "message": "{date} 到期"
     },
     "apiKeyHint": {
-        "message": "購買 API Key? <a href=\"https://ds.rick216.cn/purchase-en\" target=\"_blank\">點擊此處</a>"
+        "message": "購買 API Key? <a href=\"https://ds.rick216.cn/en/price.html\" target=\"_blank\">點擊此處</a>"
     },
     "apiKeyMissing": {
         "message": "請點擊拓展圖標購買並填寫API金鑰以使用文件轉換功能"
     },
     "apiKeyMissingShort": {
-        "message": "請<a href=\"https://ds.rick216.cn/purchase-en\" target=\"_blank\">購買</a>並填寫API金鑰"
+        "message": "請<a href=\"https://ds.rick216.cn/en/price.html\" target=\"_blank\">購買</a>並填寫API金鑰"
     },
     "manualConversionExplanation": {
         "message": "支援ChatGPT、豆包、Claude等，複製需要轉換的對話到Markdown輸入框，點擊「轉換為文件」按鈕立即下載Word格式，排版精美，支援公式！"
@@ -260,17 +263,26 @@
     "compatModeTooltip": {
         "message": "相容不規範的Markdown格式"
     },
+    "compatModeDocUrl": {
+        "message": "https://docs.deepshare.app/en/faq/compat-mode"
+    },
     "hardLineBreaksLabel": {
         "message": "強制換行"
     },
     "hardLineBreaksTooltip": {
         "message": "將源碼中的單次換行視為硬換行"
     },
+    "hardLineBreaksDocUrl": {
+        "message": "https://docs.deepshare.app/en/faq/hard-line-breaks"
+    },
     "disableAutoNumberingLabel": {
         "message": "禁用自動編號"
     },
     "disableAutoNumberingTooltip": {
         "message": "有序列表轉換為帶數字的純文本段落"
+    },
+    "disableAutoNumberingDocUrl": {
+        "message": "https://docs.deepshare.app/en/faq/disable-auto-numbering"
     },
     "getClipboardError": {
         "message": "獲取內容失敗"
@@ -292,6 +304,12 @@
     },
     "renewSubscription": {
         "message": "續費訂閱"
+    },
+    "manageSubscription": {
+        "message": "管理訂閱"
+    },
+    "pricePageUrl": {
+        "message": "https://ds.rick216.cn/en/price.html"
     },
     "subscriptionExpiredDays": {
         "message": "已過期 {days} 天"
@@ -320,6 +338,9 @@
     "screenshotFailed": {
         "message": "截圖失敗，刷新一下試試？"
     },
+    "conversationTooLong": {
+        "message": "對話內容太長，超出了瀏覽器的限制，請透過「選擇對話」功能分段截圖。"
+    },
     "imageCopied": {
         "message": "圖片已複製到剪貼簿"
     },
@@ -330,7 +351,7 @@
         "message": "API金鑰錯誤或過期，請查看郵件或聯繫客服微信：yorick_cn"
     },
     "quotaExceededError": {
-        "message": "轉換額度不足，請<a href=\"https://ds.rick216.cn/purchase-en\" target=\"_blank\">充值</a>"
+        "message": "轉換額度不足，請<a href=\"https://ds.rick216.cn/en/price.html\" target=\"_blank\">充值</a>"
     },
     "referenceSources": {
         "message": "參考來源"
@@ -471,5 +492,11 @@
     },
     "onboardingRefreshHint": {
         "message": "首次使用請刷新已打開的AI對話"
+    },
+    "scrollCollecting": {
+        "message": "正在捲動讀取對話內容，請勿操作..."
+    },
+    "documentationUrl": {
+        "message": "https://docs.deepshare.app/en"
     }
 }

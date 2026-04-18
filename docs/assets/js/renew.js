@@ -985,6 +985,12 @@ function loadApiKeyFromStorage() {
 
     if (apiKey) {
         populateInputs(apiKey);
+
+        // Clean up the URL (remove the ak parameter for security)
+        const url = new URL(window.location.href);
+        url.searchParams.delete('ak');
+        window.history.replaceState({}, document.title, url.toString());
+
         return; // Found in URL, skip storage
     }
 

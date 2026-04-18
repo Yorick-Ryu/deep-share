@@ -80,8 +80,5 @@ If you find this project helpful, please consider supporting its development:
 - ⭐ Star this project
 - 📢 Share it with others
 - 🐛 Submit bug reports or feature suggestions
-- 🧧 Sponsor the project (scan QR code with WeChat)
-
-<img src="icons/sponsor-code.png" alt="donate" width="200"/>
 
 Thank you for your support!

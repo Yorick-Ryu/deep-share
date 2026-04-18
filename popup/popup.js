@@ -484,10 +484,16 @@ function loadI18nText(errorMsg = null) {
   document.getElementById('convertMermaidLabel').textContent = getMessage('convertMermaidLabel') || '启用Mermaid图表转换';
   document.getElementById('compatModeLabel').textContent = getMessage('compatModeLabel') || '兼容模式';
   document.getElementById('compatModeTooltip').textContent = getMessage('compatModeTooltip') || '兼容不规范的Markdown格式';
+  const compatModeDocUrl = getMessage('compatModeDocUrl');
+  if (compatModeDocUrl) document.getElementById('compatModeDocLink').href = compatModeDocUrl;
   document.getElementById('hardLineBreaksLabel').textContent = getMessage('hardLineBreaksLabel') || '强制换行';
   document.getElementById('hardLineBreaksTooltip').textContent = getMessage('hardLineBreaksTooltip') || '将源码中的单次换行视为硬换行';
+  const hardLineBreaksDocUrl = getMessage('hardLineBreaksDocUrl');
+  if (hardLineBreaksDocUrl) document.getElementById('hardLineBreaksDocLink').href = hardLineBreaksDocUrl;
   document.getElementById('disableAutoNumberingLabel').textContent = getMessage('disableAutoNumberingLabel') || '禁用自动编号';
   document.getElementById('disableAutoNumberingTooltip').textContent = getMessage('disableAutoNumberingTooltip') || '将有序列表转换为带有数字的普通文本段落，避免使用Word的自动编号';
+  const disableAutoNumberingDocUrl = getMessage('disableAutoNumberingDocUrl');
+  if (disableAutoNumberingDocUrl) document.getElementById('disableAutoNumberingDocLink').href = disableAutoNumberingDocUrl;
 
   // Formula Copy Settings tab
   document.getElementById('formulaSettingsTitle').textContent = getMessage('formulaSettingsTitle') || 'Formula Copy Settings';
@@ -553,6 +559,12 @@ function loadI18nText(errorMsg = null) {
   document.getElementById('acknowledgmentText').textContent = getMessage('acknowledgmentText') || '感谢每一位为 DeepShare 提出建议的朋友！许多功能源于用户的真实需求，让我们一起提升效率，把节省的时间留给生活。';
   document.getElementById('versionLabel').textContent = getMessage('versionLabel') || 'Version:';
   document.getElementById('documentationLabel').textContent = getMessage('documentationLabel') || 'Documentation:';
+  const documentationUrl = getMessage('documentationUrl');
+  if (documentationUrl) {
+    const documentationLink = document.getElementById('documentationLink');
+    documentationLink.href = documentationUrl;
+    documentationLink.textContent = documentationUrl;
+  }
   document.getElementById('githubLabel').textContent = getMessage('githubLabel') || 'GitHub:';
   document.getElementById('developerEmailLabel').textContent = getMessage('developerEmailLabel') || 'Developer Email:';
 
@@ -587,7 +599,13 @@ function loadI18nText(errorMsg = null) {
   // Update purchase/subscribe link text
   const purchaseLink = document.getElementById('purchaseLink');
   if (purchaseLink) {
-    purchaseLink.textContent = getMessage('purchaseAddonQuota') || '购买叠加额度';
+    const isChineseLang = !(getMessage('pricePageUrl') || '').includes('/en/');
+    if (isChineseLang) {
+      purchaseLink.textContent = getMessage('purchaseAddonQuota') || '购买叠加额度';
+      purchaseLink.style.display = '';
+    } else {
+      purchaseLink.style.display = 'none';
+    }
   }
   const subscribeLink = document.getElementById('subscribeLink');
   if (subscribeLink) {
@@ -658,6 +676,18 @@ function saveSettings() {
     // Language settings
     preferredLanguage: document.getElementById('languageSelect').value
   };
+
+  // Validate URL and show hint
+  const serverUrlErrorMsg = document.getElementById('serverUrlErrorMsg');
+  if (!settings.docxServerUrl.trim()) {
+    serverUrlErrorMsg.textContent = '服务器地址不能为空';
+    serverUrlErrorMsg.style.display = 'inline';
+  } else if (!isValidUrl(settings.docxServerUrl)) {
+    serverUrlErrorMsg.textContent = '服务器地址格式不正确 (需包含 http/https)';
+    serverUrlErrorMsg.style.display = 'inline';
+  } else {
+    serverUrlErrorMsg.style.display = 'none';
+  }
 
   // Save all settings at once
   chrome.storage.sync.set(settings, () => {
@@ -844,10 +874,25 @@ function hideQuotaLoading() {
 function checkQuota(forceRefresh = false) {
   const quotaSection = document.getElementById('quotaSection');
   const apiKey = document.getElementById('docxApiKey').value;
-  const serverUrl = document.getElementById('docxServerUrl').value;
+  const serverUrlInput = document.getElementById('docxServerUrl').value.trim();
+  const serverUrlErrorMsg = document.getElementById('serverUrlErrorMsg');
+
+  // Validate URL and show hint in UI
+  if (!serverUrlInput) {
+    serverUrlErrorMsg.textContent = '服务器地址不能为空 (将使用默认地址)';
+    serverUrlErrorMsg.style.display = 'inline';
+  } else if (!isValidUrl(serverUrlInput)) {
+    serverUrlErrorMsg.textContent = '服务器地址格式不正确 (将使用默认地址)';
+    serverUrlErrorMsg.style.display = 'inline';
+  } else {
+    serverUrlErrorMsg.style.display = 'none';
+  }
+
+  // Execution layer: Use default if invalid or empty
+  const serverUrl = isValidUrl(serverUrlInput) ? serverUrlInput : 'https://api.ds.rick216.cn';
 
   // If API key is not set, hide quota section
-  if (!apiKey || !serverUrl) {
+  if (!apiKey) {
     quotaSection.style.display = 'none';
     return;
   }
@@ -1127,20 +1172,49 @@ function displayDualQuota(data) {
   const purchaseLink = document.getElementById('purchaseLink');
 
   if (subscribeLink) {
+    const basePriceUrl = getMessage('pricePageUrl') || 'https://ds.rick216.cn/price.html';
+
+    const isAutoRenew = hasSubscription && data.subscription.auto_renew === true;
+
     if (hasSubscription || hasExpiredSubscription) {
-      // User has active or recently expired subscription - show "续费套餐" link
       subscribeLink.style.display = 'inline';
-      subscribeLink.textContent = getMessage('renewSubscription') || '续费套餐';
+      if (isAutoRenew) {
+        subscribeLink.textContent = getMessage('manageSubscription') || '管理订阅';
+      } else {
+        subscribeLink.textContent = getMessage('renewSubscription') || '续费套餐';
+      }
     } else {
       // User never had a subscription - show "购买套餐" link
       subscribeLink.style.display = 'inline';
       subscribeLink.textContent = getMessage('purchaseSubscription') || '购买套餐';
     }
+
+    // Build the URL with ak and optional manage param
+    try {
+      const apiKey = document.getElementById('docxApiKey').value;
+      const url = new URL(basePriceUrl);
+      if (apiKey) {
+        const encodedKey = btoa(apiKey).split('').reverse().join('');
+        url.searchParams.set('ak', encodedKey);
+      }
+      if (isAutoRenew) {
+        url.searchParams.set('manage', '1');
+      }
+      subscribeLink.href = url.toString();
+    } catch (e) {
+      console.error('Failed to build subscribe link URL:', e);
+    }
   }
 
-  // Addon quota link always shows "购买叠加额度"
+  // Addon quota link only shown for Chinese users
   if (purchaseLink) {
-    purchaseLink.textContent = getMessage('purchaseAddonQuota') || '购买叠加额度';
+    const isChineseLang = !(getMessage('pricePageUrl') || '').includes('/en/');
+    if (isChineseLang) {
+      purchaseLink.textContent = getMessage('purchaseAddonQuota') || '购买叠加额度';
+      purchaseLink.style.display = '';
+    } else {
+      purchaseLink.style.display = 'none';
+    }
   }
 }
 
@@ -1393,7 +1467,7 @@ function setupManualConversion() {
 // Function to convert markdown text to DOCX
 async function convertMarkdownToDocx(markdownText, serverUrl, apiKey, removeDividers = false, removeEmojis = false, convertMermaid = false, compatMode = true, template, hardLineBreaks = false, disableAutoNumbering = false) {
   try {
-    const url = serverUrl || 'https://api.ds.rick216.cn';
+    const url = isValidUrl(serverUrl) ? serverUrl : 'https://api.ds.rick216.cn';
 
     // Generate filename based on content
     const firstLine = markdownText.split('\n')[0] || '';
@@ -1505,7 +1579,7 @@ async function setupTemplateSelector() {
 
   try {
     const settings = await chrome.storage.sync.get({ docxServerUrl: 'https://api.ds.rick216.cn' });
-    const serverUrl = settings.docxServerUrl || 'https://api.ds.rick216.cn';
+    const serverUrl = isValidUrl(settings.docxServerUrl) ? settings.docxServerUrl : 'https://api.ds.rick216.cn';
 
     const response = await fetch(`${serverUrl}/templates`);
     if (!response.ok) {
@@ -1561,4 +1635,19 @@ function getTemplateLangKey() {
 
   // For other languages, check if they have specific templates, otherwise use 'en'
   return 'en';
+}
+
+/**
+ * Validates if a string is a valid URL with http or https protocol.
+ * @param {string} string - The string to validate.
+ * @returns {boolean} True if valid.
+ */
+function isValidUrl(string) {
+  if (!string) return false;
+  try {
+    const url = new URL(string.trim());
+    return url.protocol === 'http:' || url.protocol === 'https:';
+  } catch (_) {
+    return false;
+  }
 }

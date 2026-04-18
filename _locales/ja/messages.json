@@ -125,6 +125,9 @@
     "unselectAllButton": {
         "message": "選択解除"
     },
+    "loadingHistory": {
+        "message": "読み込み中..."
+    },
     "noMessageSelected": {
         "message": "少なくとも1つのメッセージを選択してください"
     },
@@ -159,13 +162,13 @@
         "message": "{date} に期限切れ"
     },
     "apiKeyHint": {
-        "message": "API キーを購入しますか？<a href=\"https://ds.rick216.cn/purchase-en\" target=\"_blank\">こちらをクリック</a>"
+        "message": "API キーを購入しますか？<a href=\"https://ds.rick216.cn/en/price.html\" target=\"_blank\">こちらをクリック</a>"
     },
     "apiKeyMissing": {
         "message": "文書変換機能を使用するには、拡張機能アイコンをクリックして API キーを購入・入力してください"
     },
     "apiKeyMissingShort": {
-        "message": "<a href=\"https://ds.rick216.cn/purchase-en\" target=\"_blank\">APIキーを購入</a>・入力してください"
+        "message": "<a href=\"https://ds.rick216.cn/en/price.html\" target=\"_blank\">APIキーを購入</a>・入力してください"
     },
     "manualConversionExplanation": {
         "message": "Grok、Claude、Meta AI などをサポート。会話を Markdown 入力ボックスにコピーし、「文書に変換」をクリックすると、数式対応の美しいフォーマットの Word 文書をダウンロードできます！"
@@ -260,17 +263,26 @@
     "compatModeTooltip": {
         "message": "非標準の Markdown をサポート"
     },
+    "compatModeDocUrl": {
+        "message": "https://docs.deepshare.app/en/faq/compat-mode"
+    },
     "hardLineBreaksLabel": {
         "message": "強制改行"
     },
     "hardLineBreaksTooltip": {
         "message": "単一の改行を強制改行として扱う"
     },
+    "hardLineBreaksDocUrl": {
+        "message": "https://docs.deepshare.app/en/faq/hard-line-breaks"
+    },
     "disableAutoNumberingLabel": {
         "message": "自動番号付けを無効にする"
     },
     "disableAutoNumberingTooltip": {
         "message": "番号付きリストを番号付きのプレーンテキスト段落に変換"
+    },
+    "disableAutoNumberingDocUrl": {
+        "message": "https://docs.deepshare.app/en/faq/disable-auto-numbering"
     },
     "getClipboardError": {
         "message": "コンテンツの取得に失敗しました"
@@ -292,6 +304,12 @@
     },
     "renewSubscription": {
         "message": "サブスクリプションを更新"
+    },
+    "manageSubscription": {
+        "message": "サブスクリプションを管理"
+    },
+    "pricePageUrl": {
+        "message": "https://ds.rick216.cn/en/price.html"
     },
     "subscriptionExpiredDays": {
         "message": "{days} 日前に期限切れ"
@@ -320,6 +338,9 @@
     "screenshotFailed": {
         "message": "スクリーンショットに失敗しました。更新してみてください"
     },
+    "conversationTooLong": {
+        "message": "会話が長すぎて1枚の画像としてキャプチャできません。メッセージを少なく選択して、もう一度お試しください。"
+    },
     "imageCopied": {
         "message": "画像をクリップボードにコピーしました"
     },
@@ -327,10 +348,10 @@
         "message": "画像のクリップボードへのコピーに失敗しました"
     },
     "apiKeyError": {
-        "message": "API キーエラーまたは期限切れ。メールを確認するか、カスタマーサービスにお問い合わせください: yoricker@foxmail.com"
+        "message": "API キーエラーまたは期限切れ。メールを確認するか、カスタマーサービスにお問い合わせください: contact@deepshare.app"
     },
     "quotaExceededError": {
-        "message": "クォータが不足しています。<a href=\"https://ds.rick216.cn/purchase-en\" target=\"_blank\">チャージ</a>してください。"
+        "message": "クォータが不足しています。<a href=\"https://ds.rick216.cn/en/price.html\" target=\"_blank\">チャージ</a>してください。"
     },
     "aboutTabTitle": {
         "message": "DeepShare について"
@@ -340,6 +361,9 @@
     },
     "documentationLabel": {
         "message": "ドキュメント:"
+    },
+    "documentationUrl": {
+        "message": "https://docs.deepshare.app/en"
     },
     "githubLabel": {
         "message": "GitHub:"
@@ -489,5 +513,8 @@
     },
     "onboardingRefreshHint": {
         "message": "初回使用時は、開いているAI会話を更新してください。"
+    },
+    "scrollCollecting": {
+        "message": "スクロールしてメッセージを収集しています。しばらくお待ちください..."
     }
 }

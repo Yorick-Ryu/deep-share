@@ -4,12 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ChatGPT to Word - DeepShare</title>
+    <title>ChatGPT, Gemini, DeepSeek to Word - DeepShare</title>
 
     <meta name="description"
         content="DeepShare Online Document Converter - Convert DeepSeek, ChatGPT, Gemini, etc. AI conversation Markdown text to beautifully formatted Word documents with formulas and tables." />
     <meta name="keywords"
-        content="ChatGPT to Word,DeepSeek to Word,DeepSeek export Word,Gemini to Word,Grok to Word,LaTeX,Word export" />
+        content="ChatGPT to Word,Gemini to Word,DeepSeek to Word,AI to Word,Word export,LaTeX,Markdown to Word" />
 
     <link rel="icon" type="image/svg+xml" href="./assets/images/deepshare-icon.svg">
     <link rel="stylesheet" href="./assets/css/style.css">
@@ -33,6 +33,7 @@
             </button>
             <div class="nav-links">
                 <a href="./index-en.html">Download Browser Extension</a>
+                <a href="https://docs.deepshare.app/en/" target="_blank">Docs</a>
                 <a href="https://github.com/Yorick-Ryu/deep-share" target="_blank" class="github-link">
                     <svg class="github-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                         <path
@@ -57,7 +58,7 @@
 
     <main>
         <div class="converter-container">
-            <h1 style="text-align: center; margin-bottom: 1.5rem; font-size: 1.75rem;">ChatGPT to Word</h1>
+            <h1 style="text-align: center; margin-bottom: 1.5rem; font-size: 1.75rem;">ChatGPT, Gemini, DeepSeek to Word</h1>
 
             <!-- Converter Card -->
             <div class="converter-card">
@@ -154,7 +155,7 @@
                             </svg>
                         </button>
                     </div>
-                    <span class="form-hint">Purchase API Key? <a href="https://ds.rick216.cn/purchase-en.html"
+                    <span class="form-hint">Purchase API Key? <a href="https://ds.rick216.cn/en/price.html"
                             target="_blank">Click here</a></span>
                 </div>
 
@@ -177,7 +178,7 @@
                     <div class="checkbox-group">
                         <input type="checkbox" id="compatMode" checked>
                         <label for="compatMode">Compat Mode</label>
-                        <a href="https://docs.deepshare.app/faq/compat-mode" target="_blank"
+                        <a href="https://docs.deepshare.app/en/faq/compat-mode" target="_blank"
                             class="tooltip-icon tooltip-left-aligned" style="cursor: pointer;">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -195,7 +196,7 @@
                     <div class="checkbox-group">
                         <input type="checkbox" id="hardLineBreaks">
                         <label for="hardLineBreaks">Hard Line Breaks</label>
-                        <a href="https://docs.deepshare.app/faq/hard-line-breaks" target="_blank"
+                        <a href="https://docs.deepshare.app/en/faq/hard-line-breaks" target="_blank"
                             class="tooltip-icon tooltip-right-aligned" style="cursor: pointer;">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -210,7 +211,7 @@
                     <div class="checkbox-group">
                         <input type="checkbox" id="disableAutoNumbering">
                         <label for="disableAutoNumbering">Disable Auto Numbering</label>
-                        <a href="https://docs.deepshare.app/faq/disable-auto-numbering" target="_blank"
+                        <a href="https://docs.deepshare.app/en/faq/disable-auto-numbering" target="_blank"
                             class="tooltip-icon tooltip-left-aligned" style="cursor: pointer;">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -226,37 +227,72 @@
 
                 <!-- Quota information section -->
                 <div class="quota-section" id="quotaSection" style="display: none;">
-                    <div class="quota-info">
-                        <div class="quota-header">
-                            <h3 id="quotaTitle">Your Conversion Quota</h3>
-                            <span id="userEmail" class="user-email"></span>
+                    <!-- Loading state -->
+                    <div class="quota-loading" id="quotaLoading" style="display: none;">
+                        <div class="quota-loading-header">
+                            <div class="quota-loading-title"></div>
                         </div>
-                        <div class="quota-details">
-                            <div class="quota-item">
-                                <span class="quota-label">Total:</span>
-                                <span class="quota-value" id="totalQuota">--</span>
+                        <div class="quota-loading-blocks">
+                            <div class="quota-loading-block" id="subscriptionLoadingBlock">
+                                <div class="quota-loading-label"></div>
+                                <div class="quota-loading-value"></div>
+                                <div class="quota-loading-progress"></div>
+                                <div class="quota-loading-note"></div>
                             </div>
-                            <div class="quota-item">
-                                <span class="quota-label">Used:</span>
-                                <span class="quota-value" id="usedQuota">--</span>
-                            </div>
-                            <div class="quota-item">
-                                <span class="quota-label">Remaining:</span>
-                                <span class="quota-value quota-remaining" id="remainingQuota">--</span>
+                            <div class="quota-loading-block" id="addonLoadingBlock">
+                                <div class="quota-loading-label"></div>
+                                <div class="quota-loading-value"></div>
+                                <div class="quota-loading-progress"></div>
+                                <div class="quota-loading-note"></div>
                             </div>
                         </div>
                     </div>
-                    <div class="quota-progress-container">
-                        <div class="quota-progress" id="quotaProgress"></div>
+
+                    <div class="quota-header">
+                        <h3 id="quotaTitle">Your Conversion Quota</h3>
+                        <span id="userEmail" class="user-email"></span>
                     </div>
-                    <div class="expiration-info">
-                        <span class="expiration-label">Valid until:</span>
-                        <span class="expiration-value" id="expirationDate">--</span>
+                    <div class="quota-blocks" id="quotaBlocks">
+                        <!-- Subscription daily quota -->
+                        <div class="quota-block" id="subscriptionBlock" style="display: none;">
+                            <div class="quota-block-top">
+                                <span class="quota-block-label" id="dailyQuotaLabel">Daily Quota</span>
+                                <span class="quota-block-badge" id="subscriptionPlanName"></span>
+                            </div>
+                            <div class="quota-block-value">
+                                <span class="quota-block-remaining" id="dailyRemaining">--</span>
+                                <span class="quota-block-sep">/</span>
+                                <span id="dailyTotal">--</span>
+                            </div>
+                            <div class="quota-progress-container">
+                                <div class="quota-progress" id="dailyProgress"></div>
+                            </div>
+                            <span class="quota-block-note" id="dailyResetNote">Resets daily</span>
+                        </div>
+                        <!-- Addon pay-per-use quota -->
+                        <div class="quota-block" id="addonBlock" style="display: none;">
+                            <div class="quota-block-top">
+                                <span class="quota-block-label" id="addonQuotaLabel">Add-on Quota</span>
+                            </div>
+                            <div class="quota-block-value">
+                                <span class="quota-block-remaining" id="addonRemaining">--</span>
+                                <span class="quota-block-sep">/</span>
+                                <span id="addonTotal">--</span>
+                            </div>
+                            <div class="quota-progress-container">
+                                <div class="quota-progress" id="addonProgress"></div>
+                            </div>
+                            <span class="quota-block-note" id="addonExpiry">--</span>
+                        </div>
                     </div>
-                    <div class="quota-actions">
-                        <button id="refreshQuota" class="btn btn-secondary">Refresh</button>
-                        <a href="https://ds.rick216.cn/purchase-en.html" target="_blank" class="purchase-link">Purchase
-                            Quota</a>
+                    <div class="quota-footer">
+                        <button id="refreshQuota" class="text-link-btn">Refresh</button>
+                        <div class="quota-footer-actions">
+                            <a href="https://ds.rick216.cn/en/price.html" target="_blank" class="purchase-link"
+                                id="subscribeLink" style="display: none;">Buy Plan</a>
+                            <a href="https://ds.rick216.cn/purchase-en.html" target="_blank" class="purchase-link"
+                                id="purchaseLink">Buy Addon Quota</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -269,7 +305,7 @@
                 <a href="https://github.com/Yorick-Ryu/deep-share">GitHub</a>
                 <a href="./privacy-en.html">Privacy Policy</a>
                 <a href="./terms-en.html">Terms of Service</a>
-                <a href="./purchase-en.html">Purchase Quota</a>
+                <a href="./en/price.html">Purchase Quota</a>
             </div>
             <p class="copyright">© 2026 DeepShare. All rights reserved.</p>
         </div>

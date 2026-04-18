@@ -182,14 +182,14 @@
 
 .converter-card {
     background: var(--card-bg);
-    border-radius: 10px;
+    border-radius: 16px;
     padding: 1.5rem;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1.25rem;
 }
 
 .converter-card h2 {
     font-size: 1.25rem;
-    margin-bottom: 1.25rem;
     color: var(--text-color);
     display: flex;
     align-items: center;

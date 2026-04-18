@@ -17,7 +17,7 @@ function injectDeepSeekButtons() {
                         if (!document.getElementById('save-as-image-btn')) {
                             const saveAsImageButton = createLinkButton.cloneNode(true);
                             saveAsImageButton.id = 'save-as-image-btn';
-                            saveAsImageButton.querySelector('span').textContent = chrome.i18n.getMessage('saveAsImageButton');
+                            saveAsImageButton.querySelector('span').textContent = chrome.i18n?.getMessage('saveAsImageButton');
                             
                             const iconContainer = saveAsImageButton.querySelector('.ds-icon');
                             if (iconContainer) {
@@ -36,7 +36,7 @@ function injectDeepSeekButtons() {
                         if (saveAsImageButton && !document.getElementById('save-as-docx-btn')) {
                             const saveAsDocxButton = saveAsImageButton.cloneNode(true);
                             saveAsDocxButton.id = 'save-as-docx-btn';
-                            saveAsDocxButton.querySelector('span').textContent = chrome.i18n.getMessage('docxButton');
+                            saveAsDocxButton.querySelector('span').textContent = chrome.i18n?.getMessage('docxButton');
                             
                             saveAsDocxButton.addEventListener('click', () => {
                                 document.dispatchEvent(new Event('deepshare:saveAsDocx'));
