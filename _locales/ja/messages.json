@@ -276,7 +276,7 @@
         "message": "https://docs.deepshare.app/en/faq/hard-line-breaks"
     },
     "disableAutoNumberingLabel": {
-        "message": "自動番号付けを無効にする"
+        "message": "自動番号付け無効"
     },
     "disableAutoNumberingTooltip": {
         "message": "番号付きリストを番号付きのプレーンテキスト段落に変換"

@@ -276,7 +276,7 @@
         "message": "https://docs.deepshare.app/en/faq/hard-line-breaks"
     },
     "disableAutoNumberingLabel": {
-        "message": "Désactiver la numérotation automatique"
+        "message": "Désact. num. auto."
     },
     "disableAutoNumberingTooltip": {
         "message": "Listes ordonnées converties en paragraphes de texte brut avec numérotation"

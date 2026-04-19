@@ -276,7 +276,7 @@
         "message": "https://docs.deepshare.app/en/faq/hard-line-breaks"
     },
     "disableAutoNumberingLabel": {
-        "message": "Disable Auto Numbering"
+        "message": "No Auto Numbering"
     },
     "disableAutoNumberingTooltip": {
         "message": "Ordered lists converted to plain text with numbering"
