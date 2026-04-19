@@ -43,7 +43,8 @@
         "https://navyli.com/*",
         "https://aizex.net/*",
         "https://a.memofun.net/*",
-        "https://www.techopens.com/*"
+        "https://www.techopens.com/*",
+        "https://ai.ndai.top/*"
     ],
     "background": {
         "service_worker": "background.js"
@@ -178,7 +179,8 @@
                 "https://navyli.com/*",
                 "https://aizex.net/*",
                 "https://a.memofun.net/*",
-                "https://www.techopens.com/*"
+                "https://www.techopens.com/*",
+                "https://ai.ndai.top/*"
             ],
             "css": [
                 "styles/style.css",
