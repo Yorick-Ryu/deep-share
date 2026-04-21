@@ -8,7 +8,7 @@ A lightweight browser extension designed for AI users to easily copy formulas fr
 
 <a href="https://www.producthunt.com/products/deepshare-2/launches/deepshare-2?embed=true&amp;utm_source=badge-featured&amp;utm_medium=badge&amp;utm_campaign=badge-deepshare-2" target="_blank" rel="noopener noreferrer"><img alt="DeepShare - AI Chats to Word Documents | Product Hunt" width="250" height="54" src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1028413&amp;theme=light&amp;t=1771942926631"></a>
 
-[简体中文文档](https://docs.deepshare.app/)
+[English User Documentation](https://docs.deepshare.app/en/) | [简中用户文档](https://docs.deepshare.app/)
 
 ## Features
 
