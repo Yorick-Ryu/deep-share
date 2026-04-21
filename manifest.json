@@ -44,7 +44,8 @@
         "https://aizex.net/*",
         "https://a.memofun.net/*",
         "https://www.techopens.com/*",
-        "https://ai.ndai.top/*"
+        "https://ai.ndai.top/*",
+        "https://*.tuangouai.com/*"
     ],
     "background": {
         "service_worker": "background.js"
@@ -180,7 +181,8 @@
                 "https://aizex.net/*",
                 "https://a.memofun.net/*",
                 "https://www.techopens.com/*",
-                "https://ai.ndai.top/*"
+                "https://ai.ndai.top/*",
+                "https://*.tuangouai.com/*"
             ],
             "css": [
                 "styles/style.css",
