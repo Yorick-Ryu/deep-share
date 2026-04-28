@@ -45,6 +45,7 @@
         "https://a.memofun.net/*",
         "https://www.techopens.com/*",
         "https://ai.ndai.top/*",
+        "https://cloudlian.cn/*",
         "https://*.tuangouai.com/*"
     ],
     "background": {
@@ -182,6 +183,7 @@
                 "https://a.memofun.net/*",
                 "https://www.techopens.com/*",
                 "https://ai.ndai.top/*",
+                "https://cloudlian.cn/*",
                 "https://*.tuangouai.com/*"
             ],
             "css": [
