@@ -13,8 +13,8 @@ let formulaSettings = {
 
 // Function to add copy functionality to LaTeX formulas in Doubao platform
 function enableKatexCopy4Doubao() {
-    // Find all elements with data-custom-copy-text attribute
-    const latexElements = document.querySelectorAll('[data-custom-copy-text]');
+    // Find all elements with data-custom-copy-text or copy-text attribute
+    const latexElements = document.querySelectorAll('[copy-text]');
 
     latexElements.forEach(element => {
         // Make sure we haven't already processed this element
@@ -38,11 +38,14 @@ async function handleLatexClick(e) {
         return;
     }
 
-    // Get the LaTeX code from data-custom-copy-text attribute
-    if (this.dataset.customCopyText) {
-        // Remove the \( and \) from the beginning and end
-        let latexCode = this.dataset.customCopyText;
+    // Get the LaTeX code from data-custom-copy-text or copy-text attribute
+    let latexCode = this.dataset.customCopyText || this.getAttribute('copy-text');
+    
+    if (latexCode) {
+        // Remove the \( and \) or \[ and \] from the beginning and end
         if (latexCode.startsWith('\\(') && latexCode.endsWith('\\)')) {
+            latexCode = latexCode.substring(2, latexCode.length - 2);
+        } else if (latexCode.startsWith('\\[') && latexCode.endsWith('\\]')) {
             latexCode = latexCode.substring(2, latexCode.length - 2);
         }
 
@@ -85,7 +88,7 @@ function updateElementStyle(element) {
 
 // 更新所有已处理元素的样式和行为
 function updateAllElements() {
-    const latexElements = document.querySelectorAll('[data-custom-copy-text][data-katex-copy-enabled="true"]');
+    const latexElements = document.querySelectorAll('[copy-text][data-katex-copy-enabled="true"]');
     latexElements.forEach(updateElementStyle);
 }
 
