@@ -46,6 +46,7 @@
         "https://www.techopens.com/*",
         "https://ai.ndai.top/*",
         "https://cloudlian.cn/*",
+        "https://*.snakegpt.vip/*",
         "https://*.tuangouai.com/*"
     ],
     "background": {
@@ -184,6 +185,7 @@
                 "https://www.techopens.com/*",
                 "https://ai.ndai.top/*",
                 "https://cloudlian.cn/*",
+                "https://*.snakegpt.vip/*",
                 "https://*.tuangouai.com/*"
             ],
             "css": [
