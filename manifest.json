@@ -48,7 +48,7 @@
         "https://cloudlian.cn/*",
         "https://*.snakegpt.vip/*",
         "https://*.tuangouai.com/*",
-        "https://share.meteor-api.cn/*"
+        "https://*.meteor-api.cn/*"
     ],
     "background": {
         "service_worker": "background.js"
@@ -188,7 +188,7 @@
                 "https://cloudlian.cn/*",
                 "https://*.snakegpt.vip/*",
                 "https://*.tuangouai.com/*",
-                "https://share.meteor-api.cn/*"
+                "https://*.meteor-api.cn/*"
             ],
             "css": [
                 "styles/style.css",
