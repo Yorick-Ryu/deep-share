@@ -737,7 +737,7 @@
 
     /* 只显示月付卡片 (默认) */
     .plan-card[data-period="monthly"] {
-        display: block;
+        display: flex;
     }
 
     /* 当切换到年付时 */
@@ -746,7 +746,7 @@
     }
 
     body.yearly-view .plan-card[data-period="yearly"] {
-        display: block;
+        display: flex;
     }
 }
 
@@ -787,7 +787,7 @@
 
     /* 只显示月付卡片 (默认) */
     .plan-card[data-period="monthly"] {
-        display: block;
+        display: flex;
     }
 
     /* 当切换到年付时 */
@@ -796,7 +796,7 @@
     }
 
     body.yearly-view .plan-card[data-period="yearly"] {
-        display: block;
+        display: flex;
     }
 
     .pricing-notes {
