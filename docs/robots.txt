@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ds.rick216.cn/sitemap.xml

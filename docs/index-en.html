@@ -12,6 +12,7 @@
     <meta name="keywords"
         content="DeepShare,DeepSeek,ChatGPT to Word,DeepSeek to Word,DeepSeek export Word,Gemini to Word,Grok to Word,formula copy,LaTeX,Word export,deepseek screenshot,browser extension" />
     <meta name="author" content="DeepShare" />
+    <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" />
 
     <!-- SEO: Language and Regional Targeting -->
     <link rel="canonical" href="https://ds.rick216.cn/index-en" />
@@ -42,6 +43,85 @@
     <meta name="twitter:image" content="https://ds.rick216.cn/assets/images/cover.jpg" />
 
     <link rel="icon" type="image/svg+xml" href="./assets/images/deepshare-icon.svg">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "SoftwareApplication",
+                "@id": "https://ds.rick216.cn/index-en#software",
+                "name": "DeepShare",
+                "applicationCategory": "BrowserApplication",
+                "operatingSystem": "Chrome, Microsoft Edge, Firefox",
+                "description": "DeepShare is a browser extension that exports AI conversations from DeepSeek, ChatGPT, Gemini, and other platforms to Word documents, copies LaTeX or MathML formulas, and captures long DeepSeek conversation screenshots.",
+                "url": "https://ds.rick216.cn/index-en",
+                "image": "https://ds.rick216.cn/assets/images/cover.jpg",
+                "softwareVersion": "1.7.3",
+                "offers": {
+                    "@type": "Offer",
+                    "url": "https://ds.rick216.cn/en/price",
+                    "price": "0",
+                    "priceCurrency": "USD",
+                    "availability": "https://schema.org/InStock"
+                },
+                "sameAs": [
+                    "https://github.com/Yorick-Ryu/deep-share",
+                    "https://microsoftedge.microsoft.com/addons/detail/deepshare/pdccjnppfegekpnhfljbngammgfbcofm",
+                    "https://chromewebstore.google.com/detail/omnaecaamcabmnbjnpjpecoaalfgidop",
+                    "https://addons.mozilla.org/firefox/addon/deepshare/"
+                ]
+            },
+            {
+                "@type": "WebSite",
+                "@id": "https://ds.rick216.cn/index-en#website",
+                "name": "DeepShare",
+                "url": "https://ds.rick216.cn/index-en",
+                "inLanguage": "en",
+                "publisher": {
+                    "@id": "https://ds.rick216.cn/index-en#software"
+                }
+            },
+            {
+                "@type": "FAQPage",
+                "@id": "https://ds.rick216.cn/index-en#faq",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "What is DeepShare?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "DeepShare is a browser extension for exporting AI conversations from DeepSeek, ChatGPT, Gemini, and similar platforms to Word documents while preserving headings, lists, tables, and math formulas. It also copies formula source code and captures long DeepSeek conversation screenshots."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Which AI platforms does DeepShare support for Word export?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "DeepShare supports one-click AI chat to Word export for DeepSeek, ChatGPT, and Gemini, plus manual paste conversion for Grok, Kimi, Qwen, ChatGLM, OpenRouter, Poe, Monica, and other AI tools."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Can DeepShare copy math formulas from AI answers?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Yes. DeepShare can copy formulas from AI answers as LaTeX or MathML, making them easier to reuse in Word, WPS, research papers, lecture notes, and Markdown documents."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Is DeepShare free?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "The DeepShare extension is open source and can be installed from supported browser stores. Features that use service resources, such as AI chat to Word conversion, are available through credits or subscriptions described on the pricing page."
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
     <link rel="stylesheet" href="./assets/css/style.css">
 </head>
 
@@ -174,6 +254,27 @@
             </div>
         </section>
 
+        <section class="answer-summary" aria-labelledby="answer-summary-title">
+            <div class="answer-summary-content">
+                <h2 id="answer-summary-title">Who is DeepShare for?</h2>
+                <p><strong>DeepShare is an AI chat export tool.</strong> It turns AI answers from DeepSeek, ChatGPT, Gemini, and similar platforms into structured Word documents for students, teachers, researchers, creators, and professionals who need reusable AI output.</p>
+                <div class="summary-list">
+                    <div>
+                        <h3>AI Chats to Word</h3>
+                        <p>Exports headings, lists, code blocks, tables, and math formulas so users spend less time cleaning copied AI responses.</p>
+                    </div>
+                    <div>
+                        <h3>Formula Copy</h3>
+                        <p>Copies LaTeX or MathML formulas from AI answers for Word, WPS, research papers, slides, and Markdown documents.</p>
+                    </div>
+                    <div>
+                        <h3>DeepSeek Screenshots</h3>
+                        <p>Captures full DeepSeek conversations as images for sharing, archiving, and reporting.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <section id="features" class="features">
             <h2>Main Features</h2>
             <div class="feature-grid">
@@ -258,7 +359,7 @@
                             <td><span class="not-supported">✗</span></td>
                         </tr>
                         <tr>
-                            <td>Grok</td>
+                            <td>Doubao</td>
                             <td><span class="supported">✓</span></td>
                             <td><span class="partial">Manual Paste</span></td>
                             <td><span class="not-supported">✗</span></td>
@@ -325,14 +426,36 @@
                 </div>
             </div>
         </section>
+
+        <section id="faq" class="faq" aria-labelledby="faq-title">
+            <h2 id="faq-title">FAQ</h2>
+            <div class="faq-list">
+                <details>
+                    <summary>What is DeepShare?</summary>
+                    <p>DeepShare is a browser extension for exporting AI conversations from DeepSeek, ChatGPT, Gemini, and similar platforms to Word documents while preserving headings, lists, tables, and math formulas. It also copies formula source code and captures long DeepSeek conversation screenshots.</p>
+                </details>
+                <details>
+                    <summary>Which AI platforms does DeepShare support for Word export?</summary>
+                    <p>DeepShare supports one-click AI chat to Word export for DeepSeek, ChatGPT, and Gemini, plus manual paste conversion for Grok, Kimi, Qwen, ChatGLM, OpenRouter, Poe, Monica, and other AI tools.</p>
+                </details>
+                <details>
+                    <summary>Can DeepShare copy math formulas from AI answers?</summary>
+                    <p>Yes. DeepShare can copy formulas from AI answers as LaTeX or MathML, making them easier to reuse in Word, WPS, research papers, lecture notes, and Markdown documents.</p>
+                </details>
+                <details>
+                    <summary>Is DeepShare free?</summary>
+                    <p>The DeepShare extension is open source and can be installed from supported browser stores. Features that use service resources, such as AI chat to Word conversion, are available through credits or subscriptions described on the pricing page.</p>
+                </details>
+            </div>
+        </section>
     </main>
 
     <footer>
         <div class="footer-content">
             <div class="footer-links">
                 <a href="https://github.com/Yorick-Ryu/deep-share">GitHub</a>
-                <a href="./privacy-en.html">Privacy Policy</a>
-                <a href="./terms-en.html">Terms of Service</a>
+                <a href="https://docs.deepshare.app/en/privacy/">Privacy Policy</a>
+                <a href="https://docs.deepshare.app/en/terms/">Terms of Service</a>
                 <a href="./en/price.html">Purchase Credits</a>
             </div>
             <p class="copyright">© 2026 DeepShare. All rights reserved.</p>

@@ -12,6 +12,7 @@
     <meta name="keywords"
         content="DeepShare,DeepSeek,ChatGPT转Word,DeepSeek转Word,DeepSeek导出Word,Gemini转Word,豆包导出Word,公式复制,LaTeX,Word导出,截图分享,浏览器插件" />
     <meta name="author" content="DeepShare" />
+    <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" />
 
     <!-- SEO: Language and Regional Targeting -->
     <link rel="canonical" href="https://ds.rick216.cn/" />
@@ -40,6 +41,85 @@
     <meta name="twitter:image" content="https://ds.rick216.cn/assets/images/cover.jpg" />
 
     <link rel="icon" type="image/svg+xml" href="./assets/images/deepshare-icon.svg">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "SoftwareApplication",
+                "@id": "https://ds.rick216.cn/#software",
+                "name": "DeepShare",
+                "applicationCategory": "BrowserApplication",
+                "operatingSystem": "Chrome, Microsoft Edge, Firefox",
+                "description": "DeepShare 是一款浏览器插件，可将 DeepSeek、ChatGPT、Gemini 等 AI 对话导出为 Word 文档，复制 LaTeX 或 MathML 公式，并支持 DeepSeek 对话长截图。",
+                "url": "https://ds.rick216.cn/",
+                "image": "https://ds.rick216.cn/assets/images/cover.jpg",
+                "softwareVersion": "1.7.3",
+                "offers": {
+                    "@type": "Offer",
+                    "url": "https://ds.rick216.cn/price",
+                    "price": "0",
+                    "priceCurrency": "CNY",
+                    "availability": "https://schema.org/InStock"
+                },
+                "sameAs": [
+                    "https://github.com/Yorick-Ryu/deep-share",
+                    "https://microsoftedge.microsoft.com/addons/detail/deepshare/pdccjnppfegekpnhfljbngammgfbcofm",
+                    "https://chromewebstore.google.com/detail/omnaecaamcabmnbjnpjpecoaalfgidop",
+                    "https://addons.mozilla.org/firefox/addon/deepshare/"
+                ]
+            },
+            {
+                "@type": "WebSite",
+                "@id": "https://ds.rick216.cn/#website",
+                "name": "DeepShare",
+                "url": "https://ds.rick216.cn/",
+                "inLanguage": "zh-CN",
+                "publisher": {
+                    "@id": "https://ds.rick216.cn/#software"
+                }
+            },
+            {
+                "@type": "FAQPage",
+                "@id": "https://ds.rick216.cn/#faq",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "DeepShare 是什么？",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "DeepShare 是一款面向 AI 对话的浏览器插件，主要用于把 DeepSeek、ChatGPT、Gemini 等平台的回答导出为 Word 文档，同时保留标题、列表、表格和数学公式。它还支持复制公式源码，并提供 DeepSeek 对话长截图能力。"
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "DeepShare 支持哪些 AI 平台导出 Word？",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "DeepShare 支持 DeepSeek、ChatGPT、Gemini 的一键对话转 Word，并为豆包、Kimi、Grok、通义千问、讯飞星火、智谱清言、OpenRouter、Poe、Monica 等平台提供手动粘贴转 Word。"
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "DeepShare 能复制 AI 回答里的数学公式吗？",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "可以。DeepShare 支持从 AI 对话中复制公式，并输出为 LaTeX 或 MathML 格式，方便粘贴到 Word、WPS、论文、课件或 Markdown 文档中。"
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "DeepShare 是免费的吗？",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "DeepShare 插件本体开源并可安装使用，复制公式和 DeepSeek 对话截图完全免费。AI 对话转 Word 等涉及服务资源的功能可按页面中的套餐说明购买额度或订阅。"
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
     <link rel="stylesheet" href="./assets/css/style.css">
 </head>
 
@@ -176,6 +256,27 @@
                         <span class="dot active"></span>
                         <span class="dot"></span>
                         <span class="dot"></span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="answer-summary" aria-labelledby="answer-summary-title">
+            <div class="answer-summary-content">
+                <h2 id="answer-summary-title">DeepShare 适合谁使用？</h2>
+                <p><strong>DeepShare 是一款 AI 对话导出工具。</strong>它把 DeepSeek、ChatGPT、Gemini 等 AI 平台中的回答转换为结构清晰的 Word 文档，适合学生、教师、研究人员、内容创作者和需要整理 AI 输出的办公用户。</p>
+                <div class="summary-list">
+                    <div>
+                        <h3>AI 对话转 Word</h3>
+                        <p>导出后保留标题、列表、代码块、表格和数学公式，减少手动复制后的二次排版。</p>
+                    </div>
+                    <div>
+                        <h3>公式复制与复用</h3>
+                        <p>从 AI 回答中提取 LaTeX 或 MathML 公式，便于放入 Word、WPS、论文和课件。</p>
+                    </div>
+                    <div>
+                        <h3>DeepSeek 长截图</h3>
+                        <p>将完整 DeepSeek 对话保存为图片，适合分享、归档和汇报场景。</p>
                     </div>
                 </div>
             </div>
@@ -375,14 +476,36 @@
                 </div>
             </div>
         </section>
+
+        <section id="faq" class="faq" aria-labelledby="faq-title">
+            <h2 id="faq-title">常见问题</h2>
+            <div class="faq-list">
+                <details>
+                    <summary>DeepShare 是什么？</summary>
+                    <p>DeepShare 是一款面向 AI 对话的浏览器插件，主要用于把 DeepSeek、ChatGPT、Gemini 等平台的回答导出为 Word 文档，同时保留标题、列表、表格和数学公式。它还支持复制公式源码，并提供 DeepSeek 对话长截图能力。</p>
+                </details>
+                <details>
+                    <summary>DeepShare 支持哪些 AI 平台导出 Word？</summary>
+                    <p>DeepShare 支持 DeepSeek、ChatGPT、Gemini 的一键对话转 Word，并为豆包、Kimi、Grok、通义千问、讯飞星火、智谱清言、OpenRouter、Poe、Monica 等平台提供手动粘贴转 Word。</p>
+                </details>
+                <details>
+                    <summary>DeepShare 能复制 AI 回答里的数学公式吗？</summary>
+                    <p>可以。DeepShare 支持从 AI 对话中复制公式，并输出为 LaTeX 或 MathML 格式，方便粘贴到 Word、WPS、论文、课件或 Markdown 文档中。</p>
+                </details>
+                <details>
+                    <summary>DeepShare 是免费的吗？</summary>
+                    <p>DeepShare 插件本体开源并可安装使用，复制公式和 DeepSeek 对话截图完全免费。AI 对话转 Word 等涉及服务资源的功能可按页面中的套餐说明购买额度或订阅。</p>
+                </details>
+            </div>
+        </section>
     </main>
 
     <footer>
         <div class="footer-content">
             <div class="footer-links">
                 <a href="https://github.com/Yorick-Ryu/deep-share">GitHub</a>
-                <a href="./privacy.html">隐私政策</a>
-                <a href="./terms.html">使用条款</a>
+                <a href="https://docs.deepshare.app/privacy/">隐私政策</a>
+                <a href="https://docs.deepshare.app/terms/">使用条款</a>
                 <a href="/price.html">购买套餐</a>
             </div>
             <p class="copyright">© 2026 DeepShare. All rights reserved.</p>

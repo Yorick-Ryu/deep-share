@@ -3,6 +3,48 @@
   "outputDirectory": "docs",
   "cleanUrls": true,
   "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/privacy",
+      "destination": "https://docs.deepshare.app/privacy/",
+      "permanent": true
+    },
+    {
+      "source": "/privacy.html",
+      "destination": "https://docs.deepshare.app/privacy/",
+      "permanent": true
+    },
+    {
+      "source": "/terms",
+      "destination": "https://docs.deepshare.app/terms/",
+      "permanent": true
+    },
+    {
+      "source": "/terms.html",
+      "destination": "https://docs.deepshare.app/terms/",
+      "permanent": true
+    },
+    {
+      "source": "/privacy-en",
+      "destination": "https://docs.deepshare.app/en/privacy/",
+      "permanent": true
+    },
+    {
+      "source": "/privacy-en.html",
+      "destination": "https://docs.deepshare.app/en/privacy/",
+      "permanent": true
+    },
+    {
+      "source": "/terms-en",
+      "destination": "https://docs.deepshare.app/en/terms/",
+      "permanent": true
+    },
+    {
+      "source": "/terms-en.html",
+      "destination": "https://docs.deepshare.app/en/terms/",
+      "permanent": true
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",
@@ -49,4 +91,3 @@
     }
   ]
 }
-

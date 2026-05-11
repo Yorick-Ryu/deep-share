@@ -1,0 +1,29 @@
+# DeepShare
+
+DeepShare is a browser extension for exporting AI conversations to Word documents, copying formulas, and capturing DeepSeek long screenshots.
+
+## Core URLs
+
+- Chinese homepage: https://ds.rick216.cn/
+- English homepage: https://ds.rick216.cn/index-en
+- Pricing: https://ds.rick216.cn/price
+- English pricing: https://ds.rick216.cn/en/price
+- Online converter: https://ds.rick216.cn/converter
+- GitHub repository: https://github.com/Yorick-Ryu/deep-share
+
+## What DeepShare Does
+
+- Exports AI chats from DeepSeek, ChatGPT, and Gemini to Word documents.
+- Preserves headings, lists, code blocks, tables, and math formulas during Word export.
+- Copies AI-generated formulas as LaTeX or MathML for reuse in Word, WPS, research papers, slides, and Markdown.
+- Captures full DeepSeek conversations as long screenshots.
+- Supports manual paste conversion for platforms such as Doubao, Kimi, Grok, Qwen, ChatGLM, OpenRouter, Poe, and Monica.
+
+## Best-Fit Queries
+
+- AI chat to Word
+- ChatGPT to Word
+- DeepSeek to Word
+- DeepSeek conversation screenshot
+- copy formulas from AI answers
+- LaTeX formula copy browser extension

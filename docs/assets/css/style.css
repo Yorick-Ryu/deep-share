@@ -434,6 +434,45 @@ main {
 }
 
 /* Features Section */
+.answer-summary {
+    max-width: 1100px;
+    margin: 0 auto 8rem;
+}
+
+.answer-summary-content {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 2.5rem;
+    box-shadow: var(--card-shadow);
+}
+
+.answer-summary h2 {
+    text-align: left;
+    margin-bottom: 1rem;
+}
+
+.answer-summary p {
+    color: var(--text-muted);
+}
+
+.summary-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.summary-list h3 {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.summary-list p {
+    font-size: 0.95rem;
+    margin-bottom: 0;
+}
+
 .features {
     max-width: 1100px;
     margin: 0 auto 8rem;
@@ -635,6 +674,36 @@ main {
     height: 100%;
 }
 
+/* FAQ */
+.faq {
+    max-width: 900px;
+    margin: 0 auto 8rem;
+}
+
+.faq-list {
+    display: grid;
+    gap: 1rem;
+}
+
+.faq-list details {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    box-shadow: var(--card-shadow);
+}
+
+.faq-list summary {
+    cursor: pointer;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.faq-list p {
+    color: var(--text-muted);
+    margin: 0.75rem 0 0;
+}
+
 /* Footer */
 footer {
     background: var(--bg-secondary);
@@ -712,6 +781,18 @@ footer {
 
     .install-steps {
         flex-direction: column;
+    }
+
+    .answer-summary-content {
+        padding: 1.5rem;
+    }
+
+    .answer-summary h2 {
+        text-align: center;
+    }
+
+    .summary-list {
+        grid-template-columns: 1fr;
     }
 
     .compatibility-table {
