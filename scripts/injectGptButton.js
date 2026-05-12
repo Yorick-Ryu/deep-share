@@ -168,6 +168,65 @@
 
         let result = '';
 
+        const getCodeBlockText = (codeNode) => {
+            let text = '';
+
+            const appendNodeText = (currentNode) => {
+                if (currentNode.nodeType === Node.TEXT_NODE) {
+                    text += currentNode.textContent;
+                    return;
+                }
+
+                if (currentNode.nodeType !== Node.ELEMENT_NODE) {
+                    return;
+                }
+
+                if (currentNode.tagName === 'BR') {
+                    text += '\n';
+                    return;
+                }
+
+                currentNode.childNodes.forEach(appendNodeText);
+            };
+
+            codeNode.childNodes.forEach(appendNodeText);
+            return text.replace(/\n$/, '');
+        };
+
+        const normalizeCodeLanguage = (language) => {
+            const normalized = (language || '').trim().toLowerCase();
+            const aliases = {
+                'c++': 'cpp',
+                'c#': 'csharp',
+                'js': 'javascript',
+                'ts': 'typescript',
+                'shell': 'bash',
+                'zsh': 'bash',
+            };
+
+            if (aliases[normalized]) return aliases[normalized];
+            return /^[a-z0-9_+-]+$/.test(normalized) ? normalized : '';
+        };
+
+        const getCodeBlockLanguage = (preNode, codeNode) => {
+            const classLanguage = codeNode.className.match(/language-([a-zA-Z0-9_+-]+)/)?.[1];
+            if (classLanguage) {
+                return normalizeCodeLanguage(classLanguage);
+            }
+
+            const labels = Array.from(preNode.querySelectorAll('div'))
+                .filter(element => !element.contains(codeNode))
+                .map(element => element.textContent?.trim() || '')
+                .filter(text => text && text.length <= 30 && !/复制|copy/i.test(text));
+
+            for (const label of labels) {
+                const language = normalizeCodeLanguage(label);
+                if (language) return language;
+            }
+
+            return '';
+        };
+
         // Process all child nodes
         const processNode = (node, indent = 0, inListItem = false, trimText = false) => {
             // Skip citation pills and other metadata elements
@@ -230,12 +289,19 @@
                     }
 
                     // Process each node with trim flags
+                    let previousSignificantWasLineBreak = false;
                     for (let i = firstIdx; i <= lastIdx && i >= 0; i++) {
                         const child = childNodes[i];
-                        const trimStart = (i === firstIdx);
+                        const trimStart = (i === firstIdx) ||
+                            (previousSignificantWasLineBreak && child.nodeType === Node.TEXT_NODE);
                         const trimEnd = (i === lastIdx);
                         const needTrim = (trimStart ? 'start' : '') + (trimEnd ? 'end' : '');
                         processNode(child, indent, inListItem, needTrim || false);
+
+                        if (child.nodeType !== Node.TEXT_NODE || child.textContent.trim()) {
+                            previousSignificantWasLineBreak =
+                                child.nodeType === Node.ELEMENT_NODE && child.tagName === 'BR';
+                        }
                     }
                 } else {
                     node.childNodes.forEach(child => processNode(child, indent, inListItem, false));
@@ -246,7 +312,11 @@
 
             // Handle line breaks
             if (node.tagName === 'BR') {
-                result += '\n';
+                if (inListItem) {
+                    result += '  \n' + '   '.repeat(indent) + '  ';
+                } else {
+                    result += '\n';
+                }
                 return;
             }
 
@@ -451,9 +521,9 @@
             if (node.tagName === 'PRE') {
                 const code = node.querySelector('code');
                 if (code) {
-                    const language = code.className.match(/language-(\w+)/)?.[1] || '';
+                    const language = getCodeBlockLanguage(node, code);
                     result += '\n```' + language + '\n';
-                    result += code.textContent;
+                    result += getCodeBlockText(code);
                     result += '\n```\n\n';
                 }
                 return;
