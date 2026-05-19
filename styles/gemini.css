@@ -6,7 +6,7 @@
     justify-content: center;
 }
 
-.deepshare-gemini-docx-btn .mdc-icon-button {
+.deepshare-gemini-docx-btn:not(.deepshare-gemini-docx-btn--lumi) .mdc-icon-button {
     --mat-button-text-label-text-color: var(--gem-sys-color--on-surface-variant);
     --mat-button-text-icon-offset: 0;
     --mat-button-text-container-height: var(--message-actions-button-size, 32px);
@@ -57,30 +57,105 @@
     -webkit-font-smoothing: antialiased;
 }
 
+.deepshare-gemini-docx-btn .mat-icon:not(.lumi-symbols) {
+    font-family: 'Google Symbols', 'Material Symbols Outlined', 'Material Icons', sans-serif;
+}
 
-.deepshare-gemini-docx-btn .mdc-icon-button:hover {
+.deepshare-gemini-docx-btn--lumi,
+.deepshare-gemini-docx-btn--lumi .deepshare-gemini-docx-gem-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.deepshare-gemini-docx-btn--lumi .deepshare-gemini-lumi-icon-button {
+    color: var(--mat-icon-button-icon-color, var(--gem-sys-color--on-surface-variant, #444746));
+    background-color: transparent;
+}
+
+.deepshare-gemini-docx-btn--lumi gem-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.deepshare-gemini-tooltip-panel {
+    position: absolute;
+    z-index: 10000;
+    pointer-events: none;
+    line-height: normal;
+}
+
+.deepshare-gemini-tooltip-panel .mat-mdc-tooltip {
+    position: relative;
+    display: inline-flex;
+    transform-origin: center top;
+}
+
+.deepshare-gemini-tooltip-panel .mat-mdc-tooltip-surface {
+    position: relative;
+    z-index: 1;
+    background-color: #000;
+    color: #fff;
+    border-radius: 10px;
+    padding: 8px 12px;
+    min-width: 40px;
+    min-height: 24px;
+    box-sizing: border-box;
+    text-align: center;
+    font-family: "Google Sans", Roboto, Arial, sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 16px;
+    letter-spacing: 0;
+    white-space: nowrap;
+    box-shadow: none;
+}
+
+.deepshare-gemini-tooltip-arrow {
+    position: absolute;
+    left: 50%;
+    top: -3px;
+    width: 7px;
+    height: 7px;
+    transform: translateX(-50%) rotate(45deg);
+    background-color: #000;
+    border-radius: 1px;
+    z-index: 0;
+}
+
+.deepshare-gemini-docx-btn:not(.deepshare-gemini-docx-btn--lumi) .mdc-icon-button:hover {
     background-color: var(--mat-option-hover-state-layer-color, rgba(68, 71, 70, 0.08));
 }
 
-.deepshare-gemini-docx-btn .mdc-icon-button:focus {
+.deepshare-gemini-docx-btn:not(.deepshare-gemini-docx-btn--lumi) .mdc-icon-button:focus {
     background-color: var(--mat-option-focus-state-layer-color, rgba(68, 71, 70, 0.12));
 }
 
-.deepshare-gemini-docx-btn .mdc-icon-button:active {
+.deepshare-gemini-docx-btn:not(.deepshare-gemini-docx-btn--lumi) .mdc-icon-button:active {
     background-color: var(--mat-ripple-color, rgba(68, 71, 70, 0.16));
 }
 
 /* Dark mode specifically using system colors if preferred-color-scheme is used, 
    but variables already handle most of it */
 @media (prefers-color-scheme: dark) {
-    .deepshare-gemini-docx-btn .mdc-icon-button:hover {
+    .deepshare-gemini-tooltip-panel .mat-mdc-tooltip-surface {
+        background-color: #fff;
+        color: #000;
+    }
+
+    .deepshare-gemini-tooltip-arrow {
+        background-color: #fff;
+    }
+
+    .deepshare-gemini-docx-btn:not(.deepshare-gemini-docx-btn--lumi) .mdc-icon-button:hover {
         background-color: var(--mat-option-hover-state-layer-color, rgba(255, 255, 255, 0.08));
     }
 }
 
 
 /* Ripple effect - ensuring circular shape */
-.deepshare-gemini-docx-btn .mdc-icon-button::before {
+.deepshare-gemini-docx-btn:not(.deepshare-gemini-docx-btn--lumi) .mdc-icon-button::before {
     content: '';
     position: absolute;
     top: 50%;
@@ -93,13 +168,52 @@
     transition: background-color 0.2s ease;
 }
 
+.deepshare-gemini-docx-btn--new-ui {
+    width: 32px;
+    height: 32px;
+}
+
+.deepshare-gemini-new-ui-icon-btn {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    min-height: 32px;
+    padding: 6px;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--gem-sys-color--on-surface-variant, #444746);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.16s ease-out, color 0.16s ease-out;
+}
+
+.deepshare-gemini-new-ui-icon-btn svg,
+.deepshare-gemini-new-ui-icon-btn .mat-icon {
+    width: 20px;
+    height: 20px;
+    display: block;
+}
+
+.deepshare-gemini-new-ui-icon-btn:hover {
+    background-color: var(--mat-option-hover-state-layer-color, rgba(68, 71, 70, 0.08));
+}
+
+.deepshare-gemini-new-ui-icon-btn:focus-visible {
+    outline: 2px solid var(--gem-sys-color--primary, #0b57d0);
+    outline-offset: 2px;
+}
+
 /* Gemini selection mode styles */
 .gemini-selection-mode .conversation-container {
     transition: background-color 0.2s ease;
 }
 
 .gemini-selection-mode user-query,
-.gemini-selection-mode model-response {
+.gemini-selection-mode model-response,
+.gemini-selection-mode .deepshare-gemini-turn {
     cursor: pointer;
     position: relative;
     padding-left: 48px !important;
@@ -121,12 +235,14 @@
 }
 
 .gemini-selection-mode user-query:hover,
-.gemini-selection-mode model-response:hover {
+.gemini-selection-mode model-response:hover,
+.gemini-selection-mode .deepshare-gemini-turn:hover {
     background-color: var(--gem-sys-color--surface-container, #f0f4f9);
 }
 
 .gemini-selection-mode user-query.is-selected,
-.gemini-selection-mode model-response.is-selected {
+.gemini-selection-mode model-response.is-selected,
+.gemini-selection-mode .deepshare-gemini-turn.is-selected {
     background-color: var(--gem-sys-color--secondary-container, #c2e7ff);
 }
 
@@ -288,6 +404,34 @@
 .mat-mdc-menu-item.deepshare-export-full-word .mat-icon,
 .mat-mdc-menu-item.deepshare-menu-md-button .mat-icon {
     color: var(--mat-menu-item-icon-color, var(--gem-sys-color--on-surface-variant, #c4c7c5)) !important;
+}
+
+.deepshare-gemini-menu-item:not(.mat-mdc-menu-item):not(gem-menu-item) {
+    min-height: 40px;
+    width: 100%;
+    box-sizing: border-box;
+    color: var(--gem-sys-color--on-surface, #1f1f1f);
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    font: inherit;
+    text-align: left;
+}
+
+.deepshare-gemini-menu-item:not(.mat-mdc-menu-item):not(gem-menu-item):hover,
+.deepshare-gemini-menu-item:not(.mat-mdc-menu-item):not(gem-menu-item):focus-visible {
+    background-color: var(--mat-menu-item-hover-state-layer-color, rgba(68, 71, 70, 0.08));
+    outline: none;
+}
+
+.deepshare-gemini-menu-item:not(.mat-mdc-menu-item):not(gem-menu-item) svg {
+    width: 20px;
+    height: 20px;
+    flex: 0 0 auto;
 }
 
 /* Gemini Export Loading Bar Styles */

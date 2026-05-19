@@ -11,19 +11,16 @@
 
     // Attach listener to the document to catch clicks on the menu button
     document.addEventListener('click', (e) => {
-        const menuBtn = e.target.closest('button[data-test-id="conversation-actions-menu-icon-button"], button[data-test-id="actions-menu-button"]');
+        const menuBtn = e.target.closest('[data-test-id="conversation-actions-menu-icon-button"]');
         if (menuBtn) {
-            // Exclude sidebar history menu and bot/GEM lists: check if button is inside sidebar-related containers
-            const isSidebar = !!menuBtn.closest('.conversation-actions-container, .side-nav-opened, nav, [data-test-id="sidebar"], .bot-list-item, .bot-item, .my-stuff-side-nav');
-            
-            if (isSidebar) {
+            if (!isHeaderConversationMenuButton(menuBtn)) {
                 isHeaderMenuClicked = false;
                 return;
             }
 
             isHeaderMenuClicked = true;
             // Menu was clicked, wait for it to appear
-            setTimeout(injectExportOptions, 100);
+            setTimeout(() => injectExportOptions(), 100);
         }
     }, true);
 
@@ -31,10 +28,11 @@
     const observer = new MutationObserver((mutations) => {
         for (const mutation of mutations) {
             if (mutation.addedNodes.length) {
-                if (!isHeaderMenuClicked) continue; // Only inject if it's the header menu
-
+                const roleMenu = findOpenRoleMenu();
                 const menuPanel = document.querySelector('.mat-mdc-menu-panel.conversation-actions-menu, .mat-mdc-menu-panel.conversation-actions-menu-panel');
-                if (menuPanel && !menuPanel.dataset.deepshareExportInjected) {
+                if (roleMenu?.tagName === 'GEM-MENU') {
+                    injectExportOptions({ allowDetectedMenu: true, menuContent: roleMenu });
+                } else if (isHeaderMenuClicked && menuPanel && !menuPanel.dataset.deepshareExportInjected) {
                     injectExportOptions();
                 }
             }
@@ -43,32 +41,40 @@
 
     observer.observe(document.body, { childList: true, subtree: true });
 
-    function injectExportOptions() {
-        if (!isHeaderMenuClicked) return; // Guard clause for injection
+    function injectExportOptions(options = {}) {
+        if (!isHeaderMenuClicked && !options.allowDetectedMenu) return; // Guard clause for injection
 
-        const menuContent = document.querySelector('.mat-mdc-menu-panel.conversation-actions-menu .mat-mdc-menu-content, .mat-mdc-menu-panel.conversation-actions-menu-panel .mat-mdc-menu-content');
+        const menuContent = options.menuContent ||
+            document.querySelector('.mat-mdc-menu-panel.conversation-actions-menu .mat-mdc-menu-content, .mat-mdc-menu-panel.conversation-actions-menu-panel .mat-mdc-menu-content') ||
+            findOpenRoleMenu();
         if (!menuContent) return;
+        if (!isConversationActionsMenu(menuContent)) return;
 
         if (menuContent.querySelector('.deepshare-export-full-md')) return; // Already injected
 
         // Find the "Pin" button to insert after
-        const pinButton = menuContent.querySelector('button[data-test-id="pin-button"]');
+        const pinButton = menuContent.querySelector('[data-test-id="pin-button"]');
         // Find the "Share" button as a fallback anchor
-        const shareButton = menuContent.querySelector('button[data-test-id="share-button"]');
+        const shareButton = menuContent.querySelector('[data-test-id="share-button"]');
         
-        const targetAnchor = pinButton || shareButton || menuContent.firstElementChild;
+        const targetAnchor = pinButton || shareButton;
         if (!targetAnchor) return;
 
-        // Dynamic class detection to match native styling (bold vs normal)
+        // Dynamic class detection to match native styling and icon family.
         let iconClass = 'menu-icon';
+        let iconFamilyClass = 'google-symbols';
+        let iconNamespace = '';
         let textClass = 'menu-text';
         
         const existingIcon = targetAnchor.querySelector('mat-icon');
         const existingText = targetAnchor.querySelector('.mat-mdc-menu-item-text span');
         
         if (existingIcon) {
-            // If the existing icon uses gds-icon-l, it's likely the non-bold version
-            if (existingIcon.classList.contains('gds-icon-l')) iconClass = 'gds-icon-l';
+            if (existingIcon.classList.contains('lumi-symbols')) {
+                iconFamilyClass = 'lumi-symbols';
+                iconNamespace = 'lumi-symbols';
+                iconClass = Array.from(existingIcon.classList).find(className => /^lm-icon-/.test(className)) || 'lm-icon-m';
+            } else if (existingIcon.classList.contains('gds-icon-l')) iconClass = 'gds-icon-l';
             else if (existingIcon.classList.contains('menu-icon')) iconClass = 'menu-icon';
         }
         
@@ -78,42 +84,20 @@
             else if (existingText.classList.contains('menu-text')) textClass = 'menu-text';
         }
 
-        // --- Create Export to Markdown Button
-        const mdButton = document.createElement('button');
-        mdButton.className = 'mat-mdc-menu-item mat-focus-indicator ng-star-inserted deepshare-export-full-md';
-        mdButton.setAttribute('role', 'menuitem');
-        mdButton.setAttribute('tabindex', '0');
-        mdButton.setAttribute('aria-disabled', 'false');
-        mdButton.innerHTML = `
-            <mat-icon role="img" fonticon="file_download" class="mat-icon notranslate ${iconClass} google-symbols mat-ligature-font mat-icon-no-color" aria-hidden="true" data-mat-icon-type="font" data-mat-icon-name="file_download">
-                <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" style="width: 20px; height: 20px;">
-                    <path d="M20.56 18H3.44C2.65 18 2 17.37 2 16.59V7.41C2 6.63 2.65 6 3.44 6H20.56C21.35 6 22 6.63 22 7.41V16.59C22 17.37 21.35 18 20.56 18M6.81 15.19V11.53L8.73 13.88L10.65 11.53V15.19H12.58V8.81H10.65L8.73 11.16L6.81 8.81H4.89V15.19H6.81M19.69 12H17.77V8.81H15.85V12H13.92L16.81 15.28L19.69 12Z"/>
-                </svg>
-            </mat-icon>
-            <span class="mat-mdc-menu-item-text"><span class="${textClass}">${chrome.i18n?.getMessage('saveAsMarkdown')}</span></span>
-            <div matripple="" class="mat-ripple mat-mdc-menu-ripple"></div>
-        `;
-
-        // --- Create Export to Word Button
-        const wordButton = document.createElement('button');
-        wordButton.className = 'mat-mdc-menu-item mat-focus-indicator ng-star-inserted deepshare-export-full-word';
-        wordButton.setAttribute('role', 'menuitem');
-        wordButton.setAttribute('tabindex', '0');
-        wordButton.setAttribute('aria-disabled', 'false');
-        wordButton.innerHTML = `
-            <mat-icon role="img" fonticon="description" class="mat-icon notranslate ${iconClass} google-symbols mat-ligature-font mat-icon-no-color" aria-hidden="true" data-mat-icon-type="font" data-mat-icon-name="description">
-                <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" style="width: 20px; height: 20px;">
-                    <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
-                </svg>
-            </mat-icon>
-            <span class="mat-mdc-menu-item-text"><span class="${textClass}">${chrome.i18n?.getMessage('docxButton')}</span></span>
-            <div matripple="" class="mat-ripple mat-mdc-menu-ripple"></div>
-        `;
+        const isGemMenu = targetAnchor.tagName === 'GEM-MENU-ITEM';
+        const mdLabel = chrome.i18n?.getMessage('saveAsMarkdown') || 'Save as Markdown';
+        const wordLabel = chrome.i18n?.getMessage('docxButton') || 'Save as Word';
+        const mdButton = isGemMenu
+            ? createGemMenuItem(targetAnchor, 'article', mdLabel, 'deepshare-export-full-md', 'markdown')
+            : createMaterialMenuButton(targetAnchor, 'article', mdLabel, 'deepshare-export-full-md', textClass, iconClass, iconFamilyClass, iconNamespace, 'markdown');
+        const wordButton = isGemMenu
+            ? createGemMenuItem(targetAnchor, 'docs', wordLabel, 'deepshare-export-full-word', 'word')
+            : createMaterialMenuButton(targetAnchor, iconFamilyClass === 'lumi-symbols' ? 'docs' : 'description', wordLabel, 'deepshare-export-full-word', textClass, iconClass, iconFamilyClass, iconNamespace, 'word');
 
         // Insert buttons
         targetAnchor.after(wordButton, mdButton);
 
-        menuContent.parentElement.dataset.deepshareExportInjected = 'true';
+        (menuContent.parentElement || menuContent).dataset.deepshareExportInjected = 'true';
 
         // Click Handlers
         mdButton.addEventListener('click', async (e) => {
@@ -129,9 +113,158 @@
         });
     }
 
+    function isHeaderConversationMenuButton(menuBtn) {
+        if (!menuBtn) return false;
+        if (menuBtn.dataset.testId !== 'conversation-actions-menu-icon-button') return false;
+
+        return !menuBtn.closest([
+            '.conversation-actions-container',
+            '.side-nav-opened',
+            'nav',
+            '[data-test-id="sidebar"]',
+            '.bot-list-item',
+            '.bot-item',
+            '.my-stuff-side-nav',
+            'mat-card[data-test-id="card-container"]',
+            'uploader',
+            'toolbox-drawer',
+            '.simplified-input-menu',
+            '.menu-list-container',
+            '[data-test-id*="history"]',
+            '[data-test-id*="conversation-list"]'
+        ].join(','));
+    }
+
+    function createMenuIconHtml(fontIcon, iconClass, iconFamilyClass, iconNamespace) {
+        const namespaceAttr = iconNamespace ? ` data-mat-icon-namespace="${iconNamespace}"` : '';
+        return `<mat-icon role="img" fonticon="${fontIcon}" class="mat-icon notranslate ${iconClass} ${iconFamilyClass} mat-ligature-font mat-icon-no-color" aria-hidden="true" data-mat-icon-type="font" data-mat-icon-name="${fontIcon}"${namespaceAttr}></mat-icon>`;
+    }
+
+    function createMaterialMenuButton(targetAnchor, fontIcon, label, className, textClass, iconClass, iconFamilyClass, iconNamespace, value) {
+        if (isLumiMaterialMenuItem(targetAnchor)) {
+            return createLumiMaterialMenuButton(targetAnchor, fontIcon, label, className, value);
+        }
+
+        const button = document.createElement('button');
+        button.className = `${targetAnchor.getAttribute('class') || 'mat-mdc-menu-item mat-focus-indicator ng-star-inserted'} ${className} deepshare-gemini-menu-item`;
+        button.setAttribute('type', 'button');
+        button.setAttribute('role', 'menuitem');
+        button.setAttribute('tabindex', '0');
+        button.setAttribute('aria-disabled', 'false');
+        button.setAttribute('aria-label', label);
+        button.innerHTML = `
+            ${createMenuIconHtml(fontIcon, iconClass, iconFamilyClass, iconNamespace)}
+            <span class="mat-mdc-menu-item-text"><span class="${textClass}">${label}</span></span>
+            <div matripple="" class="mat-ripple mat-mdc-menu-ripple"></div>
+        `;
+        return button;
+    }
+
+    function isLumiMaterialMenuItem(targetAnchor) {
+        return targetAnchor.classList?.contains('lm-menu-item-theme') ||
+            targetAnchor.hasAttribute?.('lmmenuitemtheme') ||
+            !!targetAnchor.querySelector?.('mat-icon.lumi-symbols') ||
+            !!targetAnchor.querySelector?.('gem-icon.gem-menu-item-icon');
+    }
+
+    function createLumiMaterialMenuButton(targetAnchor, fontIcon, label, className, value) {
+        const button = targetAnchor.cloneNode(true);
+        button.classList.add(className, 'deepshare-gemini-menu-item');
+        button.setAttribute('type', 'button');
+        button.setAttribute('role', 'menuitem');
+        button.setAttribute('tabindex', '0');
+        button.setAttribute('aria-disabled', 'false');
+        button.setAttribute('aria-label', label);
+        button.setAttribute('data-test-id', `${value}-export-button`);
+        button.removeAttribute('jslog');
+
+        const icon = button.querySelector('mat-icon');
+        if (icon) {
+            icon.setAttribute('fonticon', fontIcon);
+            icon.setAttribute('data-mat-icon-name', fontIcon);
+            icon.setAttribute('data-mat-icon-namespace', 'lumi-symbols');
+            syncLumiIconSizeClass(targetAnchor, icon);
+            icon.textContent = '';
+        }
+
+        const labelNode = button.querySelector('.gem-menu-item-label') ||
+            button.querySelector('.mat-mdc-menu-item-text span:last-child');
+        if (labelNode) labelNode.textContent = label;
+
+        return button;
+    }
+
+    function createGemMenuItem(targetAnchor, fontIcon, label, className, value) {
+        const item = targetAnchor.cloneNode(true);
+        item.classList.add(className, 'deepshare-gemini-menu-item');
+        item.setAttribute('role', 'menuitem');
+        item.setAttribute('value', value);
+        item.setAttribute('leadingicon', fontIcon);
+        item.setAttribute('data-test-id', `${value}-export-button`);
+        item.setAttribute('tabindex', '-1');
+        item.setAttribute('aria-disabled', 'false');
+        item.removeAttribute('jslog');
+        item.removeAttribute('data-active');
+
+        const content = item.querySelector('gem-menu-item-content');
+        content?.classList.remove('active');
+
+        const icon = item.querySelector('mat-icon');
+        if (icon) {
+            icon.setAttribute('fonticon', fontIcon);
+            icon.setAttribute('data-mat-icon-name', fontIcon);
+            icon.setAttribute('data-mat-icon-namespace', 'lumi-symbols');
+            syncLumiIconSizeClass(targetAnchor, icon);
+            icon.textContent = '';
+        }
+
+        const labelNode = item.querySelector('.label span') ||
+            item.querySelector('.label-container span span') ||
+            item.querySelector('span');
+        if (labelNode) labelNode.textContent = label;
+
+        return item;
+    }
+
+    function syncLumiIconSizeClass(source, targetIcon) {
+        const sourceIcon = source?.querySelector?.('mat-icon.lumi-symbols');
+        const sourceSizeClass = Array.from(sourceIcon?.classList || []).find(className => /^lm-icon-/.test(className));
+        if (!sourceSizeClass) return;
+
+        Array.from(targetIcon.classList)
+            .filter(className => /^lm-icon-/.test(className))
+            .forEach(className => targetIcon.classList.remove(className));
+        targetIcon.classList.add(sourceSizeClass);
+    }
+
     function closeMenu() {
         const backdrop = document.querySelector('.cdk-overlay-backdrop');
         if (backdrop) backdrop.click();
+        document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', code: 'Escape', bubbles: true }));
+    }
+
+    function findOpenRoleMenu() {
+        const menus = Array.from(document.querySelectorAll('[role="menu"]'));
+        return menus.find(menu => {
+            if (menu.querySelector('.deepshare-menu-md-button')) return false;
+            return isConversationActionsMenu(menu);
+        }) || null;
+    }
+
+    function isConversationActionsMenu(menu) {
+        if (!menu) return false;
+        if (menu.matches?.('gem-menu[panelclass="share-dropdown-menu"]')) {
+            return false;
+        }
+        if (menu.closest('mat-card[data-test-id="card-container"], uploader, toolbox-drawer, .simplified-input-menu, .menu-list-container')) {
+            return false;
+        }
+
+        if (menu.closest('.mat-mdc-menu-panel.conversation-actions-menu, .mat-mdc-menu-panel.conversation-actions-menu-panel')) {
+            return true;
+        }
+
+        return !!menu.querySelector('[data-test-id="pin-button"], [data-test-id="rename-button"], [data-test-id="delete-button"]');
     }
 
     let isSelectionMode = false;
@@ -184,15 +317,16 @@
 
         // Phase 2: Inject selection UI (checkboxes) into all loaded turns
         document.body.classList.add('gemini-selection-mode');
-        const turns = document.querySelectorAll('user-query, model-response');
+        const turns = getConversationTurns();
         turns.forEach((turn, index) => {
             if (turn.querySelector('.gemini-message-checkbox-wrapper')) return;
 
-            const role = turn.tagName === 'USER-QUERY' ? 'user' : 'assistant';
+            const role = getTurnRole(turn);
             const wrapper = document.createElement('div');
             wrapper.className = 'gemini-message-checkbox-wrapper';
             wrapper.innerHTML = `<input type="checkbox" class="gemini-message-checkbox" data-index="${index}" data-role="${role}" checked>`;
 
+            turn.classList.add('deepshare-gemini-turn');
             turn.prepend(wrapper);
             turn.classList.add('is-selected'); // 初始选中时添加类名
 
@@ -221,8 +355,9 @@
         document.body.classList.remove('gemini-selection-mode');
 
         document.querySelectorAll('.gemini-message-checkbox-wrapper').forEach(el => el.remove());
-        document.querySelectorAll('user-query, model-response').forEach(el => {
+        document.querySelectorAll('user-query, model-response, .deepshare-gemini-turn').forEach(el => {
             el.removeEventListener('click', handleContainerClick);
+            el.classList.remove('deepshare-gemini-turn', 'is-selected');
         });
 
         const bar = document.querySelector('.gemini-selection-bar');
@@ -360,7 +495,7 @@
     }
 
     function updateSelectionCount() {
-        const turns = document.querySelectorAll('user-query, model-response');
+        const turns = getConversationTurns();
         turns.forEach(turn => {
             const cb = turn.querySelector('.gemini-message-checkbox');
             if (cb) {
@@ -407,7 +542,7 @@
     }
 
     function extractFullConversation(onlySelected = false, includeLink = false) {
-        const turns = Array.from(document.querySelectorAll('user-query, model-response'));
+        const turns = getConversationTurns();
         let finalMarkdown = '';
 
         let title = '';
@@ -428,19 +563,19 @@
             return checkbox && checkbox.checked;
         });
 
-        const hasUser = selectedTurns.some(t => t.tagName === 'USER-QUERY');
-        const hasAssistant = selectedTurns.some(t => t.tagName === 'MODEL-RESPONSE');
+        const hasUser = selectedTurns.some(t => getTurnRole(t) === 'user');
+        const hasAssistant = selectedTurns.some(t => getTurnRole(t) === 'assistant');
         const showRoleHeaders = hasUser && hasAssistant;
 
         selectedTurns.forEach((turn) => {
-            if (turn.tagName === 'USER-QUERY') {
+            if (getTurnRole(turn) === 'user') {
                 const textContainer = turn.querySelector('.query-text');
-                if (textContainer && window.extractGeminiContentWithFormulas) {
-                    const content = window.extractGeminiContentWithFormulas(textContainer);
+                if (window.extractGeminiContentWithFormulas) {
+                    const content = textContainer ? window.extractGeminiContentWithFormulas(textContainer) : extractGenericTurnMarkdown(turn, 'user');
                     if (showRoleHeaders) finalMarkdown += `**${chrome.i18n?.getMessage('roleUser')}**\n\n`;
                     finalMarkdown += `${content}\n\n`;
                 }
-            } else if (turn.tagName === 'MODEL-RESPONSE') {
+            } else if (getTurnRole(turn) === 'assistant') {
                 const contentContainer = turn.querySelector('.model-response-text message-content') ||
                     turn.querySelector('structured-content-container.model-response-text message-content') ||
                     turn.querySelector('message-content');
@@ -448,6 +583,8 @@
                 let content = '';
                 if (contentContainer) {
                     content = window.extractGeminiContentWithFormulas(contentContainer);
+                } else {
+                    content = extractGenericTurnMarkdown(turn, 'assistant');
                 }
                 if (showRoleHeaders) finalMarkdown += `**${chrome.i18n?.getMessage('roleAssistant')}**\n\n`;
                 finalMarkdown += `${content}\n\n`;
@@ -462,6 +599,65 @@
         }
 
         return { title, markdown: finalMarkdown.trim() };
+    }
+
+    function getConversationTurns() {
+        const oldTurns = Array.from(document.querySelectorAll('user-query, model-response'));
+        if (oldTurns.length) return oldTurns;
+
+        const headings = Array.from(document.querySelectorAll('h1, h2, h3, [role="heading"]'))
+            .filter(el => /^(你说|Gemini 说)\b/.test((el.textContent || '').replace(/\s+/g, ' ').trim()));
+
+        const turns = [];
+        const seen = new Set();
+        headings.forEach(heading => {
+            const role = (heading.textContent || '').includes('你说') ? 'user' : 'assistant';
+            const turn = findMessageBlockFromHeading(heading, role);
+            if (turn && !seen.has(turn)) {
+                seen.add(turn);
+                turn.dataset.deepshareRole = role;
+                turns.push(turn);
+            }
+        });
+
+        return turns.sort((a, b) => a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_PRECEDING ? 1 : -1);
+    }
+
+    function findMessageBlockFromHeading(heading, role) {
+        const oppositeLabel = role === 'user' ? 'Gemini 说' : '你说';
+        let node = heading;
+        let candidate = heading.parentElement || heading;
+
+        while (node.parentElement && node.parentElement !== document.body) {
+            const parent = node.parentElement;
+            const text = (parent.textContent || '').replace(/\s+/g, ' ').trim();
+            if (text.includes(oppositeLabel)) return candidate;
+            candidate = parent;
+            node = parent;
+        }
+
+        return candidate;
+    }
+
+    function getTurnRole(turn) {
+        if (turn.tagName === 'USER-QUERY') return 'user';
+        if (turn.tagName === 'MODEL-RESPONSE') return 'assistant';
+        if (turn.dataset.deepshareRole) return turn.dataset.deepshareRole;
+        const text = (turn.textContent || '').replace(/\s+/g, ' ').trim();
+        return text.includes('你说') && !text.includes('Gemini 说') ? 'user' : 'assistant';
+    }
+
+    function extractGenericTurnMarkdown(turn, role = getTurnRole(turn)) {
+        const headingText = Array.from(turn.querySelectorAll('h1, h2, h3, [role="heading"]'))
+            .map(el => (el.textContent || '').replace(/\s+/g, ' ').trim())
+            .find(text => role === 'user' ? text.startsWith('你说') : text.startsWith('Gemini 说'));
+        const clone = turn.cloneNode(true);
+        clone.querySelectorAll('button, svg, menu, [role="menu"], [role="heading"], h1, h2, h3, h4, h5, h6, textarea, input, .gemini-message-checkbox-wrapper, .deepshare-gemini-docx-btn, [aria-hidden="true"]').forEach(el => el.remove());
+        const content = window.extractGeminiContentWithFormulas(clone).trim();
+
+        if (content) return content;
+        if (role === 'user' && headingText) return headingText.replace(/^你说\s*/, '').trim();
+        return '';
     }
 
     function downloadMarkdownFile(content, title) {
@@ -511,6 +707,7 @@
             'article[data-turn="model"]',
             '.model-response', 'model-response',
             '.response-container',
+            'h1', 'h2', 'h3', '[role="heading"]',
             'div[role="listitem"]:not([data-user="true"])'
         ];
     }
@@ -595,7 +792,7 @@
 
         // Fast-path: If the conversation currently has 10 or fewer turns, 
         // it's almost certainly not truncated, so skip the auto-load entirely.
-        const currentTurns = document.querySelectorAll('user-query, model-response').length;
+        const currentTurns = getConversationTurns().length;
         if (currentTurns <= 10) {
             console.debug('DeepShare: Conversation has 10 or fewer turns. Skipping auto-load.');
             return;

@@ -23,7 +23,7 @@
             }
 
             // 2. Handle "More" menu listener to track active message
-            const moreButton = container.querySelector('button[data-test-id="more-menu-button"]');
+            const moreButton = container.querySelector('[data-test-id="more-menu-button"] button, button[data-test-id="more-menu-button"]');
             if (moreButton && !moreButton.dataset.deepshareListenerAttached) {
                 moreButton.dataset.deepshareListenerAttached = 'true';
                 moreButton.addEventListener('click', () => {
@@ -34,6 +34,84 @@
                 });
             }
         });
+
+        findAndInjectNewUiButtons();
+    }
+
+    function findAndInjectNewUiButtons() {
+        const copyButtons = document.querySelectorAll('button[aria-label="复制"], button[aria-label="Copy"], button[aria-label*="复制回复"], button[aria-label*="Copy response"]');
+
+        copyButtons.forEach(copyButton => {
+            const messageContainer = findClosestMessageContainer(copyButton, 'assistant');
+            if (!messageContainer) return;
+
+            const actionRow = findActionRow(copyButton, messageContainer);
+            if (!actionRow || actionRow.querySelector('.deepshare-gemini-docx-btn')) return;
+
+            injectNewUiButton(copyButton, actionRow);
+        });
+
+        const moreButtons = document.querySelectorAll('[data-test-id="more-menu-button"] button, button[data-test-id="more-menu-button"]');
+        moreButtons.forEach(moreButton => {
+            const messageContainer = findClosestMessageContainer(moreButton, 'assistant');
+            if (!messageContainer || moreButton.dataset.deepshareListenerAttached) return;
+
+            moreButton.dataset.deepshareListenerAttached = 'true';
+            moreButton.addEventListener('click', () => {
+                activeMessageContainer = messageContainer;
+                console.debug('DeepShare: New UI more menu opened, tracking message container');
+                setTimeout(injectMdButtonToMenu, 100);
+            });
+        });
+
+        const shareExportButtons = document.querySelectorAll([
+            '[data-test-id="share-and-export-menu-button"] button',
+            'button[data-test-id="share-and-export-menu-button"]'
+        ].join(','));
+        shareExportButtons.forEach(shareExportButton => {
+            const messageContainer = findClosestMessageContainer(shareExportButton, 'assistant');
+            if (!messageContainer || shareExportButton.dataset.deepshareListenerAttached) return;
+
+            shareExportButton.dataset.deepshareListenerAttached = 'true';
+            shareExportButton.addEventListener('click', () => {
+                activeMessageContainer = messageContainer;
+                console.debug('DeepShare: New UI share/export menu opened, tracking message container');
+                setTimeout(injectMdButtonToMenu, 100);
+            });
+        });
+    }
+
+    function findActionRow(button, messageContainer) {
+        let node = button.parentElement;
+        while (node && node !== messageContainer) {
+            const actionButtons = node.querySelectorAll('button[aria-label], button[data-test-id]');
+            if (actionButtons.length >= 2) return node;
+            node = node.parentElement;
+        }
+        return button.parentElement;
+    }
+
+    function findClosestMessageContainer(element, expectedRole) {
+        const oldContainer = element.closest('model-response, user-query, [data-message-author-role="assistant"], [data-message-author-role="user"], article[data-author], article[data-turn]');
+        if (oldContainer) return oldContainer;
+
+        const roleLabel = expectedRole === 'user' ? '你说' : 'Gemini 说';
+        const oppositeLabel = expectedRole === 'user' ? 'Gemini 说' : '你说';
+        let node = element.parentElement;
+        let candidate = null;
+
+        while (node && node !== document.body) {
+            const text = (node.textContent || '').replace(/\s+/g, ' ').trim();
+            if (text.includes(roleLabel)) {
+                candidate = node;
+            }
+            if (candidate && text.includes(oppositeLabel)) {
+                return candidate;
+            }
+            node = node.parentElement;
+        }
+
+        return candidate;
     }
 
     const observer = new MutationObserver(() => {
@@ -61,6 +139,11 @@
     function injectButton(copyBtn, container) {
         console.debug('Injecting DOCX button for Gemini');
 
+        if (isLuminousGeminiUi(container)) {
+            injectLuminousButton(copyBtn, container);
+            return;
+        }
+
         // Create the wrapper component (following Gemini's Angular component structure)
         const buttonWrapper = document.createElement('deepshare-docx-button');
         buttonWrapper.className = 'deepshare-gemini-docx-btn ng-star-inserted';
@@ -82,8 +165,9 @@
         docxButton.setAttribute('_ngcontent-ng-c3341669442', '');
         docxButton.setAttribute('mat-icon-button', ''); // 改为icon-button
         docxButton.setAttribute('tabindex', '0');
-        // docxButton.setAttribute('mattooltip', chrome.i18n?.getMessage('docxButton') || '保存为Word');
-        // docxButton.setAttribute('aria-label', chrome.i18n?.getMessage('docxButton') || '保存为Word');
+        docxButton.setAttribute('mattooltip', chrome.i18n?.getMessage('docxButton') || '保存为Word');
+        docxButton.setAttribute('aria-label', chrome.i18n?.getMessage('docxButton') || '保存为Word');
+        docxButton.setAttribute('title', chrome.i18n?.getMessage('docxButton') || '保存为Word');
         docxButton.setAttribute('data-test-id', 'docx-button');
         docxButton.setAttribute('mat-ripple-loader-class-name', 'mat-mdc-button-ripple');
         docxButton.setAttribute('mat-ripple-loader-centered', ''); // 添加居中属性
@@ -169,9 +253,292 @@
         console.debug('DOCX button successfully injected for Gemini');
     }
 
+    function isLuminousGeminiUi(container) {
+        return !!container.querySelector('.lumi-symbols, .lm-enabled, .luminous-theme');
+    }
+
+    function injectLuminousButton(copyBtn, container) {
+        const label = chrome.i18n?.getMessage('docxButton') || '保存为Word';
+        const copyGemButton = copyBtn.closest('gem-icon-button');
+        const buttonWrapper = document.createElement('deepshare-docx-button');
+        buttonWrapper.className = copyBtn.closest('.luminous-theme')
+            ? 'deepshare-gemini-docx-btn deepshare-gemini-docx-btn--lumi luminous-theme ng-star-inserted'
+            : 'deepshare-gemini-docx-btn deepshare-gemini-docx-btn--lumi ng-star-inserted';
+
+        copyElementAttributes(container, buttonWrapper, /^_ngcontent-/);
+
+        const gemButton = document.createElement('gem-icon-button');
+        gemButton.className = copyGemButton?.className || 'mat-mdc-tooltip-trigger gem-button gem-button-badge-size-small gem-button-size-small gem-button-type-on-surface lm-enabled ng-star-inserted';
+        gemButton.classList.add('deepshare-gemini-docx-gem-button');
+        gemButton.setAttribute('theme', copyGemButton?.getAttribute('theme') || 'lm');
+        gemButton.setAttribute('type', copyGemButton?.getAttribute('type') || 'onSurface');
+        gemButton.setAttribute('arialabel', label);
+        gemButton.setAttribute('gemtooltip', label);
+        gemButton.setAttribute('data-test-id', 'docx-button');
+        copyElementAttributes(copyGemButton, gemButton, /^_nghost-/);
+
+        const docxButton = copyBtn.cloneNode(false);
+        docxButton.className = copyBtn.className || 'mdc-icon-button mat-mdc-icon-button mat-mdc-button-base mat-badge mat-unthemed mat-badge-overlap mat-badge-above mat-badge-after mat-badge-small mat-badge-hidden ng-star-inserted';
+        docxButton.classList.add('deepshare-gemini-lumi-icon-button');
+        docxButton.setAttribute('maticonbutton', '');
+        docxButton.setAttribute('matbadgeposition', 'after');
+        docxButton.setAttribute('tabindex', '0');
+        docxButton.setAttribute('aria-label', label);
+        docxButton.setAttribute('data-test-id', 'docx-button');
+        docxButton.setAttribute('mat-ripple-loader-class-name', 'mat-mdc-button-ripple');
+        docxButton.setAttribute('mat-ripple-loader-centered', '');
+        docxButton.removeAttribute('jslog');
+        docxButton.removeAttribute('aria-pressed');
+
+        const gemIcon = buildLuminousIconFrom(copyBtn, 'docs');
+
+        docxButton.innerHTML = `
+            <span class="mat-mdc-button-persistent-ripple mdc-icon-button__ripple"></span>
+            ${gemIcon.outerHTML}
+            <span class="mat-focus-indicator"></span>
+            <span class="mat-mdc-button-touch-target"></span>
+            <span class="mat-ripple mat-mdc-button-ripple"></span>
+        `;
+
+        gemButton.appendChild(document.createComment(''));
+        gemButton.appendChild(docxButton);
+        gemButton.appendChild(document.createComment(''));
+        buttonWrapper.appendChild(document.createComment(''));
+        buttonWrapper.appendChild(gemButton);
+        buttonWrapper.appendChild(document.createComment(''));
+
+        const copyButtonWrapper = copyBtn.closest('copy-button');
+        if (copyButtonWrapper) {
+            copyButtonWrapper.insertAdjacentElement('afterend', buttonWrapper);
+        } else {
+            copyBtn.insertAdjacentElement('afterend', buttonWrapper);
+        }
+
+        docxButton.addEventListener('click', handleDocxButtonClick);
+        attachGeminiTooltip(docxButton, label);
+        console.debug('DOCX button successfully injected for Gemini luminous UI');
+    }
+
+    function buildLuminousIconFrom(sourceButton, fontIcon) {
+        const sourceGemIcon = sourceButton.querySelector('gem-icon');
+        const gemIcon = sourceGemIcon ? sourceGemIcon.cloneNode(true) : document.createElement('gem-icon');
+        let matIcon = gemIcon.querySelector('mat-icon');
+
+        if (!matIcon) {
+            matIcon = document.createElement('mat-icon');
+            gemIcon.appendChild(matIcon);
+        }
+
+        matIcon.setAttribute('role', 'img');
+        matIcon.setAttribute('fonticon', fontIcon);
+        matIcon.setAttribute('aria-hidden', 'true');
+        matIcon.setAttribute('data-mat-icon-type', 'font');
+        matIcon.setAttribute('data-mat-icon-name', fontIcon);
+        matIcon.setAttribute('data-mat-icon-namespace', 'lumi-symbols');
+        const sizeClass = getLumiIconSizeClass(sourceButton) || 'lm-icon-l';
+        matIcon.className = `mat-icon notranslate ${sizeClass} lumi-symbols mat-ligature-font mat-icon-no-color ng-star-inserted`;
+        matIcon.textContent = '';
+
+        return gemIcon;
+    }
+
+    function getLumiIconSizeClass(sourceButton) {
+        const sourceIcon = sourceButton?.querySelector?.('mat-icon.lumi-symbols');
+        return Array.from(sourceIcon?.classList || []).find(className => /^lm-icon-/.test(className));
+    }
+
+    function copyElementAttributes(source, target, pattern) {
+        if (!source) return;
+        Array.from(source.attributes || []).forEach(attr => {
+            if (pattern.test(attr.name)) target.setAttribute(attr.name, attr.value);
+        });
+    }
+
+    let tooltipIdSeed = 0;
+    let activeTooltip = null;
+    let tooltipShowTimer = null;
+    let tooltipHideTimer = null;
+
+    function attachGeminiTooltip(anchor, text) {
+        const show = () => {
+            clearTimeout(tooltipHideTimer);
+            clearTimeout(tooltipShowTimer);
+            showGeminiTooltip(anchor, text);
+        };
+        const hide = () => {
+            clearTimeout(tooltipShowTimer);
+            hideGeminiTooltip();
+        };
+
+        anchor.addEventListener('mouseenter', show);
+        anchor.addEventListener('focus', show);
+        anchor.addEventListener('mouseleave', hide);
+        anchor.addEventListener('blur', hide);
+        anchor.addEventListener('click', () => hideGeminiTooltip(true), true);
+        anchor.addEventListener('mousedown', hide);
+    }
+
+    function showGeminiTooltip(anchor, text) {
+        hideGeminiTooltip(true);
+
+        const id = `deepshare-gemini-tooltip-${++tooltipIdSeed}`;
+        const panel = document.createElement('div');
+        panel.id = id;
+        panel.className = 'mat-mdc-tooltip-panel mat-mdc-tooltip-panel-below mat-mdc-tooltip-panel-non-interactive deepshare-gemini-tooltip-panel deepshare-gemini-tooltip-panel--below';
+        panel.setAttribute('role', 'tooltip');
+
+        const tooltip = document.createElement('div');
+        tooltip.className = 'mat-mdc-tooltip mat-mdc-tooltip-show';
+        tooltip.innerHTML = `
+            <div class="mat-mdc-tooltip-surface">${escapeHtml(text)}</div>
+            <div class="deepshare-gemini-tooltip-arrow" aria-hidden="true"></div>
+        `;
+        panel.appendChild(tooltip);
+        document.body.appendChild(panel);
+
+        const anchorRect = anchor.getBoundingClientRect();
+        const panelRect = panel.getBoundingClientRect();
+        const gap = 6;
+        const top = Math.min(
+            window.innerHeight - panelRect.height - 8,
+            Math.max(8, anchorRect.bottom + gap)
+        );
+        const left = Math.min(
+            window.innerWidth - panelRect.width - 8,
+            Math.max(8, anchorRect.left + anchorRect.width / 2 - panelRect.width / 2)
+        );
+
+        panel.style.top = `${top + window.scrollY}px`;
+        panel.style.left = `${left + window.scrollX}px`;
+        anchor.setAttribute('aria-describedby', id);
+        activeTooltip = { panel, anchor };
+    }
+
+    function hideGeminiTooltip(immediate = false) {
+        clearTimeout(tooltipShowTimer);
+        clearTimeout(tooltipHideTimer);
+        if (!activeTooltip) {
+            if (immediate) removeGeminiTooltipPanels();
+            return;
+        }
+
+        const { panel, anchor } = activeTooltip;
+        activeTooltip = null;
+        anchor?.removeAttribute('aria-describedby');
+
+        const tooltip = panel.querySelector('.mat-mdc-tooltip');
+        if (immediate || !tooltip) {
+            panel.remove();
+            if (immediate) removeGeminiTooltipPanels();
+            return;
+        }
+
+        tooltip.classList.remove('mat-mdc-tooltip-show');
+        tooltip.classList.add('mat-mdc-tooltip-hide');
+        tooltipHideTimer = setTimeout(() => panel.remove(), 90);
+    }
+
+    function removeGeminiTooltipPanels() {
+        document.querySelectorAll('.deepshare-gemini-tooltip-panel').forEach(panel => panel.remove());
+    }
+
+    function escapeHtml(value) {
+        return String(value)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    }
+
+    function injectNewUiButton(copyBtn, container) {
+        console.debug('Injecting DOCX button for Gemini new UI');
+
+        const buttonWrapper = document.createElement('span');
+        buttonWrapper.className = 'deepshare-gemini-docx-btn deepshare-gemini-docx-btn--new-ui';
+
+        const docxButton = document.createElement('button');
+        const nativeClass = copyBtn.getAttribute('class');
+        if (nativeClass) docxButton.className = nativeClass;
+        docxButton.classList.add('deepshare-gemini-new-ui-icon-btn');
+        docxButton.setAttribute('type', 'button');
+        docxButton.setAttribute('tabindex', copyBtn.getAttribute('tabindex') || '0');
+        docxButton.setAttribute('aria-label', chrome.i18n?.getMessage('docxButton') || 'Save as Word');
+        docxButton.setAttribute('title', chrome.i18n?.getMessage('docxButton') || 'Save as Word');
+        docxButton.setAttribute('data-test-id', 'docx-button');
+        docxButton.innerHTML = createLumiMatIconHtml('docs');
+
+        buttonWrapper.appendChild(docxButton);
+        copyBtn.insertAdjacentElement('afterend', buttonWrapper);
+
+        docxButton.addEventListener('click', handleDocxButtonClick);
+        console.debug('DOCX button successfully injected for Gemini new UI');
+    }
+
+    function createLumiMatIconHtml(fontIcon) {
+        return `<mat-icon role="img" fonticon="${fontIcon}" class="mat-icon notranslate lumi-symbols mat-ligature-font mat-icon-no-color ng-star-inserted lm-icon-l" aria-hidden="true" data-mat-icon-type="font" data-mat-icon-name="${fontIcon}" data-mat-icon-namespace="lumi-symbols"></mat-icon>`;
+    }
+
+    function createAdaptiveMatIconHtml(anchor, fontIcon) {
+        const existingIcon = anchor.querySelector?.('mat-icon');
+        if (existingIcon?.classList.contains('lumi-symbols')) {
+            const sizeClass = Array.from(existingIcon.classList).find(className => /^lm-icon-/.test(className)) || 'lm-icon-l';
+            return `<mat-icon role="img" fonticon="${fontIcon}" class="mat-icon notranslate lumi-symbols mat-ligature-font mat-icon-no-color ng-star-inserted ${sizeClass}" aria-hidden="true" data-mat-icon-type="font" data-mat-icon-name="${fontIcon}" data-mat-icon-namespace="lumi-symbols"></mat-icon>`;
+        }
+
+        const iconClass = existingIcon?.classList.contains('gds-icon-l') ? 'gds-icon-l' : 'menu-icon';
+        return `<mat-icon role="img" fonticon="${fontIcon}" class="mat-icon notranslate ${iconClass} google-symbols mat-ligature-font mat-icon-no-color" aria-hidden="true" data-mat-icon-type="font" data-mat-icon-name="${fontIcon}"></mat-icon>`;
+    }
+
+    async function handleDocxButtonClick(e) {
+        e.stopPropagation();
+        e.preventDefault();
+
+        const sourceButton = e.currentTarget;
+
+        try {
+            console.debug('DOCX button clicked for Gemini');
+            sourceButton.setAttribute('disabled', 'true');
+            sourceButton.style.opacity = '0.6';
+
+            let messageContent = getGeminiContent(sourceButton);
+
+            if (messageContent && messageContent.trim()) {
+                console.debug('Successfully extracted content from Gemini DOM');
+
+                const data = await chrome.storage.sync.get(['includeGeminiChatLink']);
+                if (data.includeGeminiChatLink === true) {
+                    messageContent += `\n\n*${chrome.i18n?.getMessage('sourceConversationLabel')}: ${window.location.href}*\n*${chrome.i18n?.getMessage('exportedViaDeepShare')}*\n`;
+                }
+
+                const conversationData = {
+                    role: 'assistant',
+                    content: messageContent,
+                };
+
+                const event = new CustomEvent('deepshare:convertToDocx', {
+                    detail: {
+                        messages: conversationData,
+                        sourceButton: sourceButton,
+                    },
+                });
+                document.dispatchEvent(event);
+            } else {
+                console.warn('Extracted content was empty');
+                window.showToastNotification(chrome.i18n?.getMessage('getClipboardError') || 'Content extraction failed', 'error');
+            }
+        } catch (error) {
+            console.error('Error getting content from Gemini:', error);
+            window.showToastNotification(`${chrome.i18n?.getMessage('getClipboardError') || 'Error'}: ${error.message}`, 'error');
+        } finally {
+            sourceButton.removeAttribute('disabled');
+            sourceButton.style.opacity = '1';
+        }
+    }
+
     function injectMdButtonToMenu() {
         // 查找弹出的菜单内容
-        const menuContents = document.querySelectorAll('.mat-mdc-menu-panel .mat-mdc-menu-content');
+        const menuContents = document.querySelectorAll('.mat-mdc-menu-panel .mat-mdc-menu-content, gem-menu[role="menu"], [role="menu"]');
 
         menuContents.forEach(menuContent => {
             // 检查是否已经注入过按钮
@@ -179,9 +546,22 @@
                 return;
             }
 
+            if (menuContent.tagName === 'GEM-MENU') {
+                injectMdButtonToGemMenu(menuContent);
+                return;
+            }
+
             // 查找 "导出到 Google 文档" 按钮或者 "导出为 Gmail" 按钮
-            const exportToDocsButton = menuContent.querySelector('button[aria-label*="Google 文档"], button[aria-label*="Google Docs"]');
-            const exportToGmailButton = menuContent.querySelector('button[aria-label*="Gmail"]');
+            const menuItems = Array.from(menuContent.querySelectorAll('button, [role="menuitem"], [role="menuitemradio"], [role="option"], div, li'));
+            const findMenuItemByText = (pattern) => menuItems.find(item => {
+                const text = item.textContent || '';
+                if (!pattern.test(text)) return false;
+                return !Array.from(item.children || []).some(child => pattern.test(child.textContent || ''));
+            });
+            const exportToDocsButton = menuContent.querySelector('button[aria-label*="Google 文档"], button[aria-label*="Google Docs"]') ||
+                findMenuItemByText(/Google 文档|Google Docs/);
+            const exportToGmailButton = menuContent.querySelector('button[aria-label*="Gmail"]') ||
+                findMenuItemByText(/Gmail/);
 
             const targetAnchor = exportToDocsButton || exportToGmailButton;
             if (!targetAnchor) {
@@ -191,25 +571,24 @@
             console.debug('DeepShare: Injecting Markdown button into More menu');
 
             // 创建按钮元素
-            const mdButton = document.createElement('button');
-            mdButton.className = 'mat-mdc-menu-item mat-focus-indicator deepshare-menu-md-button';
+            const useNativeButton = targetAnchor.tagName === 'BUTTON';
+            const mdButton = document.createElement(useNativeButton ? 'button' : 'div');
+            mdButton.className = `${targetAnchor.getAttribute('class') || 'mat-mdc-menu-item mat-focus-indicator'} deepshare-menu-md-button deepshare-gemini-menu-item`;
+            if (useNativeButton) mdButton.setAttribute('type', 'button');
             mdButton.setAttribute('role', 'menuitem');
             mdButton.setAttribute('tabindex', '0');
             mdButton.setAttribute('aria-disabled', 'false');
+            mdButton.setAttribute('aria-label', chrome.i18n?.getMessage('saveAsMarkdown') || 'Save as Markdown');
 
             // 创建按钮内容
             mdButton.innerHTML = `
-                <mat-icon role="img" fonticon="file_download" class="mat-icon notranslate google-symbols mat-ligature-font mat-icon-no-color" aria-hidden="true" data-mat-icon-type="font" data-mat-icon-name="file_download">
-                    <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" style="width: 20px; height: 20px;">
-                        <path d="M20.56 18H3.44C2.65 18 2 17.37 2 16.59V7.41C2 6.63 2.65 6 3.44 6H20.56C21.35 6 22 6.63 22 7.41V16.59C22 17.37 21.35 18 20.56 18M6.81 15.19V11.53L8.73 13.88L10.65 11.53V15.19H12.58V8.81H10.65L8.73 11.16L6.81 8.81H4.89V15.19H6.81M19.69 12H17.77V8.81H15.85V12H13.92L16.81 15.28L19.69 12Z"/>
-                    </svg>
-                </mat-icon>
+                ${createAdaptiveMatIconHtml(targetAnchor, 'article')}
                 <span class="mat-mdc-menu-item-text"> ${chrome.i18n?.getMessage('saveAsMarkdown') || 'Save as Markdown'}</span>
                 <div matripple="" class="mat-ripple mat-mdc-menu-ripple"></div>
             `;
 
             // 在菜单顶部插入
-            targetAnchor.parentNode.prepend(mdButton);
+            targetAnchor.parentNode.insertBefore(mdButton, targetAnchor);
 
             // 点击事件
             mdButton.addEventListener('click', async (e) => {
@@ -221,11 +600,8 @@
 
                 // Precisely select the main response content (not thoughts)
                 // Main response is inside: structured-content-container.model-response-text > message-content
-                const contentElement = activeMessageContainer.querySelector('.model-response-text message-content') ||
-                    activeMessageContainer.querySelector('structured-content-container.model-response-text message-content') ||
-                    activeMessageContainer.querySelector('message-content'); // Fallback for older structure
-                if (contentElement) {
-                    let markdown = window.extractGeminiContentWithFormulas(contentElement);
+                let markdown = getGeminiContentFromContainer(activeMessageContainer);
+                if (markdown) {
 
                     // Append URL if enabled
                     const data = await chrome.storage.sync.get(['includeGeminiChatLink']);
@@ -241,6 +617,94 @@
                 if (backdrop) backdrop.click();
             });
         });
+    }
+
+    function injectMdButtonToGemMenu(menuContent) {
+        const targetAnchor = menuContent.querySelector('gem-menu-item[data-test-id="export-to-docs-button"]') ||
+            menuContent.querySelector('gem-menu-item[role="menuitem"]');
+        if (!targetAnchor || !activeMessageContainer) return;
+
+        const mdButton = createGeminiMenuItemFrom(
+            targetAnchor,
+            'article',
+            chrome.i18n?.getMessage('saveAsMarkdown') || 'Save as Markdown',
+            'deepshare-menu-md-button',
+            'markdown',
+            'markdown-export-button'
+        );
+
+        targetAnchor.insertAdjacentElement('beforebegin', mdButton);
+        mdButton.addEventListener('click', handleMarkdownMenuClick);
+    }
+
+    function createGeminiMenuItemFrom(targetAnchor, fontIcon, label, className, value, testId) {
+        const item = targetAnchor.cloneNode(true);
+        item.classList.add(className, 'deepshare-gemini-menu-item');
+        item.setAttribute('role', 'menuitem');
+        item.setAttribute('value', value);
+        item.setAttribute('leadingicon', fontIcon);
+        item.setAttribute('data-test-id', testId);
+        item.setAttribute('tabindex', '-1');
+        item.setAttribute('aria-disabled', 'false');
+        item.removeAttribute('jslog');
+        item.removeAttribute('data-active');
+
+        const content = item.querySelector('gem-menu-item-content');
+        content?.classList.remove('active');
+
+        const icon = item.querySelector('mat-icon');
+        if (icon) {
+            icon.setAttribute('fonticon', fontIcon);
+            icon.setAttribute('data-mat-icon-name', fontIcon);
+            icon.setAttribute('data-mat-icon-namespace', 'lumi-symbols');
+            syncLumiIconSizeClass(targetAnchor, icon);
+            icon.textContent = '';
+        }
+
+        const labelNode = item.querySelector('.label span') ||
+            item.querySelector('.label-container span span') ||
+            item.querySelector('.label') ||
+            item.querySelector('span');
+        if (labelNode) labelNode.textContent = label;
+
+        return item;
+    }
+
+    function syncLumiIconSizeClass(source, targetIcon) {
+        const sourceIcon = source?.querySelector?.('mat-icon.lumi-symbols');
+        const sourceSizeClass = Array.from(sourceIcon?.classList || []).find(className => /^lm-icon-/.test(className));
+        if (!sourceSizeClass) return;
+
+        Array.from(targetIcon.classList)
+            .filter(className => /^lm-icon-/.test(className))
+            .forEach(className => targetIcon.classList.remove(className));
+        targetIcon.classList.add(sourceSizeClass);
+    }
+
+    async function handleMarkdownMenuClick(e) {
+        e.stopPropagation();
+        if (!activeMessageContainer) {
+            console.error('DeepShare: No active message container found');
+            return;
+        }
+
+        let markdown = getGeminiContentFromContainer(activeMessageContainer);
+        if (markdown) {
+            const data = await chrome.storage.sync.get(['includeGeminiChatLink']);
+            if (data.includeGeminiChatLink === true) {
+                markdown += `\n\n*${chrome.i18n?.getMessage('sourceConversationLabel')}: ${window.location.href}*\n*${chrome.i18n?.getMessage('exportedViaDeepShare')}*\n`;
+            }
+
+            downloadMarkdownFile(markdown);
+        }
+
+        closeOpenGeminiMenu();
+    }
+
+    function closeOpenGeminiMenu() {
+        const backdrop = document.querySelector('.cdk-overlay-backdrop');
+        if (backdrop) backdrop.click();
+        document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', code: 'Escape', bubbles: true }));
     }
 
     function downloadMarkdownFile(content) {
@@ -273,7 +737,8 @@
         // Traverse up to find the message container
         // Structure: model-response > ... > message-content
         const messageContainer = button.closest('model-response') ||
-            button.closest('user-query'); // Fallback though likely always model-response
+            button.closest('user-query') ||
+            findClosestMessageContainer(button, 'assistant'); // Fallback for newer structure
 
         if (!messageContainer) {
             console.error('DeepShare: Could not find message container');
@@ -282,15 +747,27 @@
 
         // Precisely select the main response content (not thoughts)
         // Main response is inside: structured-content-container.model-response-text > message-content
+        return getGeminiContentFromContainer(messageContainer);
+    }
+
+    function getGeminiContentFromContainer(messageContainer) {
         const contentElement = messageContainer.querySelector('.model-response-text message-content') ||
             messageContainer.querySelector('structured-content-container.model-response-text message-content') ||
             messageContainer.querySelector('message-content'); // Fallback for older structure
 
-        if (!contentElement) {
+        if (contentElement) {
+            return window.extractGeminiContentWithFormulas(contentElement);
+        }
+
+        const clone = messageContainer.cloneNode(true);
+        clone.querySelectorAll('button, svg, menu, [role="menu"], [role="heading"], h1, h2, h3, h4, h5, h6, textarea, input, .deepshare-gemini-docx-btn, [aria-hidden="true"]').forEach(el => el.remove());
+        const content = window.extractGeminiContentWithFormulas(clone).trim();
+
+        if (!content) {
             console.error('DeepShare: Could not find content element');
             return null;
         }
 
-        return window.extractGeminiContentWithFormulas(contentElement);
+        return content;
     }
 })();
