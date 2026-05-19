@@ -456,6 +456,8 @@ function isValidUrl(string) {
     if (!string) return false;
     try {
         const url = new URL(string.trim());
+        // Localhost support for testing
+        if (url.hostname === 'localhost' || url.hostname === '127.0.0.1') return true;
         return url.protocol === 'http:' || url.protocol === 'https:';
     } catch (_) {
         return false;

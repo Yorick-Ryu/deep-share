@@ -63,7 +63,7 @@ async function handleKatexClick(e) {
             await navigator.clipboard.writeText(textToCopy);
 
             // Show visual feedback with localized message using the toast notification
-            window.showToastNotification(chrome.i18n?.getMessage('formulaCopied'), 'success');
+            window.showToastNotification(chrome.i18n?.getMessage('formulaCopied') || 'Formula copied!', 'success');
         } catch (error) {
             console.error('Failed to copy formula:', error);
             window.showToastNotification(chrome.i18n?.getMessage('copyFailed'), 'error');
