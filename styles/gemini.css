@@ -140,12 +140,12 @@
    but variables already handle most of it */
 @media (prefers-color-scheme: dark) {
     .deepshare-gemini-tooltip-panel .mat-mdc-tooltip-surface {
-        background-color: #fff;
+        background-color: #E6E6E6;
         color: #000;
     }
 
     .deepshare-gemini-tooltip-arrow {
-        background-color: #fff;
+        background-color: #E6E6E6;
     }
 
     .deepshare-gemini-docx-btn:not(.deepshare-gemini-docx-btn--lumi) .mdc-icon-button:hover {

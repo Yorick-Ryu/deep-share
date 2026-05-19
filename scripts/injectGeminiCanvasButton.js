@@ -7,12 +7,14 @@
     'use strict';
 
     let lastUrl = location.href;
+    let lastNewUiDeepResearchExportMenuClickAt = 0;
     console.debug('DeepShare: Initializing Canvas DOCX button injection for Gemini');
 
     // 监听分享按钮的点击，等待菜单弹出
     function attachShareButtonListener() {
         attachLegacyCanvasShareButtonListener();
         attachNewUiCanvasShareButtonListener();
+        attachNewUiDeepResearchExportMenuListener();
     }
 
     function attachLegacyCanvasShareButtonListener() {
@@ -56,6 +58,24 @@
         if (!trigger) return false;
         return !!trigger.querySelector('.lm-enabled, .lumi-symbols') ||
             !!trigger.closest('gem-popover, [class*="luminous"], [class*="lm-"]');
+    }
+
+    function attachNewUiDeepResearchExportMenuListener() {
+        const exportMenuButtons = document.querySelectorAll('button[data-test-id="export-menu-button"], [data-test-id="export-menu-button"] button');
+
+        exportMenuButtons.forEach(exportMenuButton => {
+            if (!exportMenuButton.dataset.deepshareNewUiDeepResearchExportListenerAttached) {
+                exportMenuButton.dataset.deepshareNewUiDeepResearchExportListenerAttached = 'true';
+
+                exportMenuButton.addEventListener('click', () => {
+                    lastNewUiDeepResearchExportMenuClickAt = Date.now();
+                    console.debug('DeepShare: New UI DeepResearch export menu button clicked, waiting for menu...');
+                    setTimeout(() => {
+                        injectNewUiCanvasButtonsToMenu();
+                    }, 100);
+                });
+            }
+        });
     }
 
     function injectLegacyCanvasButtonsToMenu() {
@@ -276,7 +296,7 @@
     }
 
     function injectNewUiCanvasButtonsToMenu() {
-        const menus = document.querySelectorAll('gem-menu[panelclass="share-dropdown-menu"]');
+        const menus = findNewUiCanvasMenus();
 
         menus.forEach(menu => {
             if (menu.querySelector('.deepshare-canvas-docx-button') ||
@@ -284,15 +304,15 @@
                 return;
             }
 
-            const exportToDocsItem = menu.querySelector('export-to-docs-button gem-menu-item[data-test-id="export-to-docs-button"]');
-            if (!exportToDocsItem) return;
+            const templateItem = findNewUiCanvasTemplateItem(menu);
+            if (!templateItem) return;
 
             const wordWrapper = document.createElement('deepshare-canvas-docx-button');
             wordWrapper.className = 'deepshare-canvas-docx-button ng-star-inserted';
             wordWrapper.setAttribute('data-test-id', 'deepshare-docx-button');
 
             const wordItem = createCanvasGemMenuItem(
-                exportToDocsItem,
+                templateItem,
                 'docs',
                 chrome.i18n?.getMessage('docxButton') || 'Save as Word',
                 'word',
@@ -305,7 +325,7 @@
             mdWrapper.setAttribute('data-test-id', 'deepshare-md-button');
 
             const mdItem = createCanvasGemMenuItem(
-                exportToDocsItem,
+                templateItem,
                 'article',
                 chrome.i18n?.getMessage('saveAsMarkdown') || 'Save as Markdown',
                 'markdown',
@@ -313,14 +333,50 @@
             );
             mdWrapper.appendChild(mdItem);
 
-            const exportWrapper = exportToDocsItem.closest('export-to-docs-button') || exportToDocsItem;
-            exportWrapper.insertAdjacentElement('beforebegin', wordWrapper);
+            const insertAnchor = findNewUiCanvasInsertAnchor(menu);
+            if (insertAnchor) {
+                insertAnchor.insertAdjacentElement('afterend', wordWrapper);
+            } else {
+                menu.appendChild(wordWrapper);
+            }
             wordWrapper.insertAdjacentElement('afterend', mdWrapper);
 
             wordItem.addEventListener('click', handleCanvasWordExport);
             mdItem.addEventListener('click', handleCanvasMarkdownExport);
             console.debug('DeepShare: Canvas new UI DOCX and Markdown buttons successfully injected into menu');
         });
+    }
+
+    function findNewUiCanvasMenus() {
+        return Array.from(document.querySelectorAll([
+            'gem-menu[panelclass="share-dropdown-menu"]',
+            '.mat-mdc-menu-panel .mat-mdc-menu-content'
+        ].join(','))).filter(isNewUiCanvasMenu);
+    }
+
+    function isNewUiCanvasMenu(menu) {
+        if (!menu) return false;
+
+        if (menu.matches?.('gem-menu[panelclass="share-dropdown-menu"]')) return true;
+
+        return hasRecentNewUiDeepResearchExportMenuClick() &&
+            !!menu.closest('.mat-mdc-menu-panel') &&
+            !!findNewUiCanvasTemplateItem(menu);
+    }
+
+    function hasRecentNewUiDeepResearchExportMenuClick() {
+        return Date.now() - lastNewUiDeepResearchExportMenuClickAt < 1500;
+    }
+
+    function findNewUiCanvasTemplateItem(menu) {
+        return menu.querySelector('export-to-docs-button gem-menu-item[data-test-id="export-to-docs-button"]') ||
+            menu.querySelector('gem-menu-item');
+    }
+
+    function findNewUiCanvasInsertAnchor(menu) {
+        return menu.querySelector('copy-button[data-test-id="copy-button"]') ||
+            menu.querySelector('copy-button') ||
+            null;
     }
 
     function createCanvasGemMenuItem(sourceItem, fontIcon, label, value, testId) {
@@ -1153,7 +1209,7 @@
             injectLegacyCanvasButtonsToMenu();
         }
 
-        const newUiCanvasMenus = document.querySelectorAll('gem-menu[panelclass="share-dropdown-menu"]');
+        const newUiCanvasMenus = findNewUiCanvasMenus();
         if (newUiCanvasMenus.length > 0) {
             injectNewUiCanvasButtonsToMenu();
         }

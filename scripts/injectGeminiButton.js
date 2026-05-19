@@ -30,7 +30,7 @@
                     activeMessageContainer = moreButton.closest('model-response');
                     console.debug('DeepShare: More menu opened, tracking message container');
                     // Wait for the menu overlay to appear
-                    setTimeout(injectMdButtonToMenu, 100);
+                    setTimeout(injectMarkdownButtonToResponseMoreMenu, 100);
                 });
             }
         });
@@ -60,23 +60,7 @@
             moreButton.addEventListener('click', () => {
                 activeMessageContainer = messageContainer;
                 console.debug('DeepShare: New UI more menu opened, tracking message container');
-                setTimeout(injectMdButtonToMenu, 100);
-            });
-        });
-
-        const shareExportButtons = document.querySelectorAll([
-            '[data-test-id="share-and-export-menu-button"] button',
-            'button[data-test-id="share-and-export-menu-button"]'
-        ].join(','));
-        shareExportButtons.forEach(shareExportButton => {
-            const messageContainer = findClosestMessageContainer(shareExportButton, 'assistant');
-            if (!messageContainer || shareExportButton.dataset.deepshareListenerAttached) return;
-
-            shareExportButton.dataset.deepshareListenerAttached = 'true';
-            shareExportButton.addEventListener('click', () => {
-                activeMessageContainer = messageContainer;
-                console.debug('DeepShare: New UI share/export menu opened, tracking message container');
-                setTimeout(injectMdButtonToMenu, 100);
+                setTimeout(injectMarkdownButtonToResponseMoreMenu, 100);
             });
         });
     }
@@ -267,7 +251,7 @@
 
         copyElementAttributes(container, buttonWrapper, /^_ngcontent-/);
 
-        const gemButton = document.createElement('gem-icon-button');
+        const gemButton = document.createElement('span');
         gemButton.className = copyGemButton?.className || 'mat-mdc-tooltip-trigger gem-button gem-button-badge-size-small gem-button-size-small gem-button-type-on-surface lm-enabled ng-star-inserted';
         gemButton.classList.add('deepshare-gemini-docx-gem-button');
         gemButton.setAttribute('theme', copyGemButton?.getAttribute('theme') || 'lm');
@@ -536,8 +520,8 @@
         }
     }
 
-    function injectMdButtonToMenu() {
-        // 查找弹出的菜单内容
+    function injectMarkdownButtonToResponseMoreMenu() {
+        // 查找 AI 回复“更多”按钮弹出的菜单内容
         const menuContents = document.querySelectorAll('.mat-mdc-menu-panel .mat-mdc-menu-content, gem-menu[role="menu"], [role="menu"]');
 
         menuContents.forEach(menuContent => {
@@ -547,7 +531,7 @@
             }
 
             if (menuContent.tagName === 'GEM-MENU') {
-                injectMdButtonToGemMenu(menuContent);
+                injectMarkdownButtonToGemResponseMoreMenu(menuContent);
                 return;
             }
 
@@ -568,7 +552,7 @@
                 return;
             }
 
-            console.debug('DeepShare: Injecting Markdown button into More menu');
+            console.debug('DeepShare: Injecting Markdown button into response More menu');
 
             // 创建按钮元素
             const useNativeButton = targetAnchor.tagName === 'BUTTON';
@@ -619,12 +603,12 @@
         });
     }
 
-    function injectMdButtonToGemMenu(menuContent) {
+    function injectMarkdownButtonToGemResponseMoreMenu(menuContent) {
         const targetAnchor = menuContent.querySelector('gem-menu-item[data-test-id="export-to-docs-button"]') ||
             menuContent.querySelector('gem-menu-item[role="menuitem"]');
         if (!targetAnchor || !activeMessageContainer) return;
 
-        const mdButton = createGeminiMenuItemFrom(
+        const mdButton = createGeminiResponseMoreMenuItemFrom(
             targetAnchor,
             'article',
             chrome.i18n?.getMessage('saveAsMarkdown') || 'Save as Markdown',
@@ -634,10 +618,10 @@
         );
 
         targetAnchor.insertAdjacentElement('beforebegin', mdButton);
-        mdButton.addEventListener('click', handleMarkdownMenuClick);
+        mdButton.addEventListener('click', handleResponseMoreMarkdownClick);
     }
 
-    function createGeminiMenuItemFrom(targetAnchor, fontIcon, label, className, value, testId) {
+    function createGeminiResponseMoreMenuItemFrom(targetAnchor, fontIcon, label, className, value, testId) {
         const item = targetAnchor.cloneNode(true);
         item.classList.add(className, 'deepshare-gemini-menu-item');
         item.setAttribute('role', 'menuitem');
@@ -681,7 +665,7 @@
         targetIcon.classList.add(sourceSizeClass);
     }
 
-    async function handleMarkdownMenuClick(e) {
+    async function handleResponseMoreMarkdownClick(e) {
         e.stopPropagation();
         if (!activeMessageContainer) {
             console.error('DeepShare: No active message container found');
@@ -698,10 +682,10 @@
             downloadMarkdownFile(markdown);
         }
 
-        closeOpenGeminiMenu();
+        closeOpenResponseMoreMenu();
     }
 
-    function closeOpenGeminiMenu() {
+    function closeOpenResponseMoreMenu() {
         const backdrop = document.querySelector('.cdk-overlay-backdrop');
         if (backdrop) backdrop.click();
         document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', code: 'Escape', bubbles: true }));

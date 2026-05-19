@@ -8,17 +8,29 @@
 
     // State to track if the last clicked menu button was in the main header (not sidebar)
     let isHeaderMenuClicked = false;
+    let headerMenuButtonTestId = '';
+    let lastHeaderMenuClickAt = 0;
 
     // Attach listener to the document to catch clicks on the menu button
     document.addEventListener('click', (e) => {
-        const menuBtn = e.target.closest('[data-test-id="conversation-actions-menu-icon-button"]');
+        if (isInsideSidebarSurface(e.target)) {
+            clearHeaderMenuState();
+        }
+
+        const menuBtn = e.target.closest([
+            '[data-test-id="conversation-actions-menu-icon-button"]',
+            '[data-test-id="actions-menu-button"]',
+            '[data-test-id="share-and-export-menu-button"]'
+        ].join(','));
         if (menuBtn) {
             if (!isHeaderConversationMenuButton(menuBtn)) {
-                isHeaderMenuClicked = false;
+                clearHeaderMenuState();
                 return;
             }
 
             isHeaderMenuClicked = true;
+            headerMenuButtonTestId = menuBtn.dataset.testId || '';
+            lastHeaderMenuClickAt = Date.now();
             // Menu was clicked, wait for it to appear
             setTimeout(() => injectExportOptions(), 100);
         }
@@ -28,10 +40,12 @@
     const observer = new MutationObserver((mutations) => {
         for (const mutation of mutations) {
             if (mutation.addedNodes.length) {
+                if (!hasRecentHeaderMenuClick()) continue; // Only inject after a confirmed header menu click.
+
                 const roleMenu = findOpenRoleMenu();
                 const menuPanel = document.querySelector('.mat-mdc-menu-panel.conversation-actions-menu, .mat-mdc-menu-panel.conversation-actions-menu-panel');
                 if (roleMenu?.tagName === 'GEM-MENU') {
-                    injectExportOptions({ allowDetectedMenu: true, menuContent: roleMenu });
+                    injectExportOptions({ menuContent: roleMenu });
                 } else if (isHeaderMenuClicked && menuPanel && !menuPanel.dataset.deepshareExportInjected) {
                     injectExportOptions();
                 }
@@ -42,7 +56,7 @@
     observer.observe(document.body, { childList: true, subtree: true });
 
     function injectExportOptions(options = {}) {
-        if (!isHeaderMenuClicked && !options.allowDetectedMenu) return; // Guard clause for injection
+        if (!hasRecentHeaderMenuClick()) return; // Guard clause for injection
 
         const menuContent = options.menuContent ||
             document.querySelector('.mat-mdc-menu-panel.conversation-actions-menu .mat-mdc-menu-content, .mat-mdc-menu-panel.conversation-actions-menu-panel .mat-mdc-menu-content') ||
@@ -56,8 +70,9 @@
         const pinButton = menuContent.querySelector('[data-test-id="pin-button"]');
         // Find the "Share" button as a fallback anchor
         const shareButton = menuContent.querySelector('[data-test-id="share-button"]');
+        const nativeExportButton = menuContent.querySelector('[data-test-id="export-to-docs-button"], [data-test-id="export-to-gmail-button"]');
         
-        const targetAnchor = pinButton || shareButton;
+        const targetAnchor = pinButton || shareButton || nativeExportButton || menuContent.firstElementChild;
         if (!targetAnchor) return;
 
         // Dynamic class detection to match native styling and icon family.
@@ -102,37 +117,72 @@
         // Click Handlers
         mdButton.addEventListener('click', async (e) => {
             e.stopPropagation();
-            closeMenu();
+            if (!isGemMenu) closeMenu();
             await toggleGeminiSelectionMode('md');
         });
 
         wordButton.addEventListener('click', async (e) => {
             e.stopPropagation();
-            closeMenu();
+            if (!isGemMenu) closeMenu();
             await toggleGeminiSelectionMode('docx');
         });
     }
 
     function isHeaderConversationMenuButton(menuBtn) {
         if (!menuBtn) return false;
-        if (menuBtn.dataset.testId !== 'conversation-actions-menu-icon-button') return false;
+        const testId = menuBtn.dataset.testId;
+        if (testId !== 'conversation-actions-menu-icon-button' && testId !== 'actions-menu-button' && testId !== 'share-and-export-menu-button') return false;
+        if (isSidebarConversationMenuButton(menuBtn)) return false;
+        if (testId === 'share-and-export-menu-button' && isMessageShareExportMenuButton(menuBtn)) return false;
 
-        return !menuBtn.closest([
-            '.conversation-actions-container',
-            '.side-nav-opened',
-            'nav',
-            '[data-test-id="sidebar"]',
-            '.bot-list-item',
-            '.bot-item',
-            '.my-stuff-side-nav',
-            'mat-card[data-test-id="card-container"]',
-            'uploader',
-            'toolbox-drawer',
-            '.simplified-input-menu',
-            '.menu-list-container',
-            '[data-test-id*="history"]',
-            '[data-test-id*="conversation-list"]'
+        return true;
+    }
+
+    function clearHeaderMenuState() {
+        isHeaderMenuClicked = false;
+        headerMenuButtonTestId = '';
+        lastHeaderMenuClickAt = 0;
+    }
+
+    function hasRecentHeaderMenuClick() {
+        return isHeaderMenuClicked && Date.now() - lastHeaderMenuClickAt < 1500;
+    }
+
+    function isSidebarConversationMenuButton(menuBtn) {
+        return isInsideSidebarSurface(menuBtn);
+    }
+
+    function isInsideSidebarSurface(element) {
+        if (!element?.closest) return false;
+        return !!element.closest([
+            'side-navigation-v2',
+            'bard-sidenav',
+            'bard-sidenav-container',
+            'side-navigation-content'
         ].join(','));
+    }
+
+    function isMessageShareExportMenuButton(menuBtn) {
+        if (menuBtn.closest('model-response, user-query, [data-message-author-role], article[data-author], article[data-turn]')) {
+            return true;
+        }
+
+        let node = menuBtn.parentElement;
+        let depth = 0;
+        while (node && node !== document.body && depth < 8) {
+            if (node.matches('header, nav, mat-toolbar, [role="banner"]')) return false;
+            if (node.querySelector([
+                'copy-button',
+                '[data-test-id="copy-button"]',
+                '[data-test-id="more-menu-button"]'
+            ].join(','))) {
+                return true;
+            }
+            node = node.parentElement;
+            depth++;
+        }
+
+        return false;
     }
 
     function createMenuIconHtml(fontIcon, iconClass, iconFamilyClass, iconNamespace) {
@@ -240,7 +290,6 @@
     function closeMenu() {
         const backdrop = document.querySelector('.cdk-overlay-backdrop');
         if (backdrop) backdrop.click();
-        document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', code: 'Escape', bubbles: true }));
     }
 
     function findOpenRoleMenu() {
@@ -254,9 +303,9 @@
     function isConversationActionsMenu(menu) {
         if (!menu) return false;
         if (menu.matches?.('gem-menu[panelclass="share-dropdown-menu"]')) {
-            return false;
+            return isHeaderMenuClicked && headerMenuButtonTestId === 'share-and-export-menu-button';
         }
-        if (menu.closest('mat-card[data-test-id="card-container"], uploader, toolbox-drawer, .simplified-input-menu, .menu-list-container')) {
+        if (isInsideSidebarSurface(menu) || menu.closest('mat-card[data-test-id="card-container"], uploader, toolbox-drawer, .simplified-input-menu, .menu-list-container')) {
             return false;
         }
 
@@ -264,7 +313,7 @@
             return true;
         }
 
-        return !!menu.querySelector('[data-test-id="pin-button"], [data-test-id="rename-button"], [data-test-id="delete-button"]');
+        return isHeaderMenuClicked && !!menu.querySelector('[data-test-id="pin-button"], [data-test-id="rename-button"], [data-test-id="delete-button"]');
     }
 
     let isSelectionMode = false;
