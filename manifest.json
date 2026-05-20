@@ -199,7 +199,8 @@
                 "lib/katex.min.js",
                 "scripts/formulaConverter.js",
                 "scripts/notifications.js",
-                "scripts/copyKatex4Claude.js"
+                "scripts/copyKatex4Claude.js",
+                "scripts/injectClaudeMarkdownButton.js"
             ]
         }
     ]

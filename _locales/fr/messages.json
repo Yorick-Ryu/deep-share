@@ -130,5 +130,377 @@
     },
     "noMessageSelected": {
         "message": "Veuillez sélectionner au moins un message"
+    },
+    "sponsorTabLabel": {
+        "message": "À propos"
+    },
+    "totalQuotaLabel": {
+        "message": "Total :"
+    },
+    "usedQuotaLabel": {
+        "message": "Utilisé :"
+    },
+    "remainingQuotaLabel": {
+        "message": "Restant :"
+    },
+    "quotaTitle": {
+        "message": "Quota de conversion"
+    },
+    "dailyQuotaLabel": {
+        "message": "Quota quotidien"
+    },
+    "addonQuotaLabel": {
+        "message": "Quota supplémentaire"
+    },
+    "dailyResetNote": {
+        "message": "Réinitialisé chaque jour"
+    },
+    "subscriptionExpiryNote": {
+        "message": "Réinitialisé chaque jour · Jusqu'au {date}"
+    },
+    "addonExpiryNote": {
+        "message": "Expire le {date}"
+    },
+    "apiKeyHint": {
+        "message": "Acheter une clé API ? <a href=\"https://ds.rick216.cn/en/price.html\" target=\"_blank\">Cliquez ici</a>"
+    },
+    "apiKeyMissing": {
+        "message": "Veuillez cliquer sur l’icône de l’extension pour acheter et saisir une clé API afin d’utiliser la fonction de conversion de documents."
+    },
+    "apiKeyMissingShort": {
+        "message": "Veuillez <a href=\"https://ds.rick216.cn/en/price.html\" target=\"_blank\">acheter</a> et saisir une clé API"
+    },
+    "manualConversionExplanation": {
+        "message": "Compatible avec Grok, Claude, Meta AI, etc. Copiez votre conversation dans la zone de texte Markdown, puis cliquez sur « Convertir en document » pour télécharger un document Word joliment formaté avec prise en charge des formules !"
+    },
+    "manualConversionTitle": {
+        "message": "Coller un chat IA"
+    },
+    "markdownInputLabel": {
+        "message": "Texte Markdown"
+    },
+    "markdownInputPlaceholder": {
+        "message": "Collez ici le texte au format Markdown..."
+    },
+    "convertToDocx": {
+        "message": "Convertir en document"
+    },
+    "clearMarkdown": {
+        "message": "Effacer"
+    },
+    "emptyMarkdownError": {
+        "message": "Veuillez saisir du texte Markdown"
+    },
+    "manualDocxSettings": {
+        "message": "Coller un chat IA"
+    },
+    "formulaTabLabel": {
+        "message": "Copie de formule"
+    },
+    "formulaSettingsTitle": {
+        "message": "Paramètres de copie des formules"
+    },
+    "formulaCopyTutorialText": {
+        "message": "En savoir plus sur la copie des formules :"
+    },
+    "formulaCopyTutorialLink": {
+        "message": "Voir le tutoriel"
+    },
+    "enableFormulaCopyLabel": {
+        "message": "Activer la copie des formules"
+    },
+    "formulaFormatLabel": {
+        "message": "Format de copie des formules"
+    },
+    "formatMathMLLabel": {
+        "message": "MathML"
+    },
+    "formatLaTeXLabel": {
+        "message": "LaTeX"
+    },
+    "formatDollarLatexLabel": {
+        "message": "Markdown"
+    },
+    "formulaFormatHint": {
+        "message": "MathML pour Word, LaTeX pour WPS/Overleaf, Markdown pour Lark/Notion/Obsidian"
+    },
+    "formulaEngineLabel": {
+        "message": "Moteur de conversion"
+    },
+    "engineMathJaxLabel": {
+        "message": "MathJax"
+    },
+    "engineKaTeXLabel": {
+        "message": "KaTeX"
+    },
+    "formulaEngineHint": {
+        "message": "MathJax offre une meilleure compatibilité, KaTeX est plus rapide"
+    },
+    "screenshotMethodLabel": {
+        "message": "Méthode de capture"
+    },
+    "methodDomToImageLabel": {
+        "message": "dom-to-image"
+    },
+    "methodHtml2CanvasLabel": {
+        "message": "html2canvas"
+    },
+    "screenshotMethodHint": {
+        "message": "Sélectionnez la méthode utilisée pour les captures d’écran. Si une méthode ne fonctionne pas, essayez l’autre. Veuillez actualiser la page après le changement."
+    },
+    "removeDividersLabel": {
+        "message": "Supprimer les séparateurs"
+    },
+    "removeEmojisLabel": {
+        "message": "Supprimer les emojis"
+    },
+    "convertMermaidLabel": {
+        "message": "Convertir Mermaid"
+    },
+    "compatModeLabel": {
+        "message": "Mode compatibilité"
+    },
+    "compatModeTooltip": {
+        "message": "Prend en charge le Markdown non standard"
+    },
+    "hardLineBreaksLabel": {
+        "message": "Sauts de ligne forcés"
+    },
+    "hardLineBreaksTooltip": {
+        "message": "Traiter les sauts de ligne simples comme des retours à la ligne forcés"
+    },
+    "disableAutoNumberingLabel": {
+        "message": "Désactiver la numérotation automatique"
+    },
+    "disableAutoNumberingTooltip": {
+        "message": "Les listes ordonnées sont converties en texte brut avec numérotation"
+    },
+    "getClipboardError": {
+        "message": "Impossible de récupérer le contenu"
+    },
+    "clipboardPermissionError": {
+        "message": "Impossible de récupérer le contenu, veuillez autoriser l’accès en lecture au presse-papiers"
+    },
+    "refreshButton": {
+        "message": "Actualiser"
+    },
+    "purchaseQuota": {
+        "message": "Acheter du quota"
+    },
+    "purchaseAddonQuota": {
+        "message": "Acheter un quota supplémentaire"
+    },
+    "purchaseSubscription": {
+        "message": "Acheter un abonnement"
+    },
+    "renewSubscription": {
+        "message": "Renouveler l’abonnement"
+    },
+    "manageSubscription": {
+        "message": "Gérer l’abonnement"
+    },
+    "subscriptionExpiredDays": {
+        "message": "Expiré il y a {days} jours"
+    },
+    "expirationLabel": {
+        "message": "Valide jusqu’au :"
+    },
+    "unknown": {
+        "message": "Inconnu"
+    },
+    "templateLabel": {
+        "message": "Modèle Word"
+    },
+    "universalTemplate": {
+        "message": "Universel"
+    },
+    "saveAsImageButton": {
+        "message": "Enregistrer comme image"
+    },
+    "screenshotInitiated": {
+        "message": "Génération de la capture d’écran..."
+    },
+    "screenshotSuccess": {
+        "message": "Capture d’écran enregistrée"
+    },
+    "screenshotFailed": {
+        "message": "Échec de la capture d’écran, essayer d’actualiser ?"
+    },
+    "conversationTooLong": {
+        "message": "La conversation est trop longue pour être capturée en une seule image. Veuillez sélectionner moins de messages et réessayer."
+    },
+    "imageCopied": {
+        "message": "Image copiée dans le presse-papiers"
+    },
+    "imageCopyFailed": {
+        "message": "Impossible de copier l’image dans le presse-papiers"
+    },
+    "apiKeyError": {
+        "message": "Erreur de clé API ou clé expirée. Veuillez vérifier vos e-mails ou contacter le support : contact@deepshare.app"
+    },
+    "quotaExceededError": {
+        "message": "Quota dépassé. Veuillez <a href=\"https://ds.rick216.cn/en/price.html\" target=\"_blank\">recharger</a>."
+    },
+    "aboutTabTitle": {
+        "message": "À propos de DeepShare"
+    },
+    "versionLabel": {
+        "message": "Version :"
+    },
+    "documentationLabel": {
+        "message": "Documentation :"
+    },
+    "githubLabel": {
+        "message": "GitHub :"
+    },
+    "developerEmailLabel": {
+        "message": "E-mail du développeur :"
+    },
+    "acknowledgmentText": {
+        "message": "Merci à toutes les personnes qui ont partagé leurs suggestions pour DeepShare ! De nombreuses fonctionnalités sont nées de vrais besoins utilisateurs. Augmentons ensemble notre productivité et gagnons du temps pour ce qui compte vraiment dans la vie."
+    },
+    "referenceSources": {
+        "message": "Références"
+    },
+    "unusedSources": {
+        "message": "Sources consultées mais non utilisées"
+    },
+    "saveAsMarkdown": {
+        "message": "Enregistrer en Markdown"
+    },
+    "otherSettingsTabLabel": {
+        "message": "Autres paramètres"
+    },
+    "otherSettingsTitle": {
+        "message": "Autres paramètres"
+    },
+    "geminiSettingsTitle": {
+        "message": "Gemini"
+    },
+    "exportGeminiSourcesLabel": {
+        "message": "Exporter les sources Deep Research"
+    },
+    "exportGeminiSourcesHint": {
+        "message": "Inclure les sources de référence lors de l’export des rapports Gemini Deep Research"
+    },
+    "includeGeminiChatLinkLabel": {
+        "message": "Exporter le lien du chat"
+    },
+    "includeGeminiChatLinkHint": {
+        "message": "Le contenu exporté inclut le lien vers la conversation source"
+    },
+    "itemsSelected": {
+        "message": "$COUNT$ éléments sélectionnés",
+        "description": "Nombre d’éléments sélectionnés dans la barre de sélection Gemini",
+        "placeholders": {
+        "COUNT": {
+            "content": "$1"
+        }
+        }
+    },
+    "selectAllQuestions": {
+        "message": "Sélectionner toutes les questions"
+    },
+    "confirmExport": {
+        "message": "Confirmer l’export"
+    },
+    "cancelButton": {
+        "message": "Annuler"
+    },
+    "roleUser": {
+        "message": "Utilisateur"
+    },
+    "roleAssistant": {
+        "message": "Assistant"
+    },
+    "exportedViaDeepShare": {
+        "message": "Exporté via DeepShare"
+    },
+    "geminiConversation": {
+        "message": "Conversation Gemini"
+    },
+    "sourceConversationLabel": {
+        "message": "Source"
+    },
+    "languageSettingsTitle": {
+        "message": "Langue"
+    },
+    "languageSelectLabel": {
+        "message": "Langue d’affichage"
+    },
+    "languageAuto": {
+        "message": "Automatique (par défaut du navigateur)"
+    },
+    "languageHint": {
+        "message": "Sélectionnez votre langue d’affichage préférée"
+    },
+    "networkError": {
+        "message": "Échec de la conversion, veuillez vérifier votre connexion réseau"
+    },
+    "onboardingWelcomeTitle": {
+        "message": "Bienvenue sur DeepShare !"
+    },
+    "onboardingWelcomeSubtitle": {
+        "message": "Choisissons le bon format de formule et épinglons l’extension"
+    },
+    "onboardingSelectionTitle": {
+        "message": "Choisissez votre format de formule"
+    },
+    "onboardingSelectionDescription": {
+        "message": "Vous pourrez modifier cela plus tard dans les paramètres de l’extension"
+    },
+    "onboardingMathMLDescription": {
+        "message": "Parfait pour les utilisateurs de Microsoft Word"
+    },
+    "onboardingLaTeXDescription": {
+        "message": "Pour les utilisateurs de WPS, MathType et Overleaf"
+    },
+    "onboardingDollarLatexDescription": {
+        "message": "Pour les utilisateurs de Lark, Notion et Obsidian"
+    },
+    "onboardingRecommended": {
+        "message": "Recommandé"
+    },
+    "onboardingLearnMoreText": {
+        "message": "En savoir plus sur la copie des formules :"
+    },
+    "onboardingLearnMoreLink": {
+        "message": "Voir le tutoriel"
+    },
+    "onboardingContinue": {
+        "message": "Continuer"
+    },
+    "onboardingPinTitle": {
+        "message": "Épinglez DeepShare à votre barre d’outils"
+    },
+    "onboardingPinSubtitle": {
+        "message": "Épinglez l’extension pour accéder rapidement aux paramètres"
+    },
+    "onboardingPinStep1": {
+        "message": "Cliquez sur l’icône puzzle dans la barre d’outils du navigateur"
+    },
+    "onboardingPinStep2": {
+        "message": "Trouvez DeepShare et cliquez sur l’icône d’épingle"
+    },
+    "onboardingPinStep3": {
+        "message": "Cliquez sur l’icône DeepShare à tout moment pour accéder aux paramètres"
+    },
+    "onboardingFinish": {
+        "message": "Compris !"
+    },
+    "onboardingBack": {
+        "message": "Retour"
+    },
+    "onboardingLearnMoreUsageText": {
+        "message": "En savoir plus sur l’utilisation de l’extension :"
+    },
+    "onboardingLearnMoreUsageLink": {
+        "message": "Voir les tutoriels"
+    },
+    "onboardingRefreshHint": {
+        "message": "Pour une première utilisation, veuillez actualiser toutes les conversations IA ouvertes."
+    },
+    "scrollCollecting": {
+        "message": "Défilement en cours pour collecter les messages, veuillez patienter..."
     }
 }

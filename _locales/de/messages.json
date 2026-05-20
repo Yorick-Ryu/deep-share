@@ -373,5 +373,149 @@
     },
     "acknowledgmentText": {
         "message": "Danke an alle, die Vorschläge für DeepShare geteilt haben! Viele Funktionen entstehen aus echten Benutzerbedürfnissen. Lassen wir gemeinsam die Produktivität steigen und sparen Zeit für die wirklich wichtigen Dinge im Leben."
+    },
+    "referenceSources": {
+        "message": "Referenzen"
+    },
+    "unusedSources": {
+        "message": "Geprüfte, aber nicht verwendete Quellen"
+    },
+    "saveAsMarkdown": {
+        "message": "Als Markdown speichern"
+    },
+    "otherSettingsTabLabel": {
+        "message": "Weitere Einstellungen"
+    },
+    "otherSettingsTitle": {
+        "message": "Weitere Einstellungen"
+    },
+    "geminiSettingsTitle": {
+        "message": "Gemini"
+    },
+    "exportGeminiSourcesLabel": {
+        "message": "Deep-Research-Quellen exportieren"
+    },
+    "exportGeminiSourcesHint": {
+        "message": "Referenzquellen beim Exportieren von Gemini-Deep-Research-Berichten einschließen"
+    },
+    "includeGeminiChatLinkLabel": {
+        "message": "Chat-Link exportieren"
+    },
+    "includeGeminiChatLinkHint": {
+        "message": "Exportierte Inhalte enthalten den Link zur ursprünglichen Konversation"
+    },
+    "itemsSelected": {
+        "message": "$COUNT$ Elemente ausgewählt",
+        "description": "Anzahl ausgewählter Elemente in der Gemini-Auswahlleiste",
+        "placeholders": {
+        "COUNT": {
+            "content": "$1"
+        }
+        }
+    },
+    "selectAllQuestions": {
+        "message": "Alle Fragen auswählen"
+    },
+    "confirmExport": {
+        "message": "Export bestätigen"
+    },
+    "cancelButton": {
+        "message": "Abbrechen"
+    },
+    "roleUser": {
+        "message": "Benutzer"
+    },
+    "roleAssistant": {
+        "message": "Assistent"
+    },
+    "exportedViaDeepShare": {
+        "message": "Exportiert über DeepShare"
+    },
+    "geminiConversation": {
+        "message": "Gemini-Konversation"
+    },
+    "sourceConversationLabel": {
+        "message": "Quelle"
+    },
+    "languageSettingsTitle": {
+        "message": "Sprache"
+    },
+    "languageSelectLabel": {
+        "message": "Anzeigesprache"
+    },
+    "languageAuto": {
+        "message": "Automatisch (Browserstandard)"
+    },
+    "languageHint": {
+        "message": "Wähle deine bevorzugte Anzeigesprache"
+    },
+    "networkError": {
+        "message": "Konvertierung fehlgeschlagen, bitte überprüfe deine Netzwerkverbindung"
+    },
+    "onboardingWelcomeTitle": {
+        "message": "Willkommen bei DeepShare!"
+    },
+    "onboardingWelcomeSubtitle": {
+        "message": "Lass uns das richtige Formel-Format auswählen und die Erweiterung anheften"
+    },
+    "onboardingSelectionTitle": {
+        "message": "Wähle dein Formel-Format"
+    },
+    "onboardingSelectionDescription": {
+        "message": "Du kannst dies später in den Erweiterungseinstellungen ändern"
+    },
+    "onboardingMathMLDescription": {
+        "message": "Perfekt für Microsoft-Word-Benutzer"
+    },
+    "onboardingLaTeXDescription": {
+        "message": "Für WPS-, MathType- und Overleaf-Benutzer"
+    },
+    "onboardingDollarLatexDescription": {
+        "message": "Für Lark-, Notion- und Obsidian-Benutzer"
+    },
+    "onboardingRecommended": {
+        "message": "Empfohlen"
+    },
+    "onboardingLearnMoreText": {
+        "message": "Mehr über das Kopieren von Formeln erfahren:"
+    },
+    "onboardingLearnMoreLink": {
+        "message": "Tutorial ansehen"
+    },
+    "onboardingContinue": {
+        "message": "Weiter"
+    },
+    "onboardingPinTitle": {
+        "message": "DeepShare an deine Symbolleiste anheften"
+    },
+    "onboardingPinSubtitle": {
+        "message": "Heften Sie die Erweiterung an, um schnellen Zugriff auf die Einstellungen zu erhalten"
+    },
+    "onboardingPinStep1": {
+        "message": "Klicke auf das Puzzle-Symbol in der Browser-Symbolleiste"
+    },
+    "onboardingPinStep2": {
+        "message": "Finde DeepShare und klicke auf das Stecknadel-Symbol"
+    },
+    "onboardingPinStep3": {
+        "message": "Klicke jederzeit auf das DeepShare-Symbol, um auf die Einstellungen zuzugreifen"
+    },
+    "onboardingFinish": {
+        "message": "Verstanden!"
+    },
+    "onboardingBack": {
+        "message": "Zurück"
+    },
+    "onboardingLearnMoreUsageText": {
+        "message": "Mehr über die Verwendung der Erweiterung erfahren:"
+    },
+    "onboardingLearnMoreUsageLink": {
+        "message": "Tutorials ansehen"
+    },
+    "onboardingRefreshHint": {
+        "message": "Bitte aktualisiere für die erste Nutzung alle geöffneten KI-Konversationen."
+    },
+    "scrollCollecting": {
+        "message": "Nachrichten werden gesammelt, bitte warten..."
     }
 }
