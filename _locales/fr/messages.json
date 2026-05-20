@@ -162,7 +162,7 @@
         "message": "Expire le {date}"
     },
     "apiKeyHint": {
-        "message": "Acheter une clé API ? <a href=\"https://ds.rick216.cn/en/price.html\" target=\"_blank\">Cliquez ici</a>"
+        "message": "Besoin d'acheter une clé API ? <a href=\"https://ds.rick216.cn/en/price.html\" target=\"_blank\">Cliquez ici</a>"
     },
     "apiKeyMissing": {
         "message": "Veuillez cliquer sur l’icône de l’extension pour acheter et saisir une clé API afin d’utiliser la fonction de conversion de documents."
@@ -174,7 +174,7 @@
         "message": "Compatible avec Grok, Claude, Meta AI, etc. Copiez votre conversation dans la zone de texte Markdown, puis cliquez sur « Convertir en document » pour télécharger un document Word joliment formaté avec prise en charge des formules !"
     },
     "manualConversionTitle": {
-        "message": "Coller un chat IA"
+        "message": "Coller une Conversation IA"
     },
     "markdownInputLabel": {
         "message": "Texte Markdown"
@@ -192,7 +192,7 @@
         "message": "Veuillez saisir du texte Markdown"
     },
     "manualDocxSettings": {
-        "message": "Coller un chat IA"
+        "message": "Coller une Conversation IA"
     },
     "formulaTabLabel": {
         "message": "Copie de formule"
@@ -270,7 +270,7 @@
         "message": "Traiter les sauts de ligne simples comme des retours à la ligne forcés"
     },
     "disableAutoNumberingLabel": {
-        "message": "Désactiver la numérotation automatique"
+        "message": "Sans numérotation auto"
     },
     "disableAutoNumberingTooltip": {
         "message": "Les listes ordonnées sont converties en texte brut avec numérotation"
@@ -384,7 +384,7 @@
         "message": "Inclure les sources de référence lors de l’export des rapports Gemini Deep Research"
     },
     "includeGeminiChatLinkLabel": {
-        "message": "Exporter le lien du chat"
+        "message": "Exporter le lien de la conversation"
     },
     "includeGeminiChatLinkHint": {
         "message": "Le contenu exporté inclut le lien vers la conversation source"
