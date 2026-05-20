@@ -46,6 +46,8 @@ A lightweight browser extension designed for AI users to easily copy formulas fr
 | Yi Xiao | ✓ | Manual paste | ✗ |
 | Bot.n | ✓ | Manual paste | ✗ |
 | Zhihu | ✓ | ✗ | ✗ |
+| Perplexity | ✓ | ✗ | ✗ |
+| Claude | ✓ | ✗ | ✗ |
 
 - Note: Manual paste functionality means you can copy the Markdown text from AI responses into the extension to convert it to a Word document. 
 

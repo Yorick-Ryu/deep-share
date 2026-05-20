@@ -1,9 +1,9 @@
 {
     "extensionName": {
-        "message": "DeepShare : Exporter les chats IA vers Word"
+        "message": "DeepShare : exporter les discussions IA en Word"
     },
     "extensionDescription": {
-        "message": "Exportez les conversations IA de DeepSeek, ChatGPT, Gemini, Grok... vers des documents Word, copiez les formules ; captures d'écran longues des chats DeepSeek."
+        "message": "Exportez les conversations IA de DeepSeek, ChatGPT, Gemini, Grok… vers des documents Word, copiez les formules et capturez de longues captures d’écran des discussions DeepSeek."
     },
     "shareButton": {
         "message": "Partager la conversation"
@@ -21,7 +21,7 @@
         "message": "Word"
     },
     "wordExportInfo": {
-        "message": "Cliquez sur le bouton télécharger ou copier pour exporter les questions et les réponses IA vers un document Word"
+        "message": "Cliquez sur Télécharger ou Copier pour exporter les questions des utilisateurs et les réponses de l’IA dans un document Word."
     },
     "noAiResponses": {
         "message": "Aucune réponse IA trouvée"
@@ -33,28 +33,28 @@
         "message": "Copier"
     },
     "docxButton": {
-        "message": "Enregistrer en Word"
+        "message": "Enregistrer en DOCX"
     },
     "docxFeatureExplanation": {
-        "message": "Configurer la conversion IA vers Word ; les captures et copies de formules sont gratuites et sans configuration."
+        "message": "Configurez la conversion IA vers Word ; les captures d’écran et la copie des formules sont gratuites et ne nécessitent aucune configuration."
     },
     "docxConversionSuccess": {
-        "message": "Enregistré avec succès en tant que document Word !"
+        "message": "Document Word enregistré avec succès !"
     },
     "docxConverting": {
-        "message": "Enregistrement en tant que document Word, veuillez ne pas fermer cette fenêtre !"
+        "message": "Enregistrement du document Word en cours. Ne fermez pas la fenêtre."
     },
     "docxConversionError": {
-        "message": "Échec de l'enregistrement du document Word, veuillez vérifier votre réseau ou rafraîchir la page et réessayer !"
+        "message": "Impossible d’enregistrer le document Word. Vérifiez votre connexion réseau ou actualisez la page puis réessayez."
     },
     "watermarkSettings": {
         "message": "Paramètres du filigrane"
     },
     "screenshotSettings": {
-        "message": "Capture d'écran"
+        "message": "Capture de la conversation"
     },
     "docxSettings": {
-        "message": "Chat IA vers Word"
+        "message": "Conversation IA vers Word"
     },
     "docxServerUrlLabel": {
         "message": "URL du serveur"
@@ -84,13 +84,13 @@
         "message": "Cliquez pour copier la formule"
     },
     "generatingImage": {
-        "message": "Génération de la capture d'écran..."
+        "message": "Création de la capture d’écran…"
     },
     "generateFailed": {
-        "message": "Échec de la capture d'écran, veuillez actualiser la page !"
+        "message": "Échec de la capture d’écran. Essayez d’actualiser la page."
     },
     "defaultWatermark": {
-        "message": "Contenu généré par DeepSeek AI, capturé par l'extension DeepShare"
+        "message": "Contenu généré par DeepSeek AI, capturé avec l’extension DeepShare"
     },
     "settingsButton": {
         "message": "Paramètres du filigrane"
@@ -99,10 +99,10 @@
         "message": "Masquer le filigrane par défaut"
     },
     "customWatermarkLabel": {
-        "message": "Texte de filigrane personnalisé (optionnel)"
+        "message": "Texte personnalisé du filigrane (optionnel)"
     },
     "customWatermarkPlaceholder": {
-        "message": "Entrez le filigrane personnalisé ici"
+        "message": "Entrez un texte de filigrane personnalisé"
     },
     "saveSettings": {
         "message": "Enregistrer les paramètres"
@@ -111,10 +111,10 @@
         "message": "Enregistré"
     },
     "sponsorTitle": {
-        "message": "Merci d'utiliser DeepShare ! Si vous le trouvez utile, n'hésitez pas à nous soutenir via le QR code WeChat 😊"
+        "message": "Merci d’utiliser DeepShare ! Si l’extension vous est utile, vous pouvez soutenir le projet via le QR code WeChat 😊"
     },
     "selectButton": {
-        "message": "Sélectionner les messages"
+        "message": "Sélectionner des messages"
     },
     "selectAllButton": {
         "message": "Tout sélectionner"
@@ -126,7 +126,7 @@
         "message": "Tout désélectionner"
     },
     "loadingHistory": {
-        "message": "Chargement..."
+        "message": "Chargement…"
     },
     "noMessageSelected": {
         "message": "Veuillez sélectionner au moins un message"
@@ -147,40 +147,40 @@
         "message": "Quota de conversion"
     },
     "dailyQuotaLabel": {
-        "message": "Quota journalier"
+        "message": "Quota quotidien"
     },
     "addonQuotaLabel": {
         "message": "Quota supplémentaire"
     },
     "dailyResetNote": {
-        "message": "Réinitialisé quotidiennement"
+        "message": "Réinitialisé chaque jour"
     },
     "subscriptionExpiryNote": {
-        "message": "Réinitialisé quotidiennement · Jusqu'au {date}"
+        "message": "Réinitialisé chaque jour · Jusqu'au {date}"
     },
     "addonExpiryNote": {
         "message": "Expire le {date}"
     },
     "apiKeyHint": {
-        "message": "Acheter une clé API ? <a href=\"https://ds.rick216.cn/en/price.html\" target=\"_blank\">Cliquez ici</a>"
+        "message": "Besoin d'acheter une clé API ? <a href=\"https://ds.rick216.cn/en/price.html\" target=\"_blank\">Cliquez ici</a>"
     },
     "apiKeyMissing": {
-        "message": "Veuillez cliquer sur l'icône de l'extension pour acheter et entrer une clé API pour utiliser la conversion de documents"
+        "message": "Veuillez cliquer sur l’icône de l’extension pour acheter et saisir une clé API afin d’utiliser la fonction de conversion de documents."
     },
     "apiKeyMissingShort": {
-        "message": "Veuillez <a href=\"https://ds.rick216.cn/en/price.html\" target=\"_blank\">acheter</a> et entrer une clé API"
+        "message": "Veuillez <a href=\"https://ds.rick216.cn/en/price.html\" target=\"_blank\">acheter</a> et saisir une clé API"
     },
     "manualConversionExplanation": {
-        "message": "Prend en charge Grok, Claude, Meta AI, etc. Copiez votre conversation dans la zone Markdown, cliquez sur « Convertir en document » pour télécharger un document Word joliment formaté avec support des formules !"
+        "message": "Compatible avec Grok, Claude, Meta AI, etc. Copiez votre conversation dans la zone de texte Markdown, puis cliquez sur « Convertir en document » pour télécharger un document Word joliment formaté avec prise en charge des formules !"
     },
     "manualConversionTitle": {
-        "message": "Coller le chat IA"
+        "message": "Coller une Conversation IA"
     },
     "markdownInputLabel": {
         "message": "Texte Markdown"
     },
     "markdownInputPlaceholder": {
-        "message": "Collez le texte au format Markdown ici..."
+        "message": "Collez ici le texte au format Markdown..."
     },
     "convertToDocx": {
         "message": "Convertir en document"
@@ -189,28 +189,28 @@
         "message": "Effacer"
     },
     "emptyMarkdownError": {
-        "message": "Veuillez entrer du texte Markdown"
+        "message": "Veuillez saisir du texte Markdown"
     },
     "manualDocxSettings": {
-        "message": "Coller le chat IA"
+        "message": "Coller une Conversation IA"
     },
     "formulaTabLabel": {
         "message": "Copie de formule"
     },
     "formulaSettingsTitle": {
-        "message": "Paramètres de copie de formule"
+        "message": "Paramètres de copie des formules"
     },
     "formulaCopyTutorialText": {
-        "message": "En savoir plus sur la copie de formules :"
+        "message": "En savoir plus sur la copie des formules :"
     },
     "formulaCopyTutorialLink": {
         "message": "Voir le tutoriel"
     },
     "enableFormulaCopyLabel": {
-        "message": "Activer la copie de formule"
+        "message": "Activer la copie des formules"
     },
     "formulaFormatLabel": {
-        "message": "Format de copie de formule"
+        "message": "Format de copie des formules"
     },
     "formatMathMLLabel": {
         "message": "MathML"
@@ -237,7 +237,7 @@
         "message": "MathJax offre une meilleure compatibilité, KaTeX est plus rapide"
     },
     "screenshotMethodLabel": {
-        "message": "Méthode de capture d'écran"
+        "message": "Méthode de capture"
     },
     "methodDomToImageLabel": {
         "message": "dom-to-image"
@@ -246,16 +246,16 @@
         "message": "html2canvas"
     },
     "screenshotMethodHint": {
-        "message": "Sélectionnez la méthode de capture d'écran. Si une méthode ne fonctionne pas, essayez l'autre. Veuillez actualiser la page après le changement."
+        "message": "Sélectionnez la méthode utilisée pour les captures d’écran. Si une méthode ne fonctionne pas, essayez l’autre. Veuillez actualiser la page après le changement."
     },
     "removeDividersLabel": {
         "message": "Supprimer les séparateurs"
     },
     "removeEmojisLabel": {
-        "message": "Supprimer les émojis"
+        "message": "Supprimer les emojis"
     },
     "convertMermaidLabel": {
-        "message": "Conversion Mermaid"
+        "message": "Convertir Mermaid"
     },
     "compatModeLabel": {
         "message": "Mode compatibilité"
@@ -263,59 +263,47 @@
     "compatModeTooltip": {
         "message": "Prend en charge le Markdown non standard"
     },
-    "compatModeDocUrl": {
-        "message": "https://docs.deepshare.app/en/faq/compat-mode"
-    },
     "hardLineBreaksLabel": {
-        "message": "Hard Line Breaks"
+        "message": "Sauts de ligne forcés"
     },
     "hardLineBreaksTooltip": {
-        "message": "Treat single line breaks as hard breaks"
-    },
-    "hardLineBreaksDocUrl": {
-        "message": "https://docs.deepshare.app/en/faq/hard-line-breaks"
+        "message": "Traiter les sauts de ligne simples comme des retours à la ligne forcés"
     },
     "disableAutoNumberingLabel": {
-        "message": "Désact. num. auto."
+        "message": "Sans numérotation auto"
     },
     "disableAutoNumberingTooltip": {
-        "message": "Listes ordonnées converties en paragraphes de texte brut avec numérotation"
-    },
-    "disableAutoNumberingDocUrl": {
-        "message": "https://docs.deepshare.app/en/faq/disable-auto-numbering"
+        "message": "Les listes ordonnées sont converties en texte brut avec numérotation"
     },
     "getClipboardError": {
-        "message": "Échec de la récupération du contenu"
+        "message": "Impossible de récupérer le contenu"
     },
     "clipboardPermissionError": {
-        "message": "Échec de la récupération du contenu, veuillez accorder l'autorisation de lire le presse-papiers"
+        "message": "Impossible de récupérer le contenu, veuillez autoriser l’accès en lecture au presse-papiers"
     },
     "refreshButton": {
         "message": "Actualiser"
     },
     "purchaseQuota": {
-        "message": "Acheter un quota"
+        "message": "Acheter du quota"
     },
     "purchaseAddonQuota": {
-        "message": "Acheter un quota complémentaire"
+        "message": "Acheter un quota supplémentaire"
     },
     "purchaseSubscription": {
         "message": "Acheter un abonnement"
     },
     "renewSubscription": {
-        "message": "Renouveler l'abonnement"
+        "message": "Renouveler l’abonnement"
     },
     "manageSubscription": {
-        "message": "Gérer l'abonnement"
-    },
-    "pricePageUrl": {
-        "message": "https://ds.rick216.cn/en/price.html"
+        "message": "Gérer l’abonnement"
     },
     "subscriptionExpiredDays": {
-        "message": "Expiré depuis {days} jours"
+        "message": "Expiré il y a {days} jours"
     },
     "expirationLabel": {
-        "message": "Valide jusqu'au :"
+        "message": "Valide jusqu’au :"
     },
     "unknown": {
         "message": "Inconnu"
@@ -327,31 +315,31 @@
         "message": "Universel"
     },
     "saveAsImageButton": {
-        "message": "Enregistrer en image"
+        "message": "Enregistrer comme image"
     },
     "screenshotInitiated": {
-        "message": "Génération de la capture d'écran..."
+        "message": "Génération de la capture d’écran..."
     },
     "screenshotSuccess": {
-        "message": "Capture d'écran enregistrée"
+        "message": "Capture d’écran enregistrée"
     },
     "screenshotFailed": {
-        "message": "Échec de la capture d'écran, essayez d'actualiser ?"
+        "message": "Échec de la capture d’écran, essayer d’actualiser ?"
     },
     "conversationTooLong": {
-        "message": "La conversation est trop longue pour être capturée dans une seule image. Veuillez sélectionner moins de messages et réessayer."
+        "message": "La conversation est trop longue pour être capturée en une seule image. Veuillez sélectionner moins de messages et réessayer."
     },
     "imageCopied": {
         "message": "Image copiée dans le presse-papiers"
     },
     "imageCopyFailed": {
-        "message": "Échec de la copie de l'image dans le presse-papiers"
+        "message": "Impossible de copier l’image dans le presse-papiers"
     },
     "apiKeyError": {
-        "message": "Erreur de clé API ou expirée. Veuillez vérifier votre e-mail ou contacter le service client : contact@deepshare.app"
+        "message": "Erreur de clé API ou clé expirée. Veuillez vérifier vos e-mails ou contacter le support : contact@deepshare.app"
     },
     "quotaExceededError": {
-        "message": "Quota épuisé. Veuillez <a href=\"https://ds.rick216.cn/en/price.html\" target=\"_blank\">recharger</a>."
+        "message": "Quota dépassé. Veuillez <a href=\"https://ds.rick216.cn/en/price.html\" target=\"_blank\">recharger</a>."
     },
     "aboutTabTitle": {
         "message": "À propos de DeepShare"
@@ -362,9 +350,6 @@
     "documentationLabel": {
         "message": "Documentation :"
     },
-    "documentationUrl": {
-        "message": "https://docs.deepshare.app/en"
-    },
     "githubLabel": {
         "message": "GitHub :"
     },
@@ -372,7 +357,7 @@
         "message": "E-mail du développeur :"
     },
     "acknowledgmentText": {
-        "message": "Merci à tous ceux qui ont partagé leurs suggestions pour DeepShare ! De nombreuses fonctionnalités sont nées de vrais besoins utilisateurs. Améliorons ensemble la productivité et économisons du temps pour ce qui compte vraiment."
+        "message": "Merci à toutes les personnes qui ont partagé leurs suggestions pour DeepShare ! De nombreuses fonctionnalités sont nées de vrais besoins utilisateurs. Augmentons ensemble notre productivité et gagnons du temps pour ce qui compte vraiment dans la vie."
     },
     "referenceSources": {
         "message": "Références"
@@ -393,30 +378,31 @@
         "message": "Gemini"
     },
     "exportGeminiSourcesLabel": {
-        "message": "Exporter les sources de recherche approfondie"
+        "message": "Exporter les sources Deep Research"
     },
     "exportGeminiSourcesHint": {
-        "message": "Inclure les sources de référence lors de l'exportation des rapports de recherche approfondie Gemini"
+        "message": "Inclure les sources de référence lors de l’export des rapports Gemini Deep Research"
     },
     "includeGeminiChatLinkLabel": {
-        "message": "Exporter le lien du chat"
+        "message": "Exporter le lien de la conversation"
     },
     "includeGeminiChatLinkHint": {
         "message": "Le contenu exporté inclut le lien vers la conversation source"
     },
     "itemsSelected": {
-        "message": "Sélectionné $COUNT$ éléments",
+        "message": "$COUNT$ éléments sélectionnés",
+        "description": "Nombre d’éléments sélectionnés dans la barre de sélection Gemini",
         "placeholders": {
-            "COUNT": {
-                "content": "$1"
-            }
+        "COUNT": {
+            "content": "$1"
+        }
         }
     },
     "selectAllQuestions": {
         "message": "Sélectionner toutes les questions"
     },
     "confirmExport": {
-        "message": "Confirmer l'exportation"
+        "message": "Confirmer l’export"
     },
     "cancelButton": {
         "message": "Annuler"
@@ -440,28 +426,28 @@
         "message": "Langue"
     },
     "languageSelectLabel": {
-        "message": "Langue d'affichage"
+        "message": "Langue d’affichage"
     },
     "languageAuto": {
-        "message": "Auto (Défaut du navigateur)"
+        "message": "Automatique (par défaut du navigateur)"
     },
     "languageHint": {
-        "message": "Sélectionnez votre langue d'affichage préférée"
+        "message": "Sélectionnez votre langue d’affichage préférée"
     },
     "networkError": {
-        "message": "Échec de la conversion, veuillez vérifier votre réseau"
+        "message": "Échec de la conversion, veuillez vérifier votre connexion réseau"
     },
     "onboardingWelcomeTitle": {
-        "message": "Bienvenue dans DeepShare !"
+        "message": "Bienvenue sur DeepShare !"
     },
     "onboardingWelcomeSubtitle": {
-        "message": "Choisissons le bon format de formule et épinglons l'extension"
+        "message": "Choisissons le bon format de formule et épinglons l’extension"
     },
     "onboardingSelectionTitle": {
         "message": "Choisissez votre format de formule"
     },
     "onboardingSelectionDescription": {
-        "message": "Vous pourrez modifier cela plus tard dans les paramètres de l'extension"
+        "message": "Vous pourrez modifier cela plus tard dans les paramètres de l’extension"
     },
     "onboardingMathMLDescription": {
         "message": "Parfait pour les utilisateurs de Microsoft Word"
@@ -476,7 +462,7 @@
         "message": "Recommandé"
     },
     "onboardingLearnMoreText": {
-        "message": "En savoir plus sur la copie de formules :"
+        "message": "En savoir plus sur la copie des formules :"
     },
     "onboardingLearnMoreLink": {
         "message": "Voir le tutoriel"
@@ -485,19 +471,19 @@
         "message": "Continuer"
     },
     "onboardingPinTitle": {
-        "message": "Épingler DeepShare dans votre barre d'outils"
+        "message": "Épinglez DeepShare à votre barre d’outils"
     },
     "onboardingPinSubtitle": {
-        "message": "Épinglez l'extension pour accéder rapidement aux paramètres"
+        "message": "Épinglez l’extension pour accéder rapidement aux paramètres"
     },
     "onboardingPinStep1": {
-        "message": "Cliquez sur l'icône de puzzle dans votre barre d'outils"
+        "message": "Cliquez sur l’icône puzzle dans la barre d’outils du navigateur"
     },
     "onboardingPinStep2": {
-        "message": "Trouvez DeepShare et cliquez sur l'icône d'épingle"
+        "message": "Trouvez DeepShare et cliquez sur l’icône d’épingle"
     },
     "onboardingPinStep3": {
-        "message": "Cliquez sur l'icône DeepShare à tout moment pour accéder aux paramètres"
+        "message": "Cliquez sur l’icône DeepShare à tout moment pour accéder aux paramètres"
     },
     "onboardingFinish": {
         "message": "Compris !"
@@ -506,15 +492,15 @@
         "message": "Retour"
     },
     "onboardingLearnMoreUsageText": {
-        "message": "En savoir plus sur l'utilisation de l'extension :"
+        "message": "En savoir plus sur l’utilisation de l’extension :"
     },
     "onboardingLearnMoreUsageLink": {
         "message": "Voir les tutoriels"
     },
     "onboardingRefreshHint": {
-        "message": "Pour la première utilisation, veuillez actualiser toute conversation IA ouverte."
+        "message": "Pour une première utilisation, veuillez actualiser toutes les conversations IA ouvertes."
     },
     "scrollCollecting": {
-        "message": "Défilement pour collecter les messages, veuillez patienter..."
+        "message": "Défilement en cours pour collecter les messages, veuillez patienter..."
     }
 }

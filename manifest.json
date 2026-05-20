@@ -38,7 +38,9 @@
         "https://chat.yixiaai.com/chat/?*",
         "https://www.wanzhi.com/chat/*",
         "https://www.zhihu.com/*",
-        "https://gemini.google.com/*"
+        "https://gemini.google.com/*",
+        "https://www.perplexity.ai/*",
+        "https://claude.ai/*"
     ],
     "background": {
         "service_worker": "background.js"
@@ -165,6 +167,40 @@
                 "scripts/injectGeminiButton.js",
                 "scripts/injectGeminiCanvasButton.js",
                 "scripts/injectGeminiExportMenu.js"
+            ]
+        },
+        {
+            "matches": [
+                "https://www.perplexity.ai/*"
+                ],
+            "css": [
+                "styles/style.css"
+                ],
+            "js": [
+                "lib/mathjax-config.js",
+                "lib/mathjax4.js",
+                "lib/katex.min.js",
+                "scripts/formulaConverter.js",
+                "scripts/notifications.js",
+                "scripts/copyKatex.js",
+                "scripts/copyKatex4Perplexity.js"
+                ]
+        },
+        {
+            "matches": [
+                "https://claude.ai/*"
+            ],
+            "css": [
+                "styles/style.css"
+            ],
+            "js": [
+                "lib/mathjax-config.js",
+                "lib/mathjax4.js",
+                "lib/katex.min.js",
+                "scripts/formulaConverter.js",
+                "scripts/notifications.js",
+                "scripts/copyKatex4Claude.js",
+                "scripts/injectClaudeMarkdownButton.js"
             ]
         }
     ]
