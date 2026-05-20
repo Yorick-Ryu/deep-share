@@ -39,7 +39,8 @@
         "https://www.wanzhi.com/chat/*",
         "https://www.zhihu.com/*",
         "https://gemini.google.com/*",
-        "https://www.perplexity.ai/"
+        "https://www.perplexity.ai/*",
+        "https://claude.ai/*"
     ],
     "background": {
         "service_worker": "background.js"
@@ -184,6 +185,22 @@
                 "scripts/copyKatex.js",
                 "scripts/copyKatex4Perplexity.js"
                 ]
+        },
+        {
+            "matches": [
+                "https://claude.ai/*"
+            ],
+            "css": [
+                "styles/style.css"
+            ],
+            "js": [
+                "lib/mathjax-config.js",
+                "lib/mathjax4.js",
+                "lib/katex.min.js",
+                "scripts/formulaConverter.js",
+                "scripts/notifications.js",
+                "scripts/copyKatex4Claude.js"
+            ]
         }
     ]
 }
