@@ -263,6 +263,9 @@
     "compatModeTooltip": {
         "message": "Prend en charge le Markdown non standard"
     },
+    "compatModeDocUrl": {
+        "message": "https://docs.deepshare.app/en/faq/compat-mode"
+    },
     "hardLineBreaksLabel": {
         "message": "Sauts de ligne forcés"
     },
@@ -304,6 +307,9 @@
     },
     "manageSubscription": {
         "message": "Gérer l’abonnement"
+    },
+    "pricePageUrl": {
+        "message": "https://ds.rick216.cn/en/price.html"
     },
     "subscriptionExpiredDays": {
         "message": "Expiré il y a {days} jours"
