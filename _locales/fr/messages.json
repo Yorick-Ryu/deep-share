@@ -45,7 +45,7 @@
         "message": "Enregistrement du document Word en cours. Ne fermez pas la fenêtre."
     },
     "docxConversionError": {
-        "message": "Impossible d’enregistrer le document Word. Vérifiez votre connexion réseau ou actualisez la page puis réessayez."
+        "message": "Impossible d’enregistrer le document Word. Veuillez vérifier votre connexion réseau ou actualisez la page puis réessayez."
     },
     "watermarkSettings": {
         "message": "Paramètres du filigrane"
@@ -87,7 +87,7 @@
         "message": "Création de la capture d’écran…"
     },
     "generateFailed": {
-        "message": "Échec de la capture d’écran. Essayez d’actualiser la page."
+        "message": "Échec de la capture d’écran. Veuillez actualiser la page."
     },
     "defaultWatermark": {
         "message": "Contenu généré par DeepSeek AI, capturé avec l’extension DeepShare"
@@ -252,10 +252,10 @@
         "message": "Supprimer les séparateurs"
     },
     "removeEmojisLabel": {
-        "message": "Supprimer les emojis"
+        "message": "Supprimer les émojis"
     },
     "convertMermaidLabel": {
-        "message": "Convertir Mermaid"
+        "message": "Conversion Mermaid"
     },
     "compatModeLabel": {
         "message": "Mode compatibilité"
@@ -269,11 +269,17 @@
     "hardLineBreaksTooltip": {
         "message": "Traiter les sauts de ligne simples comme des retours à la ligne forcés"
     },
+    "hardLineBreaksDocUrl": {
+        "message": "https://docs.deepshare.app/en/faq/hard-line-breaks"
+    },
     "disableAutoNumberingLabel": {
         "message": "Sans numérotation auto"
     },
     "disableAutoNumberingTooltip": {
         "message": "Les listes ordonnées sont converties en texte brut avec numérotation"
+    },
+    "disableAutoNumberingDocUrl": {
+        "message": "https://docs.deepshare.app/en/faq/disable-auto-numbering"
     },
     "getClipboardError": {
         "message": "Impossible de récupérer le contenu"
@@ -349,6 +355,9 @@
     },
     "documentationLabel": {
         "message": "Documentation :"
+    },
+    "documentationUrl": {
+        "message": "https://docs.deepshare.app/en"
     },
     "githubLabel": {
         "message": "GitHub :"
