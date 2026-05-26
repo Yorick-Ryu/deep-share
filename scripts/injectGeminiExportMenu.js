@@ -792,7 +792,39 @@
         return { signature, count: topLevel.length };
     }
 
-    // Click the top node to trigger loading more history
+    function findGeminiHistoryScroller() {
+        return document.querySelector('infinite-scroller[data-test-id="chat-history-container"]') ||
+            document.querySelector('[data-test-id="chat-history-container"]') ||
+            document.querySelector('infinite-scroller.chat-history') ||
+            document.querySelector('.chat-history');
+    }
+
+    function getHistoryLoadState() {
+        const scroller = findGeminiHistoryScroller();
+        return {
+            turns: getConversationTurns().length,
+            scrollHeight: scroller ? scroller.scrollHeight : 0,
+            scrollTop: scroller ? scroller.scrollTop : 0,
+            fingerprint: computeDOMFingerprint()
+        };
+    }
+
+    // Scroll the real Gemini history container to trigger loading older messages.
+    function scrollHistoryToTop() {
+        const scroller = findGeminiHistoryScroller();
+        if (!scroller) return false;
+
+        try {
+            scroller.scrollTo({ top: 0, behavior: 'auto' });
+            scroller.dispatchEvent(new Event('scroll', { bubbles: true }));
+            return true;
+        } catch (e) {
+            console.warn('DeepShare: Failed to scroll Gemini history container', e);
+            return false;
+        }
+    }
+
+    // Click the top node to trigger loading more history in older Gemini UIs.
     function clickTopNode() {
         const selector = getFingerprintSelectors().join(',');
         const nodes = Array.from(document.querySelectorAll(selector));
@@ -820,17 +852,24 @@
         return false;
     }
 
-    async function waitForDOMChange(beforeFingerprint, timeoutMs = 6000) {
+    function hasHistoryLoadStateChanged(beforeState, currentState) {
+        return currentState.turns !== beforeState.turns ||
+            currentState.scrollHeight !== beforeState.scrollHeight ||
+            currentState.fingerprint.signature !== beforeState.fingerprint.signature ||
+            currentState.fingerprint.count !== beforeState.fingerprint.count;
+    }
+
+    async function waitForHistoryLoadChange(beforeState, timeoutMs = 6000) {
         return new Promise((resolve) => {
             const start = Date.now();
             const pollInterval = setInterval(() => {
-                const current = computeDOMFingerprint();
-                if (current.signature !== beforeFingerprint.signature || current.count !== beforeFingerprint.count) {
+                const current = getHistoryLoadState();
+                if (hasHistoryLoadStateChanged(beforeState, current)) {
                     clearInterval(pollInterval);
-                    resolve(true); // Changed
+                    resolve(true);
                 } else if (Date.now() - start > timeoutMs) {
                     clearInterval(pollInterval);
-                    resolve(false); // Timed out without change
+                    resolve(false);
                 }
             }, 100);
         });
@@ -852,11 +891,11 @@
 
         while (attempt < maxAttempts) {
             attempt++;
-            const beforeFingerprint = computeDOMFingerprint();
+            const beforeState = getHistoryLoadState();
 
-            const clicked = clickTopNode();
-            if (!clicked) {
-                console.debug('DeepShare: Could not find top node to click, stopping auto-load.');
+            const triggered = scrollHistoryToTop() || clickTopNode();
+            if (!triggered) {
+                console.debug('DeepShare: Could not find history scroller or top node, stopping auto-load.');
                 break;
             }
 
@@ -865,12 +904,12 @@
                 textEl.textContent = chrome.i18n?.getMessage('loadingHistory') || 'Loading history...';
             }
 
-            // Wait up to 3 seconds for the DOM to change
-            console.debug(`DeepShare: Simulation click ${attempt}, waiting for DOM change...`);
-            const changed = await waitForDOMChange(beforeFingerprint, 3000);
+            // Wait up to 4 seconds for Gemini to append older history.
+            console.debug(`DeepShare: History load attempt ${attempt}, waiting for DOM change...`);
+            const changed = await waitForHistoryLoadChange(beforeState, 4000);
 
             if (!changed) {
-                console.debug('DeepShare: DOM did not change after click. Assuming all history is loaded.');
+                console.debug('DeepShare: History did not change after scroll. Assuming all history is loaded.');
                 break;
             }
 
