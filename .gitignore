@@ -30,6 +30,8 @@ yarn-error.log*
 package-lock.json
 
 # Build/Distribution files
+.output/
+.wxt/
 dist/
 build/
 *.zip
@@ -50,4 +52,3 @@ coverage/
 # Debug files
 debug.log
 chrome-debug.log
-
