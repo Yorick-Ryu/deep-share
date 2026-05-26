@@ -383,6 +383,12 @@
     "includeGeminiChatLinkHint": {
         "message": "匯出內容包含來源的對話連結"
     },
+    "geminiAutoScrollTimeoutLabel": {
+        "message": "自動捲動逾時"
+    },
+    "geminiAutoScrollTimeoutHint": {
+        "message": "每次自動上捲後，等待 Gemini 載入更多歷史的時間（3-10 秒）"
+    },
     "itemsSelected": {
         "message": "已選擇 $COUNT$ 項",
         "placeholders": {

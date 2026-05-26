@@ -106,6 +106,7 @@ function loadSettings(highlightApiKey = false, forceDocxTab = false) {
     'wordTemplateSelect',
     'exportGeminiSources',
     'includeGeminiChatLink',
+    'geminiAutoScrollTimeoutSeconds',
     'hardLineBreaks',
     'disableAutoNumbering',
     'preferredLanguage'
@@ -157,6 +158,9 @@ function loadSettings(highlightApiKey = false, forceDocxTab = false) {
 
     // Gemini Chat Link export setting
     document.getElementById('includeGeminiChatLink').checked = data.includeGeminiChatLink === true; // Default to false
+
+    // Gemini history auto-scroll timeout setting
+    document.getElementById('geminiAutoScrollTimeout').value = clampGeminiAutoScrollTimeout(data.geminiAutoScrollTimeoutSeconds);
 
     // Hard Line Breaks setting
     document.getElementById('hardLineBreaks').checked = !!data.hardLineBreaks; // Default to false
@@ -337,6 +341,7 @@ function setupAutoSave() {
     // Gemini settings
     document.getElementById('exportGeminiSources'),
     document.getElementById('includeGeminiChatLink'),
+    document.getElementById('geminiAutoScrollTimeout'),
     // Hard Line Breaks settings
     document.getElementById('hardLineBreaks'),
     // Disable Auto Numbering settings
@@ -554,6 +559,8 @@ function loadI18nText(errorMsg = null) {
   document.getElementById('exportGeminiSourcesHint').textContent = getMessage('exportGeminiSourcesHint') || 'Include reference sources when exporting Gemini Deep Research reports';
   document.getElementById('includeGeminiChatLinkLabel').textContent = getMessage('includeGeminiChatLinkLabel') || 'Export chat link';
   document.getElementById('includeGeminiChatLinkHint').textContent = getMessage('includeGeminiChatLinkHint') || 'Exported content includes the link to the source conversation';
+  document.getElementById('geminiAutoScrollTimeoutLabel').textContent = getMessage('geminiAutoScrollTimeoutLabel') || 'Auto-scroll timeout';
+  document.getElementById('geminiAutoScrollTimeoutHint').textContent = getMessage('geminiAutoScrollTimeoutHint') || 'How long to wait for Gemini to load more history after each auto-scroll (3-10 seconds)';
 
   // About tab
   document.getElementById('acknowledgmentText').textContent = getMessage('acknowledgmentText') || '感谢每一位为 DeepShare 提出建议的朋友！许多功能源于用户的真实需求，让我们一起提升效率，把节省的时间留给生活。';
@@ -616,6 +623,10 @@ function loadI18nText(errorMsg = null) {
 
 // Function to save settings
 function saveSettings() {
+  const geminiAutoScrollTimeoutInput = document.getElementById('geminiAutoScrollTimeout');
+  const geminiAutoScrollTimeoutSeconds = clampGeminiAutoScrollTimeout(geminiAutoScrollTimeoutInput.value);
+  geminiAutoScrollTimeoutInput.value = geminiAutoScrollTimeoutSeconds;
+
   // Get formula format from radio buttons
   let formulaFormat = 'mathml'; // 默认为 MathML
   if (document.getElementById('formatLaTeX').checked) {
@@ -672,6 +683,7 @@ function saveSettings() {
     // Gemini settings
     exportGeminiSources: document.getElementById('exportGeminiSources').checked,
     includeGeminiChatLink: document.getElementById('includeGeminiChatLink').checked,
+    geminiAutoScrollTimeoutSeconds: geminiAutoScrollTimeoutSeconds,
 
     // Language settings
     preferredLanguage: document.getElementById('languageSelect').value
@@ -699,6 +711,12 @@ function saveSettings() {
       setTimeout(checkQuota, 500);
     }
   });
+}
+
+function clampGeminiAutoScrollTimeout(value) {
+  const seconds = Number.parseInt(value, 10);
+  if (!Number.isFinite(seconds)) return 4;
+  return Math.min(10, Math.max(3, seconds));
 }
 
 /**

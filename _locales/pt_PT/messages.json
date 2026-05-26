@@ -404,6 +404,12 @@
     "includeGeminiChatLinkHint": {
         "message": "O conteúdo exportado inclui o link para a conversa de origem"
     },
+    "geminiAutoScrollTimeoutLabel": {
+        "message": "Tempo limite da deslocação automática"
+    },
+    "geminiAutoScrollTimeoutHint": {
+        "message": "Quanto tempo esperar que o Gemini carregue mais histórico após cada deslocação automática (3-10 segundos)"
+    },
     "itemsSelected": {
         "message": "Selecionado $COUNT$ itens",
         "placeholders": {

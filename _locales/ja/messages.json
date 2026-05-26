@@ -404,6 +404,12 @@
     "includeGeminiChatLinkHint": {
         "message": "エクスポートされるコンテンツに元の会話へのリンクが含まれます"
     },
+    "geminiAutoScrollTimeoutLabel": {
+        "message": "自動スクロールのタイムアウト"
+    },
+    "geminiAutoScrollTimeoutHint": {
+        "message": "自動スクロールごとに Gemini が履歴をさらに読み込むまで待つ時間（3-10秒）"
+    },
     "itemsSelected": {
         "message": "$COUNT$ 個を選択済み",
         "placeholders": {

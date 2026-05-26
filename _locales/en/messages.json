@@ -404,6 +404,12 @@
     "includeGeminiChatLinkHint": {
         "message": "Exported content includes the link to the source conversation"
     },
+    "geminiAutoScrollTimeoutLabel": {
+        "message": "Auto-scroll timeout"
+    },
+    "geminiAutoScrollTimeoutHint": {
+        "message": "How long to wait for Gemini to load more history after each auto-scroll (3-10 seconds)"
+    },
     "itemsSelected": {
         "message": "Selected $COUNT$ items",
         "description": "Selected count in Gemini selection bar",

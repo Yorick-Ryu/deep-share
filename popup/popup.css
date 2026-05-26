@@ -169,6 +169,7 @@ body {
 }
 
 #languageHint,
+#geminiAutoScrollTimeoutHint,
 #apiKeyHint {
   margin-top: 12px;
 }
@@ -204,7 +205,7 @@ body {
 label {
   display: block;
   margin-bottom: 12px;
-  color: var(--text-secondary);
+  color: var(--text-color);
   font-size: 12px;
 }
 
@@ -255,6 +256,7 @@ label {
 }
 
 input[type="text"],
+input[type="number"],
 input[type="password"] {
   width: 100%;
   padding: 8px;
@@ -287,12 +289,14 @@ input[type="password"] {
 }
 
 input[type="text"]::placeholder,
+input[type="number"]::placeholder,
 input[type="password"]::placeholder {
   color: var(--text-secondary);
   opacity: 0.7;
 }
 
 input[type="text"]:disabled,
+input[type="number"]:disabled,
 input[type="password"]:disabled {
   opacity: 0.6;
   cursor: not-allowed;

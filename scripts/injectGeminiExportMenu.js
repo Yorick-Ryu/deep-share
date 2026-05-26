@@ -875,6 +875,20 @@
         });
     }
 
+    async function getGeminiAutoScrollTimeoutMs() {
+        return new Promise((resolve) => {
+            try {
+                chrome.storage.sync.get(['geminiAutoScrollTimeoutSeconds'], (data) => {
+                    const seconds = Number.parseInt(data.geminiAutoScrollTimeoutSeconds, 10);
+                    const clampedSeconds = Number.isFinite(seconds) ? Math.min(10, Math.max(3, seconds)) : 4;
+                    resolve(clampedSeconds * 1000);
+                });
+            } catch (e) {
+                resolve(4000);
+            }
+        });
+    }
+
     async function autoLoadAllHistory(textEl) {
         console.debug('DeepShare: Starting auto-load of conversation history...');
 
@@ -888,6 +902,7 @@
 
         let attempt = 0;
         const maxAttempts = 50;
+        const autoScrollTimeoutMs = await getGeminiAutoScrollTimeoutMs();
 
         while (attempt < maxAttempts) {
             attempt++;
@@ -904,9 +919,9 @@
                 textEl.textContent = chrome.i18n?.getMessage('loadingHistory') || 'Loading history...';
             }
 
-            // Wait up to 4 seconds for Gemini to append older history.
+            // Wait for Gemini to append older history, using the configured timeout.
             console.debug(`DeepShare: History load attempt ${attempt}, waiting for DOM change...`);
-            const changed = await waitForHistoryLoadChange(beforeState, 4000);
+            const changed = await waitForHistoryLoadChange(beforeState, autoScrollTimeoutMs);
 
             if (!changed) {
                 console.debug('DeepShare: History did not change after scroll. Assuming all history is loaded.');

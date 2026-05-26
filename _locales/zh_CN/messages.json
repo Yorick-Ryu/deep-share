@@ -404,6 +404,12 @@
     "includeGeminiChatLinkHint": {
         "message": "导出内容包含来源的对话链接"
     },
+    "geminiAutoScrollTimeoutLabel": {
+        "message": "自动上滑超时"
+    },
+    "geminiAutoScrollTimeoutHint": {
+        "message": "每次自动上滑后，等待 Gemini 加载更多对话历史的时间（3-10 秒）"
+    },
     "itemsSelected": {
         "message": "已选择 $COUNT$ 项",
         "placeholders": {
