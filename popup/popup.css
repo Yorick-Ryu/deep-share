@@ -32,9 +32,8 @@
 }
 
 body {
-  width: 600px;
-  /* Increased width */
-  height: 500px;
+  width: 580px;
+  height: 470px;
   /* Set a fixed height */
   padding: 0;
   margin: 0;
@@ -122,7 +121,7 @@ body {
 /* Content area */
 .content {
   flex: 1;
-  padding: 24px;
+  padding: 16px;
   overflow-y: auto;
 }
 
@@ -1030,7 +1029,7 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
   font-size: 12px;
   resize: vertical;
   box-sizing: border-box;
-  min-height: 200px;
+  min-height: 180px;
 }
 
 #manual-docx-tab textarea::placeholder,
