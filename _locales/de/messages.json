@@ -404,6 +404,12 @@
     "includeGeminiChatLinkHint": {
         "message": "Exportierte Inhalte enthalten den Link zur ursprünglichen Konversation"
     },
+    "geminiAutoScrollTimeoutLabel": {
+        "message": "Zeitlimit für automatisches Hochscrollen"
+    },
+    "geminiAutoScrollTimeoutHint": {
+        "message": "Wie lange Gemini nach jedem automatischen Hochscrollen Zeit hat, weiteren Chatverlauf zu laden (3-10 Sekunden)"
+    },
     "itemsSelected": {
         "message": "$COUNT$ Elemente ausgewählt",
         "description": "Anzahl ausgewählter Elemente in der Gemini-Auswahlleiste",
