@@ -1,0 +1,49 @@
+name: Package Extension
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  package:
+    name: Package and release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate tag matches manifest version
+        run: |
+          set -euo pipefail
+          manifest_version="$(jq -er '.version' manifest.json)"
+          tag_version="${GITHUB_REF_NAME#v}"
+
+          if [[ "$tag_version" != "$manifest_version" ]]; then
+            echo "Tag version v${tag_version} does not match manifest.json version ${manifest_version}" >&2
+            exit 1
+          fi
+
+      - name: Package extension
+        run: ./package.sh
+
+      - name: Verify package
+        run: |
+          set -euo pipefail
+          manifest_version="$(jq -er '.version' manifest.json)"
+          zip_file="DeepShare-${manifest_version}.zip"
+
+          test -f "$zip_file"
+          unzip -t "$zip_file"
+          test "$(unzip -p "$zip_file" manifest.json | jq -er '.version')" = "$manifest_version"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: DeepShare-*.zip
+          generate_release_notes: true
+          fail_on_unmatched_files: true
