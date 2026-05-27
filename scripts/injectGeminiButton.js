@@ -705,16 +705,11 @@
     }
 
     function generateFilename(content) {
-        const now = new Date();
-        const timestamp = now.toLocaleString('zh-CN', {
-            year: 'numeric', month: '2-digit', day: '2-digit',
-            hour: '2-digit', minute: '2-digit', second: '2-digit',
-            hour12: false
-        }).replace(/[\/\s:]/g, '-').replace(',', '');
-
-        if (!content) return `gemini_${timestamp}`;
-        const firstLine = content.split('\n')[0].replace(/[^a-zA-Z0-9_\u4e00-\u9fa5]/g, '').substring(0, 15).trim();
-        return `${firstLine || 'gemini'}_${timestamp}`;
+        return window.DeepShareUtils.generateFilename(content, {
+            fallbackPrefix: 'gemini',
+            contentMaxLength: 15,
+            allowHyphen: false
+        });
     }
 
     function getGeminiContent(button) {

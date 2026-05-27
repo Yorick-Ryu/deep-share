@@ -390,58 +390,12 @@ async function checkQuota() {
 // @param {string} content - Markdown 内容
 // @param {string|null} title - 可选的文档标题（从 DOM 提取）
 function generateFilename(content, title = null) {
-    // Helper function to get local time zone timestamp
-    function getLocalTimestamp() {
-        const now = new Date();
-        // Format date in local timezone
-        const options = {
-            year: 'numeric', month: '2-digit', day: '2-digit',
-            hour: '2-digit', minute: '2-digit', second: '2-digit',
-            hour12: false
-        };
-        const localTime = now.toLocaleString('zh-CN', options)
-            .replace(/[\/\s:]/g, '-')
-            .replace(',', '');
-        return localTime;
-    }
-
-    // 清理文件名中不允许的特殊字符，保留中文、字母、数字和下划线
-    function sanitizeFilename(name) {
-        return name.replace(/[^a-zA-Z0-9_\u4e00-\u9fa5\-]/g, '');
-    }
-
-    const timestamp = getLocalTimestamp();
-
-    // 优先使用传入的标题
-    if (title && typeof title === 'string') {
-        let filename = title.trim();
-        // 截取前50个字符（标题可以更长一些）
-        filename = filename.substring(0, 50).trim();
-        filename = sanitizeFilename(filename);
-        if (filename) {
-            return `${filename}_${timestamp}`;
-        }
-    }
-
-    // Fallback: 使用内容的第一行
-    if (!content || typeof content !== 'string') {
-        return `document_${timestamp}`;
-    }
-
-    // Extract the first line or first few words for the filename
-    const firstLine = content.split('\n')[0] || '';
-    let filename = firstLine.trim();
-
-    // If first line is too long, truncate it
-    filename = filename.substring(0, 10).trim();
-    filename = sanitizeFilename(filename);
-
-    // If filename is still empty after cleaning, use a default
-    if (!filename) {
-        filename = 'document';
-    }
-
-    return `${filename}_${timestamp}`;
+    return window.DeepShareUtils.generateFilename(content, {
+        title,
+        fallbackPrefix: 'document',
+        titleMaxLength: 50,
+        contentMaxLength: 10
+    });
 }
 
 // Initialize the module

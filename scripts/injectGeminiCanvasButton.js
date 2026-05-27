@@ -550,58 +550,16 @@
      * @param {string|null} title - 可选的文档标题（从 DOM 提取）
      */
     function generateFilename(content, title = null) {
-        // 获取本地时区时间戳
-        function getLocalTimestamp() {
-            const now = new Date();
-            const options = {
-                year: 'numeric', month: '2-digit', day: '2-digit',
-                hour: '2-digit', minute: '2-digit', second: '2-digit',
-                hour12: false
-            };
-            const localTime = now.toLocaleString('zh-CN', options)
-                .replace(/[\/\s:]/g, '-')
-                .replace(',', '');
-            return localTime;
+        const filename = window.DeepShareUtils.generateFilename(content, {
+            title,
+            fallbackPrefix: 'document',
+            titleMaxLength: 50,
+            contentMaxLength: 10
+        });
+        if (title) {
+            console.debug('DeepShare: Using DOM title for filename:', filename);
         }
-
-        // 清理文件名中不允许的特殊字符，保留中文、字母、数字和下划线
-        function sanitizeFilename(name) {
-            return name.replace(/[^a-zA-Z0-9_\u4e00-\u9fa5\-]/g, '');
-        }
-
-        const timestamp = getLocalTimestamp();
-
-        // 优先使用传入的标题
-        if (title && typeof title === 'string') {
-            let filename = title.trim();
-            // 截取前50个字符（标题可以更长一些）
-            filename = filename.substring(0, 50).trim();
-            filename = sanitizeFilename(filename);
-            if (filename) {
-                console.debug('DeepShare: Using DOM title for filename:', filename);
-                return `${filename}_${timestamp}`;
-            }
-        }
-
-        // Fallback: 使用内容的第一行
-        if (!content || typeof content !== 'string') {
-            return `document_${timestamp}`;
-        }
-
-        // 提取第一行作为文件名
-        const firstLine = content.split('\n')[0] || '';
-        let filename = firstLine.trim();
-
-        // 截取前10个字符
-        filename = filename.substring(0, 10).trim();
-        filename = sanitizeFilename(filename);
-
-        // 如果清理后为空，使用默认名
-        if (!filename) {
-            filename = 'document';
-        }
-
-        return `${filename}_${timestamp}`;
+        return filename;
     }
 
     async function getCanvasContent() {

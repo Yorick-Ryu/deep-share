@@ -665,20 +665,11 @@
     }
 
     function generateFilename(content) {
-        const now = new Date();
-        const timestamp = now.toLocaleString('zh-CN', {
-            year: 'numeric', month: '2-digit', day: '2-digit',
-            hour: '2-digit', minute: '2-digit', second: '2-digit',
-            hour12: false
-        }).replace(/[\/\s:]/g, '-').replace(',', '');
-
-        if (!content) return `chatgpt_${timestamp}`;
-        // Try to get first line (ignoring markdown headers)
-        const lines = content.split('\n').filter(l => l.trim().length > 0);
-        let firstLine = '';
-        if (lines.length > 0) {
-            firstLine = lines[0].replace(/^#+\s*/, '').replace(/[^a-zA-Z0-9_\u4e00-\u9fa5]/g, '').substring(0, 15).trim();
-        }
-        return `${firstLine || 'chatgpt'}_${timestamp}`;
+        return window.DeepShareUtils.generateFilename(content, {
+            fallbackPrefix: 'chatgpt',
+            contentMaxLength: 15,
+            stripMarkdownHeading: true,
+            allowHyphen: false
+        });
     }
 })();

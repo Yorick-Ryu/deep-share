@@ -723,16 +723,11 @@
     }
 
     function generateFilename(title) {
-        const now = new Date();
-        const timestamp = now.toLocaleString('zh-CN', {
-            year: 'numeric', month: '2-digit', day: '2-digit',
-            hour: '2-digit', minute: '2-digit', second: '2-digit',
-            hour12: false
-        }).replace(/[\/\s:]/g, '-').replace(',', '');
-
-        if (!title) return `gemini_conversation_${timestamp}`;
-        const cleanTitle = title.replace(/[^a-zA-Z0-9_\u4e00-\u9fa5\-]/g, '').substring(0, 50).trim();
-        return `${cleanTitle || 'gemini_conversation'}_${timestamp}`;
+        return window.DeepShareUtils.generateFilename('', {
+            title,
+            fallbackPrefix: 'gemini_conversation',
+            titleMaxLength: 50
+        });
     }
 
     // --- Auto-Load Logic ---
