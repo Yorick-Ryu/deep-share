@@ -1,13 +1,14 @@
 // Global variable to store custom locale messages
 let customLocaleMessages = null;
 let currentLanguage = 'auto';
+let currentPopupAction = null;
 
 // Initialize and load settings
 document.addEventListener('DOMContentLoaded', async () => {
   // Check for action parameters in the URL
   const urlParams = new URLSearchParams(window.location.search);
   const action = urlParams.get('action');
-  const errorMsg = urlParams.get('error');
+  currentPopupAction = action;
 
   const highlightApiKey = (action === 'apiKeyMissing' || action === 'apiError');
   const forceDocxTab = (highlightApiKey || action === 'quotaExceeded');
@@ -34,7 +35,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   setupManualConversion();
 
   // Set all i18n text
-  loadI18nText(errorMsg);
+  loadI18nText(currentPopupAction);
 });
 
 // Function to load language preference and custom locale messages
@@ -175,26 +176,9 @@ function loadSettings(highlightApiKey = false, forceDocxTab = false) {
     if (data.docxApiKey) {
       checkQuota();
 
-      // Update renewal and purchase links with the API key
-      const updateLinks = () => {
-        // Select all renewal and price page links
-        const links = document.querySelectorAll('a[href*="ds.rick216.cn/renew"], a[href*="ds.rick216.cn/price"]');
-        links.forEach(link => {
-          try {
-            // Simple obfuscation: Base64 + Reverse
-            const encodedKey = btoa(data.docxApiKey).split('').reverse().join('');
-            const url = new URL(link.href);
-            url.searchParams.set('ak', encodedKey);
-            link.href = url.toString();
-          } catch (e) {
-            console.error('Failed to encode API Key for link:', e);
-          }
-        });
-      };
-
       // Run immediately and also after a short delay to ensure i18n texts are loaded
-      updateLinks();
-      setTimeout(updateLinks, 100);
+      updatePurchaseLinksWithApiKey(data.docxApiKey);
+      setTimeout(() => updatePurchaseLinksWithApiKey(data.docxApiKey), 100);
     }
 
     // If we should force the DOCX tab to be active
@@ -371,7 +355,7 @@ function setupAutoSave() {
     }
 
     // Reload all i18n text with the new language
-    loadI18nText();
+    loadI18nText(currentPopupAction);
 
     // Refresh template selector with new language (only if templates have been loaded)
     if (templatesLoaded) {
@@ -459,7 +443,7 @@ function setupUIElements() {
 }
 
 // Load all i18n text
-function loadI18nText(errorMsg = null) {
+function loadI18nText(popupAction = null) {
   // Tab labels
   document.getElementById('docxTabLabel').textContent = getMessage('docxSettings') || 'Document Conversion';
   document.getElementById('manualDocxTabLabel').textContent = getMessage('manualDocxSettings') || '手动转换文档';
@@ -477,10 +461,10 @@ function loadI18nText(errorMsg = null) {
 
   const errorElement = document.getElementById('apiKeyErrorMsg');
   if (errorElement) {
-    if (errorMsg) {
-      errorElement.innerHTML = errorMsg;
+    if (renderPopupActionMessage(errorElement, popupAction)) {
       errorElement.style.display = 'inline';
     } else {
+      errorElement.textContent = '';
       errorElement.style.display = 'none';
     }
   }
@@ -621,6 +605,48 @@ function loadI18nText(errorMsg = null) {
   }
 }
 
+function renderPopupActionMessage(element, action) {
+  const message = getPopupActionMessage(action);
+  if (!message) return false;
+
+  element.innerHTML = message;
+  element.querySelectorAll('a').forEach(link => {
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+  });
+  updatePurchaseLinksWithApiKey(document.getElementById('docxApiKey')?.value);
+  return true;
+}
+
+function getPopupActionMessage(action) {
+  switch (action) {
+    case 'apiKeyMissing':
+      return getMessage('apiKeyMissingShort') || '请<a href="https://ds.rick216.cn/price" target="_blank">购买</a>并填写API密钥';
+    case 'apiError':
+      return getMessage('apiKeyError') || 'API密钥错误或过期';
+    case 'quotaExceeded':
+      return getMessage('quotaExceededError') || '转换额度不足，请<a href="https://ds.rick216.cn/price.html" target="_blank">续费</a>';
+    default:
+      return '';
+  }
+}
+
+function updatePurchaseLinksWithApiKey(apiKey) {
+  if (!apiKey) return;
+
+  const links = document.querySelectorAll('a[href*="ds.rick216.cn/renew"], a[href*="ds.rick216.cn/price"]');
+  links.forEach(link => {
+    try {
+      const encodedKey = btoa(apiKey).split('').reverse().join('');
+      const url = new URL(link.href);
+      url.searchParams.set('ak', encodedKey);
+      link.href = url.toString();
+    } catch (e) {
+      console.error('Failed to encode API Key for link:', e);
+    }
+  });
+}
+
 // Function to save settings
 function saveSettings() {
   const geminiAutoScrollTimeoutInput = document.getElementById('geminiAutoScrollTimeout');
@@ -707,6 +733,7 @@ function saveSettings() {
 
     const apiKey = document.getElementById('docxApiKey').value;
     if (apiKey) {
+      updatePurchaseLinksWithApiKey(apiKey);
       // Check quota after saving if API key is provided
       setTimeout(checkQuota, 500);
     }
@@ -1464,8 +1491,10 @@ function setupManualConversion() {
             <line x1="15" y1="9" x2="9" y2="15"></line>
             <line x1="9" y1="9" x2="15" y2="15"></line>
           </svg>
-          <span>${errorMessage}</span>
         `;
+        const errorText = document.createElement('span');
+        errorText.textContent = errorMessage;
+        convertBtn.appendChild(errorText);
 
         // Restore the original button after 2 seconds
         setTimeout(() => {

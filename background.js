@@ -77,8 +77,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             // Open the popup programmatically with query parameters
             let popupUrl = 'popup/popup.html';
             const params = [];
-            if (message.actionParam) params.push(`action=${message.actionParam}`);
-            if (message.error) params.push(`error=${encodeURIComponent(message.error)}`);
+            if (message.actionParam) params.push(`action=${encodeURIComponent(message.actionParam)}`);
 
             if (params.length > 0) {
                 popupUrl += '?' + params.join('&');

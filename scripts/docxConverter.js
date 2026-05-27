@@ -52,8 +52,7 @@ async function convertToDocx(message, sourceButton, documentTitle = null) {
                 try {
                     chrome.runtime?.sendMessage({
                         action: 'openPopup',
-                        actionParam: 'apiKeyMissing',
-                        error: chrome.i18n?.getMessage('apiKeyMissingShort') || '请购买或填写API-KEY'
+                        actionParam: 'apiKeyMissing'
                     }).catch(err => {
                         console.warn('Could not open popup automatically:', err.message);
                     });
@@ -158,8 +157,7 @@ async function convertToDocx(message, sourceButton, documentTitle = null) {
                 try {
                     chrome.runtime?.sendMessage({
                         action: 'openPopup',
-                        actionParam: actionParam,
-                        error: errorMessage
+                        actionParam: actionParam
                     }).catch(err => {
                         console.warn('Could not open popup automatically:', err.message);
                     });
