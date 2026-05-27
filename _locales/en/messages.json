@@ -288,7 +288,13 @@
         "message": "Failed to get content"
     },
     "clipboardPermissionError": {
-        "message": "Failed to get content, please grant clipboard read permission"
+        "message": "Failed to save, please enable clipboard read permission"
+    },
+    "clipboardPermissionHelpLink": {
+        "message": "How to enable"
+    },
+    "clipboardPermissionHelpUrl": {
+        "message": "https://docs.deepshare.app/en/faq/clipboard-permission"
     },
     "refreshButton": {
         "message": "Refresh"

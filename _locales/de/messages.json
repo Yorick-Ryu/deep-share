@@ -288,7 +288,13 @@
         "message": "Inhalt konnte nicht abgerufen werden"
     },
     "clipboardPermissionError": {
-        "message": "Inhalt konnte nicht abgerufen werden. Bitte erteile die Berechtigung zum Lesen der Zwischenablage"
+        "message": "Speichern fehlgeschlagen. Bitte erlaube das Lesen der Zwischenablage"
+    },
+    "clipboardPermissionHelpLink": {
+        "message": "So geht's"
+    },
+    "clipboardPermissionHelpUrl": {
+        "message": "https://docs.deepshare.app/en/faq/clipboard-permission"
     },
     "refreshButton": {
         "message": "Aktualisieren"

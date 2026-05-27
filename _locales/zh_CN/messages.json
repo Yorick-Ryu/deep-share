@@ -288,7 +288,13 @@
         "message": "获取内容失败"
     },
     "clipboardPermissionError": {
-        "message": "获取内容失败，请打开读取剪接板权限"
+        "message": "保存失败，请打开读取剪接板权限"
+    },
+    "clipboardPermissionHelpLink": {
+        "message": "如何打开"
+    },
+    "clipboardPermissionHelpUrl": {
+        "message": "https://docs.deepshare.app/faq/clipboard-permission"
     },
     "refreshButton": {
         "message": "刷新"

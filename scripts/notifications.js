@@ -108,6 +108,17 @@
             padding-top: 1.5px; /* (24 - 21) / 2 = 1.5px to center text with icon */
         }
 
+        .ds-toast__link {
+            color: #2563eb;
+            font-weight: 700;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .ds-toast__link:hover {
+            text-decoration: underline;
+        }
+
         .ds-toast__close {
             display: flex;
             align-items: center;
@@ -193,10 +204,24 @@
         const contentDiv = document.createElement('div');
         contentDiv.className = 'ds-toast__content';
 
-        // Strip HTML tags to show only plain text in toasts (avoid raw HTML showing as text)
-        const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = message;
-        contentDiv.textContent = tempDiv.textContent || tempDiv.innerText || message;
+        if (message && typeof message === 'object') {
+            contentDiv.textContent = message.text || '';
+            if (message.linkText && message.linkHref) {
+                contentDiv.appendChild(document.createTextNode(' '));
+                const link = document.createElement('a');
+                link.className = 'ds-toast__link';
+                link.textContent = message.linkText;
+                link.href = message.linkHref;
+                link.target = '_blank';
+                link.rel = 'noopener noreferrer';
+                contentDiv.appendChild(link);
+            }
+        } else {
+            // Strip HTML tags to show only plain text in toasts (avoid raw HTML showing as text)
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = message;
+            contentDiv.textContent = tempDiv.textContent || tempDiv.innerText || message;
+        }
 
         // Close Button
         const closeDiv = document.createElement('div');

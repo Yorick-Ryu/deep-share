@@ -288,7 +288,13 @@
         "message": "Impossible de récupérer le contenu"
     },
     "clipboardPermissionError": {
-        "message": "Impossible de récupérer le contenu, veuillez autoriser l’accès en lecture au presse-papiers"
+        "message": "Échec de l’enregistrement. Veuillez autoriser la lecture du presse-papiers"
+    },
+    "clipboardPermissionHelpLink": {
+        "message": "Comment l’activer"
+    },
+    "clipboardPermissionHelpUrl": {
+        "message": "https://docs.deepshare.app/en/faq/clipboard-permission"
     },
     "refreshButton": {
         "message": "Actualiser"

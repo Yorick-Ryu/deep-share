@@ -288,7 +288,13 @@
         "message": "Error al obtener contenido"
     },
     "clipboardPermissionError": {
-        "message": "Error al obtener contenido, por favor otorga permiso para leer el portapapeles"
+        "message": "Error al guardar. Activa el permiso de lectura del portapapeles"
+    },
+    "clipboardPermissionHelpLink": {
+        "message": "Cómo activarlo"
+    },
+    "clipboardPermissionHelpUrl": {
+        "message": "https://docs.deepshare.app/en/faq/clipboard-permission"
     },
     "refreshButton": {
         "message": "Actualizar"

@@ -288,7 +288,13 @@
         "message": "Falha ao obter conteúdo"
     },
     "clipboardPermissionError": {
-        "message": "Falha ao obter conteúdo, por favor conceda permissão para ler a área de transferência"
+        "message": "Falha ao guardar. Ative a permissão de leitura da área de transferência"
+    },
+    "clipboardPermissionHelpLink": {
+        "message": "Como ativar"
+    },
+    "clipboardPermissionHelpUrl": {
+        "message": "https://docs.deepshare.app/en/faq/clipboard-permission"
     },
     "refreshButton": {
         "message": "Actualizar"

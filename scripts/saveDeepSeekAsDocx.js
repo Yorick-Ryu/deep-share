@@ -59,10 +59,11 @@ document.addEventListener('deepshare:saveAsDocx', async () => {
             window.showToastNotification(chrome.i18n?.getMessage('noMessageSelected') || 'Please select at least one message', 'error');
         } else {
             console.error('Error getting messages for DOCX conversion:', error);
-            const errorMessage = error.message && error.message.includes('Read permission denied')
-                ? chrome.i18n?.getMessage('clipboardPermissionError')
-                : `${chrome.i18n?.getMessage('getClipboardError')}: ${error.message}`;
-            window.showToastNotification(errorMessage, 'error');
+            if (error.message && error.message.includes('Read permission denied')) {
+                showClipboardPermissionError();
+            } else {
+                window.showToastNotification(`${chrome.i18n?.getMessage('getClipboardError')}: ${error.message}`, 'error');
+            }
         }
     } finally {
         if (savedClipboard !== null) {
@@ -76,6 +77,14 @@ document.addEventListener('deepshare:saveAsDocx', async () => {
         scrollAbortController = null;
     }
 });
+
+function showClipboardPermissionError() {
+    window.showToastNotification({
+        text: chrome.i18n?.getMessage('clipboardPermissionError') || '保存失败，请打开读取剪接板权限',
+        linkText: chrome.i18n?.getMessage('clipboardPermissionHelpLink') || '如何打开',
+        linkHref: chrome.i18n?.getMessage('clipboardPermissionHelpUrl') || 'https://docs.deepshare.app/faq/clipboard-permission'
+    }, 'error', 8000);
+}
 
 function setButtonDisabled(button, disabled) {
     if (!button || !(button instanceof Element)) return;
@@ -370,12 +379,12 @@ async function extractAIMessageContent(messageDiv) {
         try {
             return await getContentViaCopyButton(copyButton);
         } catch (error) {
-            console.warn('Copy button extraction failed, falling back to DOM:', error);
+            console.error('Copy button extraction failed:', error);
+            throw error;
         }
     }
 
-    // Fallback: extract from DOM directly
-    return extractContentFromDOM(messageDiv);
+    throw new Error('Copy button not found for AI message');
 }
 
 /**

@@ -288,7 +288,13 @@
         "message": "コンテンツの取得に失敗しました"
     },
     "clipboardPermissionError": {
-        "message": "コンテンツの取得に失敗しました。クリップボードの読み取りを許可してください"
+        "message": "保存に失敗しました。クリップボードの読み取りを許可してください"
+    },
+    "clipboardPermissionHelpLink": {
+        "message": "有効にする方法"
+    },
+    "clipboardPermissionHelpUrl": {
+        "message": "https://docs.deepshare.app/en/faq/clipboard-permission"
     },
     "refreshButton": {
         "message": "更新"

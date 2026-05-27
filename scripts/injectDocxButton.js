@@ -277,11 +277,11 @@ function injectDocxButton() {
                     } catch (ex) { }
                 }
 
-                const errorMessage = error.message && error.message.includes('Read permission denied')
-                    ? chrome.i18n?.getMessage('clipboardPermissionError')
-                    : `${chrome.i18n?.getMessage('getClipboardError')}: ${error.message}`;
-
-                window.showToastNotification(errorMessage, 'error');
+                if (error.message && error.message.includes('Read permission denied')) {
+                    showClipboardPermissionError();
+                } else {
+                    window.showToastNotification(`${chrome.i18n?.getMessage('getClipboardError')}: ${error.message}`, 'error');
+                }
                 return null;
             }
         }
@@ -293,6 +293,14 @@ function injectDocxButton() {
 
     // Initialize the observer
     observeAndInjectButton();
+}
+
+function showClipboardPermissionError() {
+    window.showToastNotification({
+        text: chrome.i18n?.getMessage('clipboardPermissionError') || '保存失败，请打开读取剪接板权限',
+        linkText: chrome.i18n?.getMessage('clipboardPermissionHelpLink') || '如何打开',
+        linkHref: chrome.i18n?.getMessage('clipboardPermissionHelpUrl') || 'https://docs.deepshare.app/faq/clipboard-permission'
+    }, 'error', 8000);
 }
 
 // Initialize the button injection
