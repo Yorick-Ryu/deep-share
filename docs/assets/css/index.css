@@ -1,246 +1,8 @@
-:root {
-    --primary-color: #4D6BFE;
-    --primary-hover: #3D5BEE;
-    --secondary-color: #10B981;
-    --accent-color: #F59E0B;
-    --bg-color: #FAFAFA;
-    --bg-secondary: #FFFFFF;
-    --text-main: #111827;
-    --text-muted: #4B5563;
-    --text-light: #9CA3AF;
-    --border-color: #E5E7EB;
-    --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-    --card-hover-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
-    --header-height: 70px;
-}
-
-@media (prefers-color-scheme: dark) {
-    :root {
-        --bg-color: #0F172A;
-        --bg-secondary: #1E293B;
-        --text-main: #F9FAFB;
-        --text-muted: #D1D5DB;
-        --text-light: #9CA3AF;
-        --border-color: #374151;
-        --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
-        --card-hover-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
-    }
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-html {
-    scroll-behavior: smooth;
-}
-
-body {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    background-color: var(--bg-color);
-    color: var(--text-main);
-    line-height: 1.6;
-    -webkit-font-smoothing: antialiased;
-}
-
-/* Fix browser autofill background in dark mode */
-input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus,
-input:-webkit-autofill:active {
-    -webkit-box-shadow: 0 0 0 1000px var(--bg-secondary) inset !important;
-    -webkit-text-fill-color: var(--text-main) !important;
-    caret-color: var(--text-main);
-    transition: background-color 5000s ease-in-out 0s;
-}
-
-/* Typography */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-    line-height: 1.2;
-    font-weight: 700;
-    letter-spacing: -0.025em;
-    color: var(--text-main);
-}
-
-h1 {
-    font-size: 3.5rem;
-    background: linear-gradient(135deg, var(--primary-color), #818CF8);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin-bottom: 1.5rem;
-}
-
-h2 {
-    font-size: 2.25rem;
-    margin-bottom: 2rem;
-    text-align: center;
-}
-
-p {
-    margin-bottom: 1rem;
-}
-
-a {
-    color: var(--primary-color);
-    text-decoration: none;
-    transition: color 0.2s;
-}
-
-a:hover {
-    color: var(--primary-hover);
-}
-
-/* Header */
-header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: var(--header-height);
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border-color);
-    z-index: 1000;
-}
-
-@media (prefers-color-scheme: dark) {
-    header {
-        background: rgba(15, 23, 42, 0.8);
-    }
-}
-
-nav {
-    max-width: 1100px;
-    height: 100%;
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    font-weight: 700;
-    font-size: 1.25rem;
-    color: var(--text-main);
-}
-
-.logo img {
-    width: 32px;
-    height: 32px;
-}
-
-.nav-links {
-    display: flex;
-    gap: 2rem;
-    align-items: center;
-}
-
-.nav-links a {
-    color: var(--text-muted);
-    font-weight: 500;
-    font-size: 0.95rem;
-}
-
-.nav-links a:hover {
-    color: var(--primary-color);
-}
-
-.github-link {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.github-icon {
-    width: 20px;
-    height: 20px;
-    fill: currentColor;
-}
-
-.language-switch {
-    padding: 0.4rem 0.8rem;
-    background: var(--bg-secondary);
-    border: 1px solid var(--border-color);
-    color: var(--text-main) !important;
-    border-radius: 12px;
-    font-size: 0.85rem;
-    transition: all 0.2s;
-}
-
-.language-switch:hover {
-    border-color: var(--primary-color);
-    color: var(--primary-color) !important;
-}
-
-/* Mobile Menu */
-.mobile-menu-btn {
-    display: none;
-    background: none;
-    border: none;
-    color: var(--text-main);
-    cursor: pointer;
-}
-
-.mobile-menu-btn svg {
-    width: 24px;
-    height: 24px;
-}
-
-/* Announcement Banner */
-.announcement-banner {
-    margin-top: var(--header-height);
-    background: linear-gradient(90deg, #4F46E5 0%, #818CF8 100%);
-    color: white;
-    padding: 0.5rem;
-    text-align: center;
-    font-size: 0.95rem;
-}
-
-.announcement-content {
-    max-width: 1100px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-}
-
-.new-badge {
-    background: rgba(255, 255, 255, 0.2);
-    padding: 0.3rem 0.5rem;
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-}
-
-.announcement-button {
-    background: white;
-    color: var(--primary-color);
-    padding: 0.1rem 0.4rem;
-    border-radius: 16px;
-    font-weight: 600;
-    font-size: 0.75rem;
-    transition: transform 0.2s;
-}
-
-.announcement-button:hover {
-    color: var(--primary-color);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
+/* index.css — homepage-only styles (index.html / index-en.html).
+   Pairs with shared.css, which holds the common chrome (variables, reset,
+   typography, header/nav, announcement banner, footer, feature cards,
+   step number). Edit this file to restyle the homepage without affecting
+   any other page. */
 
 /* Main Layout */
 main {
@@ -478,21 +240,6 @@ main {
     margin: 0 auto 8rem;
 }
 
-.feature-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 2rem;
-}
-
-.feature-card {
-    background: var(--bg-secondary);
-    padding: 2.0rem;
-    border-radius: 16px;
-    border: 1px solid var(--border-color);
-    box-shadow: var(--card-shadow);
-    transition: all 0.3s ease;
-}
-
 .feature-icon {
     width: 56px;
     height: 56px;
@@ -504,16 +251,6 @@ main {
     stroke-width: 1.5;
     fill: none;
     stroke: currentColor;
-}
-
-.feature-card h3 {
-    font-size: 1.25rem;
-    margin-bottom: 0.75rem;
-}
-
-.feature-card p {
-    color: var(--text-muted);
-    margin-bottom: 0;
 }
 
 /* Install Section */
@@ -538,21 +275,6 @@ main {
     border-radius: 16px;
     border: 1px solid var(--border-color);
     position: relative;
-}
-
-.step-number {
-    width: 48px;
-    height: 48px;
-    background: var(--primary-color);
-    color: white;
-    font-size: 1.25rem;
-    font-weight: 700;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 1.5rem;
-    box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3);
 }
 
 /* Compatibility Section */
@@ -704,44 +426,8 @@ main {
     margin: 0.75rem 0 0;
 }
 
-/* Footer */
-footer {
-    background: var(--bg-secondary);
-    border-top: 1px solid var(--border-color);
-    padding: 4rem 1.5rem;
-    text-align: center;
-}
-
-.footer-links {
-    display: flex;
-    justify-content: center;
-    gap: 2.5rem;
-    margin-bottom: 2rem;
-}
-
-.footer-links a {
-    color: var(--text-muted);
-    font-weight: 500;
-}
-
-.footer-links a:hover {
-    color: var(--primary-color);
-}
-
 /* Responsive */
 @media (max-width: 768px) {
-    :root {
-        --header-height: 60px;
-    }
-
-    h1 {
-        font-size: 2.5rem;
-    }
-
-    h2 {
-        font-size: 1.75rem;
-    }
-
     .hero {
         grid-template-columns: 1fr;
         text-align: center;
@@ -756,27 +442,6 @@ footer {
 
     .cta-buttons {
         justify-content: center;
-    }
-
-    .nav-links {
-        display: none;
-    }
-
-    .mobile-menu-btn {
-        display: block;
-    }
-
-    .nav-links.mobile-active {
-        display: flex !important;
-        flex-direction: column;
-        position: fixed;
-        top: var(--header-height);
-        left: 0;
-        width: 100%;
-        background: var(--bg-secondary);
-        padding: 2rem;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        border-bottom: 1px solid var(--border-color);
     }
 
     .install-steps {
