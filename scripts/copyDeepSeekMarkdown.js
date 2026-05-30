@@ -245,79 +245,7 @@
         return `${firstLine || 'deepseek'}_${timestamp}`;
     }
 
-    // Main save function
-    async function saveAsMarkdown(copyButton) {
-        if (!copyMarkdownSettings.enabled) {
-            window.showToastNotification(chrome.i18n?.getMessage('featureDisabled') || 'Save as Markdown feature is disabled', 'info');
-            return;
-        }
 
-        // Find the message container
-        let messageDiv = copyButton.closest('._4f9bf79, ._9663006');
-        if (!messageDiv) {
-            console.error('Could not find message container');
-            window.showToastNotification(chrome.i18n?.getMessage('saveFailed') || 'Failed to save', 'error');
-            return;
-        }
-
-        const isAiMessage = messageDiv.matches('._4f9bf79');
-        let markdownContent = '';
-
-        if (isAiMessage) {
-            const aiContent = extractAiResponseAsMarkdown(messageDiv);
-            if (aiContent) {
-                markdownContent = `## AI Response\n\n${aiContent}`;
-            } else {
-                markdownContent = await getContentViaCopyButton(copyButton);
-                if (markdownContent) {
-                    markdownContent = `## AI Response\n\n${markdownContent}`;
-                }
-            }
-        } else {
-            const userContent = extractUserQuestionAsMarkdown(messageDiv);
-            if (userContent) {
-                markdownContent = `## User Question\n\n${userContent}`;
-            }
-        }
-
-        if (markdownContent && markdownContent.trim()) {
-            saveMarkdownFile(markdownContent);
-        } else {
-            window.showToastNotification(chrome.i18n?.getMessage('noContent') || 'No content to save', 'error');
-        }
-    }
-
-    // Fallback: use copy button to get content
-    async function getContentViaCopyButton(copyButton) {
-        let originalClipboardContent = null;
-        try {
-            // Backup original clipboard
-            try {
-                originalClipboardContent = await navigator.clipboard.readText();
-            } catch (e) {
-                // Ignore - clipboard might be empty or permission not granted
-            }
-
-            // Click copy button
-            copyButton.click();
-            await new Promise(resolve => setTimeout(resolve, 300));
-
-            // Get content
-            const content = await navigator.clipboard.readText();
-
-            // Restore original
-            if (originalClipboardContent !== null) {
-                try {
-                    await navigator.clipboard.writeText(originalClipboardContent);
-                } catch (e) {}
-            }
-
-            return content;
-        } catch (error) {
-            console.error('Failed to get content via copy button:', error);
-            return null;
-        }
-    }
 
     // Copy entire conversation as markdown
     async function saveConversationAsMarkdown() {
@@ -348,12 +276,8 @@
                     messageIndex++;
                 }
             } else if (!isUserMessage && copyMarkdownSettings.includeAiResponse) {
-                const copyButton = messageDiv.querySelector('.ds-icon-button[role="button"]');
                 let aiContent = extractAiResponseAsMarkdown(messageDiv);
                 
-                if (!aiContent && copyButton) {
-                    aiContent = await getContentViaCopyButton(copyButton);
-                }
                 
                 if (aiContent) {
                     conversationContent += `## Message ${messageIndex}: AI Response\n\n${aiContent}\n\n---\n\n`;
@@ -374,108 +298,6 @@
         }
     }
 
-    // Inject markdown copy button next to existing copy button
-    function injectMarkdownButton(copyButton, container) {
-        if (container.querySelector('.deepseek-markdown-copy-btn')) return;
-
-        const mdButton = document.createElement('div');
-        mdButton.className = copyButton.className + ' deepseek-markdown-copy-btn';
-        mdButton.tabIndex = copyButton.tabIndex || -1;
-        mdButton.setAttribute('role', 'button');
-        mdButton.setAttribute('aria-label', chrome.i18n?.getMessage('saveAsMarkdown') || 'Save as Markdown');
-        mdButton.title = chrome.i18n?.getMessage('saveAsMarkdown') || 'Save as Markdown';
-
-        // Copy styling
-        const copyStyle = copyButton.getAttribute('style') || '';
-        mdButton.style.cssText = copyStyle;
-
-        // Create icon
-        const iconHTML = `
-            <div class="ds-icon-button__hover-bg"></div>
-            <div class="ds-icon" style="font-size: 16px; width: 16px; height: 16px;">
-                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 16px; height: 16px;">
-                    <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                    <path d="M12 11L12 17" stroke="currentColor" stroke-width="1.5"/>
-                    <path d="M9 14L12 17L15 14" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                    <path d="M9 8L15 8" stroke="currentColor" stroke-width="1.5"/>
-                    <path d="M9 11H15" stroke="currentColor" stroke-width="1.5"/>
-                </svg>
-            </div>
-        `;
-        mdButton.innerHTML = iconHTML;
-
-        // Insert after copy button
-        copyButton.parentNode.insertBefore(mdButton, copyButton.nextSibling);
-
-        // Add tooltip
-        let tooltipWrapper = null;
-        let floatingContainer = null;
-
-        mdButton.addEventListener('mouseenter', () => {
-            const tooltipText = mdButton.title;
-            if (!tooltipText) return;
-
-            if (!floatingContainer) {
-                floatingContainer = document.querySelector('.ds-floating-container');
-                if (!floatingContainer) {
-                    floatingContainer = document.createElement('div');
-                    floatingContainer.className = 'ds-floating-container';
-                    floatingContainer.style.zIndex = '9999';
-                    document.body.appendChild(floatingContainer);
-                }
-            }
-
-            tooltipWrapper = document.createElement('div');
-            tooltipWrapper.className = 'ds-floating-position-wrapper ds-theme';
-            tooltipWrapper.style.zIndex = '10000';
-
-            const tooltipElement = document.createElement('div');
-            tooltipElement.className = 'ds-tooltip ds-tooltip--s ds-elevated ds-theme';
-            tooltipElement.textContent = tooltipText;
-
-            tooltipWrapper.appendChild(tooltipElement);
-            floatingContainer.appendChild(tooltipWrapper);
-
-            const btnRect = mdButton.getBoundingClientRect();
-            tooltipWrapper.style.opacity = '0';
-            const tooltipRect = tooltipWrapper.getBoundingClientRect();
-            tooltipWrapper.style.opacity = '1';
-
-            let top = btnRect.bottom + 4;
-            let left = btnRect.left + (btnRect.width / 2) - (tooltipRect.width / 2);
-            tooltipWrapper.setAttribute('data-transform-origin', 'bottom');
-
-            if (left < 5) left = 5;
-            if ((left + tooltipRect.width) > (window.innerWidth - 5)) {
-                left = window.innerWidth - tooltipRect.width - 5;
-            }
-
-            tooltipWrapper.style.top = `${top}px`;
-            tooltipWrapper.style.left = `${left}px`;
-        });
-
-        mdButton.addEventListener('mouseleave', () => {
-            if (tooltipWrapper) {
-                tooltipWrapper.remove();
-                tooltipWrapper = null;
-            }
-        });
-
-        // Click handler
-        mdButton.addEventListener('click', async (e) => {
-            e.stopPropagation();
-            
-            // Disable button during copy
-            mdButton.style.opacity = '0.5';
-            mdButton.style.pointerEvents = 'none';
-            
-            await saveAsMarkdown(copyButton);
-            
-            // Re-enable
-            mdButton.style.opacity = '';
-            mdButton.style.pointerEvents = '';
-        });
-    }
 
     // Inject conversation markdown copy button in the share panel
     function injectConversationMarkdownButton() {
@@ -516,26 +338,6 @@
         const observer = new MutationObserver((mutations) => {
             for (const mutation of mutations) {
                 if (mutation.type === 'childList') {
-                    // Inject per-message markdown buttons
-                    const buttonContainers = document.querySelectorAll('.ds-flex[style*="align-items"][style*="gap"], div[class*="ds-flex"][style*="align-items: center"]');
-                    
-                    buttonContainers.forEach(container => {
-                        const buttonGroup = container.querySelector('.ds-flex[style*="align-items"][style*="gap"], div[class*="ds-flex"][style*="align-items"]') || container;
-                        
-                        const copyButtons = buttonGroup.querySelectorAll('.ds-icon-button[role="button"]');
-                        
-                        copyButtons.forEach(copyBtn => {
-                            // Check if this is an AI response (not user message)
-                            const isUserMessage = copyBtn.closest('.d29f3d7d, [class*="d29f3d7d"]');
-                            const isAIContainer = copyBtn.closest('._4f9bf79, [class*="_4f9bf79"]');
-                            const isAIResponse = isAIContainer && !isUserMessage;
-                            
-                            if (isAIResponse && !copyBtn.parentNode?.querySelector('.deepseek-markdown-copy-btn')) {
-                                injectMarkdownButton(copyBtn, buttonGroup);
-                            }
-                        });
-                    });
-
                     // Inject conversation-level markdown button
                     injectConversationMarkdownButton();
                 }
