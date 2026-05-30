@@ -528,5 +528,23 @@
     },
     "scrollCollecting": {
         "message": "スクロールしてメッセージを収集しています。しばらくお待ちください..."
+    },
+    "copyAsMarkdown": {
+        "message": "Markdownとしてコピー"
+    },
+    "markdownCopied": {
+        "message": "Markdownをクリップボードにコピーしました"
+    },
+    "copyConversationMarkdown": {
+        "message": "すべてをMarkdownとしてコピー"
+    },
+    "featureDisabled": {
+        "message": "Markdownコピー機能は無効になっています"
+    },
+    "noMessages": {
+        "message": "メッセージが見つかりません"
+    },
+    "noContent": {
+        "message": "コピーする内容がありません"
     }
 }
