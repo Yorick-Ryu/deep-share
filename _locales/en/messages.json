@@ -529,5 +529,23 @@
     },
     "scrollCollecting": {
         "message": "Scrolling to collect messages, please wait..."
+    },
+    "copyAsMarkdown": {
+        "message": "Copy as Markdown"
+    },
+    "markdownCopied": {
+        "message": "Markdown copied to clipboard"
+    },
+    "copyConversationMarkdown": {
+        "message": "Copy All as Markdown"
+    },
+    "featureDisabled": {
+        "message": "Markdown copy feature is disabled"
+    },
+    "noMessages": {
+        "message": "No messages found"
+    },
+    "noContent": {
+        "message": "No content to copy"
     }
 }

@@ -528,5 +528,23 @@
     },
     "scrollCollecting": {
         "message": "正在滚动读取对话内容，请勿操作..."
+    },
+    "copyAsMarkdown": {
+        "message": "复制为Markdown"
+    },
+    "markdownCopied": {
+        "message": "Markdown已复制到剪贴板"
+    },
+    "copyConversationMarkdown": {
+        "message": "复制全部为Markdown"
+    },
+    "featureDisabled": {
+        "message": "Markdown复制功能已禁用"
+    },
+    "noMessages": {
+        "message": "未找到消息"
+    },
+    "noContent": {
+        "message": "没有内容可复制"
     }
 }
