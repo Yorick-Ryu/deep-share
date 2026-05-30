@@ -66,7 +66,8 @@
                 "scripts/injectDocxButton.js",
                 "scripts/captureDeepSeek.js",
                 "scripts/saveDeepSeekAsDocx.js",
-                "scripts/injectDeepSeekButtons.js"
+                "scripts/injectDeepSeekButtons.js",
+                "scripts/copyDeepSeekMarkdown.js"
             ]
         },
         {
@@ -129,7 +130,7 @@
                 "lib/katex.min.js",
                 "scripts/formulaConverter.js",
                 "scripts/notifications.js",
-                "scripts/copyKatex4Doubao.js"
+                "scripts/copyKatex4DouBao.js"
             ]
         },
         {

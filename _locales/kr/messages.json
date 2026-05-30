@@ -1,0 +1,522 @@
+{
+    "extensionName": {
+        "message": "DeepShare: AI 채팅 내용을 Word로 내보내기"
+    },
+    "extensionDescription": {
+        "message": "DeepSeek, ChatGPT, Gemini, Grok 등의 AI 채팅 내용을 Word 문서로 내보내고, 수식을 복사하며, DeepSeek 채팅의 긴 스크린샷을 찍을 수 있습니다."
+    },
+    "shareButton": {
+        "message": "대화 공유"
+    },
+    "modalTitle": {
+        "message": "대화 공유"
+    },
+    "imageTab": {
+        "message": "이미지"
+    },
+    "textTab": {
+        "message": "텍스트"
+    },
+    "wordTab": {
+        "message": "Word"
+    },
+    "wordExportInfo": {
+        "message": "다운로드 또는 복사 버튼을 클릭하여 사용자 질문과 AI 응답을 모두 Word 문서로 내보내세요"
+    },
+    "noAiResponses": {
+        "message": "AI 응답이 없습니다"
+    },
+    "downloadButton": {
+        "message": "다운로드"
+    },
+    "copyButton": {
+        "message": "복사"
+    },
+    "docxButton": {
+        "message": "DOCX로 저장"
+    },
+    "docxFeatureExplanation": {
+        "message": "AI를 Word로 변환하는 기능을 설정하세요. 스크린샷 및 수식 복사는 무료로 제공되며 별도의 설정이 필요하지 않습니다."
+    },
+    "docxConversionSuccess": {
+        "message": "Word 문서로 성공적으로 저장되었습니다!"
+    },
+    "docxConverting": {
+        "message": "Word 문서로 저장 중입니다. 창을 닫지 마세요."
+    },
+    "docxConversionError": {
+        "message": "Word 문서로 저장하는 데 실패했습니다. 네트워크 연결을 확인하거나 페이지를 새로 고친 후 다시 시도해 주세요!"
+    },
+        "watermarkSettings": {
+        "message": "워터마크 설정"
+    },
+    "screenshotSettings": {
+        "message": "채팅 스크린샷"
+    },
+    "docxSettings": {
+        "message": "AI 채팅에서 Word로"
+    },
+    "docxServerUrlLabel": {
+        "message": "서버 URL"
+    },
+    "docxApiKeyLabel": {
+        "message": "API 키"
+    },
+    "docxModeLabel": {
+        "message": "변환 모드"
+    },
+    "modeLocalLabel": {
+        "message": "로컬 (Pandoc)"
+    },
+    "modeApiLabel": {
+        "message": "API"
+    },
+    "copied": {
+        "message": "복사됨!"
+    },
+    "copyFailed": {
+        "message": "복사 실패!"
+    },
+    "formulaCopied": {
+        "message": "수식 복사됨!"
+    },
+    "clickToCopyFormula": {
+        "message": "수식을 복사하려면 클릭하세요"
+    },
+    "generatingImage": {
+        "message": "스크린샷 생성 중..."
+    },
+    "generateFailed": {
+        "message": "스크린샷 생성에 실패했습니다. 페이지를 새로 고침해 주세요!"
+    },
+    "defaultWatermark": {
+        "message": "DeepSeek AI에서 생성하고 DeepShare 확장 프로그램으로 캡처한 콘텐츠"
+    },
+    "settingsButton": {
+        "message": "워터마크 설정"
+    },
+    "hideDefaultWatermarkLabel": {
+        "message": "기본 워터마크 숨기기"
+    },
+    "customWatermarkLabel": {
+        "message": "사용자 지정 워터마크 텍스트 (선택 사항)"
+    },
+    "customWatermarkPlaceholder": {
+        "message": "여기에 사용자 지정 워터마크를 입력하세요"
+    },
+    "saveSettings": {
+        "message": "설정 저장"
+    },
+         "settingsSaved": {
+        "message": "저장됨"
+    },
+    "sponsorTitle": {
+        "message": "이용해 주셔서 감사합니다! 도움이 되셨다면, 위챗 QR 코드를 통해 후원해 주세요 😊"
+    },
+    "selectButton": {
+        "message": "메시지 선택"
+    },
+    "selectAllButton": {
+        "message": "모두 선택"
+    },
+    "selectAllResponsesButton": {
+        "message": "모든 응답 선택"
+    },
+    "unselectAllButton": {
+        "message": "모두 선택 해제"
+    },
+    "loadingHistory": {
+        "message": "로딩 중..."
+    },
+    "noMessageSelected": {
+        "message": "메시지를 하나 이상 선택해 주세요"
+    },
+    "sponsorTabLabel": {
+        "message": "소개"
+    },
+    "totalQuotaLabel": {
+        "message": "총량:"
+    },
+    "usedQuotaLabel": {
+        "message": "사용량:"
+    },
+    "remainingQuotaLabel": {
+        "message": "잔여량:"
+    },
+    "quotaTitle": {
+        "message": "전환 할당량"
+    },
+    "dailyQuotaLabel": {
+        "message": "일일 할당량"
+    },
+    "addonQuotaLabel": {
+        "message": "애드온 할당량"
+    },
+    "dailyResetNote": {
+        "message": "매일 초기화됨"
+    },
+    "subscriptionExpiryNote": {
+        "message": "매일 초기화됨 · {date}까지"
+    },
+    "addonExpiryNote": {
+        "message": "{date}에 만료됨"
+    },
+    "apiKeyHint": {
+        "message": "API 키를 구매하시겠습니까? <a href=\"https://ds.rick216.cn/en/price.html\" target=\"_blank\">여기를 클릭하세요</a>"
+    },
+        "apiKeyMissing": {
+        "message": "문서 변환 기능을 사용하려면 확장 프로그램 아이콘을 클릭하여 API 키를 구매하고 입력해 주세요."
+    },
+    "apiKeyMissingShort": {
+        "message": "<a href=\"https://ds.rick216.cn/en/price.html\" target=\"_blank\">구매</a> 후 API 키를 입력해 주세요"
+    },
+    "manualConversionExplanation": {
+        "message": "Grok, Claude, Meta AI 등을 지원합니다. 대화 내용을 마크다운 입력란에 복사한 후 \"문서로 변환\"을 클릭하면 수식 지원이 포함된 깔끔하게 서식 처리된 Word 문서를 다운로드할 수 있습니다!"
+    },
+    "manualConversionTitle": {
+        "message": "AI 채팅 내용 붙여넣기"
+    },
+    "markdownInputLabel": {
+        "message": "마크다운 텍스트"
+    },
+    "markdownInputPlaceholder": {
+        "message": "여기에 마크다운 형식의 텍스트를 붙여넣으세요..."
+    },
+    "convertToDocx": {
+        "message": "문서로 변환"
+    },
+    "clearMarkdown": {
+        "message": "지우기"
+    },
+    "emptyMarkdownError": {
+        "message": "마크다운 텍스트를 입력해 주세요"
+    },
+    "manualDocxSettings": {
+        "message": "AI 채팅 내용 붙여넣기"
+    },
+    "formulaTabLabel": {
+        "message": "수식 복사"
+    },
+    "formulaSettingsTitle": {
+        "message": "수식 복사 설정"
+    },
+    "formulaCopyTutorialText": {
+        "message": "수식 복사에 대해 자세히 알아보기:"
+    },
+    "formulaCopyTutorialLink": {
+        "message": "튜토리얼 보기"
+    },
+    "enableFormulaCopyLabel": {
+        "message": "수식 복사 활성화"
+    },
+        "formulaFormatLabel": {
+        "message": "수식 복사 형식"
+    },
+    "formatMathMLLabel": {
+        "message": "MathML"
+    },
+    "formatLaTeXLabel": {
+        "message": "LaTeX"
+    },
+    "formatDollarLatexLabel": {
+        "message": "마크다운"
+    },
+    "formulaFormatHint": {
+        "message": "Word용 MathML, WPS/Overleaf용 LaTeX, Lark/Notion/Obsidian용 마크다운"
+    },
+    "formulaEngineLabel": {
+        "message": "변환 엔진"
+    },
+    "engineMathJaxLabel": {
+        "message": "MathJax"
+    },
+    "engineKaTeXLabel": {
+        "message": "KaTeX"
+    },
+    "formulaEngineHint": {
+        "message": "MathJax는 호환성이 더 우수하고, KaTeX는 더 빠릅니다"
+    },
+    "screenshotMethodLabel": {
+        "message": "스크린샷 방법"
+    },
+    "methodDomToImageLabel": {
+        "message": "dom-to-image"
+    },
+    "methodHtml2CanvasLabel": {
+        "message": "html2canvas"
+    },
+    "screenshotMethodHint": {
+        "message": "스크린샷에 사용할 방법을 선택하세요. 한 방법이 작동하지 않으면 다른 방법을 시도해 보세요. 방법을 변경한 후 페이지를 새로 고침해 주세요."
+    },
+    "removeDividersLabel": {
+        "message": "구분선 제거"
+    },
+    "removeEmojisLabel": {
+        "message": "이모지 제거"
+    },
+    "convertMermaidLabel": {
+        "message": "Mermaid 변환"
+    },
+    "compatModeLabel": {
+        "message": "호환 모드"
+    },
+    "compatModeTooltip": {
+        "message": "비표준 마크다운 지원"
+    },
+        "compatModeDocUrl": {
+        "message": "https://docs.deepshare.app/en/faq/compat-mode"
+    },
+    "hardLineBreaksLabel": {
+        "message": "강제 줄바꿈"
+    },
+    "hardLineBreaksTooltip": {
+        "message": "단일 줄 바꿈을 강제 줄 바꿈으로 처리"
+    },
+    "hardLineBreaksDocUrl": {
+        "message": "https://docs.deepshare.app/en/faq/hard-line-breaks"
+    },
+    "disableAutoNumberingLabel": {
+        "message": "자동 번호 매기기 안 함"
+    },
+    "disableAutoNumberingTooltip": {
+        "message": "번호가 매겨진 순서 목록을 일반 텍스트로 변환함"
+    },
+    "disableAutoNumberingDocUrl": {
+        "message": "https://docs.deepshare.app/en/faq/hard-line-breaks"
+    },
+    "getClipboardError": {
+        "message": "콘텐츠 가져오기에 실패했습니다"
+    },
+    "clipboardPermissionError": {
+        "message": "콘텐츠 가져오기에 실패했습니다. 클립보드 읽기 권한을 허용해 주세요"
+    },
+    "refreshButton": {
+        "message": "새로 고침"
+    },
+    "purchaseQuota": {
+        "message": "할당량 구매"
+    },
+    "purchaseAddonQuota": {
+        "message": "애드온 할당량 구매"
+    },
+    "purchaseSubscription": {
+        "message": "구독 구매"
+    },
+    "renewSubscription": {
+        "message": "구독 갱신"
+    },
+    "manageSubscription": {
+        "message": "구독 관리"
+    },
+    "pricePageUrl": {
+        "message": "https://ds.rick216.cn/en/price.html"
+    },
+    "subscriptionExpiredDays": {
+        "message": "{days}일 전에 만료됨"
+    },
+    "expirationLabel": {
+        "message": "유효 기간:"
+    },
+    "unknown": {
+        "message": "알 수 없음"
+    },
+    "templateLabel": {
+        "message": "Word 템플릿"
+    },
+    "universalTemplate": {
+        "message": "범용"
+    },
+    "saveAsImageButton": {
+        "message": "이미지로 저장"
+    },
+    "screenshotInitiated": {
+        "message": "스크린샷 생성 중..."
+    },
+    "screenshotSuccess": {
+        "message": "스크린샷 저장됨"
+    },
+    "screenshotFailed": {
+        "message": "스크린샷 생성에 실패했습니다. 새로 고침을 시도해 보시겠습니까?"
+    },
+    "conversationTooLong": {
+        "message": "대화가 너무 길어 하나의 이미지로 캡처할 수 없습니다. 메시지를 더 적게 선택하고 다시 시도해 주세요."
+    },
+    "imageCopied": {
+        "message": "이미지가 클립보드에 복사되었습니다"
+    },
+    "imageCopyFailed": {
+        "message": "이미지를 클립보드에 복사하는 데 실패했습니다"
+    },
+    "apiKeyError": {
+        "message": "API 키 오류 또는 만료되었습니다. 이메일을 확인하거나 고객 서비스(contact@deepshare.app)에 문의해 주세요."
+    },
+    "quotaExceededError": {
+        "message": "할당량 초과. <a href=\"https://ds.rick216.cn/en/price.html\" target=\"_blank\">충전</a>해 주십시오."
+    },
+    "aboutTabTitle": {
+        "message": "DeepShare 정보"
+    },
+    "versionLabel": {
+        "message": "버전:"
+    },
+    "documentationLabel": {
+        "message": "문서:"
+    },
+    "documentationUrl": {
+        "message": "https://docs.deepshare.app/en"
+    },
+
+         "githubLabel": {
+        "message": "GitHub:"
+    },
+    "developerEmailLabel": {
+        "message": "개발자 이메일:"
+    },
+    "acknowledgmentText": {
+        "message": "DeepShare에 대한 제안을 보내주신 모든 분께 감사드립니다! 많은 기능이 실제 사용자의 필요에서 탄생합니다. 함께 생산성을 높이고, 인생에서 진정으로 중요한 일에 더 많은 시간을 할애해 봅시다."
+    },
+    "referenceSources": {
+        "message": "참조 자료"
+    },
+    "unusedSources": {
+        "message": "검토했으나 사용되지 않은 자료"
+    },
+    "saveAsMarkdown": {
+        "message": "Markdown으로 저장"
+    },
+    "otherSettingsTabLabel": {
+        "message": "기타 설정"
+    },
+    "otherSettingsTitle": {
+        "message": "기타 설정"
+    },
+    "geminiSettingsTitle": {
+        "message": "Gemini"
+    },
+    "exportGeminiSourcesLabel": {
+        "message": "Deep Research 출처 내보내기"
+    },
+    "exportGeminiSourcesHint": {
+        "message": "Gemini Deep Research 보고서를 내보낼 때 참조 출처 포함"
+    },
+    "includeGeminiChatLinkLabel": {
+        "message": "채팅 링크 내보내기"
+    },
+    "includeGeminiChatLinkHint": {
+        "message": "내보낸 콘텐츠에는 원본 대화 링크가 포함됩니다"
+    },
+    "itemsSelected": {
+        "message": "$COUNT$개 항목 선택됨",
+        "description": "Gemini 선택 막대에서 선택한 개수",
+        "placeholders": {
+            "COUNT": {
+                "content": "$1"
+            }
+        }
+    },
+        "selectAllQuestions": {
+        "message": "모든 질문 선택"
+    },
+    "confirmExport": {
+        "message": "내보내기 확인"
+    },
+    "cancelButton": {
+        "message": "취소"
+    },
+    "roleUser": {
+        "message": "사용자"
+    },
+    "roleAssistant": {
+        "message": "어시스턴트"
+    },
+    "exportedViaDeepShare": {
+        "message": "DeepShare를 통해 내보냄"
+    },
+    "geminiConversation": {
+        "message": "Gemini 대화"
+    },
+    "sourceConversationLabel": {
+        "message": "소스"
+    },
+    "languageSettingsTitle": {
+        "message": "언어"
+    },
+    "languageSelectLabel": {
+        "message": "표시 언어"
+    },
+    "languageAuto": {
+        "message": "자동 (브라우저 기본값)"
+    },
+    "languageHint": {
+        "message": "원하는 표시 언어를 선택하세요"
+    },
+    "networkError": {
+        "message": "변환에 실패했습니다. 네트워크 연결을 확인해 주세요"
+    },
+    "onboardingWelcomeTitle": {
+        "message": "DeepShare에 오신 것을 환영합니다!"
+    },
+    "onboardingWelcomeSubtitle": {
+        "message": "적절한 수식 형식을 선택하고 확장 프로그램을 고정해 보세요"
+    },
+    "onboardingSelectionTitle": {
+        "message": "수식 형식 선택"
+    },
+    "onboardingSelectionDescription": {
+        "message": "나중에 확장 프로그램 설정에서 변경할 수 있습니다"
+    },
+    "onboardingMathMLDescription": {
+        "message": "Microsoft Word 사용자에게 안성맞춤입니다"
+    },
+        "onboardingLaTeXDescription": {
+        "message": "WPS, MathType 및 Overleaf 사용자용"
+    },
+    "onboardingDollarLatexDescription": {
+        "message": "Lark, Notion 및 Obsidian 사용자용"
+    },
+    "onboardingRecommended": {
+        "message": "권장"
+    },
+    "onboardingLearnMoreText": {
+        "message": "수식 복사에 대해 자세히 알아보기:"
+    },
+    "onboardingLearnMoreLink": {
+        "message": "튜토리얼 보기"
+    },
+    "onboardingContinue": {
+        "message": "계속하기"
+    },
+    "onboardingPinTitle": {
+        "message": "DeepShare를 도구 모음에 고정하세요"
+    },
+    "onboardingPinSubtitle": {
+        "message": "설정에 빠르게 접근하려면 확장 프로그램을 고정하세요"
+    },
+    "onboardingPinStep1": {
+        "message": "브라우저 툴바에서 퍼즐 아이콘을 클릭하세요"
+    },
+    "onboardingPinStep2": {
+        "message": "DeepShare를 찾아 핀 아이콘을 클릭하세요"
+    },
+    "onboardingPinStep3": {
+        "message": "설정에 액세스하려면 언제든지 DeepShare 아이콘을 클릭하세요"
+    },
+    "onboardingFinish": {
+        "message": "알겠습니다!"
+    },
+        "onboardingBack": {
+        "message": "뒤로"
+    },
+    "onboardingLearnMoreUsageText": {
+        "message": "확장 프로그램 사용법에 대해 자세히 알아보기:"
+    },
+    "onboardingLearnMoreUsageLink": {
+        "message": "튜토리얼 보기"
+    },
+    "onboardingRefreshHint": {
+        "message": "처음 사용하시는 경우, 열려 있는 모든 AI 대화를 새로 고침해 주세요."
+    },
+    "scrollCollecting": {
+        "message": "메시지를 수집하기 위해 스크롤 중입니다. 잠시만 기다려 주세요..."
+    }
+}
