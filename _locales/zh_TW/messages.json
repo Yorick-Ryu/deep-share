@@ -510,5 +510,23 @@
     },
     "documentationUrl": {
         "message": "https://docs.deepshare.app/en"
+    },
+    "aboutTabTitle": {
+        "message": "關於 DeepShare"
+    },
+    "versionLabel": {
+        "message": "版本："
+    },
+    "documentationLabel": {
+        "message": "文件："
+    },
+    "githubLabel": {
+        "message": "GitHub："
+    },
+    "developerEmailLabel": {
+        "message": "開發者電子郵件："
+    },
+    "acknowledgmentText": {
+        "message": "感謝所有為 DeepShare 提出建議的人！許多功能都源自真實用戶的需求。讓我們一起提升生產力，為生活中真正重要的事情節省時間。"
     }
 }

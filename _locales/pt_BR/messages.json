@@ -528,5 +528,23 @@
     },
     "scrollCollecting": {
         "message": "Rolando para coletar mensagens, por favor aguarde..."
+    },
+    "copyAsMarkdown": {
+        "message": "Copiar como Markdown"
+    },
+    "markdownCopied": {
+        "message": "Markdown copiado para a área de transferência"
+    },
+    "copyConversationMarkdown": {
+        "message": "Copiar tudo como Markdown"
+    },
+    "featureDisabled": {
+        "message": "O recurso de cópia Markdown está desativado"
+    },
+    "noMessages": {
+        "message": "Nenhuma mensagem encontrada"
+    },
+    "noContent": {
+        "message": "Nenhum conteúdo para copiar"
     }
 }
