@@ -7,27 +7,6 @@
     'use strict';
     console.debug('DeepShare: Initializing DeepSeek Markdown copy functionality');
 
-    // Load settings
-    let copyMarkdownSettings = {
-        enabled: true,
-        includeUserQuestion: true,
-        includeAiResponse: true
-    };
-
-    function loadSettings() {
-        chrome.storage.sync.get({
-            copyDeepSeekMarkdownEnabled: true,
-            includeUserQuestion: true,
-            includeAiResponse: true
-        }, (settings) => {
-            copyMarkdownSettings = {
-                enabled: settings.copyDeepSeekMarkdownEnabled,
-                includeUserQuestion: settings.includeUserQuestion,
-                includeAiResponse: settings.includeAiResponse
-            };
-        });
-    }
-
     // Function to extract AI response as markdown
     function extractAiResponseAsMarkdown(messageDiv) {
         // Find the markdown content
@@ -249,11 +228,6 @@
 
     // Copy entire conversation as markdown
     async function saveConversationAsMarkdown() {
-        if (!copyMarkdownSettings.enabled) {
-            window.showToastNotification(chrome.i18n?.getMessage('featureDisabled') || 'Save as Markdown feature is disabled', 'info');
-            return;
-        }
-
         // Find all messages
         const messageSelector = '._9663006, ._4f9bf79._43c05b5, ._4f9bf79.d7dc56a8._43c05b5';
         const messages = document.querySelectorAll(messageSelector);
@@ -269,13 +243,13 @@
         for (const messageDiv of messages) {
             const isUserMessage = messageDiv.matches('._9663006') || messageDiv.querySelector('.d29f3d7d');
             
-            if (isUserMessage && copyMarkdownSettings.includeUserQuestion) {
+            if (isUserMessage) {
                 const userContent = extractUserQuestionAsMarkdown(messageDiv);
                 if (userContent) {
                     conversationContent += `## Message ${messageIndex}: User Question\n\n${userContent}\n\n---\n\n`;
                     messageIndex++;
                 }
-            } else if (!isUserMessage && copyMarkdownSettings.includeAiResponse) {
+            } else if (!isUserMessage) {
                 let aiContent = extractAiResponseAsMarkdown(messageDiv);
                 
                 
@@ -333,8 +307,6 @@
 
     // Observe and inject buttons
     function observeAndInject() {
-        loadSettings();
-
         const observer = new MutationObserver((mutations) => {
             for (const mutation of mutations) {
                 if (mutation.type === 'childList') {
@@ -349,18 +321,6 @@
             subtree: true
         });
 
-        // Listen for settings changes
-        chrome.storage.onChanged.addListener((changes) => {
-            if (changes.copyDeepSeekMarkdownEnabled) {
-                copyMarkdownSettings.enabled = changes.copyDeepSeekMarkdownEnabled.newValue;
-            }
-            if (changes.includeUserQuestion) {
-                copyMarkdownSettings.includeUserQuestion = changes.includeUserQuestion.newValue;
-            }
-            if (changes.includeAiResponse) {
-                copyMarkdownSettings.includeAiResponse = changes.includeAiResponse.newValue;
-            }
-        });
     }
 
     // Initialize
