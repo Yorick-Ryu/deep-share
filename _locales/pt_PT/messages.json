@@ -528,23 +528,5 @@
     },
     "scrollCollecting": {
         "message": "A percorrer para recolher mensagens, por favor aguarde..."
-    },
-    "copyAsMarkdown": {
-        "message": "Copiar como Markdown"
-    },
-    "markdownCopied": {
-        "message": "Markdown copiado para a área de transferência"
-    },
-    "copyConversationMarkdown": {
-        "message": "Copiar tudo como Markdown"
-    },
-    "featureDisabled": {
-        "message": "A funcionalidade de cópia Markdown está desativada"
-    },
-    "noMessages": {
-        "message": "Nenhuma mensagem encontrada"
-    },
-    "noContent": {
-        "message": "Nenhum conteúdo para copiar"
     }
 }
