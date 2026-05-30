@@ -172,12 +172,6 @@ function loadSettings(highlightApiKey = false, forceDocxTab = false) {
     // Language preference
     document.getElementById('languageSelect').value = data.preferredLanguage || 'auto';
 
-    // DeepSeek Markdown setting
-    document.getElementById('copyDeepSeekMarkdownEnabled').checked = settings.copyDeepSeekMarkdownEnabled !== false;
-    document.getElementById('copyDeepSeekMarkdownEnabled').addEventListener('change', (e) => {
-      chrome.storage.sync.set({ copyDeepSeekMarkdownEnabled: e.target.checked });
-    });
-
     // If API key is set, check quota and update renewal/purchase links
     if (data.docxApiKey) {
       checkQuota();

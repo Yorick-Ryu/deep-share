@@ -52,135 +52,203 @@
 
     // Extract markdown from element with formula handling
     function extractMarkdownFromElement(element) {
-        let result = '';
 
-        const processNode = (node) => {
-            // Skip checkboxes and selection UI
-            if (node.nodeType === Node.ELEMENT_NODE) {
-                if (node.classList && (
-                    node.classList.contains('message-checkbox-wrapper') ||
-                    node.classList.contains('ds-checkbox-wrapper')
-                )) {
-                    return;
-                }
-            }
+        // Returns inline markdown string for a node and its children
+        function extractInline(node) {
+            if (node.nodeType === Node.TEXT_NODE) return node.textContent;
 
-            // Handle math formulas (KaTeX)
+            if (node.nodeType !== Node.ELEMENT_NODE) return '';
+
+            // Skip UI chrome
+            if (node.classList && (
+                node.classList.contains('message-checkbox-wrapper') ||
+                node.classList.contains('ds-checkbox-wrapper')
+            )) return '';
+
+            // KaTeX inline
             if (node.classList && node.classList.contains('katex')) {
-                const annotation = node.querySelector('annotation[encoding="application/x-tex"]');
-                if (annotation) {
-                    const isDisplay = node.closest('.katex-display');
-                    const latex = annotation.textContent.trim();
-                    if (isDisplay) {
-                        result += '\n$$\n' + latex + '\n$$\n';
-                    } else {
-                        result += '$' + latex + '$';
-                    }
-                    return;
-                }
+                if (node.closest('.katex-display')) return ''; // handled at block level
+                const ann = node.querySelector('annotation[encoding="application/x-tex"]');
+                return ann ? '$' + ann.textContent.trim() + '$' : node.textContent;
+            }
+            // Skip the MathML sibling inside katex-display (avoid double output)
+            if (node.classList && node.classList.contains('katex-mathml')) return '';
+
+            const tag = node.tagName;
+
+            if (tag === 'STRONG' || tag === 'B') return '**' + extractChildren(node) + '**';
+            if (tag === 'EM'     || tag === 'I') return '*'  + extractChildren(node) + '*';
+            if (tag === 'S' || tag === 'DEL')   return '~~' + extractChildren(node) + '~~';
+            if (tag === 'CODE' && !node.closest('pre')) return '`' + node.textContent + '`';
+            if (tag === 'A') {
+                const href = node.getAttribute('href');
+                const text = extractChildren(node);
+                return (href && href !== text) ? '[' + text + '](' + href + ')' : text;
+            }
+            if (tag === 'BR') return '\n';
+
+            return extractChildren(node);
+        }
+
+        function extractChildren(node) {
+            return Array.from(node.childNodes).map(extractInline).join('');
+        }
+
+        // Returns block-level markdown string (with surrounding newlines)
+        function extractBlock(node, depth) {
+            if (depth === undefined) depth = 0;
+
+            if (node.nodeType === Node.TEXT_NODE) {
+                const t = node.textContent;
+                return t.trim() ? t : '';
             }
 
-            // Handle code blocks
-            if (node.tagName === 'PRE') {
+            if (node.nodeType !== Node.ELEMENT_NODE) return '';
+
+            // Skip UI chrome
+            if (node.classList && (
+                node.classList.contains('message-checkbox-wrapper') ||
+                node.classList.contains('ds-checkbox-wrapper')
+            )) return '';
+
+            const tag = node.tagName;
+
+            // KaTeX display block
+            if (node.classList && node.classList.contains('katex-display')) {
+                const ann = node.querySelector('annotation[encoding="application/x-tex"]');
+                if (ann) return '\n$$\n' + ann.textContent.trim() + '\n$$\n';
+                return '';
+            }
+            if (node.classList && (node.classList.contains('katex') || node.classList.contains('katex-mathml'))) {
+                return extractInline(node);
+            }
+
+            // Headings
+            if (/^H[1-6]$/.test(tag)) {
+                const level = '#'.repeat(parseInt(tag[1]));
+                return '\n' + level + ' ' + extractChildren(node).trim() + '\n';
+            }
+
+            // Code block
+            if (tag === 'PRE') {
                 const code = node.querySelector('code');
                 if (code) {
-                    const language = code.className.match(/language-(\w+)/)?.[1] || '';
-                    result += '\n```' + language + '\n' + code.textContent + '\n```\n';
+                    const lang = code.className.match(/language-(\w+)/)?.[1] || '';
+                    return '\n```' + lang + '\n' + code.textContent.replace(/\n$/, '') + '\n```\n';
                 }
-                return;
+                return '\n```\n' + node.textContent + '\n```\n';
             }
 
-            // Handle inline code
-            if (node.tagName === 'CODE' && !node.closest('pre')) {
-                result += '`' + node.textContent + '`';
-                return;
+            // Blockquote
+            if (tag === 'BLOCKQUOTE') {
+                const inner = extractChildren(node).trim();
+                return '\n' + inner.split('\n').map(l => '> ' + l).join('\n') + '\n';
             }
 
-            // Handle headings
-            if (node.tagName && /^H[1-6]$/.test(node.tagName)) {
-                const level = node.tagName[1];
-                const headingMark = '#'.repeat(parseInt(level));
-                result += '\n' + headingMark + ' ' + node.textContent.trim() + '\n';
-                return;
-            }
+            // Horizontal rule
+            if (tag === 'HR') return '\n---\n';
 
-            // Handle bold
-            if (node.tagName === 'STRONG' || node.tagName === 'B') {
-                result += '**' + node.textContent + '**';
-                return;
-            }
-
-            // Handle italic
-            if (node.tagName === 'EM' || node.tagName === 'I') {
-                result += '*' + node.textContent + '*';
-                return;
-            }
-
-            // Handle links
-            if (node.tagName === 'A') {
-                const href = node.getAttribute('href');
-                const text = node.textContent;
-                if (href && href !== text) {
-                    result += '[' + text + '](' + href + ')';
-                } else {
-                    result += text;
-                }
-                return;
-            }
-
-            // Handle lists
-            if (node.tagName === 'UL' || node.tagName === 'OL') {
-                const items = node.querySelectorAll(':scope > li');
-                const isOrdered = node.tagName === 'OL';
-                items.forEach((item, idx) => {
-                    const prefix = isOrdered ? `${idx + 1}. ` : '- ';
-                    result += prefix + item.textContent.trim() + '\n';
+            // Table
+            if (tag === 'TABLE') {
+                let out = '\n';
+                const rows = Array.from(node.querySelectorAll('tr'));
+                rows.forEach((row, i) => {
+                    const cells = Array.from(row.querySelectorAll('th, td'));
+                    out += '| ' + cells.map(c => extractChildren(c).trim()).join(' | ') + ' |\n';
+                    if (i === 0) {
+                        out += '| ' + cells.map(() => '---').join(' | ') + ' |\n';
+                    }
                 });
-                return;
+                return out;
+            }
+            if (tag === 'THEAD' || tag === 'TBODY' || tag === 'TR' || tag === 'TH' || tag === 'TD') return '';
+
+            // Lists
+            if (tag === 'UL' || tag === 'OL') {
+                return extractList(node, depth);
+            }
+            if (tag === 'LI') return ''; // handled inside extractList
+
+            // Paragraph
+            if (tag === 'P') {
+                return '\n' + extractChildren(node).trim() + '\n';
             }
 
-            // Handle paragraphs
-            if (node.tagName === 'P') {
-                result += node.textContent.trim() + '\n\n';
-                return;
+            // Inline elements inside block context — emit inline
+            if (['STRONG','B','EM','I','S','DEL','CODE','A','SPAN','BR'].includes(tag)) {
+                return extractInline(node);
             }
 
-            // Handle line breaks
-            if (node.tagName === 'BR') {
-                result += '\n';
-                return;
-            }
+            // Generic container — recurse
+            return Array.from(node.childNodes).map(c => extractBlock(c, depth)).join('');
+        }
 
-            // Handle text nodes
-            if (node.nodeType === Node.TEXT_NODE) {
-                result += node.textContent;
-                return;
-            }
+        function extractList(listNode, depth) {
+            const isOrdered = listNode.tagName === 'OL';
+            const indent = '   '.repeat(depth);
+            let out = '\n';
+            let orderedIdx = 1;
+            Array.from(listNode.children).forEach(li => {
+                if (li.tagName !== 'LI') return;
+                const prefix = isOrdered ? (orderedIdx++) + '. ' : '* ';
 
-            // Recursively process children
-            if (node.childNodes && node.childNodes.length > 0) {
-                node.childNodes.forEach(processNode);
-            }
-        };
+                // Separate inline content from nested lists
+                let inlinePart = '';
+                let nestedPart = '';
+                Array.from(li.childNodes).forEach(child => {
+                    if (child.nodeType === Node.ELEMENT_NODE && (child.tagName === 'UL' || child.tagName === 'OL')) {
+                        nestedPart += extractList(child, depth + 1);
+                    } else {
+                        inlinePart += extractInline(child);
+                    }
+                });
 
-        processNode(element);
+                out += indent + prefix + inlinePart.trim() + '\n';
+                if (nestedPart) out += nestedPart;
+            });
+            return out;
+        }
 
-        // Clean up excessive newlines
-        result = result.replace(/\n{3,}/g, '\n\n').trim();
-
-        return result;
+        const raw = Array.from(element.childNodes).map(c => extractBlock(c, 0)).join('');
+        return raw.replace(/\n{3,}/g, '\n\n').trim();
     }
 
-    // Copy markdown to clipboard
-    async function copyMarkdownToClipboard(content) {
-        await navigator.clipboard.writeText(content);
-        window.showToastNotification(chrome.i18n?.getMessage('markdownCopied') || 'Markdown copied to clipboard', 'success');
+    // Save markdown content as a .md file
+    function saveMarkdownFile(content) {
+        const filename = generateFilename(content) + '.md';
+        const blob = new Blob([content], { type: 'text/markdown;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+        window.showToastNotification(chrome.i18n?.getMessage('markdownSaved') || 'Saved as Markdown file', 'success');
     }
 
-    // Main copy function
-    async function copyAsMarkdown(copyButton) {
+    function generateFilename(content) {
+        const now = new Date();
+        const timestamp = now.toLocaleString('zh-CN', {
+            year: 'numeric', month: '2-digit', day: '2-digit',
+            hour: '2-digit', minute: '2-digit', second: '2-digit',
+            hour12: false
+        }).replace(/[\/\s:]/g, '-').replace(',', '');
+
+        if (!content) return `deepseek_${timestamp}`;
+        const lines = content.split('\n').filter(l => l.trim().length > 0);
+        let firstLine = '';
+        if (lines.length > 0) {
+            firstLine = lines[0].replace(/^#+\s*/, '').replace(/[^a-zA-Z0-9_\u4e00-\u9fa5]/g, '').substring(0, 15).trim();
+        }
+        return `${firstLine || 'deepseek'}_${timestamp}`;
+    }
+
+    // Main save function
+    async function saveAsMarkdown(copyButton) {
         if (!copyMarkdownSettings.enabled) {
-            window.showToastNotification(chrome.i18n?.getMessage('featureDisabled') || 'Markdown copy feature is disabled', 'info');
+            window.showToastNotification(chrome.i18n?.getMessage('featureDisabled') || 'Save as Markdown feature is disabled', 'info');
             return;
         }
 
@@ -188,7 +256,7 @@
         let messageDiv = copyButton.closest('._4f9bf79, ._9663006');
         if (!messageDiv) {
             console.error('Could not find message container');
-            window.showToastNotification(chrome.i18n?.getMessage('copyFailed') || 'Failed to copy', 'error');
+            window.showToastNotification(chrome.i18n?.getMessage('saveFailed') || 'Failed to save', 'error');
             return;
         }
 
@@ -196,7 +264,6 @@
         let markdownContent = '';
 
         if (isAiMessage) {
-            // For AI responses, only copy AI content (user question can be optionally included via selection)
             const aiContent = extractAiResponseAsMarkdown(messageDiv);
             if (aiContent) {
                 markdownContent = `## AI Response\n\n${aiContent}`;
@@ -207,7 +274,6 @@
                 }
             }
         } else {
-            // For user messages, copy as is
             const userContent = extractUserQuestionAsMarkdown(messageDiv);
             if (userContent) {
                 markdownContent = `## User Question\n\n${userContent}`;
@@ -215,9 +281,9 @@
         }
 
         if (markdownContent && markdownContent.trim()) {
-            await copyMarkdownToClipboard(markdownContent);
+            saveMarkdownFile(markdownContent);
         } else {
-            window.showToastNotification(chrome.i18n?.getMessage('noContent') || 'No content to copy', 'error');
+            window.showToastNotification(chrome.i18n?.getMessage('noContent') || 'No content to save', 'error');
         }
     }
 
@@ -254,9 +320,9 @@
     }
 
     // Copy entire conversation as markdown
-    async function copyConversationAsMarkdown() {
+    async function saveConversationAsMarkdown() {
         if (!copyMarkdownSettings.enabled) {
-            window.showToastNotification(chrome.i18n?.getMessage('featureDisabled') || 'Markdown copy feature is disabled', 'info');
+            window.showToastNotification(chrome.i18n?.getMessage('featureDisabled') || 'Save as Markdown feature is disabled', 'info');
             return;
         }
 
@@ -302,9 +368,9 @@
             const timestamp = new Date().toLocaleString();
             const fullMarkdown = `# ${title}\n\n*Exported on ${timestamp} via DeepShare*\n\n---\n\n${conversationContent}`;
             
-            await copyMarkdownToClipboard(fullMarkdown);
+            saveMarkdownFile(fullMarkdown);
         } else {
-            window.showToastNotification(chrome.i18n?.getMessage('noContent') || 'No content to copy', 'error');
+            window.showToastNotification(chrome.i18n?.getMessage('noContent') || 'No content to save', 'error');
         }
     }
 
@@ -316,8 +382,8 @@
         mdButton.className = copyButton.className + ' deepseek-markdown-copy-btn';
         mdButton.tabIndex = copyButton.tabIndex || -1;
         mdButton.setAttribute('role', 'button');
-        mdButton.setAttribute('aria-label', chrome.i18n?.getMessage('copyAsMarkdown') || 'Copy as Markdown');
-        mdButton.title = chrome.i18n?.getMessage('copyAsMarkdown') || 'Copy as Markdown';
+        mdButton.setAttribute('aria-label', chrome.i18n?.getMessage('saveAsMarkdown') || 'Save as Markdown');
+        mdButton.title = chrome.i18n?.getMessage('saveAsMarkdown') || 'Save as Markdown';
 
         // Copy styling
         const copyStyle = copyButton.getAttribute('style') || '';
@@ -403,7 +469,7 @@
             mdButton.style.opacity = '0.5';
             mdButton.style.pointerEvents = 'none';
             
-            await copyAsMarkdown(copyButton);
+            await saveAsMarkdown(copyButton);
             
             // Re-enable
             mdButton.style.opacity = '';
@@ -428,7 +494,7 @@
         const mdCopyButton = createLinkButton.cloneNode(true);
         mdCopyButton.id = 'copy-conversation-md-btn';
         const span = mdCopyButton.querySelector('span');
-        span.textContent = chrome.i18n?.getMessage('copyConversationMarkdown') || 'Copy Markdown';
+        span.textContent = chrome.i18n?.getMessage('saveConversationMarkdown') || 'Save as Markdown';
 
         // Remove icon if exists
         const iconContainer = mdCopyButton.querySelector('.ds-icon');
@@ -437,7 +503,7 @@
         }
 
         mdCopyButton.addEventListener('click', async () => {
-            await copyConversationAsMarkdown();
+            await saveConversationAsMarkdown();
         });
 
         buttonContainer.insertBefore(mdCopyButton, createLinkButton);
