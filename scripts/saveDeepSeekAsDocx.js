@@ -17,7 +17,7 @@ document.addEventListener('deepshare:saveAsDocx', async () => {
     const { signal } = scrollAbortController;
 
     // Listen for the cancel button click
-    const cancelBtn = document.querySelector('.fab07e97 .ds-basic-button--outlined');
+    const cancelBtn = document.querySelector('.fab07e97 .ds-basic-button--outlined, .fab07e97 .ds-button--outlined');
     const onCancel = () => scrollAbortController?.abort();
     if (cancelBtn) {
         cancelBtn.addEventListener('click', onCancel, { once: true });
@@ -92,12 +92,12 @@ function setButtonDisabled(button, disabled) {
         button.style.opacity = '0.5';
         button.style.pointerEvents = 'none';
         button.setAttribute('aria-disabled', 'true');
-        button.classList.add('ds-atom-button--disabled');
+        button.classList.add('ds-atom-button--disabled', 'ds-button--disabled');
     } else {
         button.style.opacity = '';
         button.style.pointerEvents = '';
         button.setAttribute('aria-disabled', 'false');
-        button.classList.remove('ds-atom-button--disabled');
+        button.classList.remove('ds-atom-button--disabled', 'ds-button--disabled');
     }
 }
 
@@ -356,24 +356,7 @@ function isScrollable(element) {
  * or falls back to DOM text extraction.
  */
 async function extractAIMessageContent(messageDiv) {
-    // Strategy 1: Copy button with known SVG path
-    let copyButton = null;
-    const dsIconButtons = messageDiv.querySelectorAll('.ds-icon-button[role="button"]');
-    for (const btn of dsIconButtons) {
-        const svgPath = btn.querySelector('svg path[d^="M6.149"]');
-        if (svgPath) {
-            copyButton = btn;
-            break;
-        }
-    }
-
-    // Strategy 2: First role=button with tabindex
-    if (!copyButton) {
-        const buttons = messageDiv.querySelectorAll('[role="button"][tabindex]');
-        if (buttons.length > 0) {
-            copyButton = buttons[0];
-        }
-    }
+    const copyButton = findDeepSeekMessageCopyButton(messageDiv);
 
     if (copyButton) {
         try {
@@ -384,7 +367,22 @@ async function extractAIMessageContent(messageDiv) {
         }
     }
 
+    const fallbackContent = extractContentFromDOM(messageDiv);
+    if (fallbackContent) {
+        return fallbackContent;
+    }
+
     throw new Error('Copy button not found for AI message');
+}
+
+function findDeepSeekMessageCopyButton(messageDiv) {
+    const buttons = Array.from(messageDiv.querySelectorAll('[role="button"][tabindex], .ds-icon-button[role="button"]'));
+
+    return buttons.find(button => {
+        if (button.classList.contains('deepseek-docx-btn')) return false;
+        if (button.closest('.ds-markdown, .md-code-block')) return false;
+        return !!button.querySelector('svg path[d^="M6.149"]');
+    }) || null;
 }
 
 /**
