@@ -514,6 +514,15 @@
             }
         }
 
+        const sharePageTitle = document.querySelector('immersive-editor[data-test-id="docs-block"] .ProseMirror h1, .docs-content .ProseMirror h1');
+        if (sharePageTitle && sharePageTitle.textContent) {
+            const title = sharePageTitle.textContent.trim();
+            if (title) {
+                console.debug('DeepShare: Found title from Gemini share page:', title);
+                return title;
+            }
+        }
+
         return null;
     }
 
@@ -564,7 +573,11 @@
 
     async function getCanvasContent() {
         // 从Canvas编辑器中解析Markdown内容
-        const editorElement = document.querySelector('#extended-response-markdown-content');
+        const editorElement = document.querySelector([
+            '#extended-response-markdown-content',
+            'immersive-editor[data-test-id="docs-block"] .ProseMirror',
+            '.docs-content .ProseMirror'
+        ].join(','));
 
         if (!editorElement) {
             throw new Error('无法找到Canvas编辑器');
@@ -1155,6 +1168,46 @@
 
         return result;
     }
+
+    window.DeepShareGeminiCanvasExport = {
+        getTitle: getCanvasTitleFromDOM,
+        getContent: getCanvasContent,
+        downloadMarkdown: downloadMarkdownFile,
+        exportWord: async function (sourceButton) {
+            const documentTitle = getCanvasTitleFromDOM();
+            const canvasContent = await getCanvasContent();
+
+            if (!canvasContent || !canvasContent.trim()) {
+                window.showToastNotification(chrome.i18n?.getMessage('getClipboardError') || '无法获取内容', 'error');
+                return false;
+            }
+
+            document.dispatchEvent(new CustomEvent('deepshare:convertToDocx', {
+                detail: {
+                    messages: {
+                        role: 'assistant',
+                        content: canvasContent,
+                    },
+                    sourceButton,
+                    documentTitle,
+                },
+            }));
+
+            return true;
+        },
+        exportMarkdown: async function () {
+            const documentTitle = getCanvasTitleFromDOM();
+            const canvasContent = await getCanvasContent();
+
+            if (!canvasContent || !canvasContent.trim()) {
+                window.showToastNotification(chrome.i18n?.getMessage('getClipboardError') || '无法获取内容', 'error');
+                return false;
+            }
+
+            downloadMarkdownFile(canvasContent, documentTitle);
+            return true;
+        }
+    };
 
     // MutationObserver 监听DOM变化
     const observer = new MutationObserver(() => {

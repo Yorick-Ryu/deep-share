@@ -169,6 +169,14 @@
                 "scripts/injectGeminiCanvasButton.js",
                 "scripts/injectGeminiExportMenu.js"
             ]
+        },
+        {
+            "matches": [
+                "https://gemini.google.com/share/*"
+            ],
+            "js": [
+                "scripts/injectGeminiShareExportButtons.js"
+            ]
         }
     ]
 }

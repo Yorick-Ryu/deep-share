@@ -480,6 +480,81 @@
     background-color: var(--mat-option-hover-state-layer-color, rgba(68, 71, 70, 0.08));
 }
 
+.deepshare-share-export-buttons {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-right: 8px;
+}
+
+.deepshare-share-export-button {
+    min-height: 36px;
+    padding: 0 16px;
+    border: 1px solid var(--gem-sys-color--outline-variant, #c4c7c5);
+    border-radius: 18px;
+    background: var(--gem-sys-color--surface-container-low, #f8fafd);
+    color: var(--gem-sys-color--on-surface, #1f1f1f);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: "Google Sans", Roboto, Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+    letter-spacing: 0;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color 0.16s ease-out, border-color 0.16s ease-out;
+}
+
+.deepshare-share-export-button:hover {
+    background: var(--mat-option-hover-state-layer-color, rgba(68, 71, 70, 0.08));
+}
+
+.deepshare-share-export-button:focus-visible {
+    outline: 2px solid var(--gem-sys-color--primary, #0b57d0);
+    outline-offset: 2px;
+}
+
+.deepshare-share-export-button:disabled {
+    cursor: default;
+}
+
+.deepshare-share-export-icon,
+.deepshare-share-export-button .mat-icon.deepshare-share-export-icon {
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+    line-height: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    font-family: 'Google Symbols', 'Material Symbols Outlined', 'Material Icons', sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    letter-spacing: 0;
+    text-transform: none;
+    white-space: nowrap;
+    direction: ltr;
+    font-feature-settings: 'liga';
+    -webkit-font-feature-settings: 'liga';
+    -webkit-font-smoothing: antialiased;
+}
+
+@media (max-width: 640px) {
+    .deepshare-share-export-buttons {
+        width: 100%;
+        margin: 0 0 8px;
+        flex-wrap: wrap;
+    }
+
+    .deepshare-share-export-button {
+        flex: 1 1 150px;
+    }
+}
+
 @media (prefers-color-scheme: dark) {
 
     .math-inline[data-gemini-math-copy-enabled="true"]:hover,
