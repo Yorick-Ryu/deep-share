@@ -3,6 +3,54 @@
  * Handles conversion of conversation to DOCX format
  */
 
+const DEEPSHARE_PRIMARY_API_URL = 'https://api.ds.rick216.cn';
+const DEEPSHARE_FALLBACK_API_URL = 'https://api.deepshare.app';
+
+function normalizeApiBaseUrl(rawUrl) {
+    const url = isValidUrl(rawUrl) ? rawUrl.trim() : DEEPSHARE_PRIMARY_API_URL;
+    return url.replace(/\/+$/, '');
+}
+
+function getApiBaseUrlCandidates(rawUrl) {
+    const primaryUrl = normalizeApiBaseUrl(rawUrl);
+    const urls = [primaryUrl];
+
+    try {
+        const parsedUrl = new URL(primaryUrl);
+        if (parsedUrl.hostname === 'api.ds.rick216.cn') {
+            urls.push(DEEPSHARE_FALLBACK_API_URL);
+        }
+    } catch (_) {
+        urls.push(DEEPSHARE_FALLBACK_API_URL);
+    }
+
+    return urls;
+}
+
+async function fetchWithApiFallback(rawBaseUrl, path, options) {
+    const urls = getApiBaseUrlCandidates(rawBaseUrl);
+    let lastError = null;
+
+    for (let i = 0; i < urls.length; i++) {
+        const isLastAttempt = i === urls.length - 1;
+
+        try {
+            const response = await fetch(`${urls[i]}${path}`, options);
+            if (response.status < 500 || isLastAttempt) {
+                return response;
+            }
+            lastError = new Error(`API unavailable: ${response.status}`);
+        } catch (error) {
+            lastError = error;
+            if (isLastAttempt) {
+                throw error;
+            }
+        }
+    }
+
+    throw lastError || new Error('API unavailable');
+}
+
 // Function to initialize the DOCX conversion feature
 function initDocxConverter() {
     console.debug('DOCX converter initialized');
@@ -83,7 +131,7 @@ async function convertToDocx(message, sourceButton, documentTitle = null) {
 
         // Get settings from storage
         const settings = await chrome.storage.sync.get({
-            docxServerUrl: 'https://api.ds.rick216.cn'
+            docxServerUrl: DEEPSHARE_PRIMARY_API_URL
         });
 
         // Always use the API conversion method
@@ -187,7 +235,7 @@ async function convertToDocxViaApi(content, serverUrl, documentTitle = null) {
     try {
         // Get API settings from storage
         const settings = await chrome.storage.sync.get({
-            docxServerUrl: 'https://api.ds.rick216.cn',
+            docxServerUrl: DEEPSHARE_PRIMARY_API_URL,
             docxApiKey: '',
             removeDividers: false,  // Default to false for removing dividers
             removeEmojis: false,    // Default to false for removing emojis
@@ -198,8 +246,7 @@ async function convertToDocxViaApi(content, serverUrl, documentTitle = null) {
             lastUsedTemplate: null
         });
 
-        const rawUrl = serverUrl || settings.docxServerUrl || 'https://api.ds.rick216.cn';
-        const url = isValidUrl(rawUrl) ? rawUrl : 'https://api.ds.rick216.cn';
+        const rawUrl = serverUrl || settings.docxServerUrl || DEEPSHARE_PRIMARY_API_URL;
         const apiKey = settings.docxApiKey;
 
         // Ensure API key is provided
@@ -264,7 +311,7 @@ async function convertToDocxViaApi(content, serverUrl, documentTitle = null) {
         }
 
         // Call the conversion API
-        const response = await fetch(`${url}/convert-text`, {
+        const response = await fetchWithApiFallback(rawUrl, '/convert-text', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -303,13 +350,12 @@ async function checkQuota() {
     try {
         // Get API settings from storage
         const settings = await chrome.storage.sync.get({
-            docxServerUrl: 'https://api.ds.rick216.cn',
+            docxServerUrl: DEEPSHARE_PRIMARY_API_URL,
             docxApiKey: ''
         });
 
-        const rawUrl = settings.docxServerUrl;
+        const rawUrl = settings.docxServerUrl || DEEPSHARE_PRIMARY_API_URL;
         const apiKey = settings.docxApiKey;
-        const url = isValidUrl(rawUrl) ? rawUrl : 'https://api.ds.rick216.cn';
 
         // If no API key, exit quietly
         if (!apiKey) {
@@ -320,7 +366,7 @@ async function checkQuota() {
 
         // Try new subscription quota API first
         try {
-            const response = await fetch(`${url}/subscriptions/my/quota`, {
+            const response = await fetchWithApiFallback(rawUrl, '/subscriptions/my/quota', {
                 method: 'GET',
                 headers: { 'X-API-Key': apiKey }
             });
@@ -342,7 +388,7 @@ async function checkQuota() {
         // Fallback to old quota API if new API failed
         if (!quotaData) {
             try {
-                const response = await fetch(`${url}/auth/quota`, {
+                const response = await fetchWithApiFallback(rawUrl, '/auth/quota', {
                     method: 'GET',
                     headers: { 'X-API-Key': apiKey }
                 });

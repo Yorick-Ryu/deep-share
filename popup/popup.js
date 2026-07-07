@@ -2,6 +2,53 @@
 let customLocaleMessages = null;
 let currentLanguage = 'auto';
 let currentPopupAction = null;
+const DEEPSHARE_PRIMARY_API_URL = 'https://api.ds.rick216.cn';
+const DEEPSHARE_FALLBACK_API_URL = 'https://api.deepshare.app';
+
+function normalizeApiBaseUrl(rawUrl) {
+  const url = isValidUrl(rawUrl) ? rawUrl.trim() : DEEPSHARE_PRIMARY_API_URL;
+  return url.replace(/\/+$/, '');
+}
+
+function getApiBaseUrlCandidates(rawUrl) {
+  const primaryUrl = normalizeApiBaseUrl(rawUrl);
+  const urls = [primaryUrl];
+
+  try {
+    const parsedUrl = new URL(primaryUrl);
+    if (parsedUrl.hostname === 'api.ds.rick216.cn') {
+      urls.push(DEEPSHARE_FALLBACK_API_URL);
+    }
+  } catch (_) {
+    urls.push(DEEPSHARE_FALLBACK_API_URL);
+  }
+
+  return urls;
+}
+
+async function fetchWithApiFallback(rawBaseUrl, path, options) {
+  const urls = getApiBaseUrlCandidates(rawBaseUrl);
+  let lastError = null;
+
+  for (let i = 0; i < urls.length; i++) {
+    const isLastAttempt = i === urls.length - 1;
+
+    try {
+      const response = await fetch(`${urls[i]}${path}`, options);
+      if (response.status < 500 || isLastAttempt) {
+        return response;
+      }
+      lastError = new Error(`API unavailable: ${response.status}`);
+    } catch (error) {
+      lastError = error;
+      if (isLastAttempt) {
+        throw error;
+      }
+    }
+  }
+
+  throw lastError || new Error('API unavailable');
+}
 
 // Initialize and load settings
 document.addEventListener('DOMContentLoaded', async () => {
@@ -123,7 +170,7 @@ function loadSettings(highlightApiKey = false, forceDocxTab = false) {
     document.getElementById('methodSnapDOM').checked = screenshotMethod === 'snapdom';
 
     // DOCX conversion settings
-    document.getElementById('docxServerUrl').value = data.docxServerUrl || 'https://api.ds.rick216.cn';
+    document.getElementById('docxServerUrl').value = data.docxServerUrl || DEEPSHARE_PRIMARY_API_URL;
 
     const apiKeyInput = document.getElementById('docxApiKey');
     apiKeyInput.value = data.docxApiKey || '';
@@ -547,7 +594,7 @@ function loadI18nText(popupAction = null) {
   document.getElementById('geminiAutoScrollTimeoutHint').textContent = getMessage('geminiAutoScrollTimeoutHint') || 'How long to wait for Gemini to load more history after each auto-scroll (3-10 seconds)';
 
   // About tab
-  document.getElementById('acknowledgmentText').textContent = getMessage('acknowledgmentText') || '感谢每一位为 DeepShare 提出建议的朋友！许多功能源于用户的真实需求，让我们一起提升效率，把节省的时间留给生活。';
+  document.getElementById('acknowledgmentText').textContent = getMessage('acknowledgmentText') || '感谢每一位为 DeepShare 提出建议的朋友！许多功能源于用户的真实需求，让我们一起提升效率，把节省的时间留给生活。我是独立开发者Yorick，致力于用AI为大家提升效率，欢迎通过微信 yorick_cn 与我联系。';
   document.getElementById('versionLabel').textContent = getMessage('versionLabel') || 'Version:';
   document.getElementById('documentationLabel').textContent = getMessage('documentationLabel') || 'Documentation:';
   const documentationUrl = getMessage('documentationUrl');
@@ -934,7 +981,7 @@ function checkQuota(forceRefresh = false) {
   }
 
   // Execution layer: Use default if invalid or empty
-  const serverUrl = isValidUrl(serverUrlInput) ? serverUrlInput : 'https://api.ds.rick216.cn';
+  const serverUrl = isValidUrl(serverUrlInput) ? serverUrlInput : DEEPSHARE_PRIMARY_API_URL;
 
   // If API key is not set, hide quota section
   if (!apiKey) {
@@ -968,7 +1015,7 @@ function checkQuota(forceRefresh = false) {
 
       // Try new subscription quota API first
       try {
-        const response = await fetch(`${serverUrl}/subscriptions/my/quota`, {
+        const response = await fetchWithApiFallback(serverUrl, '/subscriptions/my/quota', {
           method: 'GET',
           headers: { 'X-API-Key': apiKey }
         });
@@ -994,7 +1041,7 @@ function checkQuota(forceRefresh = false) {
       // Fallback to old quota API (only if new API didn't succeed AND didn't return a 401)
       if (!quotaData && lastStatusCode !== 401) {
         try {
-          const response = await fetch(`${serverUrl}/auth/quota`, {
+          const response = await fetchWithApiFallback(serverUrl, '/auth/quota', {
             method: 'GET',
             headers: { 'X-API-Key': apiKey }
           });
@@ -1339,7 +1386,7 @@ function setupManualConversion() {
 
     // Check API key
     const settings = await chrome.storage.sync.get({
-      docxServerUrl: 'https://api.ds.rick216.cn',
+      docxServerUrl: DEEPSHARE_PRIMARY_API_URL,
       docxApiKey: '',
       removeDividers: false,
       removeEmojis: false,
@@ -1514,7 +1561,7 @@ function setupManualConversion() {
 // Function to convert markdown text to DOCX
 async function convertMarkdownToDocx(markdownText, serverUrl, apiKey, removeDividers = false, removeEmojis = false, convertMermaid = false, compatMode = true, template, hardLineBreaks = false, disableAutoNumbering = false) {
   try {
-    const url = isValidUrl(serverUrl) ? serverUrl : 'https://api.ds.rick216.cn';
+    const url = isValidUrl(serverUrl) ? serverUrl : DEEPSHARE_PRIMARY_API_URL;
 
     // Generate filename based on content
     const firstLine = markdownText.split('\n')[0] || '';
@@ -1579,7 +1626,7 @@ async function convertMarkdownToDocx(markdownText, serverUrl, apiKey, removeDivi
       body.template_name = template;
     }
 
-    const response = await fetch(`${url}/convert-text`, {
+    const response = await fetchWithApiFallback(url, '/convert-text', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -1625,10 +1672,10 @@ async function setupTemplateSelector() {
   selectElement.appendChild(defaultOption);
 
   try {
-    const settings = await chrome.storage.sync.get({ docxServerUrl: 'https://api.ds.rick216.cn' });
-    const serverUrl = isValidUrl(settings.docxServerUrl) ? settings.docxServerUrl : 'https://api.ds.rick216.cn';
+    const settings = await chrome.storage.sync.get({ docxServerUrl: DEEPSHARE_PRIMARY_API_URL });
+    const serverUrl = isValidUrl(settings.docxServerUrl) ? settings.docxServerUrl : DEEPSHARE_PRIMARY_API_URL;
 
-    const response = await fetch(`${serverUrl}/templates`);
+    const response = await fetchWithApiFallback(serverUrl, '/templates');
     if (!response.ok) {
       throw new Error(`Failed to fetch templates: ${response.status}`);
     }
