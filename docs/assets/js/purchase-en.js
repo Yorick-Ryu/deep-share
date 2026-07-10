@@ -208,50 +208,74 @@ async function checkQuota() {
     const originalText = checkBtn.textContent;
     checkBtn.textContent = 'Checking...';
     checkBtn.disabled = true;
+    resultsDiv.style.display = 'none';
 
     try {
-        const response = await fetch(`${baseUrl}/auth/quota`, {
-            method: 'GET',
-            headers: {
-                'X-API-Key': apiKey
+        let quotaData = null;
+        let lastApiError = null;
+        let lastStatusCode = null;
+
+        try {
+            const response = await fetch(`${baseUrl}/subscriptions/my/quota`, {
+                method: 'GET',
+                headers: { 'X-API-Key': apiKey }
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                quotaData = {
+                    email: data.email,
+                    has_subscription: data.has_subscription,
+                    subscription: data.subscription,
+                    addon_quota: data.addon_quota
+                };
+            } else {
+                lastStatusCode = response.status;
+                lastApiError = await extractApiError(response);
             }
-        });
-
-        if (!response.ok) {
-            throw new Error(`Invalid API Key or server error: ${response.status}`);
+        } catch {
+            lastApiError = 'The subscription quota service is unavailable.';
         }
 
-        const data = await response.json();
+        // Older API keys may only be recognized by the legacy credits endpoint.
+        if (!quotaData && lastStatusCode !== 401) {
+            try {
+                const response = await fetch(`${baseUrl}/auth/quota`, {
+                    method: 'GET',
+                    headers: { 'X-API-Key': apiKey }
+                });
 
-        // Display results
-        document.getElementById('total-quota').textContent = data.total_quota;
-        document.getElementById('used-quota').textContent = data.used_quota;
-        document.getElementById('remaining-quota').textContent = data.remaining_quota;
+                if (response.ok) {
+                    const data = await response.json();
+                    quotaData = {
+                        email: data.email,
+                        has_subscription: false,
+                        subscription: null,
+                        addon_quota: {
+                            total_quota: data.total_quota,
+                            used_quota: data.used_quota,
+                            remaining_quota: data.remaining_quota,
+                            expires_at: data.expires_at
+                        }
+                    };
+                } else {
+                    lastStatusCode = response.status;
+                    lastApiError = await extractApiError(response);
+                }
+            } catch {
+                lastStatusCode = 0;
+                lastApiError = 'Network error. Please check your connection.';
+            }
+        }
 
-        // Format and display expiration date
-        if (data.expires_at) {
-            const expirationDate = new Date(data.expires_at);
-            const formattedDate = formatDate(expirationDate);
-            document.getElementById('expiration-date').textContent = formattedDate;
+        if (quotaData) {
+            displayAccountQuota(quotaData);
+            resultsDiv.style.display = 'block';
+        } else if (lastStatusCode === 401) {
+            alert('The API Key is invalid or expired.');
         } else {
-            document.getElementById('expiration-date').textContent = 'Unknown';
+            alert(`Failed to check quota: ${lastApiError || 'Unknown error'}`);
         }
-
-        // Calculate percentage of remaining quota (not used quota) and update progress bar
-        const percentRemaining = (data.remaining_quota / data.total_quota) * 100;
-        const progressBar = document.getElementById('quota-progress');
-        progressBar.style.width = `${percentRemaining}%`;
-
-        // Change color if running low (less than 20% remaining)
-        if (data.remaining_quota < data.total_quota * 0.2) {
-            progressBar.style.backgroundColor = '#FF6B6B';
-        } else {
-            progressBar.style.backgroundColor = '#4D6BFE';
-        }
-
-        // Show results
-        resultsDiv.style.display = 'block';
-
     } catch (error) {
         alert(`Failed to check quota: ${error.message}`);
         resultsDiv.style.display = 'none';
@@ -260,6 +284,73 @@ async function checkQuota() {
         checkBtn.textContent = originalText;
         checkBtn.disabled = false;
     }
+}
+
+async function extractApiError(response) {
+    try {
+        const data = await response.json();
+        if (typeof data.detail === 'string') return data.detail;
+        if (data.detail?.message) return data.detail.message;
+    } catch {
+        // Response is not JSON.
+    }
+    return `HTTP ${response.status}`;
+}
+
+function displayAccountQuota(data) {
+    const subscriptionBlock = document.getElementById('subscription-quota-block');
+    const addonBlock = document.getElementById('addon-quota-block');
+    const emptyMessage = document.getElementById('quota-empty-message');
+    const subscription = data.has_subscription ? data.subscription : null;
+    const addonQuota = data.addon_quota;
+    const addonTotal = Number(addonQuota?.total_quota || 0);
+    const hasSubscription = Boolean(subscription);
+    const hasAddonQuota = addonTotal > 0;
+
+    subscriptionBlock.hidden = !hasSubscription;
+    addonBlock.hidden = !hasAddonQuota;
+    emptyMessage.hidden = hasSubscription || hasAddonQuota;
+
+    if (hasSubscription) {
+        const total = Number(subscription.daily_quota || 0);
+        const used = Math.max(0, Number(subscription.used_today || 0));
+        const remaining = Math.max(0, total - used);
+
+        document.getElementById('subscription-plan-name').textContent = subscription.plan_name || 'Subscription';
+        document.getElementById('subscription-total-quota').textContent = total;
+        document.getElementById('subscription-used-quota').textContent = used;
+        document.getElementById('subscription-remaining-quota').textContent = remaining;
+        document.getElementById('subscription-expiration-date').textContent = formatExpirationDate(subscription.expires_at);
+        updateQuotaProgress('subscription-quota-progress', remaining, total);
+    }
+
+    if (hasAddonQuota) {
+        const used = Math.max(0, Number(addonQuota.used_quota || 0));
+        const hasProvidedRemaining = addonQuota.remaining_quota !== null && addonQuota.remaining_quota !== undefined;
+        const providedRemaining = hasProvidedRemaining ? Number(addonQuota.remaining_quota) : NaN;
+        const remaining = Number.isFinite(providedRemaining)
+            ? Math.max(0, providedRemaining)
+            : Math.max(0, addonTotal - used);
+
+        document.getElementById('addon-total-quota').textContent = addonTotal;
+        document.getElementById('addon-used-quota').textContent = used;
+        document.getElementById('addon-remaining-quota').textContent = remaining;
+        document.getElementById('addon-expiration-date').textContent = formatExpirationDate(addonQuota.expires_at);
+        updateQuotaProgress('addon-quota-progress', remaining, addonTotal);
+    }
+}
+
+function updateQuotaProgress(elementId, remaining, total) {
+    const progressBar = document.getElementById(elementId);
+    const percentRemaining = total > 0 ? Math.min(100, (remaining / total) * 100) : 0;
+    progressBar.style.width = `${percentRemaining}%`;
+    progressBar.style.backgroundColor = percentRemaining < 20 ? '#FF6B6B' : '#4D6BFE';
+}
+
+function formatExpirationDate(value) {
+    if (!value) return 'No expiration date';
+    const date = new Date(value);
+    return Number.isNaN(date.getTime()) ? 'Unknown' : formatDate(date);
 }
 
 // Helper function to format date in a user-friendly way

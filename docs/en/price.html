@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Subscription Plans - DeepShare</title>
-    <meta name="description" content="DeepShare subscription plan details. Choose the plan that fits your needs and enjoy daily auto-refreshed Word conversion quotas, unlimited formula copying, and premium feature support.">
+    <meta name="description" content="DeepShare subscription plan details. Choose the plan that fits your needs and enjoy daily auto-refreshed Word export quotas, unlimited formula copying, and premium feature support.">
     <meta name="keywords" content="DeepShare,subscription,MarkDown to Word,AI chat export Word,pricing">
     <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
     <link rel="canonical" href="https://ds.rick216.cn/en/price">
@@ -13,7 +13,8 @@
     <link rel="alternate" hreflang="en" href="https://ds.rick216.cn/en/price">
     <link rel="icon" type="image/svg+xml" href="../assets/images/deepshare-icon.svg">
     <link rel="stylesheet" href="../assets/css/shared.css">
-    <link rel="stylesheet" href="../assets/css/price.css">
+    <link rel="stylesheet" href="../assets/css/price-common.css">
+    <link rel="stylesheet" href="../assets/css/price-en.css">
 </head>
 
 <body>
@@ -37,22 +38,22 @@
     </header>
 
     <main class="content">
-        <h1>Choose Your Plan</h1>
-        <p class="subtitle">Subscribe and enjoy daily quota resets, more conversions, and better value</p>
+        <h1>Pricing</h1>
+        <p class="subtitle">Start with a subscription for daily quota, or buy credits.</p>
 
-        <!-- Billing cycle toggle (shown on small/medium screens) -->
-        <div class="billing-toggle">
-            <button class="toggle-btn active" data-period="monthly">Monthly</button>
-            <button class="toggle-btn" data-period="yearly">
-                Yearly
-                <span class="save-badge">Save more</span>
-            </button>
+        <div class="billing-toggle" role="tablist" aria-label="Pricing option">
+            <span class="toggle-indicator" aria-hidden="true"></span>
+            <button class="toggle-btn active" type="button" data-period="monthly" role="tab" aria-selected="true" aria-controls="subscribe-panel">Monthly</button>
+            <button class="toggle-btn" type="button" data-period="yearly" role="tab" aria-selected="false" aria-controls="subscribe-panel">Yearly</button>
+            <button class="toggle-btn" type="button" data-period="on-demand" role="tab" aria-selected="false" aria-controls="on-demand-panel">Buy Credits</button>
         </div>
 
-        <!-- Pricing cards -->
-        <div class="pricing-grid">
-            <!-- Standard Monthly -->
-            <div class="plan-card" data-plan="standard_monthly" data-period="monthly">
+        <div class="purchase-hero">
+            <div class="plans-column" id="subscribe-panel">
+                <!-- Pricing cards -->
+                <div class="pricing-grid">
+                    <!-- Standard Monthly -->
+                    <div class="plan-card" data-plan="standard_monthly" data-period="monthly">
                 <div class="plan-header">
                     <h3 class="plan-name">Standard</h3>
                     <div class="plan-price">
@@ -92,14 +93,14 @@
                             <line x1="18" y1="6" x2="6" y2="18"></line>
                             <line x1="6" y1="6" x2="18" y2="18"></line>
                         </svg>
-                        <span>Agent Skill support</span>
+                        <span>Agent Skills support</span>
                     </div>
                 </div>
                 <button class="subscribe-btn" data-plan="standard_monthly">Subscribe Now</button>
-            </div>
+                    </div>
 
-            <!-- Pro Monthly -->
-            <div class="plan-card featured" data-plan="pro_monthly" data-period="monthly">
+                    <!-- Pro Monthly -->
+                    <div class="plan-card featured" data-plan="pro_monthly" data-period="monthly">
                 <div class="popular-badge">Most Popular</div>
                 <div class="plan-header">
                     <h3 class="plan-name">Pro</h3>
@@ -144,14 +145,14 @@
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <polyline points="20 6 9 17 4 12"></polyline>
                         </svg>
-                        <span>Agent Skill support</span>
+                        <span>Agent Skills support</span>
                     </div>
                 </div>
                 <button class="subscribe-btn primary" data-plan="pro_monthly">Subscribe Now</button>
-            </div>
+                    </div>
 
-            <!-- Pro Yearly -->
-            <div class="plan-card featured" data-plan="pro_yearly" data-period="yearly">
+                    <!-- Pro Yearly -->
+                    <div class="plan-card featured" data-plan="pro_yearly" data-period="yearly">
                 <div class="popular-badge">Best Value</div>
                 <div class="plan-header">
                     <h3 class="plan-name">Pro</h3>
@@ -197,7 +198,7 @@
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <polyline points="20 6 9 17 4 12"></polyline>
                         </svg>
-                        <span>Agent Skill support</span>
+                        <span>Agent Skills support</span>
                     </div>
                     <div class="feature-item">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -207,10 +208,10 @@
                     </div>
                 </div>
                 <button class="subscribe-btn primary" data-plan="pro_yearly">Subscribe Now</button>
-            </div>
+                    </div>
 
-            <!-- Ultra Yearly -->
-            <div class="plan-card ultra" data-plan="ultra_yearly" data-period="yearly">
+                    <!-- Ultra Yearly -->
+                    <div class="plan-card ultra" data-plan="ultra_yearly" data-period="yearly">
                 <div class="ultra-badge">Ultimate</div>
                 <div class="plan-header">
                     <h3 class="plan-name">Ultra</h3>
@@ -256,7 +257,7 @@
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <polyline points="20 6 9 17 4 12"></polyline>
                         </svg>
-                        <span>Agent Skill support</span>
+                        <span>Agent Skills support</span>
                     </div>
                     <div class="feature-item">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -266,70 +267,268 @@
                     </div>
                 </div>
                 <button class="subscribe-btn ultra-btn" data-plan="ultra_yearly">Subscribe Now</button>
+                    </div>
+                </div>
             </div>
+
+            <aside class="credit-pricing-card" id="on-demand-panel" aria-label="Buy credits">
+                <h2 class="credit-purchase-title">Purchase Word Export Credits</h2>
+                <div class="price-tag">$0.05 <span class="per-unit">/ export</span></div>
+
+                <div class="purchase-form">
+                    <div class="form-group">
+                        <label for="email">Your Email</label>
+                        <input type="email" id="email" placeholder="example@email.com" required autocomplete="off">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Select Purchase Amount</label>
+                        <div class="amount-options">
+                            <div class="amount-option" data-value="4.99">
+                                <div class="amount-value">$4.99</div>
+                                <div class="conversions">100 exports</div>
+                                <div class="total-conversions">Total 100</div>
+                            </div>
+                            <div class="amount-option selected" data-value="9.99">
+                                <div class="discount-badge">40% off</div>
+                                <div class="amount-value">$9.99</div>
+                                <div class="conversions">200 exports</div>
+                                <div class="bonus">+100 bonus</div>
+                                <div class="total-conversions">Total 300</div>
+                            </div>
+                            <div class="amount-option" data-value="14.99">
+                                <div class="discount-badge">50% off</div>
+                                <div class="amount-value">$14.99</div>
+                                <div class="conversions">300 exports</div>
+                                <div class="bonus">+300 bonus</div>
+                                <div class="total-conversions">Total 600</div>
+                            </div>
+                            <div class="amount-option" data-value="19.99">
+                                <div class="discount-badge">60% off</div>
+                                <div class="amount-value">$19.99</div>
+                                <div class="conversions">400 exports</div>
+                                <div class="bonus">+600 bonus</div>
+                                <div class="total-conversions">Total 1000</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="purchase-btn" id="purchase-btn">Purchase Now</button>
+                </div>
+                <p class="credit-card-note">Buy Credits are used before your subscription quota.</p>
+            </aside>
         </div>
 
-        <!-- Notes -->
-        <div class="pricing-notes">
-            <div class="note-item">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                    <path
-                        d="M12 1L21.5 6.5V11.5C21.5 16.75 18.26 21.62 12 23C5.74 21.62 2.5 16.75 2.5 11.5V6.5L12 1ZM12 3.18L4.5 7.43V11.5C4.5 15.82 7.18 19.93 12 21.3C16.82 19.93 19.5 15.82 19.5 11.5V7.43L12 3.18ZM11 15H13V17H11V15ZM11 7H13V13H11V7Z">
-                    </path>
-                </svg>
-                <span><strong>All plans auto-renew by default.</strong> You can <a href="#" id="openCancelModalLink" class="cancel-link">manage</a> your subscription anytime</span>
+        <section class="credit-section" aria-label="Credit account tools">
+            <div class="credit-layout">
+                <div class="credit-main">
+                    <div class="api-instructions">
+                        <h2>Frequently Asked Questions</h2>
+                        <div class="faq-card collapsed">
+                            <div class="faq-question">
+                                <span class="faq-question-text">Do subscription plans auto-renew?</span>
+                                <svg class="faq-toggle-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </div>
+                            <div class="faq-answer">Yes. All subscription plans auto-renew by default. You can <a href="#" id="openCancelModalLink" class="cancel-link">manage</a> your subscription anytime. Credits do not auto-renew.</div>
+                        </div>
+                        <div class="faq-card collapsed">
+                            <div class="faq-question">
+                                <span class="faq-question-text">When does daily quota reset?</span>
+                                <svg class="faq-toggle-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </div>
+                            <div class="faq-answer">The daily quota resets at 00:00 UTC. Any unused quota is not carried forward to the next day.</div>
+                        </div>
+                        <div class="faq-card collapsed">
+                            <div class="faq-question">
+                                <span class="faq-question-text">What is the usage priority between Credits and subscription quota?</span>
+                                <svg class="faq-toggle-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </div>
+                            <div class="faq-answer">Purchased Credits are used first. Once they are exhausted, your subscription's daily quota is used.</div>
+                        </div>
+                        <div class="faq-card collapsed">
+                            <div class="faq-question">
+                                <span class="faq-question-text">How do upgrades work?</span>
+                                <svg class="faq-toggle-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </div>
+                            <div class="faq-answer">You can subscribe to a higher plan and the difference is prorated. <a href="https://docs.deepshare.app/en/pricing#upgrades" target="_blank">Learn more →</a></div>
+                        </div>
+                        <div class="faq-card collapsed">
+                            <div class="faq-question">
+                                <span class="faq-question-text">Why is the Word export feature paid?</span>
+                                <svg class="faq-toggle-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </div>
+                            <div class="faq-answer">Most DeepShare features are free. Word export requires server resources for formatting and processing, and a small fee helps keep the service stable.</div>
+                        </div>
+                        <div class="faq-card collapsed">
+                            <div class="faq-question">
+                                <span class="faq-question-text">Does the API Key expire?</span>
+                                <svg class="faq-toggle-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </div>
+                            <div class="faq-answer">Yes, the API Key is valid for 1 year from the purchase date. Any purchase made within its validity period automatically extends its validity by another year.</div>
+                        </div>
+                        <div class="faq-card collapsed">
+                            <div class="faq-question">
+                                <span class="faq-question-text">What if I forget my API Key?</span>
+                                <svg class="faq-toggle-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </div>
+                            <div class="faq-answer">Contact us with the email address you used for purchase and we will help recover it.</div>
+                        </div>
+                        <div class="faq-card collapsed">
+                            <div class="faq-question">
+                                <span class="faq-question-text">How long until credits are added after payment?</span>
+                                <svg class="faq-toggle-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </div>
+                            <div class="faq-answer">Credits are added immediately after successful payment, and your API Key is sent by email.</div>
+                        </div>
+                        <div class="faq-card">
+                            <div class="faq-question">
+                                <span class="faq-question-text">Other questions?</span>
+                                <svg class="faq-toggle-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </div>
+                            <div class="faq-answer">Please send an email to: <strong><a href="mailto:contact@deepshare.app">contact@deepshare.app</a></strong></div>
+                        </div>
+                    </div>
+
+                    <div class="quota-checker">
+                        <h2>Check Credits or Subscription</h2>
+                        <p>If you have already purchased export credits, you can check your quota here:</p>
+
+                        <div class="quota-form">
+                            <div class="form-group">
+                                <label for="check-api-key">Your API Key</label>
+                                <div class="quota-api-key-wrapper">
+                                    <input type="password" id="check-api-key" placeholder="Enter your API Key" autocomplete="off">
+                                    <button type="button" class="toggle-visibility-btn" id="toggleQuotaApiKeyVisibility" title="Show/Hide">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round" class="eye-icon">
+                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                            <circle cx="12" cy="12" r="3"></circle>
+                                        </svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round" class="eye-off-icon" style="display: none;">
+                                            <path
+                                                d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24">
+                                            </path>
+                                            <line x1="1" y1="1" x2="23" y2="23"></line>
+                                        </svg>
+                                    </button>
+                                    <button type="button" class="copy-api-key-btn" id="copyQuotaApiKey" title="Copy">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                            <button class="check-quota-btn">Check Quota</button>
+                        </div>
+
+                        <div id="quota-results" style="display: none;">
+                            <div class="quota-account-grid">
+                                    <section class="quota-account-block" id="subscription-quota-block" hidden>
+                                        <div class="quota-account-header">
+                                            <span>Daily subscription quota</span>
+                                            <span class="quota-plan-badge" id="subscription-plan-name"></span>
+                                        </div>
+                                        <div class="quota-stats">
+                                            <div class="quota-stat-item">
+                                                <div class="quota-stat-label">Total</div>
+                                                <div class="quota-stat-value" id="subscription-total-quota">-</div>
+                                            </div>
+                                            <div class="quota-stat-item">
+                                                <div class="quota-stat-label">Used today</div>
+                                                <div class="quota-stat-value" id="subscription-used-quota">-</div>
+                                            </div>
+                                            <div class="quota-stat-item">
+                                                <div class="quota-stat-label">Remaining</div>
+                                                <div class="quota-stat-value highlight" id="subscription-remaining-quota">-</div>
+                                            </div>
+                                        </div>
+                                        <div class="quota-progress-bg">
+                                            <div class="quota-progress-fill" id="subscription-quota-progress"></div>
+                                        </div>
+                                        <div class="quota-expiration">
+                                            <div class="quota-expiration-label">Subscription valid until</div>
+                                            <div class="quota-expiration-value" id="subscription-expiration-date">-</div>
+                                        </div>
+                                    </section>
+
+                                    <section class="quota-account-block" id="addon-quota-block" hidden>
+                                        <div class="quota-account-header">
+                                            <span>Purchased credits</span>
+                                        </div>
+                                        <div class="quota-stats">
+                                            <div class="quota-stat-item">
+                                                <div class="quota-stat-label">Total</div>
+                                                <div class="quota-stat-value" id="addon-total-quota">-</div>
+                                            </div>
+                                            <div class="quota-stat-item">
+                                                <div class="quota-stat-label">Used</div>
+                                                <div class="quota-stat-value" id="addon-used-quota">-</div>
+                                            </div>
+                                            <div class="quota-stat-item">
+                                                <div class="quota-stat-label">Remaining</div>
+                                                <div class="quota-stat-value highlight" id="addon-remaining-quota">-</div>
+                                            </div>
+                                        </div>
+                                        <div class="quota-progress-bg">
+                                            <div class="quota-progress-fill" id="addon-quota-progress"></div>
+                                        </div>
+                                        <div class="quota-expiration">
+                                            <div class="quota-expiration-label">Credits valid until</div>
+                                            <div class="quota-expiration-value" id="addon-expiration-date">-</div>
+                                        </div>
+                                    </section>
+
+                                    <p class="quota-empty-message" id="quota-empty-message" hidden>
+                                        No active subscription or purchased credits were found for this API key.
+                                    </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="note-item">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                    <path
-                        d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20ZM13 12H17V14H11V7H13V12Z">
-                    </path>
-                </svg>
-                <span>Daily quota resets at midnight UTC and does not carry over</span>
-            </div>
-            <div class="note-item">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                    <path
-                        d="M12 2C17.52 2 22 6.48 22 12C22 17.52 17.52 22 12 22C6.48 22 2 17.52 2 12C2 6.48 6.48 2 12 2ZM12 20C16.42 20 20 16.42 20 12C20 7.58 16.42 4 12 4C7.58 4 4 7.58 4 12C4 16.42 7.58 20 12 20ZM13 12V16H11V12H8L12 8L16 12H13Z">
-                    </path>
-                </svg>
-                <span><strong>Upgrades:</strong> subscribe to a higher plan — difference is prorated. <a href="https://docs.deepshare.app/en/pricing#upgrades" target="_blank">Learn more →</a></span>
-            </div>
-            <div class="note-item">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                    <path
-                        d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20ZM11 7H13V9H11V7ZM11 11H13V17H11V11Z">
-                    </path>
-                </svg>
-                <span>After purchase, your API key is displayed immediately and sent to your email</span>
-            </div>
-            <div class="note-item">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                    <path
-                        d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20ZM11 7H13V9H11V7ZM11 11H13V17H11V11Z">
-                    </path>
-                </svg>
-                <span>Pay-per-use credits stack on top of your daily quota and are used after it runs out</span>
-            </div>
-            <div class="note-item">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                    <path
-                        d="M12.0049 22.0027C6.48204 22.0027 2.00488 17.5256 2.00488 12.0027C2.00488 6.4799 6.48204 2.00275 12.0049 2.00275C17.5277 2.00275 22.0049 6.4799 22.0049 12.0027C22.0049 17.5256 17.5277 22.0027 12.0049 22.0027ZM12.0049 20.0027C16.4232 20.0027 20.0049 16.421 20.0049 12.0027C20.0049 7.58447 16.4232 4.00275 12.0049 4.00275C7.5866 4.00275 4.00488 7.58447 4.00488 12.0027C4.00488 16.421 7.5866 20.0027 12.0049 20.0027ZM13.0049 13.0027H16.0049V15.0027H13.0049V17.0027H11.0049V15.0027H8.00488V13.0027H11.0049V12.0027H8.00488V10.0027H10.5907L8.46935 7.88143L9.88356 6.46721L12.0049 8.58853L14.1262 6.46721L15.5404 7.88143L13.4191 10.0027H16.0049V12.0027H13.0049V13.0027Z">
-                    </path>
-                </svg>
-                <a href="../purchase-en.html" class="purchase-link">
-                    <span>Need pay-per-use credits? Buy export credits →</span>
-                </a>
-            </div>
-            <div class="note-item">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                    <path
-                        d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20ZM11 15H13V17H11V15ZM13 13.3551V14H11V12.5C11 11.9477 11.4477 11.5 12 11.5C12.8284 11.5 13.5 10.8284 13.5 10C13.5 9.17157 12.8284 8.5 12 8.5C11.2723 8.5 10.6656 9.01823 10.5288 9.70577L8.56731 9.31346C8.88637 7.70919 10.302 6.5 12 6.5C13.933 6.5 15.5 8.067 15.5 10C15.5 11.5855 14.4457 12.9248 13 13.3551Z">
-                    </path>
-                </svg>
-                <span>Questions about your subscription? Email us: <strong>contact@deepshare.app</strong></span>
-            </div>
-        </div>
+        </section>
     </main>
 
     <!-- Subscription modal -->
@@ -450,6 +649,7 @@
     </footer>
 
     <script src="../assets/js/price-en.js"></script>
+    <script src="../assets/js/purchase-en.js"></script>
 
     <!-- Vercel Web Analytics -->
     <script>

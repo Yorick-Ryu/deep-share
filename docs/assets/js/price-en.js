@@ -109,21 +109,49 @@ window.addEventListener('pageshow', () => {
 
 function initBillingToggle() {
     const toggleBtns = document.querySelectorAll('.toggle-btn');
+    const toggle = document.querySelector('.billing-toggle');
+
+    function syncToggleIndicator(activeBtn) {
+        const activeIndex = Array.from(toggleBtns).indexOf(activeBtn);
+        if (toggle && activeIndex >= 0) {
+            toggle.style.setProperty('--active-index', activeIndex);
+            toggle.dataset.active = activeBtn.dataset.period;
+        }
+    }
+
     toggleBtns.forEach(btn => {
         btn.addEventListener('click', () => {
-            toggleBtns.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
             currentPeriod = btn.dataset.period;
+            toggleBtns.forEach(b => {
+                const isActive = b === btn;
+                b.classList.toggle('active', isActive);
+                b.setAttribute('aria-selected', String(isActive));
+            });
+            syncToggleIndicator(btn);
             updateVisibleCards();
         });
     });
+    syncToggleIndicator(document.querySelector('.toggle-btn.active') || toggleBtns[0]);
+    updateVisibleCards();
 }
 
 function updateVisibleCards() {
-    if (currentPeriod === 'yearly') {
-        document.body.classList.add('yearly-view');
-    } else {
-        document.body.classList.remove('yearly-view');
+    const isYearly = currentPeriod === 'yearly';
+    const isOnDemand = currentPeriod === 'on-demand';
+    const subscribePanel = document.getElementById('subscribe-panel');
+    const onDemandPanel = document.getElementById('on-demand-panel');
+
+    document.body.classList.toggle('yearly-view', isYearly);
+    document.body.classList.toggle('on-demand-view', isOnDemand);
+
+    if (subscribePanel) {
+        subscribePanel.hidden = isOnDemand;
+        subscribePanel.setAttribute('aria-hidden', String(isOnDemand));
+    }
+
+    if (onDemandPanel) {
+        onDemandPanel.hidden = !isOnDemand;
+        onDemandPanel.setAttribute('aria-hidden', String(!isOnDemand));
     }
 }
 

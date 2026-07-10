@@ -1,0 +1,1457 @@
+/* 订阅定价页面样式 */
+
+[hidden] {
+    display: none !important;
+}
+
+/* 内容布局 */
+.content {
+    max-width: 1220px;
+    margin: 78px auto 60px;
+    padding: 0 24px;
+    text-align: center;
+}
+
+.content>h1 {
+    font-size: 2.15rem;
+    margin-bottom: 0.35rem;
+}
+
+.subtitle {
+    color: var(--text-muted);
+    font-size: 1rem;
+    margin-bottom: 0.65rem;
+}
+
+/* 计费周期切换 */
+.billing-toggle {
+    --active-index: 0;
+    --toggle-track-bg: #F3F4F7;
+    --toggle-track-border: #DDE1E8;
+    --toggle-thumb-bg: #fff;
+    --toggle-muted: #8A8F99;
+    --toggle-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.05);
+    --toggle-thumb-shadow: 0 1px 2px rgba(15, 23, 42, 0.08), 0 8px 20px rgba(15, 23, 42, 0.08);
+    position: relative;
+    box-sizing: border-box;
+    display: inline-grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    width: min(340px, 100%);
+    background: var(--toggle-track-bg);
+    border: 1px solid var(--toggle-track-border);
+    border-radius: 999px;
+    padding: 3px;
+    margin-bottom: 1rem;
+    box-shadow: var(--toggle-shadow);
+}
+
+.toggle-indicator {
+    position: absolute;
+    top: 3px;
+    bottom: 3px;
+    left: 3px;
+    width: calc((100% - 6px) / 3);
+    border-radius: 999px;
+    background: var(--toggle-thumb-bg);
+    box-shadow: var(--toggle-thumb-shadow);
+    transform: translateX(calc(var(--active-index) * 100%));
+    transition: transform 0.24s cubic-bezier(0.2, 0.8, 0.2, 1);
+    pointer-events: none;
+}
+
+.toggle-btn {
+    position: relative;
+    z-index: 1;
+    justify-content: center;
+    min-height: 32px;
+    padding: 0.3rem 6px;
+    border: none;
+    background: transparent;
+    color: var(--toggle-muted);
+    font-size: 1rem;
+    font-weight: 650;
+    cursor: pointer;
+    border-radius: 999px;
+    transition: color 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+}
+
+.toggle-btn:hover {
+    color: var(--text-main);
+}
+
+.toggle-btn.active {
+    background: transparent;
+    color: var(--text-main);
+}
+
+.toggle-btn .save-badge {
+    background: rgba(239, 68, 68, 0.14);
+    color: #EF4444;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.toggle-btn.active .save-badge {
+    background: rgba(255, 255, 255, 0.92);
+    color: #DC2626;
+}
+
+.purchase-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.1rem;
+    align-items: stretch;
+    max-width: 680px;
+    margin: 0 auto;
+}
+
+body.on-demand-view .plans-column {
+    display: none;
+}
+
+body.on-demand-view .purchase-hero {
+    max-width: 680px;
+}
+
+body:not(.on-demand-view) .credit-pricing-card {
+    display: none;
+}
+
+.plans-column {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-width: 0;
+}
+
+/* 定价卡片网格 */
+.pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: 1fr;
+    gap: 1rem;
+    width: 100%;
+    height: 100%;
+    margin-bottom: 0;
+    max-width: none;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.plan-card {
+    display: none;
+}
+
+.plan-card[data-period="monthly"] {
+    display: flex;
+}
+
+body.yearly-view .plan-card[data-period="monthly"] {
+    display: none;
+}
+
+body.yearly-view .plan-card[data-period="yearly"] {
+    display: flex;
+}
+
+/* 方案卡片 */
+.plan-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1rem;
+    text-align: left;
+    position: relative;
+    transition: all 0.3s ease;
+    flex-direction: column;
+    min-height: 218px;
+}
+
+/* 推荐卡片 */
+.plan-card.featured {
+    border-color: var(--primary-color);
+    background: linear-gradient(180deg, rgba(77, 107, 254, 0.045) 0%, var(--bg-secondary) 100%);
+}
+
+/* Ultra 卡片 */
+.plan-card.ultra {
+    border-color: #F59E0B;
+    background: linear-gradient(180deg, rgba(245, 158, 11, 0.06) 0%, var(--bg-secondary) 100%);
+}
+
+/* 徽章 */
+.popular-badge,
+.ultra-badge {
+    position: absolute;
+    top: 0.8rem;
+    right: 0.9rem;
+    left: auto;
+    transform: none;
+    padding: 3px 9px;
+    border-radius: 999px;
+    font-size: 0.62rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.popular-badge {
+    background: linear-gradient(135deg, #4D6BFE 0%, #818CF8 100%);
+    color: white;
+}
+
+.ultra-badge {
+    background: linear-gradient(135deg, #F59E0B 0%, #EF4444 100%);
+    color: white;
+}
+
+/* 方案头部 */
+.plan-header {
+    text-align: left;
+    padding-right: 5.8rem;
+}
+
+/* 大屏幕时确保header高度一致 */
+@media (min-width: 1200px) {
+    .plan-header {
+        min-height: auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+    }
+}
+
+.plan-name {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    background: none;
+    -webkit-text-fill-color: unset;
+    color: var(--text-main);
+}
+
+.plan-card.ultra .plan-name {
+    background: linear-gradient(135deg, #F59E0B 0%, #EF4444 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.plan-price {
+    display: flex;
+    align-items: baseline;
+    justify-content: flex-start;
+    gap: 2px;
+}
+
+.plan-price .currency {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+.plan-price .amount {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--text-main);
+    line-height: 1;
+}
+
+.plan-price .period {
+    font-size: 0.92rem;
+    color: var(--text-muted);
+    margin-left: 2px;
+}
+
+.price-note {
+    font-size: 0.82rem;
+    color: var(--secondary-color);
+    margin-top: 0.5rem;
+    font-weight: 500;
+}
+
+/* 方案特性列表 */
+.plan-features {
+    margin-top: 0.75rem;
+    margin-bottom: 0.8rem;
+    flex-grow: 1;
+}
+
+.plan-features .feature-item {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.32rem 0;
+    color: var(--text-main);
+    font-size: 1rem;
+}
+
+.plan-features .feature-item svg {
+    width: 17px;
+    height: 17px;
+    flex-shrink: 0;
+    stroke: var(--secondary-color);
+}
+
+.plan-features .feature-item.disabled {
+    color: var(--text-light);
+}
+
+.plan-features .feature-item.disabled svg {
+    stroke: var(--text-light);
+}
+
+.plan-features .feature-item strong {
+    color: var(--primary-color);
+}
+
+/* 配额次数样式 */
+.plan-features .feature-item .quota-number {
+    font-size: 1.12em;
+    font-weight: 700;
+}
+
+/* Ultra 卡片的配额次数使用橙色 */
+.plan-card.ultra .plan-features .feature-item .quota-ultra {
+    color: #F59E0B;
+}
+
+/* 订阅按钮 */
+.subscribe-btn {
+    width: 100%;
+    padding: 0.72rem;
+    border: 1px solid var(--border-color);
+    background: transparent;
+    color: var(--text-main);
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.subscribe-btn:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    background: rgba(77, 107, 254, 0.05);
+}
+
+.subscribe-btn.primary {
+    border-color: var(--primary-color);
+    background: var(--primary-color);
+    color: white;
+}
+
+.subscribe-btn.primary:hover {
+    background: var(--primary-hover);
+    border-color: var(--primary-hover);
+}
+
+.subscribe-btn.ultra-btn {
+    border-color: #F59E0B;
+    background: linear-gradient(135deg, #F59E0B 0%, #EF4444 100%);
+    color: white;
+}
+
+.subscribe-btn.ultra-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+/* 补充说明 */
+.pricing-notes {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-top: 8.5rem;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 700px;
+    padding: 1.5rem;
+    background: var(--bg-secondary);
+    border-radius: 20px;
+    border: 1px solid var(--border-color);
+}
+
+.note-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.note-item svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    fill: var(--text-light);
+}
+
+.purchase-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--primary-color);
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.purchase-link:hover {
+    color: var(--primary-hover);
+}
+
+/* Pay-per-use credits section */
+.credit-section {
+    margin: 1.75rem auto 0;
+    max-width: 680px;
+    text-align: left;
+}
+
+.section-heading {
+    text-align: left;
+    margin-bottom: 0;
+}
+
+.section-heading h2 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-main);
+}
+
+.section-heading p {
+    color: var(--text-muted);
+    font-size: 1rem;
+    max-width: 720px;
+    margin: 0;
+}
+
+.credit-layout {
+    display: block;
+}
+
+.credit-main {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.pay-per-use-details {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.feature-comparison-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.feature-card {
+    border-radius: 16px;
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.feature-card.free {
+    background: linear-gradient(135deg, #f8faff 0%, #eef2ff 100%);
+    border: 1px solid rgba(77, 107, 254, 0.1);
+}
+
+.feature-card.pro {
+    background: linear-gradient(135deg, #4D6BFE 0%, #3D5BEE 100%);
+    color: white;
+    box-shadow: 0 10px 30px rgba(77, 107, 254, 0.2);
+}
+
+.feature-card h3 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    color: var(--text-main);
+}
+
+.feature-card.pro h3 {
+    color: white;
+}
+
+.feature-status-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.feature-card.free .feature-status-badge {
+    background: rgba(77, 107, 254, 0.1);
+    color: #4D6BFE;
+}
+
+.feature-card.pro .feature-status-badge {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem 1rem;
+}
+
+.credit-feature-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-main);
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+.credit-feature-item::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 999px;
+    background: var(--primary-color);
+    flex: 0 0 auto;
+}
+
+.feature-card.pro .credit-feature-item {
+    color: rgba(255, 255, 255, 0.92);
+}
+
+.feature-card.pro .credit-feature-item::before {
+    background: rgba(255, 255, 255, 0.85);
+}
+
+.credit-pricing-card,
+.quota-checker,
+.api-instructions {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 1.5rem;
+}
+
+html[lang="en"] .api-instructions {
+    width: 100%;
+    max-width: 680px;
+    margin: 0 auto;
+}
+
+html[lang="en"] .quota-checker {
+    width: 100%;
+    max-width: 680px;
+    margin: 0 auto;
+}
+
+.credit-pricing-card {
+    position: relative;
+    text-align: left;
+    padding: 1rem;
+    height: auto;
+    border-color: rgba(77, 107, 254, 0.35);
+    background: var(--bg-secondary);
+    scroll-margin-top: 90px;
+}
+
+.credit-purchase-title {
+    font-size: 1.25rem;
+    line-height: 1.25;
+    margin-bottom: 0.65rem;
+    color: var(--text-main);
+}
+
+.price-tag {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 0.65rem;
+}
+
+.per-unit {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    font-weight: 400;
+}
+
+.purchase-form .form-group,
+.quota-form .form-group {
+    margin-bottom: 0.75rem;
+}
+
+.purchase-form label,
+.quota-form label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-weight: 500;
+    color: var(--text-main);
+}
+
+.purchase-form input,
+.quota-form input {
+    width: 100%;
+    padding: 0.6rem 0.72rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 0.95rem;
+    background: var(--bg-secondary);
+    color: var(--text-main);
+}
+
+.purchase-form input:focus,
+.quota-form input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(77, 107, 254, 0.16);
+}
+
+.amount-options {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+    margin-top: 0.55rem;
+}
+
+.amount-option {
+    background: var(--bg-secondary);
+    border: 2px solid var(--border-color);
+    border-radius: 9px;
+    padding: 0.9rem 0.45rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    color: var(--text-main);
+    min-height: 128px;
+    line-height: 1.25;
+}
+
+.amount-option:hover,
+.amount-option.selected {
+    border-color: var(--primary-color);
+    background: rgba(77, 107, 254, 0.05);
+}
+
+.amount-value {
+    font-weight: 700;
+    font-size: 1.12rem;
+}
+
+.conversions,
+.total-conversions {
+    font-size: 0.9rem;
+    margin-top: 0.55rem;
+}
+
+.conversions {
+    color: var(--text-muted);
+}
+
+.total-conversions {
+    color: var(--text-main);
+    font-weight: 700;
+}
+
+.bonus {
+    font-size: 0.9rem;
+    color: #EF4444;
+    font-weight: 700;
+    margin-top: 0.55rem;
+}
+
+.discount-badge {
+    position: absolute;
+    top: -10px;
+    right: -8px;
+    background: #EF4444;
+    color: white;
+    padding: 3px 6px;
+    font-size: 0.66rem;
+    font-weight: 700;
+    border-radius: 12px 4px 12px 4px;
+    transform: rotate(12deg);
+}
+
+.purchase-btn,
+.check-quota-btn {
+    width: 100%;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 0.78rem 1rem;
+    font-size: 0.92rem;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 700;
+    transition: all 0.2s ease;
+}
+
+.credit-card-note {
+    margin: 0.6rem 0 0;
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    line-height: 1.45;
+}
+
+.credit-pricing-card .amount-option {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.credit-pricing-card .total-conversions {
+    font-size: 0.9rem;
+}
+
+.purchase-btn:hover,
+.check-quota-btn:hover {
+    background: var(--primary-hover);
+}
+
+.purchase-btn:disabled,
+.check-quota-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.quota-checker h2,
+.api-instructions h2 {
+    font-size: 1.35rem;
+    margin-bottom: 0.75rem;
+    color: var(--text-main);
+}
+
+.quota-checker p,
+.api-instructions p {
+    color: var(--text-muted);
+    line-height: 1.6;
+}
+
+.quota-api-key-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.quota-api-key-wrapper input {
+    padding-right: 78px;
+}
+
+.quota-api-key-wrapper .toggle-visibility-btn,
+.copy-api-key-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: transparent;
+    color: var(--text-light);
+    cursor: pointer;
+    border-radius: 6px;
+}
+
+.quota-api-key-wrapper .toggle-visibility-btn {
+    right: 38px;
+}
+
+.copy-api-key-btn {
+    right: 6px;
+}
+
+.quota-api-key-wrapper .toggle-visibility-btn:hover,
+.copy-api-key-btn:hover {
+    background: rgba(77, 107, 254, 0.1);
+    color: var(--primary-color);
+}
+
+.copy-tooltip {
+    position: absolute;
+    top: -28px;
+    right: 0;
+    background: rgba(0, 0, 0, 0.75);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+}
+
+.quota-account-grid {
+    display: grid;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.quota-account-block {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 1rem;
+}
+
+.quota-account-block .quota-stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.quota-account-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 0.85rem;
+    color: var(--text-main);
+    font-weight: 700;
+}
+
+.quota-plan-badge {
+    padding: 0.18rem 0.55rem;
+    border-radius: 999px;
+    background: rgba(77, 107, 254, 0.12);
+    color: var(--primary-color);
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.quota-empty-message {
+    margin: 0;
+    text-align: center;
+    color: var(--text-muted);
+}
+
+.quota-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    text-align: center;
+}
+
+.quota-stat-label,
+.quota-expiration-label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.quota-stat-value {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.quota-stat-value.highlight {
+    color: var(--primary-color);
+}
+
+.quota-progress-bg {
+    height: 8px;
+    background: var(--border-color);
+    border-radius: 999px;
+    overflow: hidden;
+    margin: 1rem 0;
+}
+
+.quota-progress-fill {
+    height: 100%;
+    width: 0;
+    background: var(--primary-color);
+    transition: width 0.3s ease;
+}
+
+.quota-expiration {
+    text-align: center;
+}
+
+.quota-expiration-value {
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.api-instructions ol {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0;
+}
+
+.api-instructions li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+    color: var(--text-main);
+}
+
+.step-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background: var(--primary-color);
+    color: white;
+    border-radius: 50%;
+    font-size: 0.8rem;
+    font-weight: 700;
+    flex: 0 0 auto;
+}
+
+.faq-card {
+    border-top: 1px solid var(--border-color);
+    padding: 0.9rem 0;
+}
+
+.faq-card:first-of-type {
+    border-top: none;
+}
+
+.faq-question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    cursor: pointer;
+    color: var(--text-main);
+    font-weight: 600;
+}
+
+.faq-toggle-icon {
+    flex: 0 0 auto;
+    transition: transform 0.2s ease;
+}
+
+.faq-answer {
+    margin-top: 0.75rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+}
+
+.faq-card.collapsed .faq-answer {
+    display: none;
+}
+
+.faq-card.collapsed .faq-toggle-icon {
+    transform: rotate(-90deg);
+}
+
+/* 订阅弹窗 */
+.subscribe-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.subscribe-modal.show {
+    opacity: 1;
+}
+
+.modal-content {
+    background: var(--bg-secondary);
+    border-radius: 20px;
+    padding: 2rem;
+    width: 90%;
+    max-width: 420px;
+    position: relative;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+}
+
+.close-modal {
+    position: absolute;
+    top: 1rem;
+    right: 1.25rem;
+    font-size: 1.75rem;
+    color: var(--text-light);
+    background: none;
+    border: none;
+    cursor: pointer;
+    line-height: 1;
+    transition: color 0.2s;
+}
+
+.close-modal:hover {
+    color: var(--text-main);
+}
+
+.modal-content h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.modal-price {
+    font-size: 1.25rem;
+    color: var(--primary-color);
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+.modal-form {
+    text-align: left;
+}
+
+.modal-form .form-group {
+    margin-bottom: 1.25rem;
+}
+
+.modal-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--text-main);
+}
+
+.modal-form input {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    font-size: 1rem;
+    background: var(--bg-secondary);
+    color: var(--text-main);
+    transition: border-color 0.2s;
+}
+
+.modal-form input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+/* 输入框错误状态 */
+.modal-form input.input-error {
+    border-color: #EF4444;
+}
+
+.modal-form input.input-error:focus {
+    border-color: #EF4444;
+}
+
+.input-error-msg {
+    color: #EF4444;
+    font-size: 0.8rem;
+    margin-top: 0.4rem;
+    line-height: 1.4;
+}
+
+/* 通用错误信息（按钮下方） */
+.general-error-msg {
+    color: #EF4444;
+    font-size: 0.85rem;
+    text-align: center;
+    margin-top: 0.75rem;
+    line-height: 1.4;
+    display: none;
+}
+
+.general-error-msg.show {
+    display: block;
+}
+
+.general-error-msg.show.has-action {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+    color: #92400E;
+    background: #FEF3C7;
+    border: 1px solid #FCD34D;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+}
+
+.general-error-msg.show.success {
+    color: #065F46;
+    background: #D1FAE5;
+    border: 1px solid #6EE7B7;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+}
+
+.resume-renewal-btn {
+    padding: 0.45rem 1.2rem;
+    background: #F59E0B;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.resume-renewal-btn:hover {
+    background: #D97706;
+}
+
+.resume-renewal-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* 支付方式选择 */
+.payment-methods {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.payment-method {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.payment-method:hover {
+    border-color: var(--primary-color);
+}
+
+.payment-method.selected {
+    border-color: var(--primary-color);
+    background: rgba(77, 107, 254, 0.05);
+}
+
+.payment-method span {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-muted);
+}
+
+.payment-method.selected span {
+    color: var(--primary-color);
+}
+
+/* 登录切换 */
+.login-toggle {
+    text-align: center;
+    margin-bottom: 1.25rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.login-toggle a {
+    color: var(--primary-color);
+    font-weight: 500;
+    margin-left: 0.25rem;
+}
+
+.login-toggle a:hover {
+    text-decoration: underline;
+}
+
+/* API Key 输入区域 */
+.api-key-section .api-key-input-row {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.api-key-section .api-key-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex: 1;
+}
+
+.api-key-section .api-key-input-wrapper input {
+    padding-right: 40px;
+}
+
+.api-key-section .toggle-visibility-btn {
+    position: absolute;
+    right: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-light);
+    padding: 4px;
+    height: 32px;
+    width: 32px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.api-key-section .toggle-visibility-btn:hover {
+    background: rgba(77, 107, 254, 0.1);
+    color: var(--primary-color);
+}
+
+/* 验证按钮 */
+.verify-api-key-btn {
+    padding: 0.8rem 1rem;
+    border: 2px solid var(--primary-color);
+    background: transparent;
+    color: var(--primary-color);
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.verify-api-key-btn:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
+.verify-api-key-btn:disabled {
+    border-color: var(--text-light);
+    color: var(--text-light);
+    cursor: not-allowed;
+}
+
+.verify-api-key-btn:disabled:hover {
+    background: transparent;
+    color: var(--text-light);
+}
+
+/* 验证结果显示区域 */
+.api-key-verify-result,
+.email-verify-result {
+    margin-top: 0.5rem;
+    padding: 0.6rem 0.8rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    line-height: 1.4;
+}
+
+.api-key-verify-result.success,
+.email-verify-result.success {
+    background: rgba(16, 185, 129, 0.1);
+    color: #10B981;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.api-key-verify-result.error,
+.email-verify-result.error {
+    background: rgba(239, 68, 68, 0.1);
+    color: #EF4444;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.api-key-verify-result.loading,
+.email-verify-result.loading {
+    background: rgba(77, 107, 254, 0.1);
+    color: var(--primary-color);
+    border: 1px solid rgba(77, 107, 254, 0.3);
+}
+
+/* 确认订阅按钮 */
+.confirm-subscribe-btn {
+    width: 100%;
+    padding: 1rem;
+    border: none;
+    background: var(--primary-color);
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.confirm-subscribe-btn:hover {
+    background: var(--primary-hover);
+}
+
+.confirm-subscribe-btn:disabled {
+    background: var(--text-light);
+    cursor: not-allowed;
+}
+
+.cancel-confirm-btn {
+    background: #EF4444;
+}
+
+.cancel-confirm-btn:hover {
+    background: #DC2626;
+}
+
+.cancel-confirm-btn:disabled {
+    background: var(--text-light);
+}
+
+.cancel-link {
+    color: var(--primary-color);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.cancel-link:hover {
+    color: #EF4444;
+}
+
+.cancel-modal-subtitle {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    font-weight: 400;
+}
+
+/* 响应式布局 */
+/* 大屏幕 (1200px+): 4列,显示所有卡片,隐藏切换按钮 */
+
+/* 中等屏幕 (768px-1200px): 显示切换按钮,2列 */
+@media (max-width: 1200px) {
+    /* 2列布局 */
+    .pricing-grid {
+        grid-template-columns: repeat(2, 1fr);
+        max-width: 680px;
+    }
+}
+
+@media (max-width: 980px) {
+    .purchase-hero {
+        grid-template-columns: 1fr;
+        align-items: start;
+    }
+
+    .pricing-grid {
+        height: auto;
+    }
+
+    .credit-pricing-card {
+        order: -1;
+        width: 100%;
+        height: auto;
+    }
+}
+
+/* 小屏幕 (<768px): 显示切换按钮,1列 */
+@media (max-width: 768px) {
+    .content>h1 {
+        font-size: 1.75rem;
+    }
+
+    .subtitle {
+        font-size: 1rem;
+    }
+
+    /* 显示切换按钮 */
+    .billing-toggle {
+        display: inline-grid;
+    }
+
+    .toggle-btn {
+        justify-content: center;
+    }
+
+    /* 1列布局 */
+    .pricing-grid {
+        grid-template-columns: 1fr;
+        max-width: 100%;
+    }
+
+    .plan-card {
+        padding: 1.5rem;
+    }
+
+    .section-heading h2 {
+        font-size: 1.6rem;
+    }
+
+    .credit-main {
+        grid-template-columns: 1fr;
+    }
+
+    .api-instructions {
+        grid-column: auto;
+    }
+
+    .credit-pricing-card {
+        position: static;
+        order: -1;
+    }
+
+    .feature-grid,
+    .quota-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .amount-options {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .feature-status-badge {
+        position: static;
+        display: inline-block;
+        margin-bottom: 0.75rem;
+    }
+}
+
+/* 深色模式适配 */
+@media (prefers-color-scheme: dark) {
+    .billing-toggle {
+        --toggle-track-bg: #161A22;
+        --toggle-track-border: #2A3140;
+        --toggle-thumb-bg: #252C3A;
+        --toggle-muted: #8F98A8;
+        --toggle-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.35);
+        --toggle-thumb-shadow: 0 1px 1px rgba(0, 0, 0, 0.35), 0 8px 18px rgba(0, 0, 0, 0.22);
+    }
+
+    .plan-card.featured {
+        background: linear-gradient(180deg, rgba(77, 107, 254, 0.1) 0%, var(--bg-secondary) 100%);
+    }
+
+    .plan-card.ultra {
+        background: linear-gradient(180deg, rgba(245, 158, 11, 0.1) 0%, var(--bg-secondary) 100%);
+    }
+
+    .subscribe-btn:hover {
+        background: rgba(77, 107, 254, 0.15);
+    }
+
+    .modal-content {
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    }
+
+    .feature-card.free {
+        background: linear-gradient(135deg, #1e212d 0%, #161922 100%);
+        border-color: rgba(255, 255, 255, 0.05);
+        color: #eee;
+    }
+
+    .feature-card.free h3 {
+        color: #fff;
+    }
+
+    .feature-card.free .feature-status-badge {
+        background: rgba(255, 255, 255, 0.05);
+        color: #aaa;
+    }
+}

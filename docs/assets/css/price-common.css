@@ -93,29 +93,16 @@
     height: 100%;
 }
 
-.plan-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
-}
-
 /* 推荐卡片 */
 .plan-card.featured {
     border-color: var(--primary-color);
     background: linear-gradient(180deg, rgba(77, 107, 254, 0.05) 0%, var(--bg-secondary) 100%);
 }
 
-.plan-card.featured:hover {
-    box-shadow: 0 12px 40px rgba(77, 107, 254, 0.15);
-}
-
 /* Ultra 卡片 */
 .plan-card.ultra {
     border-color: #F59E0B;
     background: linear-gradient(180deg, rgba(245, 158, 11, 0.08) 0%, var(--bg-secondary) 100%);
-}
-
-.plan-card.ultra:hover {
-    box-shadow: 0 12px 40px rgba(245, 158, 11, 0.15);
 }
 
 /* 徽章 */
@@ -752,6 +739,38 @@
 
 /* 小屏幕 (<768px): 显示切换按钮,1列 */
 @media (max-width: 768px) {
+    header nav {
+        padding: 0 16px;
+    }
+
+    header .logo {
+        gap: 0.5rem;
+        font-size: 1.1rem;
+    }
+
+    header .logo img {
+        width: 28px;
+        height: 28px;
+    }
+
+    header .nav-links {
+        display: flex;
+        gap: 0.9rem;
+    }
+
+    header .nav-links a {
+        font-size: 0.85rem;
+    }
+
+    header .github-link {
+        gap: 0.35rem;
+    }
+
+    header .github-icon {
+        width: 18px;
+        height: 18px;
+    }
+
     .content>h1 {
         font-size: 1.75rem;
     }
@@ -807,10 +826,6 @@
 
 /* 深色模式适配 */
 @media (prefers-color-scheme: dark) {
-    .plan-card:hover {
-        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
-    }
-
     .plan-card.featured {
         background: linear-gradient(180deg, rgba(77, 107, 254, 0.1) 0%, var(--bg-secondary) 100%);
     }
