@@ -31,6 +31,105 @@ function enableKatexCopy() {
     });
 }
 
+// Read the LaTeX source from both legacy KaTeX markup and current ChatGPT markup.
+function getLatexSource(element) {
+    const annotation = element.querySelector('.katex-mathml annotation[encoding="application/x-tex"]');
+    const sourceElement = element.closest('[data-math-source], [role="math"][aria-label]');
+
+    return annotation?.textContent?.trim()
+        || sourceElement?.getAttribute('data-math-source')?.trim()
+        || sourceElement?.getAttribute('aria-label')?.trim()
+        || '';
+}
+
+// Clipboard copy events must be handled synchronously. KaTeX can synchronously
+// produce MathML, so use it for mixed text-and-formula selections.
+function convertLatexToMathMLSync(latexCode, displayMode = false) {
+    try {
+        if (typeof katex === 'undefined') return '';
+
+        const container = document.createElement('div');
+        katex.render(latexCode, container, {
+            output: 'mathml',
+            throwOnError: false,
+            displayMode
+        });
+
+        const mathElement = container.querySelector('math');
+        if (!mathElement) return '';
+
+        if (!mathElement.hasAttribute('xmlns')) {
+            mathElement.setAttribute('xmlns', 'http://www.w3.org/1998/Math/MathML');
+        }
+        return mathElement.outerHTML;
+    } catch (error) {
+        console.error('DeepShare: Failed to convert selected formula to MathML:', error);
+        return '';
+    }
+}
+
+// Preserve formulas when a mixed range of ChatGPT text is copied into Word.
+function handleSelectionCopy(event) {
+    if (!formulaSettings.enableFormulaCopy || !event.clipboardData) return;
+
+    const selection = window.getSelection();
+    if (!selection || selection.isCollapsed || selection.rangeCount === 0) return;
+
+    const range = selection.getRangeAt(0);
+    const selectedFormulaSources = Array.from(document.querySelectorAll('[data-math-source]'))
+        .filter(element => {
+            try {
+                return range.intersectsNode(element);
+            } catch (error) {
+                return false;
+            }
+        })
+        .map(element => ({
+            latex: element.getAttribute('data-math-source')?.trim()
+                || element.getAttribute('aria-label')?.trim()
+                || '',
+            displayMode: element.style.display === 'block'
+                || Boolean(element.querySelector('.katex-display'))
+        }))
+        .filter(formula => formula.latex);
+
+    if (selectedFormulaSources.length === 0) return;
+
+    const fragment = range.cloneContents();
+    const container = document.createElement('div');
+    container.appendChild(fragment);
+
+    // Match cloned KaTeX nodes to the intersected source elements in document
+    // order. This also handles a range that starts or ends inside a formula,
+    // where cloneContents() may omit the outer data-math-source wrapper.
+    Array.from(container.querySelectorAll('.katex')).forEach((katexElement, index) => {
+        const formula = selectedFormulaSources[index];
+        if (!formula) return;
+        const mathML = convertLatexToMathMLSync(formula.latex, formula.displayMode);
+        if (!mathML) return;
+
+        const replacement = document.createElement(formula.displayMode ? 'div' : 'span');
+        replacement.setAttribute('data-deepshare-formula', 'true');
+        if (formula.displayMode) {
+            replacement.style.textAlign = 'center';
+            replacement.style.margin = '0.5em 0';
+        }
+        replacement.innerHTML = mathML;
+        const formulaRoot = katexElement.closest('[data-math-source]') || katexElement;
+        formulaRoot.replaceWith(replacement);
+    });
+
+    event.clipboardData.setData('text/html', container.innerHTML);
+    event.clipboardData.setData('text/plain', selection.toString());
+    event.preventDefault();
+    event.stopImmediatePropagation();
+
+    window.showToastNotification(
+        chrome.i18n?.getMessage('formulaCopied') || 'Selection copied with formulas!',
+        'success'
+    );
+}
+
 // 集中处理点击事件的函数
 async function handleKatexClick(e) {
     // 如果功能被禁用，直接返回
@@ -38,36 +137,36 @@ async function handleKatexClick(e) {
         return;
     }
 
-    // Find the annotation element that contains the LaTeX code
-    const annotation = this.querySelector('.katex-mathml annotation[encoding="application/x-tex"]');
+    const latexCode = getLatexSource(this);
 
-    if (annotation) {
-        // Trim whitespace from LaTeX code before copying
-        const latexCode = annotation.textContent.trim();
+    if (!latexCode) {
+        console.warn('DeepShare: Could not find the LaTeX source for this formula');
+        window.showToastNotification(chrome.i18n?.getMessage('copyFailed') || 'Failed to copy formula', 'error');
+        return;
+    }
 
-        try {
-            let textToCopy;
-            // Use the format specified in settings
-            if (formulaSettings.formulaFormat === 'latex') {
-                // Copy raw LaTeX
-                textToCopy = latexCode;
-            } else if (formulaSettings.formulaFormat === 'dollarLatex') {
-                // Copy LaTeX wrapped in $$ for Markdown (Lark/Notion/Obsidian)
-                textToCopy = `$$${latexCode}$$`;
-            } else {
-                // Convert LaTeX to MathML via background script
-                textToCopy = await convertLatexToMathML(latexCode);
-            }
-
-            // Copy to clipboard
-            await navigator.clipboard.writeText(textToCopy);
-
-            // Show visual feedback with localized message using the toast notification
-            window.showToastNotification(chrome.i18n?.getMessage('formulaCopied') || 'Formula copied!', 'success');
-        } catch (error) {
-            console.error('Failed to copy formula:', error);
-            window.showToastNotification(chrome.i18n?.getMessage('copyFailed'), 'error');
+    try {
+        let textToCopy;
+        // Use the format specified in settings
+        if (formulaSettings.formulaFormat === 'latex') {
+            // Copy raw LaTeX
+            textToCopy = latexCode;
+        } else if (formulaSettings.formulaFormat === 'dollarLatex') {
+            // Copy LaTeX wrapped in $$ for Markdown (Lark/Notion/Obsidian)
+            textToCopy = `$$${latexCode}$$`;
+        } else {
+            // Convert LaTeX to MathML via background script
+            textToCopy = await convertLatexToMathML(latexCode);
         }
+
+        // Copy to clipboard
+        await navigator.clipboard.writeText(textToCopy);
+
+        // Show visual feedback with localized message using the toast notification
+        window.showToastNotification(chrome.i18n?.getMessage('formulaCopied') || 'Formula copied!', 'success');
+    } catch (error) {
+        console.error('Failed to copy formula:', error);
+        window.showToastNotification(chrome.i18n?.getMessage('copyFailed'), 'error');
     }
 }
 
@@ -125,6 +224,10 @@ function initKatexCopy() {
 
     // 首先加载设置
     loadSettings();
+
+    // Handle native range copying so Word receives MathML instead of KaTeX's
+    // visual-only spans. Capture mode runs before ChatGPT's own copy handlers.
+    document.addEventListener('copy', handleSelectionCopy, true);
 
     // Use MutationObserver to handle dynamically added KaTeX elements
     const observer = new MutationObserver((mutations) => {
