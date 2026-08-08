@@ -168,6 +168,19 @@
 
         let result = '';
 
+        // ChatGPT moved the source LaTeX from KaTeX's annotation node to
+        // attributes on the surrounding math element. Support both DOM
+        // formats so DOCX/Markdown exports retain formulas after updates.
+        const getFormulaSource = (element) => {
+            const annotation = element.querySelector('annotation[encoding="application/x-tex"]');
+            const sourceElement = element.closest('[data-math-source], [role="math"][aria-label]');
+
+            return annotation?.textContent?.trim()
+                || sourceElement?.getAttribute('data-math-source')?.trim()
+                || sourceElement?.getAttribute('aria-label')?.trim()
+                || '';
+        };
+
         const getCodeBlockText = (codeNode) => {
             let text = '';
 
@@ -245,18 +258,18 @@
 
             // Handle display formulas (block level)
             if (node.classList && node.classList.contains('katex-display')) {
-                const mathML = node.querySelector('annotation[encoding="application/x-tex"]');
-                if (mathML) {
-                    result += '\n$$\n' + mathML.textContent.trim() + '\n$$\n';
+                const latexSource = getFormulaSource(node);
+                if (latexSource) {
+                    result += '\n$$\n' + latexSource + '\n$$\n';
                 }
                 return;
             }
 
             // Handle inline formulas
             if (node.classList && node.classList.contains('katex') && !node.closest('.katex-display')) {
-                const mathML = node.querySelector('annotation[encoding="application/x-tex"]');
-                if (mathML) {
-                    result += '$' + mathML.textContent.trim() + '$';
+                const latexSource = getFormulaSource(node);
+                if (latexSource) {
+                    result += '$' + latexSource + '$';
                 }
                 return;
             }
@@ -361,9 +374,9 @@
                             cellText += n.textContent;
                         } else if (n.nodeType === Node.ELEMENT_NODE) {
                             if (n.classList.contains('katex')) {
-                                const annotation = n.querySelector('annotation[encoding="application/x-tex"]');
-                                if (annotation) {
-                                    cellText += '$' + annotation.textContent.trim() + '$';
+                                const latexSource = getFormulaSource(n);
+                                if (latexSource) {
+                                    cellText += '$' + latexSource + '$';
                                     return;
                                 }
                             }
