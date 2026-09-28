@@ -1,3 +1,5 @@
+importScripts('scripts/history/core.js', 'scripts/history/store.js', 'scripts/history/background.js');
+
 /**
  * DeepShare Background Script
  * Handles background tasks for the extension
@@ -81,6 +83,9 @@ async function injectContentScriptsOnInstall() {
 
 // Listen for messages from content scripts
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    // History requests are answered asynchronously by the dedicated listener.
+    if (message.action?.startsWith('history:')) return false;
+
     // Handle open popup request
     if (message.action === 'openPopup') {
         if (chrome.action && typeof chrome.action.openPopup === 'function') {

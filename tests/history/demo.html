@@ -1,0 +1,8 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>DeepShare 历史对话功能测试</title><link rel="stylesheet" href="../../styles/history.css"><style>
+body{font:15px/1.7 system-ui;color:#263147;background:#f6f8fc;margin:50px auto;max-width:900px}main{background:white;padding:30px;border-radius:18px}h1{font-size:24px}textarea{display:block;margin-top:90px;box-sizing:border-box;width:100%;height:100px;padding:18px;border:1px solid #dde3ee;border-radius:16px;font:inherit}.export-row{display:flex;justify-content:space-between;align-items:center}button{cursor:pointer;padding:8px 18px}#attachment{color:#3e59de}
+body[data-demo-theme="dark"]{background:#16181d;color:#eee}body[data-demo-theme="dark"] main,body[data-demo-theme="dark"] textarea{background:#292a2d;color:#eee}
+</style></head>
+<body><main><h1>DeepShare 历史对话 · 交互测试</h1><p>仅使用虚构示例。点“下载”模拟设置导出，再点“导入历史对话”。</p><div class="export-row"><div><div>导出所有历史对话</div><p>示例数据已经准备好</p></div><button id="simulate-export">下载</button></div><textarea placeholder="给 DeepSeek 发送消息"></textarea><div style="display:flex;justify-content:flex-end;margin-top:8px"><button type="button" aria-label="上传附件">附件</button><input type="file" accept=".md" hidden></div><p id="attachment">尚未附加文件</p><p id="result"></p></main><script src="../../scripts/history/core.js"></script><script src="../../scripts/history/store.js"></script><script src="../../scripts/notifications.js"></script><script src="demo.js"></script><script src="../../scripts/history/content.js"></script></body>
+</html>

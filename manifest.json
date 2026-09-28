@@ -18,7 +18,8 @@
     "permissions": [
         "activeTab",
         "storage",
-        "scripting"
+        "scripting",
+        "downloads"
     ],
     "host_permissions": [
         "https://chat.deepseek.com/*",
@@ -38,7 +39,8 @@
         "https://chat.yixiaai.com/chat/?*",
         "https://www.wanzhi.com/chat/*",
         "https://www.zhihu.com/*",
-        "https://gemini.google.com/*"
+        "https://gemini.google.com/*",
+        "https://deepseek-chat-history-exports-prod.obs.cn-east-3.myhuaweicloud.com/*"
     ],
     "background": {
         "service_worker": "background.js"
@@ -49,7 +51,8 @@
                 "https://chat.deepseek.com/*"
             ],
             "css": [
-                "styles/style.css"
+                "styles/style.css",
+                "styles/history.css"
             ],
             "js": [
                 "lib/html2canvas.min.js",
@@ -66,7 +69,9 @@
                 "scripts/injectDocxButton.js",
                 "scripts/captureDeepSeek.js",
                 "scripts/saveDeepSeekAsDocx.js",
-                "scripts/injectDeepSeekButtons.js"
+                "scripts/injectDeepSeekButtons.js",
+                "scripts/history/core.js",
+                "scripts/history/content.js"
             ]
         },
         {

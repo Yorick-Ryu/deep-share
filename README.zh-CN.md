@@ -59,3 +59,6 @@
 <img src="icons/sponsor-code.png" alt="donate" width="200"/>
 
 感谢您的支持！
+## 历史对话复用（试用版）
+
+从 DeepSeek「系统设置 → 数据管理」导出并下载全部对话，DeepShare 会自动建立本地历史库。新对话中点击“导入历史对话”，搜索、预览并勾选需要的记录，即可生成 Markdown 附件。详见[试用说明](docs/deepseek-history.md)。

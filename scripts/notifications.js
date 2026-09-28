@@ -34,6 +34,19 @@
             max-width: 90vw;
         }
 
+        /* Keep notifications above modal dialogs in the browser's top layer. */
+        .deepshare-toast-container[popover] {
+            inset: auto;
+            top: 24px;
+            left: 50%;
+            margin: 0;
+            padding: 0;
+            border: 0;
+            background: transparent;
+            overflow: visible;
+        }
+        .deepshare-toast-container[popover]:not(:popover-open) { display: none; }
+
         .deepshare-toast {
             pointer-events: auto;
             display: flex;
@@ -65,7 +78,7 @@
         }
         
         /* Manual Dark Mode Override */
-        body.dark .deepshare-toast, html.dark .deepshare-toast {
+        body.dark .deepshare-toast, html.dark .deepshare-toast, body[data-ds-dark-theme] .deepshare-toast, .dsh-dialog[data-dsh-theme="dark"] .deepshare-toast {
             background: var(--deepshare-toast-bg-dark);
             border-color: var(--deepshare-toast-border-dark);
             color: var(--deepshare-toast-text-dark);
@@ -177,10 +190,21 @@
         if (!container) {
             container = document.createElement('div');
             container.className = 'deepshare-toast-container';
-            document.body.appendChild(container);
+            if (typeof container.showPopover === 'function') container.setAttribute('popover', 'manual');
         }
+        // A modal makes unrelated page nodes inert. Keep the toast inside the
+        // active dialog for interaction, then promote it above the dialog.
+        const host = [...document.querySelectorAll('dialog:modal')].at(-1) || document.body;
+        if (container.parentElement !== host) host.appendChild(container);
+        if (container.hasAttribute('popover') && !container.matches(':popover-open')) container.showPopover();
         return container;
     }
+    function syncToastHost() {
+        if (document.querySelector('.deepshare-toast-container')) getContainer();
+    }
+    document.addEventListener('deepshare:dialog-opened', syncToastHost);
+    // Capture runs before the dialog owner's close handler removes its DOM.
+    document.addEventListener('close', syncToastHost, true);
 
     // --- Core Function ---
     function showToastNotification(message, type = 'success', duration = 3000) {
