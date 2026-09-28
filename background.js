@@ -17,8 +17,10 @@ chrome.runtime.onInstalled.addListener((details) => {
         });
     }
 
-    // Inject scripts into already opened tabs without needing to refresh
-    injectContentScriptsOnInstall();
+    // Reloading/updating invalidates old script contexts but leaves their DOM
+    // behind. Reinjection creates duplicate controls and stale listeners.
+    // Existing pages pick up the new declarative scripts on their next reload.
+    if (details.reason === 'install') injectContentScriptsOnInstall();
 });
 
 // Function to dynamically inject content scripts into existing tabs
@@ -37,11 +39,13 @@ async function injectContentScriptsOnInstall() {
 
             for (const tab of tabs) {
                 // Ignore empty or restricted URLs
-                if (!tab.url || tab.url.startsWith('chrome://') || tab.url.startsWith('edge://')) {
+                if (!tab.url || !/^https?:\/\//.test(tab.url) || tab.discarded || tab.status === 'loading') {
                     continue;
                 }
 
                 try {
+                    const origin = `${new URL(tab.url).origin}/*`;
+                    if (!await chrome.permissions.contains({ origins: [origin] })) continue;
                     // Inject CSS
                     if (script.css && script.css.length > 0) {
                         await chrome.scripting.insertCSS({
@@ -57,9 +61,15 @@ async function injectContentScriptsOnInstall() {
                             files: script.js
                         });
                     }
-                    console.log(`Successfully injected content scripts into tab ${tab.id} (${tab.url})`);
+                    console.debug(`Successfully injected content scripts into tab ${tab.id}`);
                 } catch (err) {
-                    console.error(`Failed to inject into tab ${tab.id} (${tab.url}):`, err);
+                    // Access can change between querying a tab and injection
+                    // (navigation, closing, or withheld site access).
+                    if (/Cannot access|No tab with id|No frame with id|Frame with ID .* removed|The tab was closed/i.test(err.message || '')) {
+                        console.debug(`Skipped unavailable tab ${tab.id}; content scripts will load on an authorized page navigation.`);
+                    } else {
+                        console.error(`Failed to inject into tab ${tab.id}:`, err);
+                    }
                 }
             }
         }
