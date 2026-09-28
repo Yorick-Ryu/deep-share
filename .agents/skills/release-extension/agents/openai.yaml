@@ -1,0 +1,4 @@
+interface:
+  display_name: "Release Extension"
+  short_description: "Version, package, tag, push, and publish extension releases."
+  default_prompt: "Upgrade the extension version, package it, tag it, push it, and publish a GitHub Release."
