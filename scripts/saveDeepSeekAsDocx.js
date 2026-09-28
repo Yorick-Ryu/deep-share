@@ -10,8 +10,10 @@ document.addEventListener('deepshare:saveAsDocx', async () => {
 
     const docxBtn = document.getElementById('save-as-docx-btn');
     const imageBtn = document.getElementById('save-as-image-btn');
+    const markdownBtn = document.getElementById('save-as-markdown-btn');
     setButtonDisabled(docxBtn, true);
     setButtonDisabled(imageBtn, true);
+    setButtonDisabled(markdownBtn, true);
 
     scrollAbortController = new AbortController();
     const { signal } = scrollAbortController;
@@ -34,6 +36,7 @@ document.addEventListener('deepshare:saveAsDocx', async () => {
             window.showToastNotification(chrome.i18n?.getMessage('noMessageSelected') || 'Please select at least one message', 'error');
             setButtonDisabled(docxBtn, false);
             setButtonDisabled(imageBtn, false);
+            setButtonDisabled(markdownBtn, false);
             return;
         }
         const content = messages.map(m => `**${m.role}**: \n\n${m.content}`).join('\n\n---\n\n');
@@ -71,12 +74,93 @@ document.addEventListener('deepshare:saveAsDocx', async () => {
         }
         setButtonDisabled(docxBtn, false);
         setButtonDisabled(imageBtn, false);
+        setButtonDisabled(markdownBtn, false);
         if (cancelBtn) {
             cancelBtn.removeEventListener('click', onCancel);
         }
         scrollAbortController = null;
     }
 });
+
+document.addEventListener('deepshare:saveAsMarkdown', async () => {
+    console.log('Save as Markdown clicked');
+
+    const docxBtn = document.getElementById('save-as-docx-btn');
+    const imageBtn = document.getElementById('save-as-image-btn');
+    const markdownBtn = document.getElementById('save-as-markdown-btn');
+    setButtonDisabled(docxBtn, true);
+    setButtonDisabled(imageBtn, true);
+    setButtonDisabled(markdownBtn, true);
+
+    scrollAbortController = new AbortController();
+    const { signal } = scrollAbortController;
+
+    const cancelBtn = document.querySelector('.fab07e97 .ds-basic-button--outlined, .fab07e97 .ds-button--outlined');
+    const onCancel = () => scrollAbortController?.abort();
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', onCancel, { once: true });
+    }
+
+    let savedClipboard = null;
+    try {
+        try {
+            savedClipboard = await navigator.clipboard.readText();
+        } catch (_) { /* clipboard not accessible — nothing to restore later */ }
+
+        const messages = await getSelectedDeepSeekMessages(signal);
+        if (messages.length === 0) {
+            window.showToastNotification(chrome.i18n?.getMessage('noMessageSelected') || 'Please select at least one message', 'error');
+            return;
+        }
+
+        const content = messages.map(message => `**${message.role}**: \n\n${message.content}`).join('\n\n---\n\n');
+        const documentTitle = document.querySelector('.afa34042')?.textContent?.trim() || null;
+        downloadDeepSeekMarkdown(content, documentTitle);
+    } catch (error) {
+        if (error.name === 'AbortError') {
+            console.log('Markdown export cancelled by user');
+        } else if (error.message === 'NO_SELECTION') {
+            window.showToastNotification(chrome.i18n?.getMessage('noMessageSelected') || 'Please select at least one message', 'error');
+        } else {
+            console.error('Error getting messages for Markdown export:', error);
+            if (error.message && error.message.includes('Read permission denied')) {
+                showClipboardPermissionError();
+            } else {
+                window.showToastNotification(`${chrome.i18n?.getMessage('getClipboardError')}: ${error.message}`, 'error');
+            }
+        }
+    } finally {
+        if (savedClipboard !== null) {
+            try { await navigator.clipboard.writeText(savedClipboard); } catch (_) {}
+        }
+        setButtonDisabled(docxBtn, false);
+        setButtonDisabled(imageBtn, false);
+        setButtonDisabled(markdownBtn, false);
+        if (cancelBtn) {
+            cancelBtn.removeEventListener('click', onCancel);
+        }
+        scrollAbortController = null;
+    }
+});
+
+function downloadDeepSeekMarkdown(content, title) {
+    const filename = window.DeepShareUtils.generateFilename(content, {
+        title,
+        fallbackPrefix: 'deepseek_conversation',
+        titleMaxLength: 50,
+        contentMaxLength: 15,
+        stripMarkdownHeading: true
+    }) + '.md';
+    const blob = new Blob([content], { type: 'text/markdown;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+}
 
 function showClipboardPermissionError() {
     window.showToastNotification({
