@@ -4,6 +4,22 @@
     globalThis.__deepShareHistoryUI = true;
     const H = globalThis.DeepShareHistory;
     let dialog, launch, archive, activeId, statusValue, previousFocus;
+    let captureEnabled = false;
+    let pendingCapture = null;
+    let exportSource = null;
+    // A page-world observation is only a permission hint, never authority to
+    // fetch a URL. The worker still requires a browser-observed official download.
+    window.addEventListener('message', event => {
+        if (event.source !== window || event.origin !== 'https://chat.deepseek.com' || event.data?.type !== 'deepshare:history-export-source') return;
+        const value = event.data.source;
+        exportSource = null;
+        if (value && H.isExportURL(value.origin) && new URL(value.origin).origin === value.origin &&
+            Number.isFinite(value.expiresAt) && value.expiresAt > Date.now() && value.expiresAt <= Date.now() + 5 * 60000) {
+            exportSource = { origin: value.origin, expiresAt: value.expiresAt };
+        }
+    });
+    window.postMessage?.({ type: 'deepshare:history-export-source:query' }, 'https://chat.deepseek.com');
+    let captureRequest, resumingDownload = false, pendingDownload = false;
     let selected = new Set(), query = '', multiple = false;
     const element = (tag, className, text) => {
         const node = document.createElement(tag);
@@ -21,6 +37,47 @@
         return response;
     }
     const showError = text => window.showToastNotification?.({ text }, 'error', 5000);
+    function requestCapturePermission(origin) {
+        if (captureRequest) return captureRequest;
+        // Send synchronously from the click handler to preserve user activation.
+        captureRequest = request('history:capture:request', origin ? { origin } : {}).then(result => {
+            captureEnabled = result.enabled === true;
+            return captureEnabled;
+        }).finally(() => { captureRequest = null; reconcile(); });
+        updatePermissionButtons();
+        return captureRequest;
+    }
+    async function authorizeCapture() {
+        try {
+            if (pendingCapture) {
+                const result = await request('history:capture:authorize', pendingCapture);
+                if (!result.granted) window.showToastNotification?.({ text: '未授权读取导出包，仍可手动导入已下载的文件。' }, 'info', 5000);
+                await refreshCapturePermission();
+
+            }
+            reconcile();
+        } catch (error) { showError(error.message); refreshCapturePermission(); }
+    }
+    function updatePermissionButtons() {
+        for (const node of document.querySelectorAll('.dsh-capture-permission')) {
+            const label = '授权读取';
+            node.hidden = !pendingCapture;
+            if (node.textContent !== label) node.textContent = label;
+            node.disabled = !!captureRequest;
+            node.title = pendingCapture ? `允许读取 ${new URL(pendingCapture.origin).host} 的本次导出包`
+                : '允许识别手动下载的官方历史对话';
+        }
+    }
+    async function refreshCapturePermission() {
+        try {
+            const result = await request('history:capture:status');
+            captureEnabled = result.enabled === true;
+            const changed = result.pending && (pendingCapture?.id !== result.pending.id || pendingCapture?.origin !== result.pending.origin);
+            pendingCapture = result.pending || null;
+            if (changed) window.showToastNotification?.({ text: '下载已完成，请点击“授权读取”读取本次导出包。' }, 'info', 8000);
+            reconcile();
+        } catch { /* Existing features remain usable if the worker is unavailable. */ }
+    }
     const all = () => archive?.conversations || [];
     const chosenConversations = () => selected.size
         ? all().filter(c => selected.has(c.id))
@@ -53,6 +110,21 @@
         summary.title = summary.textContent;
         dialog.querySelectorAll('[data-dsh-export]').forEach(b => { b.disabled = !count; });
     }
+    function archiveImportButton(label, className = '') {
+        const node = button(label, () => dialog?.querySelector('.dsh-archive-input')?.click(), `dsh-import-archive ${className}`);
+        node.dataset.importLabel = label;
+        node.title = '导入已下载的 DeepSeek ZIP 导出包或 conversations.json';
+        node.disabled = !!dialog?.querySelector('.dsh-archive-input')?.disabled;
+        if (node.disabled) node.textContent = '导入中…';
+        return node;
+    }
+    function setArchiveImportBusy(target, busy) {
+        target.querySelector('.dsh-archive-input').disabled = busy;
+        for (const node of target.querySelectorAll('.dsh-import-archive')) {
+            node.disabled = busy;
+            node.textContent = busy ? '导入中…' : node.dataset.importLabel;
+        }
+    }
     function renderPreview() {
         const preview = dialog.querySelector('.dsh-preview');
         const changedConversation = preview.dataset.conversationId !== (activeId || '');
@@ -60,7 +132,12 @@
         preview.replaceChildren();
         const c = all().find(c => c.id === activeId);
         if (!c) {
-            preview.append(element('p', 'dsh-muted', '点击左侧对话预览，勾选需要带入新对话的内容。'));
+            if (!all().length) {
+                const empty = element('div', 'dsh-empty-state');
+                empty.append(element('p', 'dsh-empty', '请在 DeepSeek「系统设置 → 数据管理」导出历史对话，点击“下载”时可直接保存到历史库。也可点击下方“导入历史对话”选择已下载的 ZIP 或 JSON 文件。'),
+                    archiveImportButton('导入历史对话', 'dsh-primary'));
+                preview.append(empty);
+            }
             return;
         }
         preview.append(highlighted('h3', '', c.title));
@@ -89,9 +166,7 @@
             activeId = filtered[0]?.id;
             renderPreview();
         }
-        if (!all().length) {
-            list.append(element('p', 'dsh-empty', '还没有历史对话。请在 DeepSeek「系统设置 → 数据管理」导出所有历史对话，待生成完成后点“下载”，也可以点击底部“导入”选择已下载的导出包。'));
-        } else if (!filtered.length) list.append(element('p', 'dsh-empty', '没有找到匹配的对话，试试其他关键词。'));
+        if (all().length && !filtered.length) list.append(element('p', 'dsh-empty', '没有找到匹配的对话，试试其他关键词。'));
         const fragment = document.createDocumentFragment();
         let group, groupLabel;
         for (const c of filtered) {
@@ -340,16 +415,14 @@
             }
         }, 'dsh-clear');
         clearButton.addEventListener('blur', () => { if (clearArmed) resetClear(); });
-        const archiveInput = element('input');
+        const archiveInput = element('input', 'dsh-archive-input');
         archiveInput.type = 'file'; archiveInput.accept = '.zip,.json'; archiveInput.hidden = true;
-        const importButton = button('导入', () => archiveInput.click(), 'dsh-import-archive');
-        importButton.title = '导入已下载的 DeepSeek ZIP 导出包或 conversations.json';
+        const importButton = archiveImportButton('导入');
         archiveInput.addEventListener('change', async () => {
             const file = archiveInput.files[0];
             archiveInput.value = '';
             if (!file) return;
-            importButton.disabled = true; clearButton.disabled = true;
-            importButton.textContent = '导入中…';
+            setArchiveImportBusy(currentDialog, true); clearButton.disabled = true;
             let id;
             try {
                 if (file.size > H.MAX_BYTES) throw new Error('导出包超过 64 MB。');
@@ -369,11 +442,10 @@
                 if (id) await request('history:import:cancel', { id }).catch(() => {});
                 if (dialog === currentDialog) showError(`导入失败，已有历史库仍保留。${error.message}`);
             } finally {
-                importButton.disabled = false; clearButton.disabled = false;
-                importButton.textContent = '导入';
+                setArchiveImportBusy(currentDialog, false); clearButton.disabled = false;
             }
         });
-        bottom.append(button('刷新', loadArchive), importButton, clearButton, archiveInput); footer.prepend(bottom);
+        bottom.append(button('刷新', loadArchive), importButton, button('授权读取', authorizeCapture, 'dsh-capture-permission'), clearButton, archiveInput); footer.prepend(bottom);
         const currentDialog = dialog;
         const returnFocus = previousFocus;
         let outsidePointer = null;
@@ -391,6 +463,9 @@
         });
         currentDialog.addEventListener('pointercancel', () => { outsidePointer = null; });
         currentDialog.addEventListener('cancel', event => {
+            // File inputs also emit a bubbling cancel event when the chooser is
+            // dismissed. Only the dialog's own Escape event should close it.
+            if (event.target !== currentDialog) return;
             event.preventDefault();
             if (multiple) exitMultiple(); else closeLibrary();
         });
@@ -399,7 +474,7 @@
             if (dialog === currentDialog) dialog = null;
             if (returnFocus?.isConnected) returnFocus.focus();
         }, { once: true });
-        document.body.append(dialog); syncAppearance(); dialog.showModal();
+        document.body.append(dialog); updatePermissionButtons(); syncAppearance(); dialog.showModal();
         document.dispatchEvent(new Event('deepshare:dialog-opened'));
         // Native settings focuses the surface on open, not the close button.
         // Keyboard navigation still shows focus indicators on controls.
@@ -407,6 +482,8 @@
         await loadArchive();
     }
     function settingsStatus() {
+        if (pendingCapture) return '点击“授权读取”后，将本次导出包保存到本地历史库。';
+        if (!captureEnabled) return '点击下载时可授权保存到本地历史库。拒绝授权仍可正常下载，也可在历史库中手动导入文件。';
         if (statusValue?.state === 'ready' && Number.isFinite(statusValue.count)) {
             return `已保存 ${statusValue.count} 个历史对话。如需同步最新对话，请先重新导出，待生成完成后再点击下载。`;
         }
@@ -428,6 +505,30 @@
             !node.closest('.dsh-settings') && node.getClientRects().length && !node.disabled &&
             node.getAttribute('aria-disabled') !== 'true' && pattern.test(node.textContent.trim()));
     }
+    // Pause only the official settings download click while Chrome asks for
+    // optional permissions. Resume that same control once, including on denial.
+    window.addEventListener('click', event => {
+        if (resumingDownload || (!event.isTrusted && !navigator.userActivation?.isActive)) return;
+        const download = nativeHistoryControl('下载');
+        if (!download || !download.contains(event.target)) return;
+        event.preventDefault(); event.stopImmediatePropagation();
+        if (pendingDownload) return;
+        pendingDownload = true;
+        // A denied source can be requested again by the next native download
+        // click. Send before awaiting anything to retain the user gesture.
+        const origin = exportSource?.expiresAt > Date.now() ? exportSource.origin : undefined;
+        const permission = !captureEnabled ? requestCapturePermission(origin)
+            : pendingCapture ? request('history:capture:authorize', pendingCapture).then(() => true)
+            : origin ? requestCapturePermission(origin) : Promise.resolve(true);
+        permission.then(enabled => enabled ? request('history:capture:arm') : undefined).catch(error => showError(error.message)).finally(() => {
+            pendingDownload = false;
+            // Do not download from a new settings row after navigation or a re-export.
+            if (!download.isConnected || nativeHistoryControl('下载') !== download) return;
+            resumingDownload = true;
+            try { download.click(); }
+            finally { resumingDownload = false; }
+        });
+    }, true);
     function updateSettingsLabel(label) {
         const text = settingsStatus();
         const actions = ['重新导出', '下载'].filter(action => text.includes(action) && nativeHistoryControl(action));
@@ -449,13 +550,14 @@
         if (!row) { note?.remove(); return; }
         if (!note) {
             note = element('div', 'dsh-settings');
-            note.append(element('span'), button('查看历史库', openLibrary));
+            note.append(element('span'), button('授权读取', authorizeCapture, 'dsh-capture-permission'), button('查看历史库', openLibrary));
         }
         updateSettingsLabel(note.querySelector('span'));
         // Initialize theme before insertion so dark settings never paints a
         // light border while waiting for the general reconciliation timer.
         syncAppearance([note]);
         if (row.nextElementSibling !== note) row.after(note);
+        updatePermissionButtons();
     }
     function syncAppearance(nodes = [dialog, launch, document.querySelector('.dsh-settings')]) {
         // Read the site's rendered foreground so a manual DeepSeek theme takes
@@ -491,11 +593,14 @@
             launch.remove();
         }
         settingsNote();
+        updatePermissionButtons();
         syncAppearance();
     }
     chrome.storage.local.get('deepShareHistoryStatus').then(data => { statusValue = data.deepShareHistoryStatus; reconcile(); });
     chrome.storage.onChanged.addListener((changes, area) => {
-        if (area !== 'local' || !changes.deepShareHistoryStatus) return;
+        if (area !== 'local') return;
+        if (changes.deepShareHistoryCaptureEnabled || changes.deepShareHistoryCaptureRevision) refreshCapturePermission();
+        if (!changes.deepShareHistoryStatus) return;
         statusValue = changes.deepShareHistoryStatus.newValue; reconcile();
         if (dialog?.open) {
             if (statusValue?.state === 'ready') loadArchive();
@@ -514,5 +619,7 @@
     matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => syncAppearance());
     window.addEventListener('resize', reconcile);
     window.addEventListener('scroll', reconcile, { passive: true });
+    window.addEventListener('focus', refreshCapturePermission);
+    refreshCapturePermission();
     reconcile();
 })();

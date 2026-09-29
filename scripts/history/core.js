@@ -1,12 +1,18 @@
 /* Shared by the MV3 worker, content script and offline tests. No network or DOM. */
 (() => {
     const MAX_BYTES = 64 * 1024 * 1024;
-    const EXPORT_HOST = 'deepseek-chat-history-exports-prod.obs.cn-east-3.myhuaweicloud.com';
     const str = value => typeof value === 'string' ? value : '';
     function isExportURL(value) {
         try {
             const url = new URL(value);
-            return url.protocol === 'https:' && url.hostname === EXPORT_HOST && /\.zip$/i.test(url.pathname) && !url.username && !url.password;
+            // URL shape only: provenance must be established from a download
+            // started by the official export UI before this URL may be read.
+            const host = url.hostname;
+            return url.protocol === 'https:' && !url.username && !url.password &&
+                (!url.port || url.port === '443') && host.includes('.') &&
+                host.length <= 253 && host.split('.').every(label => /^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/i.test(label)) &&
+                !/^[\d.]+$/.test(host) &&
+                !/(^|\.)(localhost|local|internal|test|invalid)$/.test(host);
         } catch { return false; }
     }
     async function readLimited(stream, limit = MAX_BYTES) {

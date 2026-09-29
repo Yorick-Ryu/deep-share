@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "default_locale": "en",
     "name": "__MSG_extensionName__",
-    "version": "1.9.0",
+    "version": "1.9.1",
     "description": "__MSG_extensionDescription__",
     "icons": {
         "16": "icons/icon16.png",
@@ -18,8 +18,13 @@
     "permissions": [
         "activeTab",
         "storage",
-        "scripting",
+        "scripting"
+    ],
+    "optional_permissions": [
         "downloads"
+    ],
+    "optional_host_permissions": [
+        "https://*/*"
     ],
     "host_permissions": [
         "https://chat.deepseek.com/*",
@@ -39,13 +44,18 @@
         "https://chat.yixiaai.com/chat/?*",
         "https://www.wanzhi.com/chat/*",
         "https://www.zhihu.com/*",
-        "https://gemini.google.com/*",
-        "https://deepseek-chat-history-exports-prod.obs.cn-east-3.myhuaweicloud.com/*"
+        "https://gemini.google.com/*"
     ],
     "background": {
         "service_worker": "background.js"
     },
     "content_scripts": [
+        {
+            "matches": ["https://chat.deepseek.com/*"],
+            "js": ["scripts/history/export-source.js"],
+            "run_at": "document_start",
+            "world": "MAIN"
+        },
         {
             "matches": [
                 "https://chat.deepseek.com/*"

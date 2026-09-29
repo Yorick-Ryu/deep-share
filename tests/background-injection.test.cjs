@@ -2,8 +2,8 @@ const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const vm = require('node:vm');
-function setup({ granted = true, tabs = [{ id: 1, url: 'https://chat.deepseek.com/', status: 'complete' }], failFirst = false } = {}) {
-    const calls = { css: [], js: [], errors: [], checks: [] };
+function setup({ granted = true, tabs = [{ id: 1, url: 'https://chat.deepseek.com/', status: 'complete' }], failFirst = false, world } = {}) {
+    const calls = { css: [], js: [], errors: [], checks: [], worlds: [] };
     let installed;
     const context = vm.createContext({
         URL, importScripts() {},
@@ -12,14 +12,14 @@ function setup({ granted = true, tabs = [{ id: 1, url: 'https://chat.deepseek.co
             runtime: {
                 onInstalled: { addListener: fn => { installed = fn; } },
                 onMessage: { addListener() {} },
-                getManifest: () => ({ content_scripts: [{ matches: ['https://chat.deepseek.com/*'], css: ['styles/style.css'], js: ['scripts/common.js'] }] })
+                getManifest: () => ({ content_scripts: [{ matches: ['https://chat.deepseek.com/*'], css: ['styles/style.css'], js: ['scripts/common.js'], world }] })
             },
             permissions: { contains: async request => { calls.checks.push(request); return granted; } },
             storage: { sync: { get: (_keys, fn) => fn({ onboardingCompleted: true }) } },
             tabs: { query: async () => tabs },
             scripting: {
                 insertCSS: async ({ target }) => { if (failFirst && target.tabId === 1) throw new Error('Cannot access contents of the page.'); calls.css.push(target.tabId); },
-                executeScript: async ({ target }) => { calls.js.push(target.tabId); }
+                executeScript: async ({ target, world }) => { calls.js.push(target.tabId); calls.worlds.push(world); }
             }
         }
     });
@@ -53,4 +53,10 @@ test('access changes on one tab do not block remaining tabs', async () => {
     await vm.runInContext('injectContentScriptsOnInstall()', h.context);
     assert.deepEqual(h.calls.js, [2]);
     assert.equal(h.calls.errors.length, 0);
+});
+
+test('initial injection honors the declared MAIN world for the export observer', async () => {
+    const h = setup({ world: 'MAIN' });
+    await vm.runInContext('injectContentScriptsOnInstall()', h.context);
+    assert.deepEqual(h.calls.worlds, ['MAIN']);
 });

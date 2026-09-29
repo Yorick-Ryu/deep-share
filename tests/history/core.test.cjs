@@ -2,9 +2,10 @@ const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const H = require('../../scripts/history/core.js');
 const { conversation, zip } = require('./fixtures.cjs');
-test('accepts only HTTPS official export files', () => {
-    assert.equal(H.isExportURL('https://deepseek-chat-history-exports-prod.obs.cn-east-3.myhuaweicloud.com/id.zip?signature=secret'), true);
-    for (const url of ['https://evil.example/id.zip', 'https://deepseek-chat-history-exports-prod.obs.cn-east-3.myhuaweicloud.com.evil.test/id.zip', 'http://deepseek-chat-history-exports-prod.obs.cn-east-3.myhuaweicloud.com/id.zip', 'file:///history.zip']) assert.equal(H.isExportURL(url), false);
+test('accepts public HTTPS URL shapes without pinning a domain or ZIP suffix', () => {
+    assert.equal(H.isExportURL('https://new-cdn.deepseek.com/export?id=123'), true);
+    assert.equal(H.isExportURL('https://exports.deepseek.com/folder/file.zip?signature=secret'), true);
+    for (const url of ['http://exports.deepseek.com/file.zip', 'file:///history.zip', 'https://127.0.0.1/history.zip', 'https://localhost/history.zip', 'https://a.local/history.zip', 'https://[::1]/history.zip', 'https://user:pass@example.com/file.zip', 'https://example.com:8443/file.zip', 'https://*.example.com/file.zip', 'https://-cdn.example.com/file.zip']) assert.equal(H.isExportURL(url), false);
 });
 test('reads stored and deflated ZIP with CRC verification', async () => {
     const text = JSON.stringify([conversation()]);

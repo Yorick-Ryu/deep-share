@@ -1,4 +1,4 @@
-importScripts('scripts/history/core.js', 'scripts/history/store.js', 'scripts/history/background.js');
+importScripts('scripts/history/core.js', 'scripts/history/store.js', 'scripts/history/permissions.js', 'scripts/history/background.js');
 
 /**
  * DeepShare Background Script
@@ -60,7 +60,8 @@ async function injectContentScriptsOnInstall() {
                     if (script.js && script.js.length > 0) {
                         await chrome.scripting.executeScript({
                             target: { tabId: tab.id },
-                            files: script.js
+                            files: script.js,
+                            ...(script.world ? { world: script.world } : {})
                         });
                     }
                     console.debug(`Successfully injected content scripts into tab ${tab.id}`);

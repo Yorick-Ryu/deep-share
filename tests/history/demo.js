@@ -24,6 +24,11 @@
     }
     globalThis.chrome = {
         runtime: { sendMessage: async ({ action, chunk }) => {
+            if (action === 'history:capture:status') return { ok: true, enabled: true, pending: null };
+            if (action === 'history:capture:arm') return { ok: true };
+            if (action === 'history:capture:authorize') return { ok: true, granted: true };
+            if (action === 'history:capture:request') return { ok: true, enabled: true };
+            if (action === 'history:capture:revoke') return { ok: true, enabled: false };
             if (action === 'history:import:start') { importChunks = []; return { ok: true, id: 'demo-import' }; }
             if (action === 'history:import:chunk') { importChunks.push(chunk); return { ok: true }; }
             if (action === 'history:import:cancel') { importChunks = []; return { ok: true }; }
