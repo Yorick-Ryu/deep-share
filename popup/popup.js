@@ -173,7 +173,9 @@ function loadSettings(highlightApiKey = false, forceDocxTab = false) {
     document.getElementById('docxServerUrl').value = data.docxServerUrl || DEEPSHARE_PRIMARY_API_URL;
 
     const apiKeyInput = document.getElementById('docxApiKey');
-    apiKeyInput.value = data.docxApiKey || '';
+    decryptApiKey(data.docxApiKey).then((decryptedApiKey) => {
+      apiKeyInput.value = decryptedApiKey || '';
+    });
 
 
 
@@ -695,6 +697,50 @@ function updatePurchaseLinksWithApiKey(apiKey) {
 }
 
 // Function to save settings
+const API_KEY_CRYPTO_STORAGE_KEY = 'docxApiKeyCryptoKey';
+
+async function getApiKeyCryptoKey() {
+  const stored = await chrome.storage.local.get([API_KEY_CRYPTO_STORAGE_KEY]);
+  let rawKey = stored[API_KEY_CRYPTO_STORAGE_KEY];
+  if (!rawKey) {
+    const generated = await crypto.subtle.generateKey({ name: 'AES-GCM', length: 256 }, true, ['encrypt', 'decrypt']);
+    const exported = await crypto.subtle.exportKey('raw', generated);
+    rawKey = btoa(String.fromCharCode(...new Uint8Array(exported)));
+    await chrome.storage.local.set({ [API_KEY_CRYPTO_STORAGE_KEY]: rawKey });
+  }
+  const keyBytes = Uint8Array.from(atob(rawKey), (c) => c.charCodeAt(0));
+  return crypto.subtle.importKey('raw', keyBytes, 'AES-GCM', false, ['encrypt', 'decrypt']);
+}
+
+// Encrypt the API key (AES-GCM) before it is persisted to chrome.storage.sync,
+// so the secret is not stored in plaintext (CWE-312).
+async function encryptApiKey(plainText) {
+  if (!plainText) return '';
+  const key = await getApiKeyCryptoKey();
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const cipherBuf = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, new TextEncoder().encode(plainText));
+  const ivB64 = btoa(String.fromCharCode(...iv));
+  const cipherB64 = btoa(String.fromCharCode(...new Uint8Array(cipherBuf)));
+  return `${ivB64}:${cipherB64}`;
+}
+
+// Decrypt a value previously produced by encryptApiKey. Falls back to
+// returning the raw stored value for legacy plaintext keys saved before this fix.
+async function decryptApiKey(stored) {
+  if (!stored) return '';
+  const parts = stored.split(':');
+  if (parts.length !== 2) return stored;
+  try {
+    const key = await getApiKeyCryptoKey();
+    const iv = Uint8Array.from(atob(parts[0]), (c) => c.charCodeAt(0));
+    const cipherBytes = Uint8Array.from(atob(parts[1]), (c) => c.charCodeAt(0));
+    const plainBuf = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, cipherBytes);
+    return new TextDecoder().decode(plainBuf);
+  } catch (_) {
+    return stored;
+  }
+}
+
 function saveSettings() {
   const geminiAutoScrollTimeoutInput = document.getElementById('geminiAutoScrollTimeout');
   const geminiAutoScrollTimeoutSeconds = clampGeminiAutoScrollTimeout(geminiAutoScrollTimeoutInput.value);
@@ -775,7 +821,9 @@ function saveSettings() {
   }
 
   // Save all settings at once
-  chrome.storage.sync.set(settings, () => {
+  encryptApiKey(settings.docxApiKey).then((encryptedDocxApiKey) => {
+    settings.docxApiKey = encryptedDocxApiKey;
+    chrome.storage.sync.set(settings, () => {
     console.log('Settings saved automatically');
 
     const apiKey = document.getElementById('docxApiKey').value;
@@ -784,6 +832,7 @@ function saveSettings() {
       // Check quota after saving if API key is provided
       setTimeout(checkQuota, 500);
     }
+  });
   });
 }
 
@@ -1445,7 +1494,7 @@ function setupManualConversion() {
       `;
 
       // Call the conversion function with markdown text
-      await convertMarkdownToDocx(markdownText, settings.docxServerUrl, settings.docxApiKey, settings.removeDividers, settings.removeEmojis, settings.convertMermaid, settings.compatMode, document.getElementById('wordTemplateSelect').value, settings.hardLineBreaks, settings.disableAutoNumbering);
+      await convertMarkdownToDocx(markdownText, settings.docxServerUrl, await decryptApiKey(settings.docxApiKey), settings.removeDividers, settings.removeEmojis, settings.convertMermaid, settings.compatMode, document.getElementById('wordTemplateSelect').value, settings.hardLineBreaks, settings.disableAutoNumbering);
 
       // Update button to show success message briefly
       convertBtn.innerHTML = `
