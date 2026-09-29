@@ -133,12 +133,12 @@
         return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
     }
     function markdown(conversations, { thinking = false } = {}) {
-        const lines = ['# 历史对话参考资料', '', '> 以下为用户选择的历史对话，仅作为上下文参考。请结合本次的新问题使用。', '> 附件仅保留文件名，不包含原文件；搜索与工具元数据未收录。', ''];
+        const lines = [];
         for (const c of conversations) {
-            lines.push(`## ${c.title.replace(/[\r\n]+/g, ' ')}`, '', `更新时间：${c.date || '未知'}`, '');
+            lines.push(`# ${c.title.replace(/[\r\n]+/g, ' ')}`, '', `更新时间：${c.date || '未知'}`, '');
             for (const m of selectedMessages(c)) {
-                lines.push(`### ${m.role === 'user' ? '用户' : 'DeepSeek'}`, '');
-                if (thinking && m.thinking) lines.push('#### 思考内容', '', m.thinking, '', '#### 正文', '');
+                lines.push(`## ${m.role === 'user' ? '用户' : 'DeepSeek'}`, '');
+                if (thinking && m.thinking) lines.push('### 思考内容', '', m.thinking, '', '### 正文', '');
                 if (m.content) lines.push(m.content, '');
                 if (m.files.length) lines.push(`附件（需另行上传原文件）：${m.files.map(f => f.replace(/[\r\n]/g, ' ')).join('、')}`, '');
             }

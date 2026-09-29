@@ -48,7 +48,9 @@
     function updateSelection() {
         const count = chosenConversations().length;
         const bytes = count ? new Blob([chosenMarkdown()]).size : 0;
-        dialog.querySelector('.dsh-summary').textContent = `${selected.size ? `已选 ${selected.size} 个对话` : count ? '当前对话' : '未选择对话'} · ${(bytes / 1024).toFixed(1)} KB`;
+        const summary = dialog.querySelector('.dsh-summary');
+        summary.textContent = `${selected.size ? `已选 ${selected.size} 个对话` : count ? '当前对话' : '未选择对话'} · ${(bytes / 1024).toFixed(1)} KB`;
+        summary.title = summary.textContent;
         dialog.querySelectorAll('[data-dsh-export]').forEach(b => { b.disabled = !count; });
     }
     function renderPreview() {
@@ -406,39 +408,63 @@
     }
     function settingsStatus() {
         if (statusValue?.state === 'ready' && Number.isFinite(statusValue.count)) {
-            return `已保存 ${statusValue.count} 个历史对话，请点击“下载”同步对话。`;
+            return `已保存 ${statusValue.count} 个历史对话。如需同步最新对话，请先重新导出，待生成完成后再点击下载。`;
         }
-        return statusValue?.message || '请点击“下载”同步历史对话，之后可在新对话中选择导入。';
+        return statusValue?.message || '请先导出历史对话，待生成完成后点击下载同步；如需获取最新对话，请先重新导出。';
     }
-    function settingsNote() {
-        const existing = document.querySelector('.dsh-settings');
-        if (existing) {
-            const label = existing.querySelector('span');
-            const text = settingsStatus();
-            if (label.textContent !== text) label.textContent = text;
-            return;
-        }
-        // Match the visible export row by meaning, not DeepSeek's changing hashed classes.
+    function nativeExportRow() {
+        // Resolve the current row again after every native settings tab change.
         const heading = [...document.querySelectorAll('div,span,p,h3')].find(node => node.childElementCount === 0 && /^(导出所有历史对话|Export (all )?(chat )?history|Export data)$/i.test(node.textContent.trim()) && node.getClientRects().length);
-        if (!heading) return;
-        let row = heading.parentElement;
+        let row = heading?.parentElement;
         for (let i = 0; row && i < 4; i++, row = row.parentElement) {
             if (/删除所有对话|Delete all chats/i.test(row.textContent)) return;
-            if ([...row.querySelectorAll('button,[role="button"]')].some(control => /^(下载|导出|Download|Export)$/i.test(control.textContent.trim()))) {
-                const note = element('div', 'dsh-settings');
-                note.append(element('span', '', settingsStatus()), button('查看历史库', openLibrary));
-                row.after(note); return;
-            }
+            if ([...row.querySelectorAll('button,[role="button"]')].some(node =>
+                !node.closest('.dsh-settings') && /^(下载|导出|Download|Export)$/i.test(node.textContent.trim()))) return row;
         }
     }
-    function syncAppearance() {
+    function nativeHistoryControl(action) {
+        const pattern = action === '重新导出' ? /^(重新导出|Re-export|Export again)$/i : /^(下载|Download)$/i;
+        return [...(nativeExportRow()?.querySelectorAll('button,[role="button"]') || [])].find(node =>
+            !node.closest('.dsh-settings') && node.getClientRects().length && !node.disabled &&
+            node.getAttribute('aria-disabled') !== 'true' && pattern.test(node.textContent.trim()));
+    }
+    function updateSettingsLabel(label) {
+        const text = settingsStatus();
+        const actions = ['重新导出', '下载'].filter(action => text.includes(action) && nativeHistoryControl(action));
+        const links = actions.join(',');
+        if (label.textContent === text && label.dataset.links === links) return;
+        const parts = text.split(/(重新导出|下载)/g).map(part => {
+            if (!actions.includes(part)) return document.createTextNode(part);
+            const link = element('button', 'dsh-settings-link', part);
+            link.type = 'button';
+            link.addEventListener('click', () => nativeHistoryControl(part)?.click());
+            return link;
+        });
+        label.dataset.links = links;
+        label.replaceChildren(...parts);
+    }
+    function settingsNote() {
+        const row = nativeExportRow();
+        let note = document.querySelector('.dsh-settings');
+        if (!row) { note?.remove(); return; }
+        if (!note) {
+            note = element('div', 'dsh-settings');
+            note.append(element('span'), button('查看历史库', openLibrary));
+        }
+        updateSettingsLabel(note.querySelector('span'));
+        // Initialize theme before insertion so dark settings never paints a
+        // light border while waiting for the general reconciliation timer.
+        syncAppearance([note]);
+        if (row.nextElementSibling !== note) row.after(note);
+    }
+    function syncAppearance(nodes = [dialog, launch, document.querySelector('.dsh-settings')]) {
         // Read the site's rendered foreground so a manual DeepSeek theme takes
         // precedence over the OS setting. Keep our CSS scoped to this feature.
         const source = document.querySelector('textarea') || document.body;
         const computed = getComputedStyle(source);
         const channels = computed.color.match(/[\d.]+/g)?.slice(0, 3).map(Number);
         const dark = channels?.length === 3 && channels[0] * .2126 + channels[1] * .7152 + channels[2] * .0722 > 150;
-        for (const node of [dialog, launch, document.querySelector('.dsh-settings')].filter(Boolean)) {
+        for (const node of nodes.filter(Boolean)) {
             const theme = dark ? 'dark' : 'light';
             if (node.dataset.dshTheme !== theme) node.dataset.dshTheme = theme;
             if (node.style.fontFamily !== computed.fontFamily) node.style.fontFamily = computed.fontFamily;
@@ -479,9 +505,13 @@
     let timer;
     new MutationObserver(records => {
         if (records.every(r => r.target.closest?.('.dsh-dialog,.dsh-settings,.dsh-launch'))) return;
+        // Native settings replaces its rows when switching tabs. Remove or
+        // re-anchor our sibling in this microtask, before the next paint;
+        // waiting for the general debounce flashes the orphan at the top.
+        settingsNote();
         clearTimeout(timer); timer = setTimeout(reconcile, 200);
-    }).observe(document.documentElement, { childList: true, subtree: true, attributes: true, attributeFilter: ['class', 'style', 'data-theme'] });
-    matchMedia('(prefers-color-scheme: dark)').addEventListener('change', syncAppearance);
+    }).observe(document.documentElement, { childList: true, subtree: true, attributes: true, attributeFilter: ['class', 'style', 'data-theme', 'hidden', 'disabled', 'aria-disabled'] });
+    matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => syncAppearance());
     window.addEventListener('resize', reconcile);
     window.addEventListener('scroll', reconcile, { passive: true });
     reconcile();
