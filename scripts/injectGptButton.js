@@ -8,36 +8,59 @@
 
     let lastUrl = location.href;
     let activeMessageContainer = null;
+    let tooltipSequence = 0;
+    let tooltipWarmUntil = 0;
+    let nativeTooltipVisible = false;
+    const nativeTooltipSelector = '[role="tooltip"]:not(.deepshare-gpt-tooltip), [data-radix-popper-content-wrapper] [data-state$="open"][data-side]';
+    function hasNativeTooltip() {
+        return Array.from(document.querySelectorAll(nativeTooltipSelector)).some(node =>
+            node.getBoundingClientRect().height > 0 && !node.closest('[role="menu"]'));
+    }
     console.debug('DeepShare: Initializing DOCX button injection for ChatGPT');
 
+    const legacyGroupSelector = 'div[class*="group-hover/turn-messages"]';
+    const bodySelector = '.markdown, [data-markdown-text-style="assistant-message"]';
+
+    function findMessageContainer(button) {
+        const legacy = button.closest('.agent-turn');
+        if (legacy) return legacy;
+
+        // The new UI places the actions beside the content of a virtualized
+        // turn, which may also contain the user's prompt. Read only assistant
+        // Markdown roots, and never climb into the whole conversation.
+        const turn = button.closest('[data-turn-key], [data-content-search-turn-key], article[data-testid^="conversation-turn-"]');
+        return turn?.querySelector(bodySelector) ? turn : null;
+    }
+
     function findAndInjectButtons() {
-        // More specific selector for the button group
-        const buttonGroups = document.querySelectorAll('div[class*="group-hover/turn-messages"]');
+        const groups = document.querySelectorAll(`${legacyGroupSelector}, .turn-action-controls`);
+        groups.forEach(group => {
+            const copyButton = group.querySelector('button[data-testid="copy-turn-action-button"]')
+                || Array.from(group.querySelectorAll('button')).find(button =>
+                    /^(copy|copy response|复制|複製)$/i.test(button.getAttribute('aria-label') || ''));
+            if (!copyButton || !findMessageContainer(copyButton)) return;
+            if (!group.querySelector('.deepshare-docx-btn')) injectButton(copyButton);
 
-        buttonGroups.forEach(group => {
-            const copyButton = group.querySelector('button[data-testid="copy-turn-action-button"]');
-            if (copyButton && !group.querySelector('.deepshare-docx-btn')) {
-                injectButton(copyButton);
-            }
-
-            // Handle "More" menu listener to track active message
-            const moreButtons = group.querySelectorAll('button[aria-haspopup="menu"]');
-            moreButtons.forEach(moreButton => {
-                if (!moreButton.dataset.deepshareListenerAttached) {
-                    moreButton.dataset.deepshareListenerAttached = 'true';
-                    moreButton.addEventListener('click', () => {
-                        activeMessageContainer = moreButton.closest('.agent-turn');
-                        console.debug('DeepShare: More menu opened, tracking message container');
-                        // Wait for the menu overlay to appear
-                        setTimeout(injectMdButtonToMenu, 100);
-                    });
-                }
+            group.querySelectorAll('button[aria-haspopup="menu"]').forEach(moreButton => {
+                if (moreButton.dataset.deepshareListenerAttached) return;
+                moreButton.dataset.deepshareListenerAttached = 'true';
+                moreButton.addEventListener('click', () => {
+                    activeMessageContainer = findMessageContainer(moreButton);
+                    // Use the trigger's own menu, not an unrelated open menu.
+                    setTimeout(() => injectMdButtonToMenu(moreButton), 100);
+                });
             });
         });
     }
 
     const observer = new MutationObserver(() => {
-        // On any DOM change, re-check for buttons
+        const nativeVisible = hasNativeTooltip();
+        if (nativeTooltipVisible && !nativeVisible) tooltipWarmUntil = Date.now() + 300;
+        nativeTooltipVisible = nativeVisible;
+        // Virtualized turns can be removed while their tooltip is open.
+        document.querySelectorAll('.deepshare-gpt-tooltip').forEach(tooltip => {
+            if (!document.querySelector(`[aria-describedby="${tooltip.id}"]`)) tooltip.remove();
+        });
         findAndInjectButtons();
 
         // Also check if URL has changed for SPA navigation
@@ -61,7 +84,8 @@
     function injectButton(copyBtn) {
         // Create the DOCX button
         const docxButton = document.createElement('button');
-        docxButton.className = 'text-token-text-secondary hover:bg-token-bg-secondary rounded-lg deepshare-docx-btn';
+        docxButton.className = `${copyBtn.className} deepshare-docx-btn`;
+        docxButton.type = 'button';
         docxButton.setAttribute('aria-label', chrome.i18n?.getMessage('docxButton') || 'Save as Word document');
 
         const span = document.createElement('span');
@@ -76,42 +100,89 @@
                 <path d="M6 14H12" stroke="currentColor" stroke-width="1.5"/>
             </svg>
         `;
-        docxButton.appendChild(span);
+        const nativeIcon = copyBtn.querySelector('svg');
+        const nativeWrapper = nativeIcon?.closest('span');
+        if (nativeWrapper && copyBtn.contains(nativeWrapper)) {
+            span.className = nativeWrapper.className;
+            docxButton.appendChild(span);
+        } else {
+            docxButton.appendChild(span.firstElementChild);
+        }
+        const icon = docxButton.querySelector('svg');
+        if (nativeIcon) {
+            icon.setAttribute('class', nativeIcon.getAttribute('class') || '');
+            const { width, height } = nativeIcon.getBoundingClientRect();
+            icon.style.width = `${width || 20}px`;
+            icon.style.height = `${height || 20}px`;
+        }
+        icon.setAttribute('aria-hidden', 'true');
 
-        // Insert after the copy button
-        copyBtn.insertAdjacentElement('afterend', docxButton);
+        // New ChatGPT wraps its copy trigger in a display:contents tooltip
+        // host. A sibling inside that host would activate BOTH tooltips and
+        // change the native trigger's positioning bounds. Keep our button
+        // outside the host, while retaining the legacy direct-sibling layout.
+        const copyHost = copyBtn.parentElement;
+        const insertionAnchor = copyHost?.matches('span.contents[data-state]')
+            ? copyHost : copyBtn;
+        insertionAnchor.insertAdjacentElement('afterend', docxButton);
 
         // Add tooltip listeners
         let tooltip = null;
+        let tooltipTimer = null;
 
-        docxButton.addEventListener('mouseenter', () => {
-            if (docxButton.hasAttribute('disabled')) return;
-
+        const hideTooltip = () => {
+            clearTimeout(tooltipTimer);
+            if (tooltip) tooltipWarmUntil = Date.now() + 300;
+            tooltip?.remove();
+            tooltip = null;
+            docxButton.removeAttribute('aria-describedby');
+            window.removeEventListener('scroll', hideTooltip, true);
+            window.removeEventListener('resize', hideTooltip);
+        };
+        const renderTooltip = () => {
+            if (!docxButton.isConnected || docxButton.disabled) return;
             tooltip = document.createElement('div');
             tooltip.className = 'deepshare-gpt-tooltip';
+            tooltip.id = `deepshare-gpt-tooltip-${++tooltipSequence}`;
+            tooltip.setAttribute('role', 'tooltip');
             tooltip.textContent = docxButton.getAttribute('aria-label');
+            if (copyBtn.closest('.turn-action-controls')) {
+                tooltip.style.cssText = 'background:var(--color-background-tooltip,#0d0d0d);color:var(--color-text-tooltip,#fff);border:1px solid var(--color-border-tooltip,rgba(255,255,255,.05));font-size:14px;font-weight:var(--tooltip-compact-font-weight,600);line-height:18px;letter-spacing:var(--tracking-tooltip,normal);border-radius:16px;padding:5px 12px;box-shadow:var(--shadow-tooltip,0 8px 18px rgba(15,23,42,.2));text-align:center;';
+            } else {
+                tooltip.classList.add('dark', 'bg-token-bg-tooltip');
+                tooltip.style.cssText = 'background:var(--bg-tooltip,#1b1b1b);color:#fff;border:1px solid var(--border-tooltip,rgba(255,255,255,.05));font-size:14px;font-weight:600;line-height:18px;letter-spacing:-.15px;border-radius:9999px;padding:5px 12px;box-shadow:0 8px 18px rgba(15,23,42,.2);text-align:center;';
+            }
+            tooltip.style.zIndex = '10000';
             document.body.appendChild(tooltip);
-
-            const btnRect = docxButton.getBoundingClientRect();
-            const tooltipRect = tooltip.getBoundingClientRect();
-
-            let top = btnRect.bottom + 8;
-            let left = btnRect.left + (btnRect.width / 2) - (tooltipRect.width / 2);
-
-            if (left < 5) left = 5;
-            if (left + tooltipRect.width > window.innerWidth) {
-                left = window.innerWidth - tooltipRect.width - 5;
+            docxButton.setAttribute('aria-describedby', tooltip.id);
+            window.addEventListener('scroll', hideTooltip, true);
+            window.addEventListener('resize', hideTooltip);
+            const rect = docxButton.getBoundingClientRect();
+            const tipRect = tooltip.getBoundingClientRect();
+            // Match the new toolbar's native tooltip offset; retain the legacy spacing.
+            const tooltipGap = copyBtn.closest('.turn-action-controls') ? 6 : 8;
+            const top = rect.bottom + tipRect.height + tooltipGap <= window.innerHeight
+                ? rect.bottom + tooltipGap : rect.top - tipRect.height - tooltipGap;
+            tooltip.style.top = `${Math.max(4, top)}px`;
+            tooltip.style.left = `${Math.max(4, Math.min(rect.left + (rect.width - tipRect.width) / 2, window.innerWidth - tipRect.width - 4))}px`;
+        };
+        const showTooltip = (event) => {
+            hideTooltip();
+            if (docxButton.disabled || !docxButton.isConnected) return;
+            // Native ChatGPT: 200 ms on first hover; focus and warm hovers are immediate.
+            if (event.type === 'focus' || hasNativeTooltip() || Date.now() < tooltipWarmUntil) {
+                renderTooltip();
+            } else {
+                tooltipTimer = setTimeout(renderTooltip, 200);
             }
-
-            tooltip.style.top = `${top}px`;
-            tooltip.style.left = `${left}px`;
-        });
-
-        docxButton.addEventListener('mouseleave', () => {
-            if (tooltip) {
-                tooltip.remove();
-                tooltip = null;
-            }
+        };
+        docxButton.addEventListener('mouseenter', showTooltip);
+        docxButton.addEventListener('mouseleave', hideTooltip);
+        docxButton.addEventListener('focus', showTooltip);
+        docxButton.addEventListener('blur', hideTooltip);
+        docxButton.addEventListener('click', hideTooltip);
+        docxButton.addEventListener('keydown', event => {
+            if (event.key === 'Escape') hideTooltip();
         });
 
         // Add click handler
@@ -121,10 +192,10 @@
 
             try {
                 // Find the message content container
-                const messageContainer = docxButton.closest('.agent-turn');
+                const messageContainer = findMessageContainer(docxButton);
 
                 if (!messageContainer) {
-                    console.error('DeepShare: Could not find message container (.agent-turn)');
+                    console.error('DeepShare: Could not find message container');
                     throw new Error('Could not find message container');
                 }
 
@@ -163,7 +234,8 @@
      * Converts KaTeX formulas to standard Markdown format
      */
     function extractContentWithFormulas(container) {
-        const markdownDivs = container.querySelectorAll('.markdown');
+        const markdownDivs = Array.from(container.querySelectorAll(bodySelector))
+            .filter(root => !root.parentElement?.closest(bodySelector));
         if (markdownDivs.length === 0) return '';
 
         let result = '';
@@ -609,9 +681,11 @@
         return result;
     }
 
-    function injectMdButtonToMenu() {
+    function injectMdButtonToMenu(trigger) {
         // Find the Radix menu content
-        const menuContents = document.querySelectorAll('div[role="menu"]');
+        const menuId = trigger.getAttribute('aria-controls');
+        const menu = menuId ? document.getElementById(menuId) : null;
+        const menuContents = menu ? [menu] : [];
 
         menuContents.forEach(menuContent => {
             // Check if already injected
@@ -624,6 +698,11 @@
             // Create menu item element matching ChatGPT's style
             const mdButton = document.createElement('div');
             mdButton.className = 'group __menu-item gap-1.5 deepshare-menu-md-button hover:bg-token-main-surface-secondary cursor-pointer px-3 py-2 rounded-xl';
+            // The new menu's timestamp also has role=menuitem, but is
+            // select-text/cursor-default rather than marked aria-disabled.
+            const nativeItem = Array.from(menuContent.querySelectorAll('[role="menuitem"]'))
+                .find(item => !item.matches('[aria-disabled="true"], [data-disabled], .cursor-default, .select-text'));
+            if (nativeItem) mdButton.className = `${nativeItem.className} deepshare-menu-md-button`;
             mdButton.setAttribute('role', 'menuitem');
             mdButton.setAttribute('tabindex', '0');
 
@@ -639,8 +718,45 @@
                 </div>
             `;
 
+            const nativeMenuIcon = nativeItem?.querySelector('svg');
+            const menuIcon = mdButton.querySelector('svg');
+            if (nativeMenuIcon) {
+                menuIcon.setAttribute('class', nativeMenuIcon.getAttribute('class') || '');
+                const { width, height } = nativeMenuIcon.getBoundingClientRect();
+                menuIcon.style.width = `${width || 20}px`;
+                menuIcon.style.height = `${height || 20}px`;
+            }
+            const nativeRow = nativeItem?.querySelector('[data-menu-row-content]');
+            if (nativeRow) {
+                const row = document.createElement('div');
+                row.className = nativeRow.className;
+                row.setAttribute('data-menu-row-content', 'true');
+                const iconWrapper = mdButton.firstElementChild;
+                const label = mdButton.lastElementChild;
+                iconWrapper.className = nativeMenuIcon?.parentElement?.className || '';
+                const nativeLabel = Array.from(nativeRow.children)
+                    .find(child => child.tagName === 'SPAN' && !child.querySelector('svg'));
+                label.className = nativeLabel?.className || 'min-w-0 flex-1 truncate';
+                label.textContent = chrome.i18n?.getMessage('saveAsMarkdown') || 'Save as Markdown';
+                row.append(iconWrapper, label);
+                mdButton.replaceChildren(row);
+            }
+            const highlight = () => mdButton.setAttribute('data-highlighted', '');
+            const unhighlight = () => mdButton.removeAttribute('data-highlighted');
+            mdButton.addEventListener('mouseenter', highlight);
+            mdButton.addEventListener('mouseleave', unhighlight);
+            mdButton.addEventListener('focus', highlight);
+            mdButton.addEventListener('blur', unhighlight);
+
             // Append to the end of the menu
             menuContent.append(mdButton);
+
+            mdButton.addEventListener('keydown', event => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    mdButton.click();
+                }
+            });
 
             // Click event
             mdButton.addEventListener('click', (e) => {
@@ -655,11 +771,9 @@
                     downloadMarkdownFile(markdown);
                 }
 
-                // Close menu - GPT uses Radix, clicking outside or selecting works
-                // We'll just let it be or try to find a backdrop if necessary
-                // Most Radix menus close on selection automatically if handled right
-                // But since we stopPropagation, we might need to manually close it if GPT doesn't
-                document.body.click();
+                // Closing through the native trigger also restores its focus.
+                trigger.click();
+                trigger.focus();
             });
         });
     }
