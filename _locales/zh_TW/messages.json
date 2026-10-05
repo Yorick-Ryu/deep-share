@@ -737,5 +737,62 @@
     },
     "historyCleared": {
         "message": "本機歷史已清除，請重新匯出並下載。"
+    },
+    "apiKeyRequired": {
+        "message": "API Key 不能為空"
+    },
+    "apiKeyUserInactive": {
+        "message": "關聯帳戶已被停用"
+    },
+    "apiKeyExpired": {
+        "message": "API Key 無效或已過期"
+    },
+    "apiKeyInvalid": {
+        "message": "API Key 無效，請檢查後重試"
+    },
+    "quotaCheckFailed": {
+        "message": "查詢額度失敗"
+    },
+    "quotaCheckFailedCached": {
+        "message": "查詢額度失敗，顯示快取資料"
+    },
+    "apiKeyCopied": {
+        "message": "已複製！"
+    },
+    "apiKeyToggleVisibility": {
+        "message": "顯示/隱藏 API Key"
+    },
+    "apiKeyCopy": {
+        "message": "複製 API Key"
+    },
+    "serverUrlRequired": {
+        "message": "伺服器位址不能為空"
+    },
+    "serverUrlInvalid": {
+        "message": "伺服器位址格式不正確（需包含 http/https）"
+    },
+    "serverUrlRequiredDefault": {
+        "message": "伺服器位址不能為空（將使用預設位址）"
+    },
+    "serverUrlInvalidDefault": {
+        "message": "伺服器位址格式不正確（將使用預設位址）"
+    },
+    "aboutTabTitle": {
+        "message": "關於 DeepShare"
+    },
+    "versionLabel": {
+        "message": "版本號："
+    },
+    "documentationLabel": {
+        "message": "官方文件："
+    },
+    "githubLabel": {
+        "message": "GitHub："
+    },
+    "developerEmailLabel": {
+        "message": "開發者電子郵件："
+    },
+    "acknowledgmentText": {
+        "message": "感謝每一位為 DeepShare 提出建議的朋友！許多功能源於使用者的真實需求，讓我們一起提升效率，把省下的時間留給生活。我是獨立開發者 Yorick，致力於用 AI 為大家提升效率，歡迎透過微信 yorick_cn 與我聯絡。"
     }
 }

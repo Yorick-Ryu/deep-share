@@ -756,5 +756,44 @@
     },
     "historyCleared": {
         "message": "Lokaler Verlauf gelöscht. Zum Wiederaufbau erneut exportieren und herunterladen."
+    },
+    "apiKeyRequired": {
+        "message": "API-Schlüssel erforderlich"
+    },
+    "apiKeyUserInactive": {
+        "message": "Das zugehörige Konto wurde deaktiviert"
+    },
+    "apiKeyExpired": {
+        "message": "Der API-Schlüssel ist ungültig oder abgelaufen"
+    },
+    "apiKeyInvalid": {
+        "message": "Ungültiger API-Schlüssel. Bitte prüfen und erneut versuchen"
+    },
+    "quotaCheckFailed": {
+        "message": "Kontingent konnte nicht abgefragt werden"
+    },
+    "quotaCheckFailedCached": {
+        "message": "Kontingent konnte nicht abgefragt werden. Zwischengespeicherte Daten werden angezeigt"
+    },
+    "apiKeyCopied": {
+        "message": "Kopiert!"
+    },
+    "apiKeyToggleVisibility": {
+        "message": "API-Schlüssel anzeigen/ausblenden"
+    },
+    "apiKeyCopy": {
+        "message": "API-Schlüssel kopieren"
+    },
+    "serverUrlRequired": {
+        "message": "Die Server-URL darf nicht leer sein"
+    },
+    "serverUrlInvalid": {
+        "message": "Ungültige Server-URL (muss http/https enthalten)"
+    },
+    "serverUrlRequiredDefault": {
+        "message": "Die Server-URL ist leer (Standard-URL wird verwendet)"
+    },
+    "serverUrlInvalidDefault": {
+        "message": "Ungültige Server-URL (Standard-URL wird verwendet)"
     }
 }

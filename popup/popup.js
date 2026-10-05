@@ -457,7 +457,7 @@ function setupUIElements() {
       // Show success tooltip
       const tooltip = document.createElement('span');
       tooltip.className = 'copy-tooltip';
-      tooltip.textContent = '已复制!';
+      tooltip.textContent = getMessage('apiKeyCopied');
       copyApiKeyBtn.appendChild(tooltip);
 
       // Remove tooltip after animation completes
@@ -491,6 +491,17 @@ function setupUIElements() {
 
 // Load all i18n text
 function loadI18nText(popupAction = null) {
+  for (const [id, key] of [['toggleApiKeyVisibility', 'apiKeyToggleVisibility'], ['copyApiKey', 'apiKeyCopy']]) {
+    const button = document.getElementById(id);
+    button.title = getMessage(key);
+    button.setAttribute('aria-label', getMessage(key));
+  }
+
+  const serverUrlError = document.getElementById('serverUrlErrorMsg');
+  if (serverUrlError.dataset.i18nKey) {
+    serverUrlError.textContent = getMessage(serverUrlError.dataset.i18nKey);
+  }
+
   // Tab labels
   document.getElementById('docxTabLabel').textContent = getMessage('docxSettings') || 'Document Conversion';
   document.getElementById('manualDocxTabLabel').textContent = getMessage('manualDocxSettings') || '手动转换文档';
@@ -765,10 +776,12 @@ function saveSettings() {
   // Validate URL and show hint
   const serverUrlErrorMsg = document.getElementById('serverUrlErrorMsg');
   if (!settings.docxServerUrl.trim()) {
-    serverUrlErrorMsg.textContent = '服务器地址不能为空';
+    serverUrlErrorMsg.dataset.i18nKey = 'serverUrlRequired';
+    serverUrlErrorMsg.textContent = getMessage('serverUrlRequired');
     serverUrlErrorMsg.style.display = 'inline';
   } else if (!isValidUrl(settings.docxServerUrl)) {
-    serverUrlErrorMsg.textContent = '服务器地址格式不正确 (需包含 http/https)';
+    serverUrlErrorMsg.dataset.i18nKey = 'serverUrlInvalid';
+    serverUrlErrorMsg.textContent = getMessage('serverUrlInvalid');
     serverUrlErrorMsg.style.display = 'inline';
   } else {
     serverUrlErrorMsg.style.display = 'none';
@@ -814,19 +827,19 @@ function mapApiKeyError(detail, statusCode) {
   if (statusCode === 401) {
     if (detail.includes('required')) {
       // "API Key is required"
-      return getMessage('apiKeyRequired') || 'API Key 不能为空';
+      return getMessage('apiKeyRequired');
     }
     if (detail.includes('not active')) {
       // "User associated with this API key is not active"
-      return getMessage('apiKeyUserInactive') || '关联账户已被停用';
+      return getMessage('apiKeyUserInactive');
     }
     if (detail.includes('Invalid or expired')) {
       // "Invalid or expired API key" — from get_api_key (strict check)
-      return getMessage('apiKeyExpired') || 'API Key 无效或已过期';
+      return getMessage('apiKeyExpired');
     }
     // "Invalid or disabled API key" — from get_api_key_allow_expired
     // and any other 401 messages
-    return getMessage('apiKeyInvalid') || 'API Key 无效，请检查后重试';
+    return getMessage('apiKeyInvalid');
   }
   // Network / server errors are not shown on the input
   return null;
@@ -971,10 +984,12 @@ function checkQuota(forceRefresh = false) {
 
   // Validate URL and show hint in UI
   if (!serverUrlInput) {
-    serverUrlErrorMsg.textContent = '服务器地址不能为空 (将使用默认地址)';
+    serverUrlErrorMsg.dataset.i18nKey = 'serverUrlRequiredDefault';
+    serverUrlErrorMsg.textContent = getMessage('serverUrlRequiredDefault');
     serverUrlErrorMsg.style.display = 'inline';
   } else if (!isValidUrl(serverUrlInput)) {
-    serverUrlErrorMsg.textContent = '服务器地址格式不正确 (将使用默认地址)';
+    serverUrlErrorMsg.dataset.i18nKey = 'serverUrlInvalidDefault';
+    serverUrlErrorMsg.textContent = getMessage('serverUrlInvalidDefault');
     serverUrlErrorMsg.style.display = 'inline';
   } else {
     serverUrlErrorMsg.style.display = 'none';
@@ -1089,7 +1104,7 @@ function checkQuota(forceRefresh = false) {
           if (friendlyMsg) {
             showApiKeyQuotaError(friendlyMsg);
           } else {
-            showApiKeyQuotaError(lastApiError || (getMessage('quotaCheckFailed') || '查询额度失败，显示缓存数据'));
+            showApiKeyQuotaError(lastApiError || (getMessage('quotaCheckFailedCached')));
           }
         } else {
           // No cached data available – hide quota section
@@ -1099,7 +1114,7 @@ function checkQuota(forceRefresh = false) {
           if (friendlyMsg) {
             showApiKeyQuotaError(friendlyMsg);
           } else {
-            showApiKeyQuotaError(lastApiError || (getMessage('quotaCheckFailed') || '查询额度失败'));
+            showApiKeyQuotaError(lastApiError || (getMessage('quotaCheckFailed')));
           }
         }
       }

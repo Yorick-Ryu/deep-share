@@ -755,5 +755,44 @@
     },
     "historyCleared": {
         "message": "ローカル履歴を削除しました。再エクスポートとダウンロードで復元できます。"
+    },
+    "apiKeyRequired": {
+        "message": "API キーを入力してください"
+    },
+    "apiKeyUserInactive": {
+        "message": "関連付けられたアカウントは無効になっています"
+    },
+    "apiKeyExpired": {
+        "message": "API キーが無効か、有効期限が切れています"
+    },
+    "apiKeyInvalid": {
+        "message": "API キーが無効です。確認して再試行してください"
+    },
+    "quotaCheckFailed": {
+        "message": "利用枠を確認できませんでした"
+    },
+    "quotaCheckFailedCached": {
+        "message": "利用枠を確認できませんでした。キャッシュされたデータを表示しています"
+    },
+    "apiKeyCopied": {
+        "message": "コピーしました！"
+    },
+    "apiKeyToggleVisibility": {
+        "message": "API キーを表示/非表示"
+    },
+    "apiKeyCopy": {
+        "message": "API キーをコピー"
+    },
+    "serverUrlRequired": {
+        "message": "サーバー URL を入力してください"
+    },
+    "serverUrlInvalid": {
+        "message": "サーバー URL の形式が正しくありません（http/https が必要です）"
+    },
+    "serverUrlRequiredDefault": {
+        "message": "サーバー URL が空です（既定の URL を使用します）"
+    },
+    "serverUrlInvalidDefault": {
+        "message": "サーバー URL の形式が正しくありません（既定の URL を使用します）"
     }
 }

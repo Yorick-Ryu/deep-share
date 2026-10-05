@@ -756,5 +756,44 @@
     },
     "historyCleared": {
         "message": "Local history cleared. Export and download again to rebuild it."
+    },
+    "apiKeyRequired": {
+        "message": "API Key is required"
+    },
+    "apiKeyUserInactive": {
+        "message": "The associated account has been deactivated"
+    },
+    "apiKeyExpired": {
+        "message": "API Key is invalid or has expired"
+    },
+    "apiKeyInvalid": {
+        "message": "Invalid API Key. Please check it and try again"
+    },
+    "quotaCheckFailed": {
+        "message": "Failed to check quota"
+    },
+    "quotaCheckFailedCached": {
+        "message": "Failed to check quota. Showing cached data"
+    },
+    "apiKeyCopied": {
+        "message": "Copied!"
+    },
+    "apiKeyToggleVisibility": {
+        "message": "Show/hide API Key"
+    },
+    "apiKeyCopy": {
+        "message": "Copy API Key"
+    },
+    "serverUrlRequired": {
+        "message": "Server URL cannot be empty"
+    },
+    "serverUrlInvalid": {
+        "message": "Invalid server URL (must include http/https)"
+    },
+    "serverUrlRequiredDefault": {
+        "message": "Server URL is empty (using the default URL)"
+    },
+    "serverUrlInvalidDefault": {
+        "message": "Invalid server URL (using the default URL)"
     }
 }

@@ -756,5 +756,44 @@
     },
     "historyCleared": {
         "message": "Historique local effacé. Exportez et téléchargez pour le recréer."
+    },
+    "apiKeyRequired": {
+        "message": "Une clé API est requise"
+    },
+    "apiKeyUserInactive": {
+        "message": "Le compte associé a été désactivé"
+    },
+    "apiKeyExpired": {
+        "message": "La clé API est invalide ou a expiré"
+    },
+    "apiKeyInvalid": {
+        "message": "Clé API invalide. Vérifiez-la et réessayez"
+    },
+    "quotaCheckFailed": {
+        "message": "Impossible de consulter le quota"
+    },
+    "quotaCheckFailedCached": {
+        "message": "Impossible de consulter le quota. Affichage des données en cache"
+    },
+    "apiKeyCopied": {
+        "message": "Copié !"
+    },
+    "apiKeyToggleVisibility": {
+        "message": "Afficher/masquer la clé API"
+    },
+    "apiKeyCopy": {
+        "message": "Copier la clé API"
+    },
+    "serverUrlRequired": {
+        "message": "L’URL du serveur ne peut pas être vide"
+    },
+    "serverUrlInvalid": {
+        "message": "URL du serveur invalide (doit inclure http/https)"
+    },
+    "serverUrlRequiredDefault": {
+        "message": "L’URL du serveur est vide (utilisation de l’URL par défaut)"
+    },
+    "serverUrlInvalidDefault": {
+        "message": "URL du serveur invalide (utilisation de l’URL par défaut)"
     }
 }

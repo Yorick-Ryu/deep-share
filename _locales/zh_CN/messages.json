@@ -755,5 +755,44 @@
     },
     "historyCleared": {
         "message": "本地历史库已清除。请从系统设置导出并下载以重新建立。"
+    },
+    "apiKeyRequired": {
+        "message": "API Key 不能为空"
+    },
+    "apiKeyUserInactive": {
+        "message": "关联账户已被停用"
+    },
+    "apiKeyExpired": {
+        "message": "API Key 无效或已过期"
+    },
+    "apiKeyInvalid": {
+        "message": "API Key 无效，请检查后重试"
+    },
+    "quotaCheckFailed": {
+        "message": "查询额度失败"
+    },
+    "quotaCheckFailedCached": {
+        "message": "查询额度失败，显示缓存数据"
+    },
+    "apiKeyCopied": {
+        "message": "已复制！"
+    },
+    "apiKeyToggleVisibility": {
+        "message": "显示/隐藏 API Key"
+    },
+    "apiKeyCopy": {
+        "message": "复制 API Key"
+    },
+    "serverUrlRequired": {
+        "message": "服务器地址不能为空"
+    },
+    "serverUrlInvalid": {
+        "message": "服务器地址格式不正确（需包含 http/https）"
+    },
+    "serverUrlRequiredDefault": {
+        "message": "服务器地址不能为空（将使用默认地址）"
+    },
+    "serverUrlInvalidDefault": {
+        "message": "服务器地址格式不正确（将使用默认地址）"
     }
 }

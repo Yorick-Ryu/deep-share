@@ -755,5 +755,44 @@
     },
     "historyCleared": {
         "message": "Histórico local limpo. Exporte e baixe para recriá-lo."
+    },
+    "apiKeyRequired": {
+        "message": "A chave de API é obrigatória"
+    },
+    "apiKeyUserInactive": {
+        "message": "A conta associada foi desativada"
+    },
+    "apiKeyExpired": {
+        "message": "A chave de API é inválida ou expirou"
+    },
+    "apiKeyInvalid": {
+        "message": "Chave de API inválida. Verifique e tente novamente"
+    },
+    "quotaCheckFailed": {
+        "message": "Não foi possível consultar a cota"
+    },
+    "quotaCheckFailedCached": {
+        "message": "Não foi possível consultar a cota. Exibindo dados em cache"
+    },
+    "apiKeyCopied": {
+        "message": "Copiado!"
+    },
+    "apiKeyToggleVisibility": {
+        "message": "Mostrar/ocultar chave de API"
+    },
+    "apiKeyCopy": {
+        "message": "Copiar chave de API"
+    },
+    "serverUrlRequired": {
+        "message": "A URL do servidor não pode ficar vazia"
+    },
+    "serverUrlInvalid": {
+        "message": "URL do servidor inválida (deve incluir http/https)"
+    },
+    "serverUrlRequiredDefault": {
+        "message": "A URL do servidor está vazia (usando a URL padrão)"
+    },
+    "serverUrlInvalidDefault": {
+        "message": "URL do servidor inválida (usando a URL padrão)"
     }
 }

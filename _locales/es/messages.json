@@ -755,5 +755,44 @@
     },
     "historyCleared": {
         "message": "Historial local borrado. Exporta y descarga para reconstruirlo."
+    },
+    "apiKeyRequired": {
+        "message": "Se requiere una clave API"
+    },
+    "apiKeyUserInactive": {
+        "message": "La cuenta asociada ha sido desactivada"
+    },
+    "apiKeyExpired": {
+        "message": "La clave API no es válida o ha caducado"
+    },
+    "apiKeyInvalid": {
+        "message": "Clave API no válida. Compruébala e inténtalo de nuevo"
+    },
+    "quotaCheckFailed": {
+        "message": "No se pudo consultar la cuota"
+    },
+    "quotaCheckFailedCached": {
+        "message": "No se pudo consultar la cuota. Se muestran los datos en caché"
+    },
+    "apiKeyCopied": {
+        "message": "¡Copiado!"
+    },
+    "apiKeyToggleVisibility": {
+        "message": "Mostrar/ocultar la clave API"
+    },
+    "apiKeyCopy": {
+        "message": "Copiar la clave API"
+    },
+    "serverUrlRequired": {
+        "message": "La URL del servidor no puede estar vacía"
+    },
+    "serverUrlInvalid": {
+        "message": "URL del servidor no válida (debe incluir http/https)"
+    },
+    "serverUrlRequiredDefault": {
+        "message": "La URL del servidor está vacía (se usará la URL predeterminada)"
+    },
+    "serverUrlInvalidDefault": {
+        "message": "URL del servidor no válida (se usará la URL predeterminada)"
     }
 }
