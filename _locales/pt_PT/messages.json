@@ -528,5 +528,232 @@
     },
     "scrollCollecting": {
         "message": "A percorrer para recolher mensagens, por favor aguarde..."
+    },
+    "historyTitle": {
+        "message": "Importar histórico"
+    },
+    "historyAllow": {
+        "message": "Permitir acesso"
+    },
+    "historyClose": {
+        "message": "Fechar"
+    },
+    "historyList": {
+        "message": "Histórico de conversas"
+    },
+    "historySearch": {
+        "message": "Pesquisar histórico"
+    },
+    "historySearchHint": {
+        "message": "Pesquisar títulos ou mensagens"
+    },
+    "historyMulti": {
+        "message": "Selecionar conversas"
+    },
+    "historyExitMulti": {
+        "message": "Sair da seleção"
+    },
+    "historySelect": {
+        "message": "Selecionar $value$",
+        "placeholders": {
+            "value": {
+                "content": "$1"
+            }
+        }
+    },
+    "historySelected": {
+        "message": "Conversas selecionadas: $value$",
+        "placeholders": {
+            "value": {
+                "content": "$1"
+            }
+        }
+    },
+    "historyCurrent": {
+        "message": "Conversa atual"
+    },
+    "historyNone": {
+        "message": "Nenhuma conversa selecionada"
+    },
+    "historyUser": {
+        "message": "Utilizador"
+    },
+    "historyThinking": {
+        "message": "Raciocínio"
+    },
+    "historyIncludeThinking": {
+        "message": "Incluir raciocínio"
+    },
+    "historyNoText": {
+        "message": "(Sem conteúdo de texto)"
+    },
+    "historyFiles": {
+        "message": "Anexos: $value$ (apenas nomes)",
+        "placeholders": {
+            "value": {
+                "content": "$1"
+            }
+        }
+    },
+    "historyNoMatches": {
+        "message": "Nenhuma conversa encontrada. Tente outra palavra."
+    },
+    "historyDownloadMD": {
+        "message": "Descarregar Markdown"
+    },
+    "historyWord": {
+        "message": "Exportar para Word"
+    },
+    "historyImport": {
+        "message": "Importar"
+    },
+    "historyImporting": {
+        "message": "A importar…"
+    },
+    "historyRefresh": {
+        "message": "Atualizar"
+    },
+    "historyClear": {
+        "message": "Limpar histórico local"
+    },
+    "historyConfirmClear": {
+        "message": "Confirmar limpeza?"
+    },
+    "historyClearing": {
+        "message": "A limpar…"
+    },
+    "historyView": {
+        "message": "Abrir histórico"
+    },
+    "historyToday": {
+        "message": "Hoje"
+    },
+    "historyYesterday": {
+        "message": "Ontem"
+    },
+    "historyWeek": {
+        "message": "Últimos 7 dias"
+    },
+    "historyMonth": {
+        "message": "Últimos 30 dias"
+    },
+    "historyOlder": {
+        "message": "Anteriores"
+    },
+    "historyUpdated": {
+        "message": "Atualizado: $value$",
+        "placeholders": {
+            "value": {
+                "content": "$1"
+            }
+        }
+    },
+    "historyUnknown": {
+        "message": "Desconhecido"
+    },
+    "historyBody": {
+        "message": "Conteúdo"
+    },
+    "historyFileNote": {
+        "message": "Anexos (carregue os ficheiros originais em separado): $value$",
+        "placeholders": {
+            "value": {
+                "content": "$1"
+            }
+        }
+    },
+    "historyFilename": {
+        "message": "Histórico"
+    },
+    "historyFilenameSuffix": {
+        "message": " e outras conversas"
+    },
+    "historyUntitled": {
+        "message": "Conversa sem título"
+    },
+    "historyImportHint": {
+        "message": "Importar um ZIP do DeepSeek ou conversations.json descarregado"
+    },
+    "historyEmpty": {
+        "message": "Exporte o histórico em Definições → Gestão de dados do DeepSeek e descarregue-o. Ou importe um ZIP ou JSON já descarregado."
+    },
+    "historyWordHint": {
+        "message": "Envia o conteúdo selecionado ao serviço de conversão do DeepShare com a sua chave API configurada"
+    },
+    "historyDenied": {
+        "message": "Acesso não autorizado. Pode importar o ficheiro manualmente."
+    },
+    "historyAllowHost": {
+        "message": "Permitir ler esta exportação de $value$",
+        "placeholders": {
+            "value": {
+                "content": "$1"
+            }
+        }
+    },
+    "historyAllowHint": {
+        "message": "Permitir detetar exportações oficiais descarregadas manualmente"
+    },
+    "historyDownloaded": {
+        "message": "Descarga concluída. Clique em “Permitir acesso” para ler a exportação."
+    },
+    "historyPending": {
+        "message": "Clique em “Permitir acesso” para guardar a exportação no histórico local."
+    },
+    "historyCaptureHint": {
+        "message": "Ao descarregar, pode permitir guardar no histórico local. Recusar não impede a descarga nem a importação manual."
+    },
+    "historySaved": {
+        "message": "Conversas guardadas: $value$. Para atualizar, exporte novamente, aguarde e descarregue.",
+        "placeholders": {
+            "value": {
+                "content": "$1"
+            }
+        }
+    },
+    "historySyncHint": {
+        "message": "Exporte o histórico, aguarde e descarregue. Exporte novamente para incluir conversas novas."
+    },
+    "historyReexport": {
+        "message": "Exportar novamente"
+    },
+    "historyDownload": {
+        "message": "Descarregar"
+    },
+    "historyUploadMissing": {
+        "message": "Controlo de carregamento não encontrado. Descarregue o Markdown e use o botão de anexos do DeepSeek."
+    },
+    "historyUploadFailed": {
+        "message": "Falha ao anexar automaticamente. Descarregue o Markdown e anexe manualmente."
+    },
+    "historyConnection": {
+        "message": "Extensão desligada. Atualize a página."
+    },
+    "historySize": {
+        "message": "A exportação excede 64 MB."
+    },
+    "historyChooseFile": {
+        "message": "Escolha um ZIP ou JSON exportado pelo DeepSeek."
+    },
+    "historyImportFailed": {
+        "message": "Falha ao importar. O histórico existente foi preservado."
+    },
+    "historyInvalidArchive": {
+        "message": "Ficheiro inválido ou incompleto. Exporte ou descarregue novamente."
+    },
+    "historyOperationFailed": {
+        "message": "A operação falhou. Tente novamente; o histórico foi preservado."
+    },
+    "historySaving": {
+        "message": "A guardar o histórico descarregado…"
+    },
+    "historyManualImport": {
+        "message": "Não é possível ler a descarga em segurança. Importe o ZIP manualmente."
+    },
+    "historyPermissionExpired": {
+        "message": "A autorização mudou. Clique em “Permitir acesso” ou descarregue novamente."
+    },
+    "historyCleared": {
+        "message": "Histórico local limpo. Exporte e descarregue para o recriar."
     }
 }

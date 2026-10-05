@@ -80,6 +80,7 @@
                 "scripts/captureDeepSeek.js",
                 "scripts/saveDeepSeekAsDocx.js",
                 "scripts/injectDeepSeekButtons.js",
+                "scripts/history/i18n.js",
                 "scripts/history/core.js",
                 "scripts/history/content.js"
             ]

@@ -528,5 +528,232 @@
     },
     "scrollCollecting": {
         "message": "スクロールしてメッセージを収集しています。しばらくお待ちください..."
+    },
+    "historyTitle": {
+        "message": "履歴をインポート"
+    },
+    "historyAllow": {
+        "message": "アクセスを許可"
+    },
+    "historyClose": {
+        "message": "閉じる"
+    },
+    "historyList": {
+        "message": "チャット履歴"
+    },
+    "historySearch": {
+        "message": "履歴を検索"
+    },
+    "historySearchHint": {
+        "message": "タイトルや本文を検索"
+    },
+    "historyMulti": {
+        "message": "チャットを選択"
+    },
+    "historyExitMulti": {
+        "message": "選択を終了"
+    },
+    "historySelect": {
+        "message": "$value$ を選択",
+        "placeholders": {
+            "value": {
+                "content": "$1"
+            }
+        }
+    },
+    "historySelected": {
+        "message": "選択中：$value$ 件",
+        "placeholders": {
+            "value": {
+                "content": "$1"
+            }
+        }
+    },
+    "historyCurrent": {
+        "message": "現在のチャット"
+    },
+    "historyNone": {
+        "message": "未選択"
+    },
+    "historyUser": {
+        "message": "ユーザー"
+    },
+    "historyThinking": {
+        "message": "思考内容"
+    },
+    "historyIncludeThinking": {
+        "message": "思考内容を含める"
+    },
+    "historyNoText": {
+        "message": "（本文なし）"
+    },
+    "historyFiles": {
+        "message": "添付：$value$（ファイル名のみ）",
+        "placeholders": {
+            "value": {
+                "content": "$1"
+            }
+        }
+    },
+    "historyNoMatches": {
+        "message": "一致する履歴がありません。別の語句をお試しください。"
+    },
+    "historyDownloadMD": {
+        "message": "Markdown をダウンロード"
+    },
+    "historyWord": {
+        "message": "Word にエクスポート"
+    },
+    "historyImport": {
+        "message": "インポート"
+    },
+    "historyImporting": {
+        "message": "インポート中…"
+    },
+    "historyRefresh": {
+        "message": "更新"
+    },
+    "historyClear": {
+        "message": "ローカル履歴を削除"
+    },
+    "historyConfirmClear": {
+        "message": "削除しますか？"
+    },
+    "historyClearing": {
+        "message": "削除中…"
+    },
+    "historyView": {
+        "message": "履歴を開く"
+    },
+    "historyToday": {
+        "message": "今日"
+    },
+    "historyYesterday": {
+        "message": "昨日"
+    },
+    "historyWeek": {
+        "message": "過去7日間"
+    },
+    "historyMonth": {
+        "message": "過去30日間"
+    },
+    "historyOlder": {
+        "message": "それ以前"
+    },
+    "historyUpdated": {
+        "message": "更新日時：$value$",
+        "placeholders": {
+            "value": {
+                "content": "$1"
+            }
+        }
+    },
+    "historyUnknown": {
+        "message": "不明"
+    },
+    "historyBody": {
+        "message": "本文"
+    },
+    "historyFileNote": {
+        "message": "添付（元ファイルは別途アップロード）：$value$",
+        "placeholders": {
+            "value": {
+                "content": "$1"
+            }
+        }
+    },
+    "historyFilename": {
+        "message": "チャット履歴"
+    },
+    "historyFilenameSuffix": {
+        "message": " ほかのチャット"
+    },
+    "historyUntitled": {
+        "message": "無題のチャット"
+    },
+    "historyImportHint": {
+        "message": "ダウンロード済みの DeepSeek ZIP または conversations.json を読み込む"
+    },
+    "historyEmpty": {
+        "message": "DeepSeek の設定 → データ管理で履歴をエクスポートしてダウンロードしてください。保存済みの ZIP や JSON も読み込めます。"
+    },
+    "historyWordHint": {
+        "message": "設定済み API キーで選択内容を DeepShare の文書変換サービスに送信します"
+    },
+    "historyDenied": {
+        "message": "許可されませんでした。保存済みファイルは手動で読み込めます。"
+    },
+    "historyAllowHost": {
+        "message": "$value$ からの今回のエクスポートの読み取りを許可",
+        "placeholders": {
+            "value": {
+                "content": "$1"
+            }
+        }
+    },
+    "historyAllowHint": {
+        "message": "手動でダウンロードした公式履歴の検出を許可"
+    },
+    "historyDownloaded": {
+        "message": "ダウンロード完了。「アクセスを許可」で読み込めます。"
+    },
+    "historyPending": {
+        "message": "「アクセスを許可」でローカル履歴に保存します。"
+    },
+    "historyCaptureHint": {
+        "message": "ダウンロード時にローカル保存を許可できます。拒否しても通常のダウンロードと手動インポートは可能です。"
+    },
+    "historySaved": {
+        "message": "$value$ 件を保存しました。最新の履歴は再エクスポートの完了後にダウンロードしてください。",
+        "placeholders": {
+            "value": {
+                "content": "$1"
+            }
+        }
+    },
+    "historySyncHint": {
+        "message": "履歴のエクスポート完了後にダウンロードしてください。最新の履歴には再エクスポートが必要です。"
+    },
+    "historyReexport": {
+        "message": "再エクスポート"
+    },
+    "historyDownload": {
+        "message": "ダウンロード"
+    },
+    "historyUploadMissing": {
+        "message": "アップロード欄が見つかりません。Markdown を保存し、DeepSeek の添付ボタンでアップロードしてください。"
+    },
+    "historyUploadFailed": {
+        "message": "自動添付に失敗しました。Markdown を保存して手動で添付してください。"
+    },
+    "historyConnection": {
+        "message": "拡張機能との接続が切れました。ページを更新してください。"
+    },
+    "historySize": {
+        "message": "エクスポートが64 MBを超えています。"
+    },
+    "historyChooseFile": {
+        "message": "DeepSeek の ZIP または JSON を選択してください。"
+    },
+    "historyImportFailed": {
+        "message": "インポート失敗。既存の履歴は保持されています。"
+    },
+    "historyInvalidArchive": {
+        "message": "履歴ファイルが無効または不完全です。再エクスポートまたは再ダウンロードしてください。"
+    },
+    "historyOperationFailed": {
+        "message": "操作に失敗しました。再試行してください。既存の履歴は保持されています。"
+    },
+    "historySaving": {
+        "message": "ダウンロードした履歴を保存中…"
+    },
+    "historyManualImport": {
+        "message": "安全に読み取れません。保存済み ZIP を履歴から手動で読み込んでください。"
+    },
+    "historyPermissionExpired": {
+        "message": "許可情報が変わりました。再度「アクセスを許可」するか、ダウンロードし直してください。"
+    },
+    "historyCleared": {
+        "message": "ローカル履歴を削除しました。再エクスポートとダウンロードで復元できます。"
     }
 }

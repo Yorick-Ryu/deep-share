@@ -3,6 +3,8 @@
     if (globalThis.__deepShareHistoryUI) return;
     globalThis.__deepShareHistoryUI = true;
     const H = globalThis.DeepShareHistory;
+    const t = H.translate;
+    const localizeError = message => globalThis.DeepShareHistoryI18n?.error(message) || message;
     let dialog, launch, archive, activeId, statusValue, previousFocus;
     let captureEnabled = false;
     let pendingCapture = null;
@@ -33,10 +35,10 @@
     };
     async function request(action, payload = {}) {
         const response = await chrome.runtime.sendMessage({ ...payload, action });
-        if (!response?.ok) throw new Error(response?.error || '插件连接中断，请刷新页面再试。');
+        if (!response?.ok) throw new Error(response?.error || t("插件连接中断，请刷新页面再试。"));
         return response;
     }
-    const showError = text => window.showToastNotification?.({ text }, 'error', 5000);
+    const showError = text => window.showToastNotification?.({ text: localizeError(text) }, 'error', 5000);
     function requestCapturePermission(origin) {
         if (captureRequest) return captureRequest;
         // Send synchronously from the click handler to preserve user activation.
@@ -51,7 +53,7 @@
         try {
             if (pendingCapture) {
                 const result = await request('history:capture:authorize', pendingCapture);
-                if (!result.granted) window.showToastNotification?.({ text: '未授权读取导出包，仍可手动导入已下载的文件。' }, 'info', 5000);
+                if (!result.granted) window.showToastNotification?.({ text: t("未授权读取导出包，仍可手动导入已下载的文件。") }, 'info', 5000);
                 await refreshCapturePermission();
 
             }
@@ -60,12 +62,12 @@
     }
     function updatePermissionButtons() {
         for (const node of document.querySelectorAll('.dsh-capture-permission')) {
-            const label = '授权读取';
+            const label = t("授权读取");
             node.hidden = !pendingCapture;
             if (node.textContent !== label) node.textContent = label;
             node.disabled = !!captureRequest;
-            node.title = pendingCapture ? `允许读取 ${new URL(pendingCapture.origin).host} 的本次导出包`
-                : '允许识别手动下载的官方历史对话';
+            node.title = pendingCapture ? t('允许读取 $1 的本次导出包', [new URL(pendingCapture.origin).host])
+                : t("允许识别手动下载的官方历史对话");
         }
     }
     async function refreshCapturePermission() {
@@ -74,7 +76,7 @@
             captureEnabled = result.enabled === true;
             const changed = result.pending && (pendingCapture?.id !== result.pending.id || pendingCapture?.origin !== result.pending.origin);
             pendingCapture = result.pending || null;
-            if (changed) window.showToastNotification?.({ text: '下载已完成，请点击“授权读取”读取本次导出包。' }, 'info', 8000);
+            if (changed) window.showToastNotification?.({ text: t("下载已完成，请点击“授权读取”读取本次导出包。") }, 'info', 8000);
             reconcile();
         } catch { /* Existing features remain usable if the worker is unavailable. */ }
     }
@@ -106,23 +108,23 @@
         const count = chosenConversations().length;
         const bytes = count ? new Blob([chosenMarkdown()]).size : 0;
         const summary = dialog.querySelector('.dsh-summary');
-        summary.textContent = `${selected.size ? `已选 ${selected.size} 个对话` : count ? '当前对话' : '未选择对话'} · ${(bytes / 1024).toFixed(1)} KB`;
+        summary.textContent = `${selected.size ? t('已选 $1 个对话', [selected.size]) : count ? t("当前对话") : t("未选择对话")} · ${(bytes / 1024).toFixed(1)} KB`;
         summary.title = summary.textContent;
         dialog.querySelectorAll('[data-dsh-export]').forEach(b => { b.disabled = !count; });
     }
     function archiveImportButton(label, className = '') {
         const node = button(label, () => dialog?.querySelector('.dsh-archive-input')?.click(), `dsh-import-archive ${className}`);
         node.dataset.importLabel = label;
-        node.title = '导入已下载的 DeepSeek ZIP 导出包或 conversations.json';
+        node.title = t("导入已下载的 DeepSeek ZIP 导出包或 conversations.json");
         node.disabled = !!dialog?.querySelector('.dsh-archive-input')?.disabled;
-        if (node.disabled) node.textContent = '导入中…';
+        if (node.disabled) node.textContent = t("导入中…");
         return node;
     }
     function setArchiveImportBusy(target, busy) {
         target.querySelector('.dsh-archive-input').disabled = busy;
         for (const node of target.querySelectorAll('.dsh-import-archive')) {
             node.disabled = busy;
-            node.textContent = busy ? '导入中…' : node.dataset.importLabel;
+            node.textContent = busy ? t("导入中…") : node.dataset.importLabel;
         }
     }
     function renderPreview() {
@@ -134,8 +136,8 @@
         if (!c) {
             if (!all().length) {
                 const empty = element('div', 'dsh-empty-state');
-                empty.append(element('p', 'dsh-empty', '请在 DeepSeek「系统设置 → 数据管理」导出历史对话，点击“下载”时可直接保存到历史库。也可点击下方“导入历史对话”选择已下载的 ZIP 或 JSON 文件。'),
-                    archiveImportButton('导入历史对话', 'dsh-primary'));
+                empty.append(element('p', 'dsh-empty', t("请在 DeepSeek「系统设置 → 数据管理」导出历史对话，点击“下载”时可直接保存到历史库。也可点击下方“导入历史对话”选择已下载的 ZIP 或 JSON 文件。")),
+                    archiveImportButton(t("导入历史对话"), 'dsh-primary'));
                 preview.append(empty);
             }
             return;
@@ -143,14 +145,14 @@
         preview.append(highlighted('h3', '', c.title));
         for (const message of H.selectedMessages(c)) {
             const article = element('article', 'dsh-message');
-            article.append(element('strong', '', message.role === 'user' ? '用户' : 'DeepSeek'));
+            article.append(element('strong', '', message.role === 'user' ? t("用户") : 'DeepSeek'));
             if (dialog.querySelector('#dsh-thinking').checked && message.thinking) {
                 const details = element('details');
-                details.append(element('summary', '', '思考内容'), highlighted('pre', '', message.thinking));
+                details.append(element('summary', '', t("思考内容")), highlighted('pre', '', message.thinking));
                 article.append(details);
             }
-            article.append(highlighted('pre', '', message.content || '（无文本正文）'));
-            if (message.files.length) article.append(element('p', 'dsh-muted', `附件：${message.files.join('、')}（仅文件名）`));
+            article.append(highlighted('pre', '', message.content || t("（无文本正文）")));
+            if (message.files.length) article.append(element('p', 'dsh-muted', t('附件：$1（仅文件名）', [message.files.join(', ')])));
             preview.append(article);
         }
         if (changedConversation) preview.scrollTop = 0;
@@ -166,7 +168,7 @@
             activeId = filtered[0]?.id;
             renderPreview();
         }
-        if (all().length && !filtered.length) list.append(element('p', 'dsh-empty', '没有找到匹配的对话，试试其他关键词。'));
+        if (all().length && !filtered.length) list.append(element('p', 'dsh-empty', t("没有找到匹配的对话，试试其他关键词。")));
         const fragment = document.createDocumentFragment();
         let group, groupLabel;
         for (const c of filtered) {
@@ -177,7 +179,7 @@
             }
             const row = element('div', `dsh-row${c.id === activeId ? ' dsh-active' : ''}`);
             const check = element('input'); check.type = 'checkbox'; check.checked = selected.has(c.id);
-            check.setAttribute('aria-label', `选择 ${c.title}`);
+            check.setAttribute('aria-label', t('选择 $1', [c.title]));
             check.addEventListener('change', () => {
                 check.checked ? selected.add(c.id) : selected.delete(c.id);
                 open.setAttribute('aria-pressed', String(check.checked));
@@ -250,7 +252,7 @@
             tools.append(toggle);
         }
         toggle.hidden = !multiple && !all().some(matches);
-        const label = multiple ? '退出多选' : '多选';
+        const label = multiple ? t("退出多选") : t("多选");
         toggle.setAttribute('aria-label', label);
         toggle.setAttribute('aria-pressed', String(multiple));
         if (multiple) toggle.setAttribute('aria-keyshortcuts', 'Escape');
@@ -299,7 +301,7 @@
             return !node.disabled && (!accept || accept.split(',').some(type => ['.md', '.markdown', 'text/*', 'text/markdown', 'text/plain', '*/*'].includes(type.trim())));
         });
         if (!input) {
-            showError('暂未找到可用的文档上传入口。请下载 MD，再通过 DeepSeek 输入框的附件按钮上传。');
+            showError(t("暂未找到可用的文档上传入口。请下载 MD，再通过 DeepSeek 输入框的附件按钮上传。"));
             return;
         }
         const uploadButton = dialog.querySelector('.dsh-upload');
@@ -313,7 +315,7 @@
             // Return to the composer; DeepSeek displays the attachment's upload status.
             closeLibrary();
         } catch {
-            showError('浏览器未能自动附加文件，请下载 MD 后从 DeepSeek 附件按钮上传。');
+            showError(t("浏览器未能自动附加文件，请下载 MD 后从 DeepSeek 附件按钮上传。"));
         } finally { uploadButton.disabled = false; }
     }
     async function loadArchive() {
@@ -346,11 +348,11 @@
         dialog.tabIndex = -1;
         const header = element('header', 'dsh-header');
         const title = element('div');
-        const heading = element('h2', '', '导入历史对话'); heading.id = 'dsh-title';
+        const heading = element('h2', '', t("导入历史对话")); heading.id = 'dsh-title';
         title.append(heading);
         const close = button('', closeLibrary, 'dsh-close');
-        close.setAttribute('aria-label', '关闭');
-        close.title = '关闭';
+        close.setAttribute('aria-label', t("关闭"));
+        close.title = t("关闭");
         const closeIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
         closeIcon.setAttribute('viewBox', '0 0 16 16');
         closeIcon.setAttribute('aria-hidden', 'true');
@@ -365,10 +367,10 @@
         header.append(title, close); dialog.append(header); dialog.setAttribute('aria-labelledby', 'dsh-title');
         const workspace = element('div', 'dsh-workspace');
         const sidebar = element('aside', 'dsh-sidebar');
-        sidebar.setAttribute('aria-label', '历史对话列表');
+        sidebar.setAttribute('aria-label', t("历史对话列表"));
         const main = element('div', 'dsh-main');
         const toolbar = element('div', 'dsh-toolbar');
-        const search = element('input', 'dsh-search'); search.type = 'search'; search.placeholder = '搜索标题或对话正文'; search.setAttribute('aria-label', '搜索历史对话'); search.value = query;
+        const search = element('input', 'dsh-search'); search.type = 'search'; search.placeholder = t("搜索标题或对话正文"); search.setAttribute('aria-label', t("搜索历史对话")); search.value = query;
         let timer;
         search.addEventListener('input', () => { clearTimeout(timer); timer = setTimeout(() => { query = search.value; renderList(); renderPreview(); }, 150); });
         const selectionTools = element('div', 'dsh-selection-tools');
@@ -382,29 +384,29 @@
         const thinkingLabel = element('label', 'dsh-thinking-label');
         const thinking = element('input'); thinking.type = 'checkbox'; thinking.id = 'dsh-thinking'; thinking.setAttribute('role', 'switch');
         thinking.addEventListener('change', () => { renderPreview(); updateSelection(); });
-        thinkingLabel.append(thinking, document.createTextNode(' 包含思考内容'));
+        thinkingLabel.append(thinking, document.createTextNode(' ' + t('包含思考内容')));
         const actions = element('div', 'dsh-actions');
-        const downloadButton = button('下载Markdown', download); downloadButton.dataset.dshExport = ''; downloadButton.disabled = true;
-        const wordButton = button('导出 Word', exportWord); wordButton.dataset.dshExport = ''; wordButton.disabled = true;
-        wordButton.title = '使用 DeepShare 文档转换服务，发送所选内容并沿用插件的 API-Key 设置';
-        const uploadButton = button('导入', upload, 'dsh-primary dsh-upload'); uploadButton.dataset.dshExport = ''; uploadButton.disabled = true;
+        const downloadButton = button(t("下载Markdown"), download); downloadButton.dataset.dshExport = ''; downloadButton.disabled = true;
+        const wordButton = button(t("导出 Word"), exportWord); wordButton.dataset.dshExport = ''; wordButton.disabled = true;
+        wordButton.title = t("使用 DeepShare 文档转换服务，发送所选内容并沿用插件的 API-Key 设置");
+        const uploadButton = button(t("导入"), upload, 'dsh-primary dsh-upload'); uploadButton.dataset.dshExport = ''; uploadButton.disabled = true;
         actions.append(downloadButton, wordButton, uploadButton);
         footer.append(element('span', 'dsh-summary'), thinkingLabel, actions); dialog.append(footer);
         const bottom = element('div', 'dsh-bottom');
         let clearArmed = false;
         const resetClear = () => {
             clearArmed = false;
-            clearButton.textContent = '清除本地历史库';
+            clearButton.textContent = t("清除本地历史库");
         };
-        const clearButton = button('清除本地历史库', async () => {
+        const clearButton = button(t("清除本地历史库"), async () => {
             if (!clearArmed) {
                 clearArmed = true;
-                clearButton.textContent = '确认清除？';
+                clearButton.textContent = t("确认清除？");
                 return;
             }
             clearArmed = false;
             clearButton.disabled = true;
-            clearButton.textContent = '清除中…';
+            clearButton.textContent = t("清除中…");
             try {
                 await request('history:clear'); selected.clear();
                 if (dialog === currentDialog && currentDialog.open) await loadArchive();
@@ -417,7 +419,7 @@
         clearButton.addEventListener('blur', () => { if (clearArmed) resetClear(); });
         const archiveInput = element('input', 'dsh-archive-input');
         archiveInput.type = 'file'; archiveInput.accept = '.zip,.json'; archiveInput.hidden = true;
-        const importButton = archiveImportButton('导入');
+        const importButton = archiveImportButton(t("导入"));
         archiveInput.addEventListener('change', async () => {
             const file = archiveInput.files[0];
             archiveInput.value = '';
@@ -425,10 +427,10 @@
             setArchiveImportBusy(currentDialog, true); clearButton.disabled = true;
             let id;
             try {
-                if (file.size > H.MAX_BYTES) throw new Error('导出包超过 64 MB。');
+                if (file.size > H.MAX_BYTES) throw new Error(t("导出包超过 64 MB。"));
                 const text = /\.zip$/i.test(file.name)
                     ? await H.unzipConversations(await file.arrayBuffer())
-                    : /\.json$/i.test(file.name) ? await file.text() : (() => { throw new Error('请选择 DeepSeek 导出的 ZIP 或 JSON 文件。'); })();
+                    : /\.json$/i.test(file.name) ? await file.text() : (() => { throw new Error(t("请选择 DeepSeek 导出的 ZIP 或 JSON 文件。")); })();
                 ({ id } = await request('history:import:start', { length: text.length }));
                 for (let offset = 0; offset < text.length; offset += 262144) {
                     await request('history:import:chunk', { id, offset, chunk: text.slice(offset, offset + 262144) });
@@ -445,7 +447,7 @@
                 setArchiveImportBusy(currentDialog, false); clearButton.disabled = false;
             }
         });
-        bottom.append(button('刷新', loadArchive), importButton, button('授权读取', authorizeCapture, 'dsh-capture-permission'), clearButton, archiveInput); footer.prepend(bottom);
+        bottom.append(button(t("刷新"), loadArchive), importButton, button(t("授权读取"), authorizeCapture, 'dsh-capture-permission'), clearButton, archiveInput); footer.prepend(bottom);
         const currentDialog = dialog;
         const returnFocus = previousFocus;
         let outsidePointer = null;
@@ -472,6 +474,7 @@
         currentDialog.addEventListener('close', () => {
             clearTimeout(timer); currentDialog.remove();
             if (dialog === currentDialog) dialog = null;
+            if (pendingLocale) updateLocale();
             if (returnFocus?.isConnected) returnFocus.focus();
         }, { once: true });
         document.body.append(dialog); updatePermissionButtons(); syncAppearance(); dialog.showModal();
@@ -482,28 +485,28 @@
         await loadArchive();
     }
     function settingsStatus() {
-        if (pendingCapture) return '点击“授权读取”后，将本次导出包保存到本地历史库。';
-        if (!captureEnabled) return '点击下载时可授权保存到本地历史库。拒绝授权仍可正常下载，也可在历史库中手动导入文件。';
+        if (pendingCapture) return t("点击“授权读取”后，将本次导出包保存到本地历史库。");
+        if (!captureEnabled) return t("点击下载时可授权保存到本地历史库。拒绝授权仍可正常下载，也可在历史库中手动导入文件。");
         if (statusValue?.state === 'ready' && Number.isFinite(statusValue.count)) {
-            return `已保存 ${statusValue.count} 个历史对话。如需同步最新对话，请先重新导出，待生成完成后再点击下载。`;
+            return t('已保存 $1 个历史对话。如需同步最新对话，请先重新导出，待生成完成后再点击下载。', [statusValue.count]);
         }
-        return statusValue?.message || '请先导出历史对话，待生成完成后点击下载同步；如需获取最新对话，请先重新导出。';
+        return (statusValue?.message ? localizeError(statusValue.message) : '') || t("请先导出历史对话，待生成完成后点击下载同步；如需获取最新对话，请先重新导出。");
     }
     function nativeExportRow() {
         // Resolve the current row again after every native settings tab change.
-        const heading = [...document.querySelectorAll('div,span,p,h3')].find(node => node.childElementCount === 0 && /^(导出所有历史对话|Export (all )?(chat )?history|Export data)$/i.test(node.textContent.trim()) && node.getClientRects().length);
+        const heading = [...document.querySelectorAll('div,span,p,h3')].find(node => node.childElementCount === 0 && H.nativeLabel('heading', node.textContent) && node.getClientRects().length);
         let row = heading?.parentElement;
         for (let i = 0; row && i < 4; i++, row = row.parentElement) {
-            if (/删除所有对话|Delete all chats/i.test(row.textContent)) return;
+            if (H.nativeLabel('delete', row.textContent, true)) return;
             if ([...row.querySelectorAll('button,[role="button"]')].some(node =>
-                !node.closest('.dsh-settings') && /^(下载|导出|Download|Export)$/i.test(node.textContent.trim()))) return row;
+                !node.closest('.dsh-settings') && (H.nativeLabel('download', node.textContent) || H.nativeLabel('export', node.textContent)))) return row;
         }
     }
     function nativeHistoryControl(action) {
-        const pattern = action === '重新导出' ? /^(重新导出|Re-export|Export again)$/i : /^(下载|Download)$/i;
+        const kind = action === '重新导出' ? 'reexport' : 'download';
         return [...(nativeExportRow()?.querySelectorAll('button,[role="button"]') || [])].find(node =>
             !node.closest('.dsh-settings') && node.getClientRects().length && !node.disabled &&
-            node.getAttribute('aria-disabled') !== 'true' && pattern.test(node.textContent.trim()));
+            node.getAttribute('aria-disabled') !== 'true' && H.nativeLabel(kind, node.textContent));
     }
     // Pause only the official settings download click while Chrome asks for
     // optional permissions. Resume that same control once, including on denial.
@@ -531,26 +534,28 @@
     }, true);
     function updateSettingsLabel(label) {
         const text = settingsStatus();
-        const actions = ['重新导出', '下载'].filter(action => text.includes(action) && nativeHistoryControl(action));
-        const links = actions.join(',');
-        if (label.textContent === text && label.dataset.links === links) return;
-        const parts = text.split(/(重新导出|下载)/g).map(part => {
-            if (!actions.includes(part)) return document.createTextNode(part);
-            const link = element('button', 'dsh-settings-link', part);
+        const actions = ['重新导出', '下载'].filter(action => nativeHistoryControl(action));
+        const links = actions.map(action => t(action)).join(',');
+        if (label.dataset.status === text && label.dataset.links === links) return;
+        const nodes = [document.createTextNode(text)];
+        for (const action of actions) {
+            nodes.push(document.createTextNode(' '));
+            const link = element('button', 'dsh-settings-link', t(action));
             link.type = 'button';
-            link.addEventListener('click', () => nativeHistoryControl(part)?.click());
-            return link;
-        });
-        label.dataset.links = links;
-        label.replaceChildren(...parts);
+            link.addEventListener('click', () => nativeHistoryControl(action)?.click());
+            nodes.push(link);
+        }
+        label.dataset.status = text; label.dataset.links = links;
+        label.replaceChildren(...nodes);
     }
+
     function settingsNote() {
         const row = nativeExportRow();
         let note = document.querySelector('.dsh-settings');
         if (!row) { note?.remove(); return; }
         if (!note) {
             note = element('div', 'dsh-settings');
-            note.append(element('span'), button('授权读取', authorizeCapture, 'dsh-capture-permission'), button('查看历史库', openLibrary));
+            note.append(element('span'), button(t("授权读取"), authorizeCapture, 'dsh-capture-permission'), button(t("查看历史库"), openLibrary));
         }
         updateSettingsLabel(note.querySelector('span'));
         // Initialize theme before insertion so dark settings never paints a
@@ -583,9 +588,26 @@
         }
         return null;
     }
+    let localeReady = !globalThis.DeepShareHistoryI18n;
+    let pendingLocale = false;
+    let pageLanguage = document.documentElement.lang;
+    async function updateLocale() {
+        if (!globalThis.DeepShareHistoryI18n) return;
+        if (dialog?.open) { pendingLocale = true; return; }
+        pendingLocale = false;
+        try {
+            if (!await DeepShareHistoryI18n.init(document.documentElement.lang)) return;
+            localeReady = true;
+            if (launch) launch.textContent = t('导入历史对话');
+            document.querySelector('.dsh-settings')?.remove();
+            // Keep an open library's selection and preview; update labels when
+            // it is next opened rather than discarding an in-progress import.
+            reconcile();
+        } catch { localeReady = true; reconcile(); }
+    }
     function reconcile() {
-        if (!document.body) return;
-        if (!launch) launch = button('导入历史对话', openLibrary, 'dsh-launch');
+        if (!document.body || !localeReady) return;
+        if (!launch) launch = button(t("导入历史对话"), openLibrary, 'dsh-launch');
         const attachment = findAttachmentButton();
         if (attachment) {
             if (attachment.previousElementSibling !== launch) attachment.before(launch);
@@ -598,6 +620,7 @@
     }
     chrome.storage.local.get('deepShareHistoryStatus').then(data => { statusValue = data.deepShareHistoryStatus; reconcile(); });
     chrome.storage.onChanged.addListener((changes, area) => {
+        if (area === 'sync' && changes.preferredLanguage) { updateLocale(); return; }
         if (area !== 'local') return;
         if (changes.deepShareHistoryCaptureEnabled || changes.deepShareHistoryCaptureRevision) refreshCapturePermission();
         if (!changes.deepShareHistoryStatus) return;
@@ -609,17 +632,21 @@
     });
     let timer;
     new MutationObserver(records => {
+        if (document.documentElement.lang !== pageLanguage) {
+            pageLanguage = document.documentElement.lang; updateLocale();
+        }
         if (records.every(r => r.target.closest?.('.dsh-dialog,.dsh-settings,.dsh-launch'))) return;
         // Native settings replaces its rows when switching tabs. Remove or
         // re-anchor our sibling in this microtask, before the next paint;
         // waiting for the general debounce flashes the orphan at the top.
         settingsNote();
         clearTimeout(timer); timer = setTimeout(reconcile, 200);
-    }).observe(document.documentElement, { childList: true, subtree: true, attributes: true, attributeFilter: ['class', 'style', 'data-theme', 'hidden', 'disabled', 'aria-disabled'] });
+    }).observe(document.documentElement, { childList: true, subtree: true, attributes: true, attributeFilter: ['lang', 'class', 'style', 'data-theme', 'hidden', 'disabled', 'aria-disabled'] });
     matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => syncAppearance());
     window.addEventListener('resize', reconcile);
     window.addEventListener('scroll', reconcile, { passive: true });
     window.addEventListener('focus', refreshCapturePermission);
+    updateLocale();
     refreshCapturePermission();
     reconcile();
 })();

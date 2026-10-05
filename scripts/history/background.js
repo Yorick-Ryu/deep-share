@@ -244,6 +244,14 @@
             return true;
         }
         (async () => {
+            if (message.action === 'history:locale') {
+                const locales = ['en', 'zh_CN', 'zh_TW', 'es', 'pt_BR', 'pt_PT', 'fr', 'ja', 'de'];
+                if (!locales.includes(message.locale)) throw new Error('Unsupported locale');
+                const response = await fetch(chrome.runtime.getURL(`_locales/${message.locale}/messages.json`));
+                if (!response.ok) throw new Error('Locale unavailable');
+                const catalog = await response.json();
+                return { ok: true, messages: Object.fromEntries(Object.entries(catalog).filter(([key]) => key.startsWith('history'))) };
+            }
             if (message.action === 'history:capture:status') {
                 await flowsReady;
                 const pending = candidateFor(sender.tab.id);

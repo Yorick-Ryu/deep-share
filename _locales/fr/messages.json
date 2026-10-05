@@ -420,9 +420,9 @@
         "message": "$COUNT$ éléments sélectionnés",
         "description": "Nombre d’éléments sélectionnés dans la barre de sélection Gemini",
         "placeholders": {
-        "COUNT": {
-            "content": "$1"
-        }
+            "COUNT": {
+                "content": "$1"
+            }
         }
     },
     "selectAllQuestions": {
@@ -529,5 +529,232 @@
     },
     "scrollCollecting": {
         "message": "Défilement en cours pour collecter les messages, veuillez patienter..."
+    },
+    "historyTitle": {
+        "message": "Importer des conversations"
+    },
+    "historyAllow": {
+        "message": "Autoriser l’accès"
+    },
+    "historyClose": {
+        "message": "Fermer"
+    },
+    "historyList": {
+        "message": "Historique des conversations"
+    },
+    "historySearch": {
+        "message": "Rechercher dans l’historique"
+    },
+    "historySearchHint": {
+        "message": "Rechercher titres ou messages"
+    },
+    "historyMulti": {
+        "message": "Sélectionner des conversations"
+    },
+    "historyExitMulti": {
+        "message": "Quitter la sélection"
+    },
+    "historySelect": {
+        "message": "Sélectionner $value$",
+        "placeholders": {
+            "value": {
+                "content": "$1"
+            }
+        }
+    },
+    "historySelected": {
+        "message": "Conversations sélectionnées : $value$",
+        "placeholders": {
+            "value": {
+                "content": "$1"
+            }
+        }
+    },
+    "historyCurrent": {
+        "message": "Conversation actuelle"
+    },
+    "historyNone": {
+        "message": "Aucune conversation sélectionnée"
+    },
+    "historyUser": {
+        "message": "Utilisateur"
+    },
+    "historyThinking": {
+        "message": "Raisonnement"
+    },
+    "historyIncludeThinking": {
+        "message": "Inclure le raisonnement"
+    },
+    "historyNoText": {
+        "message": "(Aucun texte)"
+    },
+    "historyFiles": {
+        "message": "Pièces jointes : $value$ (noms uniquement)",
+        "placeholders": {
+            "value": {
+                "content": "$1"
+            }
+        }
+    },
+    "historyNoMatches": {
+        "message": "Aucune conversation trouvée. Essayez un autre mot."
+    },
+    "historyDownloadMD": {
+        "message": "Télécharger Markdown"
+    },
+    "historyWord": {
+        "message": "Exporter vers Word"
+    },
+    "historyImport": {
+        "message": "Importer"
+    },
+    "historyImporting": {
+        "message": "Importation…"
+    },
+    "historyRefresh": {
+        "message": "Actualiser"
+    },
+    "historyClear": {
+        "message": "Effacer l’historique local"
+    },
+    "historyConfirmClear": {
+        "message": "Confirmer l’effacement ?"
+    },
+    "historyClearing": {
+        "message": "Effacement…"
+    },
+    "historyView": {
+        "message": "Ouvrir l’historique"
+    },
+    "historyToday": {
+        "message": "Aujourd’hui"
+    },
+    "historyYesterday": {
+        "message": "Hier"
+    },
+    "historyWeek": {
+        "message": "7 derniers jours"
+    },
+    "historyMonth": {
+        "message": "30 derniers jours"
+    },
+    "historyOlder": {
+        "message": "Plus anciennes"
+    },
+    "historyUpdated": {
+        "message": "Mise à jour : $value$",
+        "placeholders": {
+            "value": {
+                "content": "$1"
+            }
+        }
+    },
+    "historyUnknown": {
+        "message": "Inconnu"
+    },
+    "historyBody": {
+        "message": "Contenu"
+    },
+    "historyFileNote": {
+        "message": "Pièces jointes (importez les originaux séparément) : $value$",
+        "placeholders": {
+            "value": {
+                "content": "$1"
+            }
+        }
+    },
+    "historyFilename": {
+        "message": "Historique"
+    },
+    "historyFilenameSuffix": {
+        "message": " et autres conversations"
+    },
+    "historyUntitled": {
+        "message": "Conversation sans titre"
+    },
+    "historyImportHint": {
+        "message": "Importer un ZIP DeepSeek ou conversations.json téléchargé"
+    },
+    "historyEmpty": {
+        "message": "Exportez l’historique dans Paramètres → Gestion des données de DeepSeek, puis téléchargez-le. Vous pouvez aussi importer un ZIP ou JSON téléchargé."
+    },
+    "historyWordHint": {
+        "message": "Envoie le contenu sélectionné au service de conversion DeepShare avec votre clé API configurée"
+    },
+    "historyDenied": {
+        "message": "Accès non autorisé. Vous pouvez importer le fichier manuellement."
+    },
+    "historyAllowHost": {
+        "message": "Autoriser la lecture de cette exportation depuis $value$",
+        "placeholders": {
+            "value": {
+                "content": "$1"
+            }
+        }
+    },
+    "historyAllowHint": {
+        "message": "Détecter les exports officiels téléchargés manuellement"
+    },
+    "historyDownloaded": {
+        "message": "Téléchargement terminé. Cliquez sur « Autoriser l’accès » pour lire cet export."
+    },
+    "historyPending": {
+        "message": "Cliquez sur « Autoriser l’accès » pour enregistrer cet export localement."
+    },
+    "historyCaptureHint": {
+        "message": "Lors du téléchargement, vous pouvez autoriser l’enregistrement local. Le refus n’empêche ni le téléchargement ni l’importation manuelle."
+    },
+    "historySaved": {
+        "message": "Conversations enregistrées : $value$. Pour les actualiser, réexportez, attendez, puis téléchargez.",
+        "placeholders": {
+            "value": {
+                "content": "$1"
+            }
+        }
+    },
+    "historySyncHint": {
+        "message": "Exportez l’historique, attendez, puis téléchargez. Réexportez pour inclure les nouvelles conversations."
+    },
+    "historyReexport": {
+        "message": "Réexporter"
+    },
+    "historyDownload": {
+        "message": "Télécharger"
+    },
+    "historyUploadMissing": {
+        "message": "Bouton d’envoi introuvable. Téléchargez le Markdown et utilisez le bouton de pièce jointe DeepSeek."
+    },
+    "historyUploadFailed": {
+        "message": "Échec de l’ajout automatique. Téléchargez le Markdown et joignez-le manuellement."
+    },
+    "historyConnection": {
+        "message": "Extension déconnectée. Actualisez la page."
+    },
+    "historySize": {
+        "message": "L’export dépasse 64 Mo."
+    },
+    "historyChooseFile": {
+        "message": "Choisissez un ZIP ou JSON exporté par DeepSeek."
+    },
+    "historyImportFailed": {
+        "message": "Échec de l’importation. L’historique existant est conservé."
+    },
+    "historyInvalidArchive": {
+        "message": "Fichier invalide ou incomplet. Exportez-le ou téléchargez-le à nouveau."
+    },
+    "historyOperationFailed": {
+        "message": "Échec de l’opération. Réessayez ; l’historique est conservé."
+    },
+    "historySaving": {
+        "message": "Enregistrement de l’historique téléchargé…"
+    },
+    "historyManualImport": {
+        "message": "Lecture sécurisée impossible. Importez le ZIP manuellement dans l’historique."
+    },
+    "historyPermissionExpired": {
+        "message": "L’autorisation a changé. Cliquez sur « Autoriser l’accès » ou téléchargez à nouveau."
+    },
+    "historyCleared": {
+        "message": "Historique local effacé. Exportez et téléchargez pour le recréer."
     }
 }

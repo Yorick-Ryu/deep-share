@@ -193,3 +193,15 @@
 @media(prefers-reduced-motion: reduce) {
     .dsh-dialog[open], .dsh-dialog[open]::backdrop { animation-duration: 1ms; }
 }
+
+/* Translations can be much wider than the original Chinese controls. */
+.dsh-header { padding-right: 52px; }
+.dsh-bottom { flex-basis: 100%; flex-wrap: wrap; }
+.dsh-thinking-label { white-space: normal; }
+.dsh-settings { flex-wrap: wrap; }
+.dsh-settings > span { min-width: min(100%, 220px); }
+.dsh-actions { max-width: 100%; margin-left: auto; }
+@media(max-width: 600px) {
+    .dsh-actions { width: 100%; }
+    .dsh-actions .dsh-button { white-space: normal; }
+}

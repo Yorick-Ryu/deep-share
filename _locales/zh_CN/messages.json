@@ -528,5 +528,232 @@
     },
     "scrollCollecting": {
         "message": "正在滚动读取对话内容，请勿操作..."
+    },
+    "historyTitle": {
+        "message": "导入历史对话"
+    },
+    "historyAllow": {
+        "message": "授权读取"
+    },
+    "historyClose": {
+        "message": "关闭"
+    },
+    "historyList": {
+        "message": "历史对话列表"
+    },
+    "historySearch": {
+        "message": "搜索历史对话"
+    },
+    "historySearchHint": {
+        "message": "搜索标题或对话正文"
+    },
+    "historyMulti": {
+        "message": "多选"
+    },
+    "historyExitMulti": {
+        "message": "退出多选"
+    },
+    "historySelect": {
+        "message": "选择 $value$",
+        "placeholders": {
+            "value": {
+                "content": "$1"
+            }
+        }
+    },
+    "historySelected": {
+        "message": "已选 $value$ 个对话",
+        "placeholders": {
+            "value": {
+                "content": "$1"
+            }
+        }
+    },
+    "historyCurrent": {
+        "message": "当前对话"
+    },
+    "historyNone": {
+        "message": "未选择对话"
+    },
+    "historyUser": {
+        "message": "用户"
+    },
+    "historyThinking": {
+        "message": "思考内容"
+    },
+    "historyIncludeThinking": {
+        "message": "包含思考内容"
+    },
+    "historyNoText": {
+        "message": "（无文本正文）"
+    },
+    "historyFiles": {
+        "message": "附件：$value$（仅文件名）",
+        "placeholders": {
+            "value": {
+                "content": "$1"
+            }
+        }
+    },
+    "historyNoMatches": {
+        "message": "没有找到匹配的对话，试试其他关键词。"
+    },
+    "historyDownloadMD": {
+        "message": "下载Markdown"
+    },
+    "historyWord": {
+        "message": "导出 Word"
+    },
+    "historyImport": {
+        "message": "导入"
+    },
+    "historyImporting": {
+        "message": "导入中…"
+    },
+    "historyRefresh": {
+        "message": "刷新"
+    },
+    "historyClear": {
+        "message": "清除本地历史库"
+    },
+    "historyConfirmClear": {
+        "message": "确认清除？"
+    },
+    "historyClearing": {
+        "message": "清除中…"
+    },
+    "historyView": {
+        "message": "查看历史库"
+    },
+    "historyToday": {
+        "message": "今天"
+    },
+    "historyYesterday": {
+        "message": "昨天"
+    },
+    "historyWeek": {
+        "message": "7 天内"
+    },
+    "historyMonth": {
+        "message": "30 天内"
+    },
+    "historyOlder": {
+        "message": "更早"
+    },
+    "historyUpdated": {
+        "message": "更新时间：$value$",
+        "placeholders": {
+            "value": {
+                "content": "$1"
+            }
+        }
+    },
+    "historyUnknown": {
+        "message": "未知"
+    },
+    "historyBody": {
+        "message": "正文"
+    },
+    "historyFileNote": {
+        "message": "附件（需另行上传原文件）：$value$",
+        "placeholders": {
+            "value": {
+                "content": "$1"
+            }
+        }
+    },
+    "historyFilename": {
+        "message": "历史对话"
+    },
+    "historyFilenameSuffix": {
+        "message": "等多个对话"
+    },
+    "historyUntitled": {
+        "message": "未命名对话"
+    },
+    "historyImportHint": {
+        "message": "导入已下载的 DeepSeek ZIP 导出包或 conversations.json"
+    },
+    "historyEmpty": {
+        "message": "请在 DeepSeek「系统设置 → 数据管理」导出历史对话，点击“下载”时可直接保存到历史库。也可点击下方“导入历史对话”选择已下载的 ZIP 或 JSON 文件。"
+    },
+    "historyWordHint": {
+        "message": "使用 DeepShare 文档转换服务，发送所选内容并沿用插件的 API-Key 设置"
+    },
+    "historyDenied": {
+        "message": "未授权读取导出包，仍可手动导入已下载的文件。"
+    },
+    "historyAllowHost": {
+        "message": "允许读取 $value$ 的本次导出包",
+        "placeholders": {
+            "value": {
+                "content": "$1"
+            }
+        }
+    },
+    "historyAllowHint": {
+        "message": "允许识别手动下载的官方历史对话"
+    },
+    "historyDownloaded": {
+        "message": "下载已完成，请点击“授权读取”读取本次导出包。"
+    },
+    "historyPending": {
+        "message": "点击“授权读取”后，将本次导出包保存到本地历史库。"
+    },
+    "historyCaptureHint": {
+        "message": "点击下载时可授权保存到本地历史库。拒绝授权仍可正常下载，也可在历史库中手动导入文件。"
+    },
+    "historySaved": {
+        "message": "已保存 $value$ 个历史对话。如需同步最新对话，请先重新导出，待生成完成后再点击下载。",
+        "placeholders": {
+            "value": {
+                "content": "$1"
+            }
+        }
+    },
+    "historySyncHint": {
+        "message": "请先导出历史对话，待生成完成后点击下载同步；如需获取最新对话，请先重新导出。"
+    },
+    "historyReexport": {
+        "message": "重新导出"
+    },
+    "historyDownload": {
+        "message": "下载"
+    },
+    "historyUploadMissing": {
+        "message": "暂未找到可用的文档上传入口。请下载 MD，再通过 DeepSeek 输入框的附件按钮上传。"
+    },
+    "historyUploadFailed": {
+        "message": "浏览器未能自动附加文件，请下载 MD 后从 DeepSeek 附件按钮上传。"
+    },
+    "historyConnection": {
+        "message": "插件连接中断，请刷新页面再试。"
+    },
+    "historySize": {
+        "message": "导出包超过 64 MB。"
+    },
+    "historyChooseFile": {
+        "message": "请选择 DeepSeek 导出的 ZIP 或 JSON 文件。"
+    },
+    "historyImportFailed": {
+        "message": "导入失败，已有历史库仍保留。"
+    },
+    "historyInvalidArchive": {
+        "message": "历史文件无效或不完整，请重新导出或下载。"
+    },
+    "historyOperationFailed": {
+        "message": "操作未完成，请重试。已有历史库仍保留。"
+    },
+    "historySaving": {
+        "message": "正在保存刚下载的历史对话…"
+    },
+    "historyManualImport": {
+        "message": "此下载地址无法安全读取，请在历史库中手动导入已下载的 ZIP 文件。"
+    },
+    "historyPermissionExpired": {
+        "message": "下载授权信息已更新，请再点击一次“授权读取”，或重新下载。"
+    },
+    "historyCleared": {
+        "message": "本地历史库已清除。请从系统设置导出并下载以重新建立。"
     }
 }

@@ -510,5 +510,232 @@
     },
     "documentationUrl": {
         "message": "https://docs.deepshare.app/en"
+    },
+    "historyTitle": {
+        "message": "匯入歷史對話"
+    },
+    "historyAllow": {
+        "message": "授權讀取"
+    },
+    "historyClose": {
+        "message": "關閉"
+    },
+    "historyList": {
+        "message": "歷史對話清單"
+    },
+    "historySearch": {
+        "message": "搜尋歷史對話"
+    },
+    "historySearchHint": {
+        "message": "搜尋標題或對話內容"
+    },
+    "historyMulti": {
+        "message": "多選"
+    },
+    "historyExitMulti": {
+        "message": "退出多選"
+    },
+    "historySelect": {
+        "message": "選擇 $value$",
+        "placeholders": {
+            "value": {
+                "content": "$1"
+            }
+        }
+    },
+    "historySelected": {
+        "message": "已選 $value$ 個對話",
+        "placeholders": {
+            "value": {
+                "content": "$1"
+            }
+        }
+    },
+    "historyCurrent": {
+        "message": "目前對話"
+    },
+    "historyNone": {
+        "message": "未選擇對話"
+    },
+    "historyUser": {
+        "message": "使用者"
+    },
+    "historyThinking": {
+        "message": "思考內容"
+    },
+    "historyIncludeThinking": {
+        "message": "包含思考內容"
+    },
+    "historyNoText": {
+        "message": "（無文字內容）"
+    },
+    "historyFiles": {
+        "message": "附件：$value$（僅檔名）",
+        "placeholders": {
+            "value": {
+                "content": "$1"
+            }
+        }
+    },
+    "historyNoMatches": {
+        "message": "找不到符合的對話，請嘗試其他關鍵字。"
+    },
+    "historyDownloadMD": {
+        "message": "下載 Markdown"
+    },
+    "historyWord": {
+        "message": "匯出 Word"
+    },
+    "historyImport": {
+        "message": "匯入"
+    },
+    "historyImporting": {
+        "message": "匯入中…"
+    },
+    "historyRefresh": {
+        "message": "重新整理"
+    },
+    "historyClear": {
+        "message": "清除本機歷史庫"
+    },
+    "historyConfirmClear": {
+        "message": "確認清除？"
+    },
+    "historyClearing": {
+        "message": "清除中…"
+    },
+    "historyView": {
+        "message": "查看歷史庫"
+    },
+    "historyToday": {
+        "message": "今天"
+    },
+    "historyYesterday": {
+        "message": "昨天"
+    },
+    "historyWeek": {
+        "message": "7 天內"
+    },
+    "historyMonth": {
+        "message": "30 天內"
+    },
+    "historyOlder": {
+        "message": "更早"
+    },
+    "historyUpdated": {
+        "message": "更新時間：$value$",
+        "placeholders": {
+            "value": {
+                "content": "$1"
+            }
+        }
+    },
+    "historyUnknown": {
+        "message": "未知"
+    },
+    "historyBody": {
+        "message": "內文"
+    },
+    "historyFileNote": {
+        "message": "附件（需另外上傳原始檔案）：$value$",
+        "placeholders": {
+            "value": {
+                "content": "$1"
+            }
+        }
+    },
+    "historyFilename": {
+        "message": "歷史對話"
+    },
+    "historyFilenameSuffix": {
+        "message": "等多個對話"
+    },
+    "historyUntitled": {
+        "message": "未命名對話"
+    },
+    "historyImportHint": {
+        "message": "匯入已下載的 DeepSeek ZIP 或 conversations.json"
+    },
+    "historyEmpty": {
+        "message": "請在 DeepSeek「設定 → 資料管理」匯出並下載歷史對話，或匯入已下載的 ZIP 或 JSON。"
+    },
+    "historyWordHint": {
+        "message": "使用設定的 API 金鑰將所選內容傳送至 DeepShare 文件轉換服務"
+    },
+    "historyDenied": {
+        "message": "未授權讀取，仍可手動匯入已下載的檔案。"
+    },
+    "historyAllowHost": {
+        "message": "允許讀取來自 $value$ 的這次匯出檔案",
+        "placeholders": {
+            "value": {
+                "content": "$1"
+            }
+        }
+    },
+    "historyAllowHint": {
+        "message": "允許識別手動下載的官方歷史匯出檔案"
+    },
+    "historyDownloaded": {
+        "message": "下載完成。請點擊「授權讀取」讀取這次匯出檔案。"
+    },
+    "historyPending": {
+        "message": "點擊「授權讀取」將這次匯出存入本機歷史庫。"
+    },
+    "historyCaptureHint": {
+        "message": "下載時可授權存入本機歷史庫；拒絕後仍可下載及手動匯入。"
+    },
+    "historySaved": {
+        "message": "已儲存 $value$ 個對話。更新時請先重新匯出，完成後再下載。",
+        "placeholders": {
+            "value": {
+                "content": "$1"
+            }
+        }
+    },
+    "historySyncHint": {
+        "message": "請先匯出，完成後下載；取得最新對話前請重新匯出。"
+    },
+    "historyReexport": {
+        "message": "重新匯出"
+    },
+    "historyDownload": {
+        "message": "下載"
+    },
+    "historyUploadMissing": {
+        "message": "找不到上傳入口。請下載 Markdown，再使用 DeepSeek 附件按鈕上傳。"
+    },
+    "historyUploadFailed": {
+        "message": "自動附加失敗，請下載 Markdown 後手動上傳。"
+    },
+    "historyConnection": {
+        "message": "擴充功能連線中斷，請重新整理頁面。"
+    },
+    "historySize": {
+        "message": "匯出檔案超過 64 MB。"
+    },
+    "historyChooseFile": {
+        "message": "請選擇 DeepSeek 匯出的 ZIP 或 JSON。"
+    },
+    "historyImportFailed": {
+        "message": "匯入失敗，現有歷史庫未變更。"
+    },
+    "historyInvalidArchive": {
+        "message": "歷史檔案無效或不完整，請重新匯出或下載。"
+    },
+    "historyOperationFailed": {
+        "message": "操作未完成，請重試。現有歷史庫未變更。"
+    },
+    "historySaving": {
+        "message": "正在儲存下載的歷史對話…"
+    },
+    "historyManualImport": {
+        "message": "無法安全讀取此下載。請在歷史庫手動匯入 ZIP。"
+    },
+    "historyPermissionExpired": {
+        "message": "下載授權資訊已更新。請再點擊「授權讀取」或重新下載。"
+    },
+    "historyCleared": {
+        "message": "本機歷史已清除，請重新匯出並下載。"
     }
 }

@@ -23,6 +23,9 @@ function harness({ failFetch = false, failStore = false, downloadsGranted = true
         },
         fetch: async (value, options) => {
             calls.push({ url: value, options });
+            if (value.startsWith('chrome-extension://extension-id/_locales/')) {
+                return new Response(fs.readFileSync(value.replace('chrome-extension://extension-id/', ''), 'utf8'));
+            }
             if (beforeFetch) await beforeFetch();
             if (failFetch) throw Error('offline');
             return new Response(invalidZip ? 'not an archive' : zip(JSON.stringify([conversation()]), 8));
@@ -48,7 +51,7 @@ function harness({ failFetch = false, failStore = false, downloadsGranted = true
                 onAdded: event('added'), onRemoved: event('removed')
             },
             storage: { local: storage(local), session: storage(session) },
-            runtime: { id: 'extension-id', getManifest: () => ({ host_permissions: ['https://chat.deepseek.com/*'] }), onMessage: event('message') }
+            runtime: { id: 'extension-id', getURL: path => 'chrome-extension://extension-id/' + path, getManifest: () => ({ host_permissions: ['https://chat.deepseek.com/*'] }), onMessage: event('message') }
         }
     };
     vm.runInNewContext(fs.readFileSync('scripts/history/permissions.js', 'utf8'), context);
@@ -260,4 +263,18 @@ test('refusing a new origin keeps an already-granted downloads permission enable
     const response = await h.message({ action: 'history:capture:request', origin: 'https://new-cdn.deepseek.com' });
     assert.equal(response.enabled, true); assert.equal(response.granted, false);
     assert.equal(h.calls.length, 0);
+});
+
+test('locale catalogs are private, allowlisted and contain only history messages', async () => {
+    const h = harness();
+    const result = await h.message({ action: 'history:locale', locale: 'de' });
+    assert.equal(result.ok, true);
+    assert.equal(result.messages.historyTitle.message, 'Chatverlauf importieren');
+    assert.equal(result.messages.extensionName, undefined);
+    for (const locale of ['../../manifest', 'en/../../secret', 'xx']) {
+        assert.equal((await h.message({ action: 'history:locale', locale })).ok, false);
+    }
+    assert.equal(h.calls.length, 1);
+    assert.equal(h.permissionRequests.length, 0);
+    assert.equal((await h.message({ action: 'history:locale', locale: 'en' }, { ...sender(), url: 'https://evil.example/' })).ok, false);
 });

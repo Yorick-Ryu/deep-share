@@ -529,5 +529,232 @@
     },
     "scrollCollecting": {
         "message": "Scrolling to collect messages, please wait..."
+    },
+    "historyTitle": {
+        "message": "Import chat history"
+    },
+    "historyAllow": {
+        "message": "Allow access"
+    },
+    "historyClose": {
+        "message": "Close"
+    },
+    "historyList": {
+        "message": "Chat history"
+    },
+    "historySearch": {
+        "message": "Search history"
+    },
+    "historySearchHint": {
+        "message": "Search titles or messages"
+    },
+    "historyMulti": {
+        "message": "Select chats"
+    },
+    "historyExitMulti": {
+        "message": "Exit selection"
+    },
+    "historySelect": {
+        "message": "Select $value$",
+        "placeholders": {
+            "value": {
+                "content": "$1"
+            }
+        }
+    },
+    "historySelected": {
+        "message": "Selected chats: $value$",
+        "placeholders": {
+            "value": {
+                "content": "$1"
+            }
+        }
+    },
+    "historyCurrent": {
+        "message": "Current chat"
+    },
+    "historyNone": {
+        "message": "No chat selected"
+    },
+    "historyUser": {
+        "message": "User"
+    },
+    "historyThinking": {
+        "message": "Thinking"
+    },
+    "historyIncludeThinking": {
+        "message": "Include thinking"
+    },
+    "historyNoText": {
+        "message": "(No text content)"
+    },
+    "historyFiles": {
+        "message": "Attachments: $value$ (filenames only)",
+        "placeholders": {
+            "value": {
+                "content": "$1"
+            }
+        }
+    },
+    "historyNoMatches": {
+        "message": "No matching chats. Try another keyword."
+    },
+    "historyDownloadMD": {
+        "message": "Download Markdown"
+    },
+    "historyWord": {
+        "message": "Export Word"
+    },
+    "historyImport": {
+        "message": "Import"
+    },
+    "historyImporting": {
+        "message": "Importing…"
+    },
+    "historyRefresh": {
+        "message": "Refresh"
+    },
+    "historyClear": {
+        "message": "Clear local history"
+    },
+    "historyConfirmClear": {
+        "message": "Confirm clear?"
+    },
+    "historyClearing": {
+        "message": "Clearing…"
+    },
+    "historyView": {
+        "message": "Open history"
+    },
+    "historyToday": {
+        "message": "Today"
+    },
+    "historyYesterday": {
+        "message": "Yesterday"
+    },
+    "historyWeek": {
+        "message": "Last 7 days"
+    },
+    "historyMonth": {
+        "message": "Last 30 days"
+    },
+    "historyOlder": {
+        "message": "Earlier"
+    },
+    "historyUpdated": {
+        "message": "Updated: $value$",
+        "placeholders": {
+            "value": {
+                "content": "$1"
+            }
+        }
+    },
+    "historyUnknown": {
+        "message": "Unknown"
+    },
+    "historyBody": {
+        "message": "Content"
+    },
+    "historyFileNote": {
+        "message": "Attachments (upload original files separately): $value$",
+        "placeholders": {
+            "value": {
+                "content": "$1"
+            }
+        }
+    },
+    "historyFilename": {
+        "message": "Chat history"
+    },
+    "historyFilenameSuffix": {
+        "message": " and other chats"
+    },
+    "historyUntitled": {
+        "message": "Untitled chat"
+    },
+    "historyImportHint": {
+        "message": "Import a downloaded DeepSeek ZIP or conversations.json"
+    },
+    "historyEmpty": {
+        "message": "Export your history in DeepSeek Settings → Data Management, then download it to save it locally. Or import a downloaded ZIP or JSON below."
+    },
+    "historyWordHint": {
+        "message": "Send selected content to DeepShare’s document conversion service using your configured API key"
+    },
+    "historyDenied": {
+        "message": "Access was not granted. You can still import the downloaded file manually."
+    },
+    "historyAllowHost": {
+        "message": "Allow reading this export from $value$",
+        "placeholders": {
+            "value": {
+                "content": "$1"
+            }
+        }
+    },
+    "historyAllowHint": {
+        "message": "Allow detection of manually downloaded official history exports"
+    },
+    "historyDownloaded": {
+        "message": "Download complete. Click “Allow access” to read this export."
+    },
+    "historyPending": {
+        "message": "Click “Allow access” to save this export to your local history."
+    },
+    "historyCaptureHint": {
+        "message": "When you download, you can allow saving to local history. Declining still allows the download and manual import."
+    },
+    "historySaved": {
+        "message": "Saved chats: $value$. For newer chats, re-export first, wait for it to finish, then download.",
+        "placeholders": {
+            "value": {
+                "content": "$1"
+            }
+        }
+    },
+    "historySyncHint": {
+        "message": "Export your history, wait for it to finish, then download. Re-export to include newer chats."
+    },
+    "historyReexport": {
+        "message": "Re-export"
+    },
+    "historyDownload": {
+        "message": "Download"
+    },
+    "historyUploadMissing": {
+        "message": "No document upload control found. Download Markdown and upload it with DeepSeek’s attachment button."
+    },
+    "historyUploadFailed": {
+        "message": "Automatic attachment failed. Download Markdown and attach it manually in DeepSeek."
+    },
+    "historyConnection": {
+        "message": "Extension disconnected. Refresh the page and try again."
+    },
+    "historySize": {
+        "message": "The export exceeds 64 MB."
+    },
+    "historyChooseFile": {
+        "message": "Choose a ZIP or JSON file exported by DeepSeek."
+    },
+    "historyImportFailed": {
+        "message": "Import failed. Your existing history is unchanged."
+    },
+    "historyInvalidArchive": {
+        "message": "Invalid or incomplete history file. Export or download it again."
+    },
+    "historyOperationFailed": {
+        "message": "Operation failed. Try again; your existing history is unchanged."
+    },
+    "historySaving": {
+        "message": "Saving downloaded history…"
+    },
+    "historyManualImport": {
+        "message": "Cannot read this download safely. Import the downloaded ZIP manually in the history library."
+    },
+    "historyPermissionExpired": {
+        "message": "Download access details changed. Click “Allow access” again or download again."
+    },
+    "historyCleared": {
+        "message": "Local history cleared. Export and download again to rebuild it."
     }
 }

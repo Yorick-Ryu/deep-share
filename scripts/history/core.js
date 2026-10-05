@@ -1,7 +1,22 @@
 /* Shared by the MV3 worker, content script and offline tests. No network or DOM. */
 (() => {
+    const t = (source, values = []) => globalThis.DeepShareHistoryI18n?.t(source, values) ?? source.replace(/\$(\d+)/g, (_, n) => String(values[Number(n) - 1] ?? ''));
     const MAX_BYTES = 64 * 1024 * 1024;
     const str = value => typeof value === 'string' ? value : '';
+    // Exact labels observed in DeepSeek's settings; never match a generic
+    // download elsewhere on the page or an adjacent destructive action.
+    const nativeLabels = {
+        heading: ['导出所有历史对话', '匯出所有歷史對話', 'Export data', 'Export history', 'Export chat history', 'Export all history', 'Export all chat history', 'Daten exportieren', 'Exporter les données', 'Exportar datos', 'Exportar dados', 'データをエクスポート'],
+        download: ['下载', '下載', 'Download', 'Herunterladen', 'Télécharger', 'Descargar', 'Baixar', 'Descarregar', 'ダウンロード'],
+        export: ['导出', '匯出', 'Export', 'Exportieren', 'Exporter', 'Exportar', 'エクスポート'],
+        reexport: ['重新导出', '重新匯出', 'Re-export', 'Re-exporting', 'Export again', 'Erneut exportieren', 'Réexporter', 'Reexportar', '再エクスポート'],
+        delete: ['删除所有对话', '刪除所有對話', 'Delete all chats', 'Alle Chats löschen', 'Supprimer tous les dialogues', 'Eliminar todos los chats', 'Excluir todas as conversas', 'Eliminar todas as conversas', 'すべてのチャットを削除']
+    };
+    const normalizeLabel = text => String(text || '').normalize('NFKC').replace(/\s+/g, ' ').trim().toLocaleLowerCase();
+    function nativeLabel(kind, text, contains = false) {
+        const value = normalizeLabel(text);
+        return (nativeLabels[kind] || []).some(label => contains ? value.includes(normalizeLabel(label)) : value === normalizeLabel(label));
+    }
     function isExportURL(value) {
         try {
             const url = new URL(value);
@@ -129,24 +144,24 @@
     }
     function dateGroup(value, now = new Date()) {
         const date = new Date(value);
-        if (!Number.isFinite(date.getTime())) return '更早';
+        if (!Number.isFinite(date.getTime())) return t("更早");
         const day = d => Date.UTC(d.getFullYear(), d.getMonth(), d.getDate());
         const days = Math.round((day(now) - day(date)) / 86400000);
-        if (days === 0) return '今天';
-        if (days === 1) return '昨天';
-        if (days > 1 && days < 7) return '7 天内';
-        if (days >= 7 && days < 30) return '30 天内';
+        if (days === 0) return t("今天");
+        if (days === 1) return t("昨天");
+        if (days > 1 && days < 7) return t("7 天内");
+        if (days >= 7 && days < 30) return t("30 天内");
         return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
     }
     function markdown(conversations, { thinking = false } = {}) {
         const lines = [];
         for (const c of conversations) {
-            lines.push(`# ${c.title.replace(/[\r\n]+/g, ' ')}`, '', `更新时间：${c.date || '未知'}`, '');
+            lines.push(`# ${c.title.replace(/[\r\n]+/g, ' ')}`, '', t("更新时间：$1", [c.date || t("未知")]), '');
             for (const m of selectedMessages(c)) {
-                lines.push(`## ${m.role === 'user' ? '用户' : 'DeepSeek'}`, '');
-                if (thinking && m.thinking) lines.push('### 思考内容', '', m.thinking, '', '### 正文', '');
+                lines.push(`## ${m.role === 'user' ? t("用户") : 'DeepSeek'}`, '');
+                if (thinking && m.thinking) lines.push('### ' + t('思考内容'), '', m.thinking, '', '### ' + t('正文'), '');
                 if (m.content) lines.push(m.content, '');
-                if (m.files.length) lines.push(`附件（需另行上传原文件）：${m.files.map(f => f.replace(/[\r\n]/g, ' ')).join('、')}`, '');
+                if (m.files.length) lines.push(t('附件（需另行上传原文件）：$1', [m.files.map(f => f.replace(/[\r\n]/g, ' ')).join(', ')]), '');
             }
             lines.push('---', '');
         }
@@ -154,7 +169,7 @@
     }
     function filename(conversations) {
         let title = str(conversations[0]?.title).replace(/[<>:"/\\|?*\u0000-\u001f\u007f]/g, ' ').replace(/\s+/g, ' ').trim().replace(/^[. ]+|[. ]+$/g, '');
-        if (!title) title = '历史对话';
+        if (!title) title = t("历史对话");
         // Stay below common 255-byte filename limits, including Chinese titles.
         let shortened = '';
         for (const char of title) {
@@ -163,8 +178,8 @@
         }
         title = shortened.replace(/[. ]+$/g, '');
         if (/^(con|prn|aux|nul|com[1-9]|lpt[1-9])(?:\.|$)/i.test(title)) title = '_' + title;
-        return `${title}${conversations.length > 1 ? '等多个对话' : ''}.md`;
+        return `${title}${conversations.length > 1 ? t("等多个对话") : ''}.md`;
     }
-    globalThis.DeepShareHistory = { MAX_BYTES, isExportURL, readLimited, unzipConversations, parseConversations, selectedMessages, dateGroup, markdown, filename, crc32 };
+    globalThis.DeepShareHistory = { translate: t, nativeLabel, MAX_BYTES, isExportURL, readLimited, unzipConversations, parseConversations, selectedMessages, dateGroup, markdown, filename, crc32 };
     if (typeof module !== 'undefined') module.exports = globalThis.DeepShareHistory;
 })();
