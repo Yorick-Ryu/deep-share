@@ -32,3 +32,7 @@
 ## 后续修复：繁体中文关于页面
 
 已补齐 `aboutTabTitle`、`versionLabel`、`documentationLabel`、`githubLabel`、`developerEmailLabel` 和 `acknowledgmentText`，致谢文案与简体中文内容保持一致。繁体中文与英语词库现有键集合完全一致。浏览器重新加载与实际页面验证仍受上述自动控制限制。
+
+## 1.9.3 发布前验证
+
+2026-10-05：62 项现有回归测试通过；使用 DOM 桩执行真实 popup 脚本，验证全部 9 种语言的文案绑定、4 类地址错误的语言切换、按钮 title/aria-label、关于区域和 API 错误映射，并确认词库均为 252 项。安装包完整性、manifest 文件引用与权限/注入范围对比检查通过。用户重新加载后，实际弹窗已确认英文 `Show/hide API Key`、`Copy API Key` 生效；随后自动控制被浏览器 URL 安全策略阻止，繁体中文排版及其余真实交互尚未完成验证，DOM 桩测试不代表浏览器视觉验证。
