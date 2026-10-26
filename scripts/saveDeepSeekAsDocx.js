@@ -216,8 +216,7 @@ async function collectVisibleSelectedMessages(selectedCheckboxes) {
         if (messageDiv) {
             if (messageDiv.matches('._9663006') || messageDiv.querySelector('.d29f3d7d')) {
                 const userElement = messageDiv.querySelector('.fbb737a4');
-                const userText = Array.from(userElement?.childNodes || [])
-                    .find(node => node.nodeType === Node.TEXT_NODE)?.textContent?.trim();
+                const userText = getUserTextContent(userElement);
                 if (userText) {
                     messages.push({ role: "User", content: userText });
                 }
@@ -369,16 +368,8 @@ async function collectVisibleMessages(collectedMessages) {
 function getUserTextContent(element) {
     if (!element) return null;
 
-    // First try: get direct text nodes
-    const textFromNodes = Array.from(element.childNodes)
-        .filter(node => node.nodeType === Node.TEXT_NODE)
-        .map(node => node.textContent.trim())
-        .filter(Boolean)
-        .join('');
-
-    if (textFromNodes) return textFromNodes;
-
-    // Fallback: get innerText which handles nested structures
+    // DeepSeek wraps prompts in collapsible div/span elements. Read the entire
+    // rendered prompt so nested text and line breaks survive in both collectors.
     const innerText = element.innerText?.trim();
     return innerText || null;
 }
