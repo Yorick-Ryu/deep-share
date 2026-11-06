@@ -22,6 +22,9 @@
     const bodySelector = '.markdown, [data-markdown-text-style="assistant-message"]';
 
     function findMessageContainer(button) {
+        // A virtualized turn can contain BOTH roles, with the same copy icon.
+        // Reject the user's toolbar before looking for assistant Markdown.
+        if (button.closest('[data-message-author-role="user"], [data-content-search-unit-key$=":user"], [data-chatgpt-search-unit-key$=":user"], [class~="group/user-message"]')) return null;
         const legacy = button.closest('.agent-turn');
         if (legacy) return legacy;
 
@@ -35,11 +38,16 @@
     function findAndInjectButtons() {
         const groups = document.querySelectorAll(`${legacyGroupSelector}, .turn-action-controls`);
         groups.forEach(group => {
-            const copyButton = group.querySelector('button[data-testid="copy-turn-action-button"]')
-                || Array.from(group.querySelectorAll('button')).find(button =>
-                    /^(copy|copy response|复制|複製)$/i.test(button.getAttribute('aria-label') || ''));
-            if (!copyButton || !findMessageContainer(copyButton)) return;
-            if (!group.querySelector('.deepshare-docx-btn')) injectButton(copyButton);
+            // Identify the assistant's native action row structurally. Buttons
+            // inside rendered message content are not native action controls.
+            if (group.closest(bodySelector) || !findMessageContainer(group)) return;
+            // Prefer placing next to Copy when its stable marker exists.
+            // Otherwise use the first native action ONLY as a style/position
+            // reference; its label, language and icon do not determine eligibility.
+            const anchor = group.querySelector('button[data-testid="copy-turn-action-button"]')
+                || group.querySelector('button:not(.deepshare-docx-btn)');
+            if (!anchor) return;
+            if (!group.querySelector('.deepshare-docx-btn')) injectButton(anchor);
 
             group.querySelectorAll('button[aria-haspopup="menu"]').forEach(moreButton => {
                 if (moreButton.dataset.deepshareListenerAttached) return;
@@ -81,10 +89,10 @@
     // Initial injection check after a small delay
     setTimeout(findAndInjectButtons, 500);
 
-    function injectButton(copyBtn) {
+    function injectButton(referenceButton) {
         // Create the DOCX button
         const docxButton = document.createElement('button');
-        docxButton.className = `${copyBtn.className} deepshare-docx-btn`;
+        docxButton.className = `${referenceButton.className} deepshare-docx-btn`;
         docxButton.type = 'button';
         docxButton.setAttribute('aria-label', chrome.i18n?.getMessage('docxButton') || 'Save as Word document');
 
@@ -100,9 +108,9 @@
                 <path d="M6 14H12" stroke="currentColor" stroke-width="1.5"/>
             </svg>
         `;
-        const nativeIcon = copyBtn.querySelector('svg');
+        const nativeIcon = referenceButton.querySelector('svg');
         const nativeWrapper = nativeIcon?.closest('span');
-        if (nativeWrapper && copyBtn.contains(nativeWrapper)) {
+        if (nativeWrapper && referenceButton.contains(nativeWrapper)) {
             span.className = nativeWrapper.className;
             docxButton.appendChild(span);
         } else {
@@ -121,9 +129,9 @@
         // host. A sibling inside that host would activate BOTH tooltips and
         // change the native trigger's positioning bounds. Keep our button
         // outside the host, while retaining the legacy direct-sibling layout.
-        const copyHost = copyBtn.parentElement;
-        const insertionAnchor = copyHost?.matches('span.contents[data-state]')
-            ? copyHost : copyBtn;
+        const referenceHost = referenceButton.parentElement;
+        const insertionAnchor = referenceHost?.matches('span.contents[data-state]')
+            ? referenceHost : referenceButton;
         insertionAnchor.insertAdjacentElement('afterend', docxButton);
 
         // Add tooltip listeners
@@ -146,7 +154,7 @@
             tooltip.id = `deepshare-gpt-tooltip-${++tooltipSequence}`;
             tooltip.setAttribute('role', 'tooltip');
             tooltip.textContent = docxButton.getAttribute('aria-label');
-            if (copyBtn.closest('.turn-action-controls')) {
+            if (referenceButton.closest('.turn-action-controls')) {
                 tooltip.style.cssText = 'background:var(--color-background-tooltip,#0d0d0d);color:var(--color-text-tooltip,#fff);border:1px solid var(--color-border-tooltip,rgba(255,255,255,.05));font-size:14px;font-weight:var(--tooltip-compact-font-weight,600);line-height:18px;letter-spacing:var(--tracking-tooltip,normal);border-radius:16px;padding:5px 12px;box-shadow:var(--shadow-tooltip,0 8px 18px rgba(15,23,42,.2));text-align:center;';
             } else {
                 tooltip.classList.add('dark', 'bg-token-bg-tooltip');
@@ -160,7 +168,7 @@
             const rect = docxButton.getBoundingClientRect();
             const tipRect = tooltip.getBoundingClientRect();
             // Match the new toolbar's native tooltip offset; retain the legacy spacing.
-            const tooltipGap = copyBtn.closest('.turn-action-controls') ? 6 : 8;
+            const tooltipGap = referenceButton.closest('.turn-action-controls') ? 6 : 8;
             const top = rect.bottom + tipRect.height + tooltipGap <= window.innerHeight
                 ? rect.bottom + tooltipGap : rect.top - tipRect.height - tooltipGap;
             tooltip.style.top = `${Math.max(4, top)}px`;

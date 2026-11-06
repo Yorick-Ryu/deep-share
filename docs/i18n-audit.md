@@ -17,7 +17,7 @@
 | 高 | `scripts/injectGeminiExportMenu.js` 的 `getConversationTurns`、`getTurnRole`、`extractGenericTurnMarkdown`；`scripts/injectGeminiButton.js` 的 `findClosestMessageContainer` | 旧标签结构失效后的回退逻辑依赖“你说”“Gemini 说”。非中文新界面可能无法选中消息或区分角色。旧结构仍有独立路径，不能据此断言全部 Gemini 导出失效。 | 优先使用与语言无关的结构或角色属性；在真实非中文新界面验证回退路径。 |
 | 中 | `popup/popup.js` 的 `loadLanguagePreference`；大量调用 `chrome.i18n.getMessage` 的内容脚本 | popup 支持手动选择 `preferredLanguage`，但多数网页按钮、公式通知仍直接跟随 Chrome 语言，未读取该偏好。历史功能已单独接入，但还不是全插件统一语言机制。 | 统一词库加载、语言优先级和变更通知；分别验证各平台注入。 |
 | 中 | `scripts/injectGeminiCanvasButton.js:583`；`scripts/extractGeminiContent.js:66` | Canvas 编辑器不存在时抛出中文错误；工具执行代码块的文字回退只识别“显示代码”“代码输出”，结构识别失败时可能误收集分析代码。 | 翻译错误信息，并优先依赖稳定结构识别代码块。 |
-| 低 | `scripts/injectGptButton.js:40`；`scripts/injectGeminiButton.js` 的复制按钮与 Docs 菜单回退 | 有稳定属性选择器，但文字兜底只覆盖中英文（部分含繁中），其他语言在结构变化时覆盖不足。 | 针对无稳定属性的实际页面补回退，不扩大到任意按钮匹配。 |
+| 低 | `scripts/injectGeminiButton.js` 的复制按钮与 Docs 菜单回退 | 有稳定属性选择器，但文字兜底只覆盖中英文，其他语言在结构变化时覆盖不足。 | 针对无稳定属性的实际页面补回退，不扩大到任意按钮匹配。 |
 | 低 | `scripts/history/core.js:137`；`scripts/history/i18n.js` 的 `error` | 无标题的历史记录仍持久化为“未命名对话”；已定义的 `historyUntitled` 尚未接入显示。旧后台中文错误有些按类别转换成通用本地化提示，尚未逐个保留具体原因。 | 无标题状态与用户原始标题分开存储；后台返回结构化错误码和参数，由界面翻译。 |
 | 待确认调用 | `popup/popup.js` 的 `formatDate` | 只区分浏览器中文和 `en-US`，不使用手动偏好或其他区域格式。本次未找到调用点，不能断言当前界面受到影响。 | 使用前改用 `Intl.DateTimeFormat` 和实际选中的 locale，或删除无用函数。 |
 
@@ -32,6 +32,18 @@
 ## 后续修复：繁体中文关于页面
 
 已补齐 `aboutTabTitle`、`versionLabel`、`documentationLabel`、`githubLabel`、`developerEmailLabel` 和 `acknowledgmentText`，致谢文案与简体中文内容保持一致。繁体中文与英语词库现有键集合完全一致。浏览器重新加载与实际页面验证仍受上述自动控制限制。
+
+## 后续修复：ChatGPT 德语界面缺失导出按钮
+
+2026-11-06：在真实 ChatGPT 德语界面（`?locale=de-DE`）复现。新版操作栏没有 `data-testid="copy-turn-action-button"`，原有文字回退仅识别英文和简繁中文，无法匹配实际的 `Kopieren`。Word 按钮插入和 Markdown 菜单监听均在此处提前返回。
+
+最终实现按助手回复及原生操作栏结构判断是否插入，完全移除对复制按钮标签、翻译及 SVG 路径的识别。稳定复制测试标记存在时优先在其后插入，否则使用操作栏首个原生按钮作为样式及位置参考，不推断其功能。同时排除用户消息操作栏及 Markdown 正文内的按钮：新版同一个虚拟化 turn 内同时包含两种角色，不能仅凭 turn 内存在 Markdown 判断消息角色。语言切换和图标变化不会影响此定位；若未来操作栏或消息结构变化，仍需适配新 DOM。
+
+已从 Chrome 扩展管理页确认开发版加载路径为本项目，重新加载扩展后刷新中、德语页面；两者均只在助手回复处出现一个 Word 按钮。德语“更多操作”中 Markdown 菜单显示并成功触发本地下载，内容仅包含助手回复。Word 点击已验证内容提取日志与转换事件触发，本次未向转换服务发送请求。
+
+重新加载最终结构定位版本并刷新已有中、德语页面后，实际验证 11 种 locale：`zh-CN`、`zh-TW`、`en-US`、`de-DE`、`fr-FR`、`ja-JP`、`es-ES`、`pt-BR`、`pt-PT`、`ko-KR`、`ar`。全部只在助手回复处显示一个 Word 按钮，Markdown 菜单可见，阿拉伯语 RTL 布局正常。本次验证了按钮插入和菜单，不代表已逐种语言测试后端 Word 转换。日语、西语首次检查时回复正文尚未完成加载，提前点击 Word 未触发转换；日语额外重复检查时遇到 Cloudflare 人机验证，未操作验证码。
+
+新增 `tests/chatgpt-buttons.html`，可直接用 Chrome 打开，结果显示于页面。55 项浏览器检查通过，覆盖多语言标签、复制后标签、空标签、无图标、图标变化、旧测试标记、旧操作栏、非操作栏按钮及正文操作栏排除、用户操作栏排除、内容提取、重复注入及操作栏重建。现有 `node --test tests/*.test.cjs tests/history/*.test.cjs` 的 71 项测试通过。未改变权限、注入范围或版本号。
 
 ## 1.9.3 发布前验证
 
