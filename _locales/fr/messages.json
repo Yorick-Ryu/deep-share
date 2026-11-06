@@ -731,7 +731,7 @@
         "message": "Extension déconnectée. Actualisez la page."
     },
     "historySize": {
-        "message": "L’export dépasse 64 Mo."
+        "message": "L’export dépasse 256 Mo."
     },
     "historyChooseFile": {
         "message": "Choisissez un ZIP ou JSON exporté par DeepSeek."

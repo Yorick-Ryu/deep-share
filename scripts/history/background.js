@@ -48,7 +48,7 @@
         for (const [key, value] of imports) if (value.expires < now) imports.delete(key);
         const owner = `${sender.tab.id}:${sender.documentId || sender.frameId || 0}`;
         if (message.action === 'history:import:start') {
-            if (!Number.isInteger(message.length) || message.length < 1 || message.length > H.MAX_BYTES) throw new Error('对话数据超过 64 MB 或为空。');
+            if (!Number.isInteger(message.length) || message.length < 1 || message.length > H.MAX_BYTES) throw new Error('对话数据超过 256 MB 或为空。');
             const id = crypto.randomUUID();
             imports.set(owner, { id, expected: message.length, length: 0, chunks: [], expires: now + 120000 });
             return { ok: true, id };
@@ -71,7 +71,7 @@
         imports.delete(owner);
         if (pending.length !== pending.expected) throw new Error('导入数据不完整，原历史库未改动。');
         const text = pending.chunks.join('');
-        if (new TextEncoder().encode(text).length > H.MAX_BYTES) throw new Error('对话数据超过 64 MB。');
+        if (new TextEncoder().encode(text).length > H.MAX_BYTES) throw new Error('对话数据超过 256 MB。');
         queue = queue.catch(() => {}).then(async () => {
             const conversations = H.parseConversations(text);
             await store.write({ conversations, savedAt: new Date().toISOString() });
@@ -133,7 +133,7 @@
                 await status({ state: 'loading', message: '正在保存刚下载的历史对话…' });
                 const response = await fetch(url, { credentials: 'omit', redirect: 'error', signal: AbortSignal.timeout(25000) });
                 if (!response.ok) throw new Error('导出链接已失效或无法读取，请重新导出并下载。');
-                if (Number(response.headers.get('content-length')) > H.MAX_BYTES) throw new Error('导出包超过 64 MB。');
+                if (Number(response.headers.get('content-length')) > H.MAX_BYTES) throw new Error('导出包超过 256 MB。');
                 const text = await H.unzipConversations(await H.readLimited(response.body));
                 const conversations = H.parseConversations(text);
                 if (!await stillAllowed()) return;

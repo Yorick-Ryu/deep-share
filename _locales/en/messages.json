@@ -731,7 +731,7 @@
         "message": "Extension disconnected. Refresh the page and try again."
     },
     "historySize": {
-        "message": "The export exceeds 64 MB."
+        "message": "The export exceeds 256 MB."
     },
     "historyChooseFile": {
         "message": "Choose a ZIP or JSON file exported by DeepSeek."

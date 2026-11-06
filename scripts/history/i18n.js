@@ -58,7 +58,7 @@
     "暂未找到可用的文档上传入口。请下载 MD，再通过 DeepSeek 输入框的附件按钮上传。": "historyUploadMissing",
     "浏览器未能自动附加文件，请下载 MD 后从 DeepSeek 附件按钮上传。": "historyUploadFailed",
     "插件连接中断，请刷新页面再试。": "historyConnection",
-    "导出包超过 64 MB。": "historySize",
+    "导出包超过 256 MB。": "historySize",
     "请选择 DeepSeek 导出的 ZIP 或 JSON 文件。": "historyChooseFile",
     "导入失败，已有历史库仍保留。": "historyImportFailed",
     "历史文件无效或不完整，请重新导出或下载。": "historyInvalidArchive",
@@ -124,7 +124,7 @@
     "historyUploadMissing": "No document upload control found. Download Markdown and upload it with DeepSeek’s attachment button.",
     "historyUploadFailed": "Automatic attachment failed. Download Markdown and attach it manually in DeepSeek.",
     "historyConnection": "Extension disconnected. Refresh the page and try again.",
-    "historySize": "The export exceeds 64 MB.",
+    "historySize": "The export exceeds 256 MB.",
     "historyChooseFile": "Choose a ZIP or JSON file exported by DeepSeek.",
     "historyImportFailed": "Import failed. Your existing history is unchanged.",
     "historyInvalidArchive": "Invalid or incomplete history file. Export or download it again.",
@@ -160,7 +160,7 @@
         for (const prefix of ['导入失败，已有历史库仍保留。']) {
             if (text.startsWith(prefix)) return t(prefix) + ' ' + error(text.slice(prefix.length));
         }
-        if (/64 MB/.test(text)) return t('导出包超过 64 MB。');
+        if (/256 MB/.test(text)) return t('导出包超过 256 MB。');
         if (/ZIP|JSON|conversations\.json|对话分支|对话格式|对话 ID|可识别的消息|没有对话/.test(text)) return t('历史文件无效或不完整，请重新导出或下载。');
         // Browser-generated errors may already be localized. Never rewrite
         // conversation content; this helper is only for operation failures.

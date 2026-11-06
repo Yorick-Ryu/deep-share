@@ -731,7 +731,7 @@
         "message": "Verbindung zur Erweiterung getrennt. Seite neu laden."
     },
     "historySize": {
-        "message": "Der Export überschreitet 64 MB."
+        "message": "Der Export überschreitet 256 MB."
     },
     "historyChooseFile": {
         "message": "Eine von DeepSeek exportierte ZIP- oder JSON-Datei auswählen."

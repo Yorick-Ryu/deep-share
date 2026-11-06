@@ -1,7 +1,7 @@
 /* Shared by the MV3 worker, content script and offline tests. No network or DOM. */
 (() => {
     const t = (source, values = []) => globalThis.DeepShareHistoryI18n?.t(source, values) ?? source.replace(/\$(\d+)/g, (_, n) => String(values[Number(n) - 1] ?? ''));
-    const MAX_BYTES = 64 * 1024 * 1024;
+    const MAX_BYTES = 256 * 1024 * 1024;
     const str = value => typeof value === 'string' ? value : '';
     // Exact labels observed in DeepSeek's settings; never match a generic
     // download elsewhere on the page or an adjacent destructive action.
@@ -39,7 +39,7 @@
                 const { value, done } = await reader.read();
                 if (done) break;
                 size += value.length;
-                if (size > limit) throw new Error('导出包超过 64 MB，暂无法处理。');
+                if (size > limit) throw new Error('导出包超过 256 MB，暂无法处理。');
                 chunks.push(value);
             }
         } catch (error) { await reader.cancel().catch(() => {}); throw error; }
@@ -58,7 +58,7 @@
     }
     async function unzipConversations(input) {
         const bytes = input instanceof Uint8Array ? input : new Uint8Array(input);
-        if (bytes.length > MAX_BYTES) throw new Error('导出包超过 64 MB，暂无法处理。');
+        if (bytes.length > MAX_BYTES) throw new Error('导出包超过 256 MB，暂无法处理。');
         const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
         const u16 = n => view.getUint16(n, true), u32 = n => view.getUint32(n, true);
         let end = bytes.length - 22;
@@ -80,7 +80,7 @@
             offset += 46 + nameLength + extra + comment;
             if (!/(^|\/)conversations\.json$/i.test(name)) continue;
             if (flags & 1) throw new Error('不支持加密的导出包。');
-            if (size > MAX_BYTES || compressed > MAX_BYTES) throw new Error('对话数据超过 64 MB。');
+            if (size > MAX_BYTES || compressed > MAX_BYTES) throw new Error('对话数据超过 256 MB。');
             if (local + 30 > bytes.length || u32(local) !== 0x04034b50) throw new Error('ZIP 内容损坏。');
             const start = local + 30 + u16(local + 26) + u16(local + 28);
             if (start + compressed > bytes.length) throw new Error('ZIP 内容不完整。');

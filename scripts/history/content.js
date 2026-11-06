@@ -427,7 +427,7 @@
             setArchiveImportBusy(currentDialog, true); clearButton.disabled = true;
             let id;
             try {
-                if (file.size > H.MAX_BYTES) throw new Error(t("导出包超过 64 MB。"));
+                if (file.size > H.MAX_BYTES) throw new Error(t("导出包超过 256 MB。"));
                 const text = /\.zip$/i.test(file.name)
                     ? await H.unzipConversations(await file.arrayBuffer())
                     : /\.json$/i.test(file.name) ? await file.text() : (() => { throw new Error(t("请选择 DeepSeek 导出的 ZIP 或 JSON 文件。")); })();

@@ -730,7 +730,7 @@
         "message": "插件连接中断，请刷新页面再试。"
     },
     "historySize": {
-        "message": "导出包超过 64 MB。"
+        "message": "导出包超过 256 MB。"
     },
     "historyChooseFile": {
         "message": "请选择 DeepSeek 导出的 ZIP 或 JSON 文件。"

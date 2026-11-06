@@ -730,7 +730,7 @@
         "message": "拡張機能との接続が切れました。ページを更新してください。"
     },
     "historySize": {
-        "message": "エクスポートが64 MBを超えています。"
+        "message": "エクスポートが256 MBを超えています。"
     },
     "historyChooseFile": {
         "message": "DeepSeek の ZIP または JSON を選択してください。"

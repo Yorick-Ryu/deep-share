@@ -61,7 +61,7 @@ test('missing locale falls back to English, including old worker errors', async 
     const { I } = environment('fr', 'en', true); await I.init('fr');
     assert.equal(I.t('导入历史对话'), 'Import chat history');
     assert.equal(I.t('选择 $1', ['Math']), 'Select Math');
-    assert.match(I.error('导出包超过 64 MB，暂无法处理。'), /64 MB/);
+    assert.match(I.error('导出包超过 256 MB，暂无法处理。'), /256 MB/);
     assert.doesNotMatch(I.error('保存失败，已有对话库仍保留。网络错误'), /\p{Script=Han}/u);
 });
 test('stale locale loads cannot replace the latest language', async () => {

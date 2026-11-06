@@ -712,7 +712,7 @@
         "message": "擴充功能連線中斷，請重新整理頁面。"
     },
     "historySize": {
-        "message": "匯出檔案超過 64 MB。"
+        "message": "匯出檔案超過 256 MB。"
     },
     "historyChooseFile": {
         "message": "請選擇 DeepSeek 匯出的 ZIP 或 JSON。"

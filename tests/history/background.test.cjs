@@ -109,6 +109,12 @@ test('invalid and interrupted local imports leave the old library untouched', as
     ({ id } = await h.message({ action: 'history:import:start', length: 10 }));
     await h.message({ action: 'history:import:cancel', id });
     assert.equal((await h.message({ action: 'history:import:finish', id })).ok, false);
+    for (const length of [64 * 1024 * 1024 + 1, 256 * 1024 * 1024]) {
+        const begin = await h.message({ action: 'history:import:start', length });
+        assert.equal(begin.ok, true);
+        await h.message({ action: 'history:import:cancel', id: begin.id });
+    }
+    assert.equal((await h.message({ action: 'history:import:start', length: 256 * 1024 * 1024 + 1 })).ok, false);
     assert.equal((await h.message({ action: 'history:import:start', length: H.MAX_BYTES + 1 })).ok, false);
     assert.deepEqual(h.archive().conversations, ['previous']);
 });
