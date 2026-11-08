@@ -1,6 +1,6 @@
 ---
 name: release-extension
-description: Release browser extensions or similar small packaged apps by upgrading a semantic version, packaging build artifacts, creating a git commit and tag, pushing to the remote, and publishing a GitHub Release with assets. Use when the user asks to "upgrade version", "bump version", "tag", "package", "push", "publish release", "发布 release", "打标签", "打包", or run the end-to-end release flow.
+description: Package and release browser extensions, including version bumps, git tags, GitHub Releases, and authorized Chrome Web Store or Microsoft Edge Add-ons updates. Use for packaging, release publishing, or uploading an extension update to these stores.
 ---
 
 # Release Extension
@@ -8,6 +8,8 @@ description: Release browser extensions or similar small packaged apps by upgrad
 ## Overview
 
 Use this skill to run a conservative end-to-end release flow for a repo that packages an extension or lightweight app and publishes GitHub Releases. Treat the release as a live operation: inspect first, preserve user changes, verify artifacts, and only push or publish after the local release state is correct.
+
+Follow the user's requested scope: packaging alone does not authorize commits, pushes, GitHub publication or store submission. For Chrome/Edge upload or review submission, read [the store update workflow](references/store-upload.md). Reuse the exact verified release ZIP across destinations and report their statuses separately.
 
 ## Workflow
 
@@ -57,6 +59,7 @@ Use this skill to run a conservative end-to-end release flow for a repo that pac
 9. Final checks:
    - Run `git status --short --branch`.
    - Report the version, tag, commit hash, package path, release URL, and any remaining untracked artifact.
+   - If store updates were requested, upload/submit using the linked workflow and verify each store's final version and status. Distinguish review submission from a version already live in the store.
 
 ## Guardrails
 
