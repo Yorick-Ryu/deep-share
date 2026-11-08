@@ -1,5 +1,10 @@
 (() => {
     const H = DeepShareHistory, store = DeepShareHistoryStore;
+    const debug = H.createDiagnostics('worker', chrome);
+    // Remove only the diagnostic caches written by the previous test build.
+    chrome.storage.local.remove?.(['deepShareHistoryDebug:page', 'deepShareHistoryDebug:worker'])
+        ?.catch(error => debug('diagnostics.cleanup.failed', {}, error));
+    debug('worker.ready');
     const capturePermissions = DeepShareHistoryPermissions;
     const canCapture = () => chrome.permissions.contains(capturePermissions);
     const sourceIsDeepSeek = value => { try { return new URL(value).origin === 'https://chat.deepseek.com'; } catch { return false; } };
@@ -41,6 +46,61 @@
     let queue = Promise.resolve();
     const scheduled = new Set();
     const imports = new Map();
+    const reads = new Map();
+    const readerOwner = sender => `${sender.tab.id}:${sender.documentId || sender.frameId || 0}`;
+    function releaseRead(owner) {
+        const pending = reads.get(owner);
+        if (pending) clearTimeout(pending.timer);
+        reads.delete(owner);
+    }
+    function readChunk(pending, owner, offset) {
+        if (!Number.isInteger(offset) || offset !== pending.offset) throw new Error('历史库读取位置无效，请重试。');
+        const chunk = pending.text.slice(offset, offset + H.TRANSFER_CHUNK_SIZE);
+        pending.offset += chunk.length;
+        if (pending.offset === pending.text.length) {
+            debug('archive.transfer.done', { totalChars: pending.text.length });
+            releaseRead(owner);
+        }
+        return { ok: true, chunk };
+    }
+    async function readMessage(message, sender) {
+        const owner = readerOwner(sender);
+        if (message.action === 'history:read') {
+            releaseRead(owner);
+            // One immutable snapshot per reader: never mix archives if an import
+            // or clear finishes between chunks. Bound concurrent retained snapshots.
+            if (reads.size >= 4) throw new Error('历史库读取繁忙，请稍后重试。');
+            const pending = { id: crypto.randomUUID(), text: '', offset: 0 };
+            reads.set(owner, pending);
+            pending.timer = setTimeout(() => {
+                if (reads.get(owner) === pending) {
+                    debug('archive.transfer.expired', { offset: pending.offset, totalChars: pending.text.length });
+                    releaseRead(owner);
+                }
+            }, 120000);
+            pending.timer?.unref?.();
+            try {
+                const started = Date.now();
+                debug('archive.storage.read.start');
+                const archive = await store.read();
+                debug('archive.storage.read.done', { count: archive?.conversations?.length || 0, durationMs: Date.now() - started });
+                pending.text = JSON.stringify(archive || null);
+                debug('archive.snapshot.ready', { totalChars: pending.text.length, durationMs: Date.now() - started });
+                if (reads.get(owner) !== pending) throw new Error('历史库读取已过期，请重试。');
+                return { ...readChunk(pending, owner, 0), id: pending.id, length: pending.text.length };
+            } catch (error) {
+                if (reads.get(owner) === pending) releaseRead(owner);
+                throw error;
+            }
+        }
+        const pending = reads.get(owner);
+        if (!pending || pending.id !== message.id) throw new Error('历史库读取已过期，请重试。');
+        if (message.action === 'history:read:cancel') {
+            debug('archive.transfer.cancelled', { offset: pending.offset, totalChars: pending.text.length });
+            releaseRead(owner); return { ok: true };
+        }
+        return readChunk(pending, owner, message.offset);
+    }
     // Transfer JSON in bounded chunks so large local exports do not exceed
     // Chrome's per-message limit. Unfinished transfers never touch the archive.
     function importMessage(message, sender) {
@@ -73,8 +133,13 @@
         const text = pending.chunks.join('');
         if (new TextEncoder().encode(text).length > H.MAX_BYTES) throw new Error('对话数据超过 256 MB。');
         queue = queue.catch(() => {}).then(async () => {
+            const started = Date.now();
+            debug('import.parse.start', { totalChars: text.length });
             const conversations = H.parseConversations(text);
+            debug('import.parse.done', { count: conversations.length, durationMs: Date.now() - started });
+            debug('import.storage.write.start', { count: conversations.length });
             await store.write({ conversations, savedAt: new Date().toISOString() });
+            debug('import.storage.write.done', { count: conversations.length, durationMs: Date.now() - started });
             await status({ state: 'ready', count: conversations.length });
             return { ok: true, count: conversations.length };
         });
@@ -199,6 +264,23 @@
         if (sender.id !== chrome.runtime.id || !sender.tab || !sourceIsDeepSeek(sender.url) || (sender.frameId || 0) !== 0) {
             respond({ ok: false, error: '仅允许在 DeepSeek 页面访问历史库。' }); return false;
         }
+        const started = Date.now();
+        const requestId = typeof message.debugRequestId === 'string' && /^[a-z0-9-]{1,80}$/i.test(message.debugRequestId) ? message.debugRequestId : 'legacy';
+        const details = { requestId, action: message.action, offset: message.offset, chunkChars: message.chunk?.length, totalChars: message.length };
+        const sampled = !message.action.endsWith(':chunk') || message.offset % (32 * H.TRANSFER_CHUNK_SIZE) === 0;
+        if (sampled) debug('message.received', details);
+        const reply = value => {
+            try {
+                respond({ ...value, debugWorkerRunId: debug.runId });
+                if (sampled) debug('message.reply.sent', { ...details, durationMs: Date.now() - started, chunkChars: value.chunk?.length, count: value.count });
+            } catch (error) {
+                debug('message.reply.failed', { ...details, durationMs: Date.now() - started }, error);
+                // A response serialization error must not become an unhandled
+                // rejection and leave the caller waiting until its channel closes.
+                try { respond({ ok: false, error: '扩展回复发送失败，请刷新页面再试。', debugWorkerRunId: debug.runId }); }
+                catch (fallbackError) { debug('message.reply.fallback.failed', details, fallbackError); }
+            }
+        };
         if (message.action === 'history:capture:authorize') {
             // Validate against browser-observed metadata before requesting access.
             // A cold worker can restore state, but must require a fresh click to
@@ -206,19 +288,19 @@
             const pending = flowsLoaded && candidateFor(sender.tab.id);
             if (!pending || pending.state !== 'permission' || pending.id !== message.id || pending.origin !== message.origin) {
                 flowsReady.then(notifyCapture).catch(() => {});
-                respond({ ok: false, error: '下载授权信息已更新，请再点击一次“授权读取”，或重新下载。' }); return false;
+                reply({ ok: false, error: '下载授权信息已更新，请再点击一次“授权读取”，或重新下载。' }); return false;
             }
             try {
                 chrome.permissions.request(hostPermission(pending.origin)).then(granted => {
-                    respond({ ok: true, granted });
+                    reply({ ok: true, granted });
                     if (!granted) return;
                     (async () => {
                         await rememberOrigin(pending.origin);
                         const [item] = await chrome.downloads.search({ id: pending.id });
                         if (item && candidateFor(sender.tab.id) === pending) await capture(item);
                     })().catch(error => status({ state: 'error', message: `读取未完成，请重新下载或手动导入文件。${error.message}` }).catch(() => {}));
-                }).catch(error => respond({ ok: false, error: error.message }));
-            } catch (error) { respond({ ok: false, error: error.message }); }
+                }).catch(error => { debug('message.handler.failed', details, error); reply({ ok: false, error: error.message }); });
+            } catch (error) { debug('message.handler.failed', details, error); reply({ ok: false, error: error.message }); }
             return true;
         }
         if (message.action === 'history:capture:request') {
@@ -238,9 +320,9 @@
                     if (enabled) registerDownloads();
                     if (granted && origin) await rememberOrigin(origin);
                     await syncPermissionState();
-                    respond({ ok: true, enabled, granted });
-                }).catch(error => respond({ ok: false, error: error.message }));
-            } catch (error) { respond({ ok: false, error: error.message }); }
+                    reply({ ok: true, enabled, granted });
+                }).catch(error => { debug('message.handler.failed', details, error); reply({ ok: false, error: error.message }); });
+            } catch (error) { debug('message.handler.failed', details, error); reply({ ok: false, error: error.message }); }
             return true;
         }
         (async () => {
@@ -271,10 +353,7 @@
                 return { ok: true, enabled: await canCapture() };
             }
             if (message.action.startsWith('history:import:')) return importMessage(message, sender);
-            if (message.action === 'history:read') {
-                const archive = await store.read();
-                return { ok: true, archive: archive || null };
-            }
+            if (['history:read', 'history:read:chunk', 'history:read:cancel'].includes(message.action)) return readMessage(message, sender);
             if (message.action === 'history:clear') {
                 // Serialize with captures, so a pending download cannot repopulate a cleared library.
                 queue = queue.catch(() => {}).then(() => store.clear());
@@ -283,7 +362,10 @@
                 return { ok: true };
             }
             throw new Error('未知历史对话操作。');
-        })().then(respond, error => respond({ ok: false, error: error.message }));
+        })().then(reply, error => {
+            debug('message.handler.failed', { ...details, durationMs: Date.now() - started }, error);
+            reply({ ok: false, error: error.message });
+        });
         return true;
     });
 })();

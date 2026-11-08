@@ -4,6 +4,7 @@
     let archive = null;
     const listeners = [];
     let importChunks = [];
+    let readSnapshot;
     const raw = [
         ['项目技术方案', '我们计划做一个历史对话功能。', '从设置导出，然后在新对话里筛选历史记录。'],
         ['代码与公式示例', '请保留 $E = mc^2$。', '```js\nconst answer = 42;\n```\n\n公式：$E = mc^2$'],
@@ -23,7 +24,13 @@
         }
     }
     globalThis.chrome = {
-        runtime: { sendMessage: async ({ action, chunk }) => {
+        runtime: { sendMessage: async ({ action, chunk, offset = 0 }) => {
+            if (action === 'history:read') {
+                readSnapshot = JSON.stringify(await DeepShareHistoryStore.read() || null);
+                return { ok: true, id: 'demo-read', length: readSnapshot.length, chunk: readSnapshot.slice(0, DeepShareHistory.TRANSFER_CHUNK_SIZE) };
+            }
+            if (action === 'history:read:chunk') return { ok: true, chunk: readSnapshot.slice(offset, offset + DeepShareHistory.TRANSFER_CHUNK_SIZE) };
+            if (action === 'history:read:cancel') { readSnapshot = null; return { ok: true }; }
             if (action === 'history:capture:status') return { ok: true, enabled: true, pending: null };
             if (action === 'history:capture:arm') return { ok: true };
             if (action === 'history:capture:authorize') return { ok: true, granted: true };

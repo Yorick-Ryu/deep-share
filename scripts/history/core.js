@@ -2,6 +2,65 @@
 (() => {
     const t = (source, values = []) => globalThis.DeepShareHistoryI18n?.t(source, values) ?? source.replace(/\$(\d+)/g, (_, n) => String(values[Number(n) - 1] ?? ''));
     const MAX_BYTES = 256 * 1024 * 1024;
+    // Even JSON-escaped control characters stay far below Chrome's 64 MiB limit.
+    const TRANSFER_CHUNK_SIZE = 262144;
+    function createDiagnostics(scope, api = globalThis.chrome) {
+        const runId = globalThis.crypto?.randomUUID?.() || Math.random().toString(36).slice(2);
+        const manifest = api?.runtime?.getManifest?.() || {};
+        const fields = ['requestId', 'action', 'offset', 'chunkChars', 'totalChars', 'bytes', 'count', 'durationMs', 'format', 'stage', 'workerRunId'];
+        function log(event, details = {}, error) {
+            // Routine transport/progress details are visible only with Verbose
+            // enabled. Keep one normal import summary and actionable failures.
+            const level = ['request.waiting', 'archive.transfer.expired', 'diagnostics.cleanup.failed'].includes(event) ? 'warn'
+                : ['archive.load.failed', 'import.failed'].includes(event) ? 'debug'
+                : error ? 'error' : event === 'import.saved' ? 'info' : 'debug';
+            // Never log payload objects, file names, titles, bodies, URLs or keys.
+            const entry = { time: new Date().toISOString(), scope, runId, level, build: 'history-console-20261108.2',
+                version: manifest.version_name || manifest.version || 'unknown',
+                browser: globalThis.navigator?.userAgent?.match(/(?:Chrome|Edg)\/[\d.]+/g)?.join(' ') || 'unknown', event };
+            for (const field of fields) {
+                const value = details[field];
+                if (typeof value === 'number' || typeof value === 'boolean' || typeof value === 'string' && value.length <= 100) entry[field] = value;
+            }
+            if (error) {
+                const message = String(error.message || '');
+                entry.errorCode = /message channel closed|port closed/i.test(message) ? 'CHANNEL_CLOSED'
+                    : /64\s*MiB|maximum allowed size/i.test(message) ? 'MESSAGE_TOO_LARGE'
+                    : /context invalidated/i.test(message) ? 'CONTEXT_INVALIDATED'
+                    : /receiving end does not exist|establish connection/i.test(message) ? 'NO_RECEIVER'
+                    : /quota/i.test(message + error.name) ? 'STORAGE_QUOTA'
+                    : /过期/.test(message) ? 'TRANSFER_EXPIRED' : 'OPERATION_FAILED';
+                entry.errorName = ['Error', 'TypeError', 'SyntaxError', 'DOMException', 'QuotaExceededError', 'AbortError'].includes(error.name) ? error.name : 'Error';
+                entry.frames = String(error.stack || '').split('\n').slice(1).join('\n')
+                    .match(/(?:scripts\/history\/[a-z-]+\.js|background\.js):\d+:\d+/g)?.slice(0, 5) || [];
+            }
+            try { console[level]('[DeepShare History]', JSON.stringify(entry)); } catch { /* Diagnostics cannot break history. */ }
+        }
+        log.runId = runId;
+        return log;
+    }
+    async function readArchive(request, isCurrent = () => true) {
+        let id, complete = false;
+        try {
+            const first = await request('history:read');
+            id = first.id;
+            if (typeof id !== 'string' || !Number.isInteger(first.length) || first.length < 1) throw new Error('历史库读取数据无效，请重试。');
+            const chunks = [];
+            let offset = 0, response = first;
+            while (true) {
+                if (!isCurrent()) return null;
+                const chunk = response.chunk;
+                if (typeof chunk !== 'string' || !chunk.length || chunk.length > TRANSFER_CHUNK_SIZE || offset + chunk.length > first.length) throw new Error('历史库读取不完整，请重试。');
+                chunks.push(chunk); offset += chunk.length;
+                if (offset === first.length) break;
+                response = await request('history:read:chunk', { id, offset });
+            }
+            complete = true;
+            return JSON.parse(chunks.join(''));
+        } finally {
+            if (id && !complete) await request('history:read:cancel', { id }).catch(() => {});
+        }
+    }
     const str = value => typeof value === 'string' ? value : '';
     // Exact labels observed in DeepSeek's settings; never match a generic
     // download elsewhere on the page or an adjacent destructive action.
@@ -180,6 +239,6 @@
         if (/^(con|prn|aux|nul|com[1-9]|lpt[1-9])(?:\.|$)/i.test(title)) title = '_' + title;
         return `${title}${conversations.length > 1 ? t("等多个对话") : ''}.md`;
     }
-    globalThis.DeepShareHistory = { translate: t, nativeLabel, MAX_BYTES, isExportURL, readLimited, unzipConversations, parseConversations, selectedMessages, dateGroup, markdown, filename, crc32 };
+    globalThis.DeepShareHistory = { translate: t, nativeLabel, MAX_BYTES, TRANSFER_CHUNK_SIZE, createDiagnostics, readArchive, isExportURL, readLimited, unzipConversations, parseConversations, selectedMessages, dateGroup, markdown, filename, crc32 };
     if (typeof module !== 'undefined') module.exports = globalThis.DeepShareHistory;
 })();

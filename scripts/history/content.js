@@ -3,6 +3,9 @@
     if (globalThis.__deepShareHistoryUI) return;
     globalThis.__deepShareHistoryUI = true;
     const H = globalThis.DeepShareHistory;
+    const debug = H.createDiagnostics('page', chrome);
+    debug('page.ready');
+    let requestSequence = 0;
     const t = H.translate;
     const localizeError = message => globalThis.DeepShareHistoryI18n?.error(message) || message;
     let dialog, launch, archive, activeId, statusValue, previousFocus;
@@ -34,9 +37,22 @@
         node.type = 'button'; node.addEventListener('click', action); return node;
     };
     async function request(action, payload = {}) {
-        const response = await chrome.runtime.sendMessage({ ...payload, action });
-        if (!response?.ok) throw new Error(response?.error || t("插件连接中断，请刷新页面再试。"));
-        return response;
+        const requestId = `${debug.runId}-${++requestSequence}`;
+        const started = Date.now();
+        const details = { requestId, action, offset: payload.offset, chunkChars: payload.chunk?.length, totalChars: payload.length };
+        const sampled = !action.endsWith(':chunk') || payload.offset % (32 * H.TRANSFER_CHUNK_SIZE) === 0;
+        if (sampled) debug('request.start', details);
+        const timer = globalThis.setTimeout?.(() => debug('request.waiting', { ...details, durationMs: Date.now() - started }), 10000);
+        try {
+            const response = await chrome.runtime.sendMessage({ ...payload, action, debugRequestId: requestId });
+            if (!response?.ok) throw new Error(response?.error || t("插件连接中断，请刷新页面再试。"));
+            if (sampled) debug('request.done', { ...details, durationMs: Date.now() - started, workerRunId: response.debugWorkerRunId,
+                chunkChars: response.chunk?.length, totalChars: response.length, count: response.count });
+            return response;
+        } catch (error) {
+            debug('request.failed', { ...details, durationMs: Date.now() - started }, error);
+            throw error;
+        } finally { globalThis.clearTimeout?.(timer); }
     }
     const showError = text => window.showToastNotification?.({ text: localizeError(text) }, 'error', 5000);
     function requestCapturePermission(origin) {
@@ -318,17 +334,35 @@
             showError(t("浏览器未能自动附加文件，请下载 MD 后从 DeepSeek 附件按钮上传。"));
         } finally { uploadButton.disabled = false; }
     }
-    async function loadArchive() {
+    let archiveLoad;
+    function loadArchive() {
         const target = dialog;
         if (!target?.open) return;
-        try {
-            const result = await request('history:read');
-            if (dialog !== target || !target.open || target.dataset.closing) return;
-            archive = result.archive;
-            selected = new Set([...selected].filter(id => all().some(c => c.id === id)));
-            if (!all().some(c => c.id === activeId)) activeId = all()[0]?.id;
-            renderList(); renderPreview();
-        } catch (error) { if (dialog === target && target.open) showError(error.message); }
+        if (archiveLoad) {
+            archiveLoad.again = true;
+            if (archiveLoad.target === target) return archiveLoad.promise;
+            // A reopened dialog waits for the old reader to cancel before starting.
+            return archiveLoad.promise.then(() => { if (dialog === target && target.open && archiveLoad?.target !== target) return loadArchive(); });
+        }
+        const job = { target, again: false };
+        debug('archive.load.start');
+        archiveLoad = job;
+        const isCurrent = () => dialog === target && target.open && !target.dataset.closing;
+        job.promise = (async () => {
+            do {
+                job.again = false;
+                const result = await H.readArchive(request, isCurrent);
+                if (!isCurrent()) return;
+                if (job.again) continue;
+                archive = result;
+                debug('archive.load.done', { count: all().length });
+                selected = new Set([...selected].filter(id => all().some(c => c.id === id)));
+                if (!all().some(c => c.id === activeId)) activeId = all()[0]?.id;
+                renderList(); renderPreview();
+            } while (job.again && isCurrent());
+        })().catch(error => { debug('archive.load.failed', {}, error); if (isCurrent()) showError(error.message); })
+            .finally(() => { if (archiveLoad === job) archiveLoad = null; });
+        return job.promise;
     }
     function closeLibrary() {
         const target = dialog;
@@ -426,21 +460,29 @@
             if (!file) return;
             setArchiveImportBusy(currentDialog, true); clearButton.disabled = true;
             let id;
+            let stage = 'file.read';
+            const started = Date.now();
+            debug('import.start', { bytes: file.size, format: /\.zip$/i.test(file.name) ? 'zip' : /\.json$/i.test(file.name) ? 'json' : 'unsupported' });
             try {
                 if (file.size > H.MAX_BYTES) throw new Error(t("导出包超过 256 MB。"));
                 const text = /\.zip$/i.test(file.name)
                     ? await H.unzipConversations(await file.arrayBuffer())
                     : /\.json$/i.test(file.name) ? await file.text() : (() => { throw new Error(t("请选择 DeepSeek 导出的 ZIP 或 JSON 文件。")); })();
+                debug('import.file.ready', { totalChars: text.length, durationMs: Date.now() - started });
+                stage = 'transfer';
                 ({ id } = await request('history:import:start', { length: text.length }));
                 for (let offset = 0; offset < text.length; offset += 262144) {
                     await request('history:import:chunk', { id, offset, chunk: text.slice(offset, offset + 262144) });
                 }
-                await request('history:import:finish', { id }); id = null;
+                stage = 'save';
+                const result = await request('history:import:finish', { id }); id = null;
+                debug('import.saved', { count: result.count, durationMs: Date.now() - started });
                 selected.clear(); activeId = undefined; query = ''; multiple = false;
                 if (dialog === currentDialog && currentDialog.open) {
                     search.value = ''; await loadArchive();
                 }
             } catch (error) {
+                debug('import.failed', { stage, durationMs: Date.now() - started }, error);
                 if (id) await request('history:import:cancel', { id }).catch(() => {});
                 if (dialog === currentDialog) showError(`导入失败，已有历史库仍保留。${error.message}`);
             } finally {

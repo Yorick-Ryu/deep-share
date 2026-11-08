@@ -9,14 +9,14 @@ const sender = (id = 2) => ({ id: 'extension-id', tab: { id }, frameId: 0, url: 
 const tick = () => new Promise(resolve => setImmediate(resolve));
 function harness({ failFetch = false, failStore = false, downloadsGranted = true, hostGranted = true,
     exposeDownloads = true, acceptPermission = true, session = {}, local = {}, invalidZip = false, beforeFetch } = {}) {
-    const listeners = {}, calls = [], records = new Map(), permissionRequests = [];
+    const listeners = {}, calls = [], records = new Map(), permissionRequests = [], debugEntries = [];
     const origins = new Set(hostGranted ? [new URL(url).origin + '/*'] : []);
     let hasDownloads = downloadsGranted, archive = { conversations: ['previous'] };
     const event = key => ({ addListener: f => { listeners[key] = f; }, removeListener: f => { if (listeners[key] === f) delete listeners[key]; } });
     const storage = data => ({ set: async value => Object.assign(data, JSON.parse(JSON.stringify(value))), get: async key => ({ [key]: data[key] }) });
     const downloads = { onCreated: event('created'), onChanged: event('changed'), search: async ({ id }) => records.has(id) ? [records.get(id)] : [] };
     const context = {
-        DeepShareHistory: H, AbortSignal, URL, TextEncoder, crypto: require('node:crypto').webcrypto,
+        DeepShareHistory: { ...H, createDiagnostics: () => Object.assign((...entry) => debugEntries.push(entry), { runId: 'test-worker' }) }, AbortSignal, URL, TextEncoder, setTimeout, clearTimeout, crypto: require('node:crypto').webcrypto,
         DeepShareHistoryStore: {
             read: async () => archive,
             write: async value => { if (failStore) throw Error('quota'); archive = value; }, clear: async () => { archive = null; }
@@ -63,7 +63,7 @@ function harness({ failFetch = false, failStore = false, downloadsGranted = true
         await listeners.changed?.({ id: value.id, state: { current: value.state } }); return value;
     };
     const settle = async () => { for (let i = 0; i < 60 && !['ready', 'error'].includes(local.deepShareHistoryStatus?.state); i++) await new Promise(resolve => setTimeout(resolve, 5)); };
-    return { listeners, local, session, calls, records, permissionRequests, message, item, download, settle,
+    return { listeners, local, session, calls, records, permissionRequests, debugEntries, message, item, download, settle,
         arm: from => message('history:capture:arm', from), archive: () => archive, origins };
 }
 test('correlates official export click, validates archive and deduplicates events without persisting signed URLs', async () => {
@@ -74,7 +74,7 @@ test('correlates official export click, validates archive and deduplicates event
     assert.equal(h.calls[0].options.redirect, 'error');
     assert.equal(h.calls[0].options.credentials, 'omit');
     assert.doesNotMatch(JSON.stringify([h.local, h.session]), /signature/);
-    assert.equal((await h.message('history:read')).archive.conversations.length, 1);
+    assert.equal((await readArchive(h)).conversations.length, 1);
 });
 for (const mode of ['failFetch', 'failStore', 'invalidZip']) test(`${mode} preserves the previous archive`, async () => {
     const h = harness({ [mode]: true }); await h.arm(); await h.download();
@@ -88,6 +88,13 @@ async function startImport(h, text) {
         assert.equal((await h.message({ action: 'history:import:chunk', id: begin.id, offset, chunk: text.slice(offset, offset + 262144) })).ok, true);
     }
     return begin.id;
+}
+function readArchive(h, from = sender()) {
+    return H.readArchive(async (action, payload) => {
+        const result = await h.message({ action, ...payload }, from);
+        if (!result.ok) throw new Error(result.error);
+        return result;
+    });
 }
 test('local import assembles bounded chunks and preserves the official conversation data', async () => {
     const h = harness({ downloadsGranted: false, hostGranted: false, exposeDownloads: false }), c = conversation('local');
@@ -133,7 +140,7 @@ test('local import validates owner, ordering and storage failures', async () => 
 test('ungranted downloads API does not break reading or clearing the library', async () => {
     const h = harness({ downloadsGranted: false, hostGranted: false, exposeDownloads: false });
     assert.equal((await h.message('history:capture:status')).enabled, false);
-    assert.deepEqual((await h.message('history:read')).archive.conversations, ['previous']);
+    assert.deepEqual((await readArchive(h)).conversations, ['previous']);
     assert.equal(h.listeners.created, undefined);
     await h.message('history:clear'); assert.equal(h.archive(), null);
 });
@@ -283,4 +290,89 @@ test('locale catalogs are private, allowlisted and contain only history messages
     assert.equal(h.calls.length, 1);
     assert.equal(h.permissionRequests.length, 0);
     assert.equal((await h.message({ action: 'history:locale', locale: 'en' }, { ...sender(), url: 'https://evil.example/' })).ok, false);
+});
+
+test('reads archives above 64 MiB through bounded replies without losing text', async () => {
+    const h = harness();
+    const text = 'X'.repeat(64 * 1024 * 1024) + '中文😀\n"\\';
+    h.archive().conversations = [{ id: 'large', content: text }];
+    let replies = 0;
+    const archive = await H.readArchive(async (action, payload) => {
+        const response = await h.message({ action, ...payload });
+        assert.equal(response.ok, true);
+        assert.ok(Buffer.byteLength(JSON.stringify(response)) < 2 * 1024 * 1024);
+        replies++;
+        return response;
+    });
+    assert.ok(replies > 256);
+    assert.equal(archive.conversations[0].content, text);
+});
+
+test('read snapshots survive clearing, are document-owned and release after completion', async () => {
+    const h = harness();
+    h.archive().conversations = ['中文😀\n"\\'.repeat(100000)];
+    const expected = JSON.stringify(h.archive());
+    const first = await h.message('history:read', { ...sender(), documentId: 'one' });
+    assert.equal(first.ok, true);
+    const chunk = { action: 'history:read:chunk', id: first.id, offset: first.chunk.length };
+    for (const from of [sender(3), { ...sender(), documentId: 'two' }]) {
+        assert.equal((await h.message(chunk, from)).ok, false);
+    }
+    assert.equal((await h.message({ ...chunk, offset: 1 }, { ...sender(), documentId: 'one' })).ok, false);
+    await h.message('history:clear');
+    let initial = true;
+    const actual = await H.readArchive(async (action, payload) => {
+        if (initial) { initial = false; return first; }
+        return h.message({ action, ...payload }, { ...sender(), documentId: 'one' });
+    });
+    assert.equal(JSON.stringify(actual), expected);
+    assert.equal((await h.message(chunk, { ...sender(), documentId: 'one' })).ok, false);
+    assert.equal(await readArchive(h), null);
+});
+
+test('closed readers cancel transfers; failed chunk reads preserve the original error', async () => {
+    const h = harness();
+    h.archive().conversations = ['X'.repeat(600000)];
+    let first;
+    const request = async (action, payload) => {
+        const result = await h.message({ action, ...payload });
+        if (action === 'history:read') first = result;
+        if (!result.ok) throw Error(result.error);
+        return result;
+    };
+    assert.equal(await H.readArchive(request, () => false), null);
+    assert.equal((await h.message({ action: 'history:read:chunk', id: first.id, offset: first.chunk.length })).ok, false);
+    await assert.rejects(H.readArchive(async (action, payload) => {
+        if (action === 'history:read:chunk') throw Error('worker disconnected');
+        return request(action, payload);
+    }), /worker disconnected/);
+    assert.equal((await h.message({ action: 'history:read:chunk', id: first.id, offset: first.chunk.length })).ok, false);
+});
+
+test('bounds concurrent snapshots and permits retry after cancellation', async () => {
+    const h = harness(); h.archive().conversations = ['X'.repeat(600000)];
+    const readers = [];
+    for (let i = 1; i <= 4; i++) readers.push(await h.message('history:read', sender(i)));
+    assert.equal((await h.message('history:read', sender(5))).ok, false);
+    await h.message({ action: 'history:read:cancel', id: readers[0].id }, sender(1));
+    assert.equal((await h.message('history:read', sender(5))).ok, true);
+    for (let i = 2; i <= 5; i++) {
+        const read = await h.message('history:read', sender(i));
+        await h.message({ action: 'history:read:cancel', id: read.id }, sender(i));
+    }
+});
+
+test('response serialization failures are diagnosed and answered with a small fallback', async () => {
+    const h = harness();
+    let attempts = 0;
+    const response = await new Promise(resolve => h.listeners.message({ action: 'history:read', debugRequestId: 'trace-123' }, sender(), value => {
+        if (++attempts === 1) throw new TypeError('Message exceeded maximum allowed size of 64MiB.');
+        resolve(value);
+    }));
+    assert.equal(response.ok, false);
+    assert.equal(attempts, 2);
+    const failure = h.debugEntries.find(([event]) => event === 'message.reply.failed');
+    assert.equal(failure[1].requestId, 'trace-123');
+    assert.equal(failure[1].action, 'history:read');
+    assert.match(failure[2].message, /64MiB/);
 });

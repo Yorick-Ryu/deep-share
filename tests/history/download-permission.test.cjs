@@ -24,13 +24,13 @@ function page({ enabled = false, pending = null } = {}) {
     const row = { textContent: '导出所有历史对话 下载', querySelectorAll: () => [download] };
     const heading = { textContent: '导出所有历史对话', childElementCount: 0, parentElement: row, getClientRects: () => [1] };
     const context = {
-        URL, DeepShareHistory: require('../../scripts/history/core.js'), navigator: { userActivation: { isActive: false } },
+        URL, DeepShareHistory: { ...require('../../scripts/history/core.js'), createDiagnostics: () => Object.assign(() => {}, { runId: 'test-page' }) }, navigator: { userActivation: { isActive: false } },
         document: { documentElement: {}, querySelectorAll: selector => selector === 'div,span,p,h3' ? [heading] : [] },
         window: { addEventListener: (type, listener) => { events[type] = listener; }, showToastNotification() {} },
         MutationObserver: class { observe() {} }, matchMedia: () => ({ addEventListener() {} }),
         chrome: {
             runtime: { sendMessage: message => {
-                const { action } = message; messages.push(JSON.parse(JSON.stringify(message)));
+                const { action } = message; const { debugRequestId, ...payload } = message; assert.match(debugRequestId, /^test-page-\d+$/); messages.push(JSON.parse(JSON.stringify(payload)));
                 calls.push(action);
                 if (action === 'history:capture:arm') return Promise.resolve({ ok: true });
                 if (action === 'history:capture:status') return Promise.resolve({ ok: true, enabled, pending });
