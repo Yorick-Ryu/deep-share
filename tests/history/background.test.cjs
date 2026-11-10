@@ -16,7 +16,7 @@ function harness({ failFetch = false, failStore = false, downloadsGranted = true
     const storage = data => ({ set: async value => Object.assign(data, JSON.parse(JSON.stringify(value))), get: async key => ({ [key]: data[key] }) });
     const downloads = { onCreated: event('created'), onChanged: event('changed'), search: async ({ id }) => records.has(id) ? [records.get(id)] : [] };
     const context = {
-        DeepShareHistory: { ...H, createDiagnostics: () => Object.assign((...entry) => debugEntries.push(entry), { runId: 'test-worker' }) }, AbortSignal, URL, TextEncoder, setTimeout, clearTimeout, crypto: require('node:crypto').webcrypto,
+        DeepShareHistory: { ...H, createDiagnostics: () => Object.assign((...entry) => debugEntries.push(entry), { runId: 'test-worker' }) }, AbortSignal, URL, TextEncoder, setTimeout, clearTimeout, setInterval, clearInterval, crypto: require('node:crypto').webcrypto,
         DeepShareHistoryStore: {
             read: async () => archive,
             write: async value => { if (failStore) throw Error('quota'); archive = value; }, clear: async () => { archive = null; }
@@ -63,7 +63,7 @@ function harness({ failFetch = false, failStore = false, downloadsGranted = true
         await listeners.changed?.({ id: value.id, state: { current: value.state } }); return value;
     };
     const settle = async () => { for (let i = 0; i < 60 && !['ready', 'error'].includes(local.deepShareHistoryStatus?.state); i++) await new Promise(resolve => setTimeout(resolve, 5)); };
-    return { listeners, local, session, calls, records, permissionRequests, debugEntries, message, item, download, settle,
+    return { context, listeners, local, session, calls, records, permissionRequests, debugEntries, message, item, download, settle,
         arm: from => message('history:capture:arm', from), archive: () => archive, origins };
 }
 test('correlates official export click, validates archive and deduplicates events without persisting signed URLs', async () => {
@@ -375,4 +375,36 @@ test('response serialization failures are diagnosed and answered with a small fa
     assert.equal(failure[1].requestId, 'trace-123');
     assert.equal(failure[1].action, 'history:read');
     assert.match(failure[2].message, /64MiB/);
+});
+
+test('only active imports keep the worker alive and always stop after success or failure', async () => {
+    for (const fail of [false, true]) {
+        const h = harness(); let callback, cleared = 0, probes = 0, finishWrite;
+        h.context.setInterval = (fn, ms) => { assert.equal(ms, 20000); callback = fn; return 7; };
+        h.context.clearInterval = id => { assert.equal(id, 7); cleared++; };
+        h.context.chrome.runtime.getPlatformInfo = async () => { probes++; return {}; };
+        h.context.DeepShareHistoryStore.write = () => new Promise((resolve, reject) => {
+            finishWrite = () => fail ? reject(Error('quota')) : resolve();
+        });
+        const id = await startImport(h, JSON.stringify([conversation('active')]));
+        assert.equal(callback, undefined);
+        const pending = h.message({ action: 'history:import:finish', id });
+        while (!finishWrite) await tick();
+        await callback(); assert.equal(probes, 1);
+        assert.equal(cleared, 0);
+        finishWrite(); assert.equal((await pending).ok, !fail);
+        assert.equal(cleared, 1);
+    }
+});
+
+test('reading a legacy shared-path archive compacts it before serialization without modifying storage', async () => {
+    const h = harness(), shared = Array.from({ length: 1000 }, (_, i) => 'message-' + i);
+    const c = { id: 'legacy', messages: shared.map(id => ({ id, content: 'test' })), branches: Array.from({ length: 100 }, (_, i) => ({ id: 'leaf-' + i, date: '', messageIds: shared })) };
+    h.archive().conversations = [c];
+    const before = JSON.stringify(h.archive()).length;
+    const result = await readArchive(h);
+    assert.equal(result.conversations[0].branches.length, 100);
+    assert.deepEqual(H.branchMessageIds(result.conversations[0]), shared);
+    assert.ok(JSON.stringify(result).length < before / 10);
+    assert.ok(Array.isArray(h.archive().conversations[0].branches[0].messageIds));
 });

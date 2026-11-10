@@ -44,6 +44,14 @@
         await chrome.storage.local.set({ [key]: [...new Set([...(data[key] || []), `${origin}/*`])] });
     }
     let queue = Promise.resolve();
+    async function runArchiveTask(task) {
+        // Only keep an active import alive. Yielding parsing lets this timer run;
+        // clear it after success or failure instead of keeping an idle worker up.
+        const keepAlive = () => chrome.runtime.getPlatformInfo?.().catch(error => debug('import.keepalive.failed', {}, error));
+        const timer = setInterval(keepAlive, 20000);
+        try { return await task(); }
+        finally { clearInterval(timer); }
+    }
     const scheduled = new Set();
     const imports = new Map();
     const reads = new Map();
@@ -82,7 +90,7 @@
             try {
                 const started = Date.now();
                 debug('archive.storage.read.start');
-                const archive = await store.read();
+                const archive = await runArchiveTask(async () => H.compactArchiveAsync(await store.read()));
                 debug('archive.storage.read.done', { count: archive?.conversations?.length || 0, durationMs: Date.now() - started });
                 pending.text = JSON.stringify(archive || null);
                 debug('archive.snapshot.ready', { totalChars: pending.text.length, durationMs: Date.now() - started });
@@ -132,17 +140,18 @@
         if (pending.length !== pending.expected) throw new Error('导入数据不完整，原历史库未改动。');
         const text = pending.chunks.join('');
         if (new TextEncoder().encode(text).length > H.MAX_BYTES) throw new Error('对话数据超过 256 MB。');
-        queue = queue.catch(() => {}).then(async () => {
+        debug('import.queued', { totalChars: text.length });
+        queue = queue.catch(() => {}).then(() => runArchiveTask(async () => {
             const started = Date.now();
             debug('import.parse.start', { totalChars: text.length });
-            const conversations = H.parseConversations(text);
+            const conversations = await H.parseConversationsAsync(text);
             debug('import.parse.done', { count: conversations.length, durationMs: Date.now() - started });
             debug('import.storage.write.start', { count: conversations.length });
             await store.write({ conversations, savedAt: new Date().toISOString() });
             debug('import.storage.write.done', { count: conversations.length, durationMs: Date.now() - started });
             await status({ state: 'ready', count: conversations.length });
             return { ok: true, count: conversations.length };
-        });
+        }));
         return queue;
     }
     const status = value => chrome.storage.local.set({ deepShareHistoryStatus: { ...value, updatedAt: new Date().toISOString() } });
@@ -190,7 +199,7 @@
         if (scheduled.has(item.id)) return;
         scheduled.add(item.id);
         candidate.state = 'reading'; await saveFlows(); await notifyCapture();
-        queue = queue.catch(() => {}).then(async () => {
+        queue = queue.catch(() => {}).then(() => runArchiveTask(async () => {
             const stillAllowed = async () => candidateFor(candidate.tabId) === candidate &&
                 await canCapture() && await chrome.permissions.contains(hostPermission(origin));
             try {
@@ -200,7 +209,7 @@
                 if (!response.ok) throw new Error('导出链接已失效或无法读取，请重新导出并下载。');
                 if (Number(response.headers.get('content-length')) > H.MAX_BYTES) throw new Error('导出包超过 256 MB。');
                 const text = await H.unzipConversations(await H.readLimited(response.body));
-                const conversations = H.parseConversations(text);
+                const conversations = await H.parseConversationsAsync(text);
                 if (!await stillAllowed()) return;
                 await store.write({ conversations, savedAt: new Date().toISOString() });
                 await rememberOrigin(origin);
@@ -212,7 +221,7 @@
                 scheduled.delete(item.id);
                 await saveFlows(); await notifyCapture();
             }
-        });
+        }));
         await queue;
     }
     const onCreated = item => { capture(item).catch(() => {}); };

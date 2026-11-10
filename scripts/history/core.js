@@ -15,7 +15,7 @@
                 : ['archive.load.failed', 'import.failed'].includes(event) ? 'debug'
                 : error ? 'error' : event === 'import.saved' ? 'info' : 'debug';
             // Never log payload objects, file names, titles, bodies, URLs or keys.
-            const entry = { time: new Date().toISOString(), scope, runId, level, build: 'history-console-20261108.2',
+            const entry = { time: new Date().toISOString(), scope, runId, level, build: 'history-compact-20261110.1',
                 version: manifest.version_name || manifest.version || 'unknown',
                 browser: globalThis.navigator?.userAgent?.match(/(?:Chrome|Edg)\/[\d.]+/g)?.join(' ') || 'unknown', event };
             for (const field of fields) {
@@ -28,9 +28,10 @@
                     : /64\s*MiB|maximum allowed size/i.test(message) ? 'MESSAGE_TOO_LARGE'
                     : /context invalidated/i.test(message) ? 'CONTEXT_INVALIDATED'
                     : /receiving end does not exist|establish connection/i.test(message) ? 'NO_RECEIVER'
+                    : /Invalid string length/i.test(message) ? 'STRING_TOO_LARGE'
                     : /quota/i.test(message + error.name) ? 'STORAGE_QUOTA'
                     : /过期/.test(message) ? 'TRANSFER_EXPIRED' : 'OPERATION_FAILED';
-                entry.errorName = ['Error', 'TypeError', 'SyntaxError', 'DOMException', 'QuotaExceededError', 'AbortError'].includes(error.name) ? error.name : 'Error';
+                entry.errorName = ['Error', 'RangeError', 'TypeError', 'SyntaxError', 'DOMException', 'QuotaExceededError', 'AbortError'].includes(error.name) ? error.name : 'Error';
                 entry.frames = String(error.stack || '').split('\n').slice(1).join('\n')
                     .match(/(?:scripts\/history\/[a-z-]+\.js|background\.js):\d+:\d+/g)?.slice(0, 5) || [];
             }
@@ -153,53 +154,133 @@
     }
     function normalizeMessage(message, id) {
         if (!message || !Array.isArray(message.fragments)) return null;
-        const fragments = message.fragments;
-        const role = fragments.some(f => f.type === 'REQUEST') ? 'user' : 'assistant';
-        const content = fragments.filter(f => ['REQUEST', 'RESPONSE'].includes(f.type)).map(f => str(f.content)).filter(Boolean).join('\n\n');
-        const thinking = fragments.filter(f => f.type === 'THINK').map(f => str(f.content)).filter(Boolean).join('\n\n');
-        const files = fragments.flatMap(f => f.type === 'FILE' && Array.isArray(f.files) ? f.files.map(file => str(file.file_name)).filter(Boolean) : []);
+        let role = 'assistant';
+        const contents = [], thoughts = [], files = [];
+        for (const fragment of message.fragments) {
+            if (fragment.type === 'REQUEST') role = 'user';
+            if (fragment.type === 'REQUEST' || fragment.type === 'RESPONSE') {
+                if (str(fragment.content)) contents.push(fragment.content);
+            } else if (fragment.type === 'THINK') {
+                if (str(fragment.content)) thoughts.push(fragment.content);
+            } else if (fragment.type === 'FILE' && Array.isArray(fragment.files)) {
+                for (const file of fragment.files) if (str(file.file_name)) files.push(file.file_name);
+            }
+        }
+        const content = contents.join('\n\n'), thinking = thoughts.join('\n\n');
         if (!content && !thinking && !files.length) return null;
         return { id, role: files.length && !content && !thinking ? 'user' : role, content, thinking, files, date: str(message.inserted_at) };
     }
-    function parseConversations(text) {
+    function* parseConversationSteps(text) {
         let data;
         try { data = JSON.parse(text.replace(/^\uFEFF/, '')); } catch { throw new Error('对话 JSON 无法读取，请重新导出。'); }
         if (!Array.isArray(data) || !data.length) throw new Error('导出包里没有对话。');
         const seen = new Set();
-        return data.map((raw, index) => {
+        const conversations = [];
+        let work = 0;
+        for (let index = 0; index < data.length; index++) {
+            const raw = data[index];
             if (!raw || !raw.mapping || typeof raw.mapping !== 'object' || Array.isArray(raw.mapping)) throw new Error(`第 ${index + 1} 个对话格式不支持，原对话库未改动。`);
             const id = str(raw.id) || `conversation-${index}`;
             if (seen.has(id)) throw new Error('导出包中有重复对话 ID，原对话库未改动。');
             seen.add(id);
-            const nodes = Object.entries(raw.mapping).map(([id, n]) => ({ id, parent: n.parent == null ? null : String(n.parent), message: normalizeMessage(n.message, id) }));
-            const nodeMap = new Map(nodes.map(n => [n.id, n]));
-            const parents = new Set(nodes.map(n => n.parent).filter(n => n !== null));
-            const leaves = nodes.filter(n => !parents.has(n.id));
-            const branches = leaves.map(leaf => {
-                let current = leaf;
-                const visited = new Set(), ids = [];
-                while (current) {
-                    if (visited.has(current.id)) throw new Error('对话分支存在循环。');
-                    visited.add(current.id);
-                    if (current.message) ids.push(current.id);
+            const nodes = [], nodeMap = new Map(), parents = new Set(), messages = [];
+            for (const [id, n] of Object.entries(raw.mapping)) {
+                const node = { id, parent: n.parent == null ? null : String(n.parent), message: normalizeMessage(n.message, id), order: nodes.length };
+                nodes.push(node); nodeMap.set(id, node);
+                if (node.parent !== null) parents.add(node.parent);
+                if (node.message) messages.push(node.message);
+                if (++work % 1024 === 0) yield;
+            }
+            // Store each parent edge once instead of duplicating an entire
+            // root-to-leaf path for every branch (which can grow quadratically).
+            const messageParents = Object.create(null), nearest = new Map();
+            for (const node of nodes) {
+                let current = node;
+                const path = [], visiting = new Set();
+                while (current && !nearest.has(current.id)) {
+                    if (visiting.has(current.id)) throw new Error('对话分支存在循环。');
+                    visiting.add(current.id); path.push(current);
                     if (current.parent !== null && !nodeMap.has(current.parent)) throw new Error('对话分支不完整。');
                     current = nodeMap.get(current.parent);
+                    if (++work % 1024 === 0) yield;
                 }
-                return { id: leaf.id, messageIds: ids.reverse(), date: leaf.message?.date || '' };
-            }).filter(b => b.messageIds.length);
+                let parentMessage = current ? nearest.get(current.id) : null;
+                while (path.length) {
+                    const part = path.pop();
+                    if (part.message) { messageParents[part.id] = parentMessage; parentMessage = part.id; }
+                    nearest.set(part.id, parentMessage);
+                    if (++work % 1024 === 0) yield;
+                }
+            }
+            const branches = [];
+            for (const leaf of nodes) {
+                const messageId = nearest.get(leaf.id);
+                if (!parents.has(leaf.id) && messageId !== null) branches.push({ id: leaf.id, messageId, date: leaf.message?.date || '' });
+            }
             if (!branches.length) throw new Error(`第 ${index + 1} 个对话没有可识别的消息。`);
-            // No current_node in the official export: choose the most recently written leaf.
-            branches.sort((a, b) => b.date.localeCompare(a.date) || nodes.findIndex(n => n.id === b.id) - nodes.findIndex(n => n.id === a.id));
-            const messages = nodes.filter(n => n.message).map(n => n.message);
-            const reached = new Set(branches.flatMap(b => b.messageIds));
-            if (messages.some(m => !reached.has(m.id))) throw new Error('存在无法读取的对话分支。');
-            return { id, title: str(raw.title) || '未命名对话', date: str(raw.updated_at) || str(raw.inserted_at), messages, branches };
-        }).sort((a, b) => b.date.localeCompare(a.date));
+            branches.sort((a, b) => b.date.localeCompare(a.date) || nodeMap.get(b.id).order - nodeMap.get(a.id).order);
+            conversations.push({ id, title: str(raw.title) || '未命名对话', date: str(raw.updated_at) || str(raw.inserted_at), messages, branches, messageParents });
+            yield;
+        }
+        return conversations.sort((a, b) => b.date.localeCompare(a.date));
+    }
+    function parseConversations(text) {
+        const steps = parseConversationSteps(text);
+        let step;
+        do { step = steps.next(); } while (!step.done);
+        return step.value;
+    }
+    async function parseConversationsAsync(text, yieldControl = () => new Promise(resolve => setTimeout(resolve, 0))) {
+        const steps = parseConversationSteps(text);
+        let sliceStart = Date.now();
+        while (true) {
+            const step = steps.next();
+            if (step.done) return step.value;
+            if (Date.now() - sliceStart >= 8) {
+                await yieldControl();
+                sliceStart = Date.now();
+            }
+        }
+    }
+    function branchMessageIds(conversation, branch = conversation.branches[0]) {
+        if (Array.isArray(branch.messageIds)) return branch.messageIds; // Existing archives.
+        const ids = [], visited = new Set();
+        let id = branch.messageId;
+        while (id != null) {
+            if (visited.has(id)) throw new Error('对话分支存在循环。');
+            visited.add(id); ids.push(id);
+            if (!Object.hasOwn(conversation.messageParents || {}, id)) throw new Error('对话分支不完整。');
+            id = conversation.messageParents[id];
+        }
+        return ids.reverse();
     }
     function selectedMessages(conversation) {
-        const branch = conversation.branches[0];
         const byId = new Map(conversation.messages.map(m => [m.id, m]));
-        return branch.messageIds.map(id => byId.get(id));
+        return branchMessageIds(conversation).map(id => byId.get(id));
+    }
+    async function compactArchiveAsync(archive) {
+        if (!archive?.conversations) return archive;
+        const conversations = [];
+        let work = 0, sliceStart = Date.now();
+        for (const conversation of archive.conversations) {
+            if (!conversation?.branches?.some(branch => Array.isArray(branch.messageIds))) {
+                conversations.push(conversation); continue;
+            }
+            const messageParents = Object.create(null), branches = [];
+            for (const branch of conversation.branches) {
+                let parent = null;
+                for (const id of branchMessageIds(conversation, branch)) {
+                    if (Object.hasOwn(messageParents, id) && messageParents[id] !== parent) throw new Error('对话分支不完整。');
+                    messageParents[id] = parent; parent = id;
+                    if (++work % 1024 === 0 && Date.now() - sliceStart >= 8) {
+                        await new Promise(resolve => setTimeout(resolve, 0)); sliceStart = Date.now();
+                    }
+                }
+                branches.push({ id: branch.id, messageId: parent, date: branch.date });
+            }
+            conversations.push({ ...conversation, branches, messageParents });
+        }
+        return { ...archive, conversations };
     }
     function dateGroup(value, now = new Date()) {
         const date = new Date(value);
@@ -239,6 +320,6 @@
         if (/^(con|prn|aux|nul|com[1-9]|lpt[1-9])(?:\.|$)/i.test(title)) title = '_' + title;
         return `${title}${conversations.length > 1 ? t("等多个对话") : ''}.md`;
     }
-    globalThis.DeepShareHistory = { translate: t, nativeLabel, MAX_BYTES, TRANSFER_CHUNK_SIZE, createDiagnostics, readArchive, isExportURL, readLimited, unzipConversations, parseConversations, selectedMessages, dateGroup, markdown, filename, crc32 };
+    globalThis.DeepShareHistory = { translate: t, nativeLabel, MAX_BYTES, TRANSFER_CHUNK_SIZE, createDiagnostics, readArchive, compactArchiveAsync, branchMessageIds, isExportURL, readLimited, unzipConversations, parseConversations, parseConversationsAsync, selectedMessages, dateGroup, markdown, filename, crc32 };
     if (typeof module !== 'undefined') module.exports = globalThis.DeepShareHistory;
 })();

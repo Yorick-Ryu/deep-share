@@ -39,6 +39,9 @@ test('normal progress is debug, import summaries info, slow requests warn and fa
     assert.equal(h.output.at(-1).level, 'error'); assert.equal(h.output.at(-1).entry.errorCode, 'CHANNEL_CLOSED');
     log('message.reply.failed', {}, new TypeError('Message exceeded maximum allowed size of 64MiB.'));
     assert.equal(h.output.at(-1).level, 'error'); assert.equal(h.output.at(-1).entry.errorCode, 'MESSAGE_TOO_LARGE');
+    log('message.handler.failed', {}, new RangeError('Invalid string length'));
+    assert.equal(h.output.at(-1).entry.errorCode, 'STRING_TOO_LARGE');
+    assert.equal(h.output.at(-1).entry.errorName, 'RangeError');
     // Higher-level handlers add context in Verbose without duplicating the Error entry.
     log('archive.load.failed', {}, new Error('offline')); assert.equal(h.output.at(-1).level, 'debug');
     assert.deepEqual(h.storageCalls, []);
