@@ -673,7 +673,7 @@
         "message": "Unbenannter Chat"
     },
     "historyImportHint": {
-        "message": "Heruntergeladene DeepSeek-ZIP oder conversations.json importieren"
+        "message": "Heruntergeladene DeepSeek-ZIP oder JSON importieren"
     },
     "historyEmpty": {
         "message": "Exportieren Sie den Verlauf unter DeepSeek-Einstellungen → Datenverwaltung und laden Sie ihn herunter. Alternativ eine gespeicherte ZIP- oder JSON-Datei importieren."

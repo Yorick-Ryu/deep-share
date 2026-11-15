@@ -654,7 +654,7 @@
         "message": "未命名對話"
     },
     "historyImportHint": {
-        "message": "匯入已下載的 DeepSeek ZIP 或 conversations.json"
+        "message": "匯入已下載的 DeepSeek ZIP 或 JSON"
     },
     "historyEmpty": {
         "message": "請在 DeepSeek「設定 → 資料管理」匯出並下載歷史對話，或匯入已下載的 ZIP 或 JSON。"

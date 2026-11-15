@@ -672,7 +672,7 @@
         "message": "無題のチャット"
     },
     "historyImportHint": {
-        "message": "ダウンロード済みの DeepSeek ZIP または conversations.json を読み込む"
+        "message": "ダウンロード済みの DeepSeek ZIP または JSON を読み込む"
     },
     "historyEmpty": {
         "message": "DeepSeek の設定 → データ管理で履歴をエクスポートしてダウンロードしてください。保存済みの ZIP や JSON も読み込めます。"

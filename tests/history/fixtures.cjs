@@ -13,15 +13,24 @@ const conversation = (id = 'one') => ({
         ] } }
     }
 });
-function zip(text, method = 0) {
-    const data = Buffer.from(text), name = Buffer.from('conversations.json');
-    const compressed = method === 8 ? require('node:zlib').deflateRawSync(data) : data;
-    const local = Buffer.alloc(30); local.writeUInt32LE(0x04034b50); local.writeUInt16LE(method, 8);
-    local.writeUInt16LE(name.length, 26);
-    const central = Buffer.alloc(46); central.writeUInt32LE(0x02014b50); central.writeUInt16LE(method, 10);
-    central.writeUInt32LE(H.crc32(data), 16); central.writeUInt32LE(compressed.length, 20); central.writeUInt32LE(data.length, 24); central.writeUInt16LE(name.length, 28);
-    const end = Buffer.alloc(22); end.writeUInt32LE(0x06054b50); end.writeUInt16LE(1, 8); end.writeUInt16LE(1, 10);
-    end.writeUInt32LE(central.length + name.length, 12); end.writeUInt32LE(local.length + name.length + compressed.length, 16);
-    return Buffer.concat([local, name, compressed, central, name, end]);
+function zipEntries(entries) {
+    const locals = [], centrals = [];
+    let offset = 0;
+    for (const { name: path, text = '', method = 0, declaredSize } of entries) {
+        const data = Buffer.from(text), name = Buffer.from(path);
+        const compressed = method === 8 ? require('node:zlib').deflateRawSync(data) : data;
+        const local = Buffer.alloc(30); local.writeUInt32LE(0x04034b50); local.writeUInt16LE(method, 8);
+        local.writeUInt16LE(name.length, 26);
+        const central = Buffer.alloc(46); central.writeUInt32LE(0x02014b50); central.writeUInt16LE(method, 10);
+        central.writeUInt32LE(H.crc32(data), 16); central.writeUInt32LE(compressed.length, 20); central.writeUInt32LE(declaredSize ?? data.length, 24); central.writeUInt16LE(name.length, 28);
+        central.writeUInt32LE(offset, 42);
+        locals.push(local, name, compressed); centrals.push(central, name);
+        offset += local.length + name.length + compressed.length;
+    }
+    const directory = Buffer.concat(centrals), end = Buffer.alloc(22);
+    end.writeUInt32LE(0x06054b50); end.writeUInt16LE(entries.length, 8); end.writeUInt16LE(entries.length, 10);
+    end.writeUInt32LE(directory.length, 12); end.writeUInt32LE(offset, 16);
+    return Buffer.concat([...locals, directory, end]);
 }
-module.exports = { conversation, zip };
+function zip(text, method = 0) { return zipEntries([{ name: 'conversations.json', text, method }]); }
+module.exports = { conversation, zip, zipEntries };

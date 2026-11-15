@@ -131,7 +131,7 @@
     function archiveImportButton(label, className = '') {
         const node = button(label, () => dialog?.querySelector('.dsh-archive-input')?.click(), `dsh-import-archive ${className}`);
         node.dataset.importLabel = label;
-        node.title = t("导入已下载的 DeepSeek ZIP 导出包或 conversations.json");
+        node.title = t("导入已下载的 DeepSeek ZIP 导出包或对话 JSON");
         node.disabled = !!dialog?.querySelector('.dsh-archive-input')?.disabled;
         if (node.disabled) node.textContent = t("导入中…");
         return node;

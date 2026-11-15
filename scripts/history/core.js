@@ -129,6 +129,7 @@
         if (u16(end + 4) || u16(end + 6) || u16(end + 8) !== u16(end + 10)) throw new Error('不支持分卷 ZIP。');
         let offset = u32(end + 16);
         const count = u16(end + 10);
+        const sessions = [], legacy = [];
         for (let i = 0; i < count; i++) {
             if (offset + 46 > end || u32(offset) !== 0x02014b50) throw new Error('ZIP 目录损坏。');
             const flags = u16(offset + 8), method = u16(offset + 10), crc = u32(offset + 16);
@@ -138,9 +139,21 @@
             if (offset + 46 + nameLength + extra + comment > end) throw new Error('ZIP 目录损坏。');
             const name = new TextDecoder().decode(bytes.subarray(offset + 46, offset + 46 + nameLength));
             offset += 46 + nameLength + extra + comment;
-            if (!/(^|\/)conversations\.json$/i.test(name)) continue;
+            const entry = { flags, method, crc, compressed, size, local };
+            if (/(^|\/)chat_sessions\/[^/]+\.json$/i.test(name)) sessions.push(entry);
+            else if (/(^|\/)conversations\.json$/i.test(name) && !/(^|\/)chat_sessions\//i.test(name)) legacy.push(entry);
+        }
+        // v3 exports split conversations into individual JSON files. Read only
+        // session data: attachment binaries and account metadata stay in the ZIP.
+        const entries = legacy.length ? legacy : sessions;
+        if (!entries.length) throw new Error('导出包中未找到可识别的对话 JSON。');
+        if (legacy.length > 1) throw new Error('导出包中有重复对话文件，原对话库未改动。');
+        const total = entries.reduce((sum, entry) => sum + entry.size, legacy.length ? 0 : entries.length + 1);
+        if (total > MAX_BYTES) throw new Error('对话数据超过 256 MB。');
+        const texts = [];
+        for (const { flags, method, crc, compressed, size, local } of entries) {
             if (flags & 1) throw new Error('不支持加密的导出包。');
-            if (size > MAX_BYTES || compressed > MAX_BYTES) throw new Error('对话数据超过 256 MB。');
+            if (compressed > MAX_BYTES) throw new Error('对话数据超过 256 MB。');
             if (local + 30 > bytes.length || u32(local) !== 0x04034b50) throw new Error('ZIP 内容损坏。');
             const start = local + 30 + u16(local + 26) + u16(local + 28);
             if (start + compressed > bytes.length) throw new Error('ZIP 内容不完整。');
@@ -148,17 +161,19 @@
             if (method === 8) data = await readLimited(new Blob([data]).stream().pipeThrough(new DecompressionStream('deflate-raw')), size);
             else if (method !== 0) throw new Error('不支持该 ZIP 压缩方式。');
             if (data.length !== size || crc32(data) !== crc) throw new Error('导出包校验失败，请重新下载。');
-            return new TextDecoder('utf-8', { fatal: true }).decode(data);
+            texts.push(new TextDecoder('utf-8', { fatal: true }).decode(data).replace(/^\uFEFF/, ''));
         }
-        throw new Error('导出包中未找到 conversations.json。');
+        // Keep the same chunked transfer and atomic import path for both formats.
+        return legacy.length ? texts[0] : '[' + texts.join(',') + ']';
     }
     function normalizeMessage(message, id) {
         if (!message || !Array.isArray(message.fragments)) return null;
-        let role = 'assistant';
+        const explicitRole = typeof message.role === 'string' ? message.role.toUpperCase() : '';
+        let role = explicitRole === 'USER' ? 'user' : 'assistant';
         const contents = [], thoughts = [], files = [];
         for (const fragment of message.fragments) {
-            if (fragment.type === 'REQUEST') role = 'user';
-            if (fragment.type === 'REQUEST' || fragment.type === 'RESPONSE') {
+            if (!explicitRole && fragment.type === 'REQUEST') role = 'user';
+            if (fragment.type === 'REQUEST' || fragment.type === 'RESPONSE' || fragment.type === 'TEMPLATE_RESPONSE') {
                 if (str(fragment.content)) contents.push(fragment.content);
             } else if (fragment.type === 'THINK') {
                 if (str(fragment.content)) thoughts.push(fragment.content);
@@ -168,23 +183,31 @@
         }
         const content = contents.join('\n\n'), thinking = thoughts.join('\n\n');
         if (!content && !thinking && !files.length) return null;
-        return { id, role: files.length && !content && !thinking ? 'user' : role, content, thinking, files, date: str(message.inserted_at) };
+        return { id, role: !explicitRole && files.length && !content && !thinking ? 'user' : role, content, thinking, files, date: str(message.inserted_at) };
     }
     function* parseConversationSteps(text) {
         let data;
         try { data = JSON.parse(text.replace(/^\uFEFF/, '')); } catch { throw new Error('对话 JSON 无法读取，请重新导出。'); }
+        // Also accept one JSON extracted from chat_sessions/ for manual import.
+        if (data && !Array.isArray(data) && Array.isArray(data.messages)) data = [data];
         if (!Array.isArray(data) || !data.length) throw new Error('导出包里没有对话。');
         const seen = new Set();
         const conversations = [];
         let work = 0;
         for (let index = 0; index < data.length; index++) {
             const raw = data[index];
-            if (!raw || !raw.mapping || typeof raw.mapping !== 'object' || Array.isArray(raw.mapping)) throw new Error(`第 ${index + 1} 个对话格式不支持，原对话库未改动。`);
+            const split = raw && Array.isArray(raw.messages);
+            if (!raw || !split && (!raw.mapping || typeof raw.mapping !== 'object' || Array.isArray(raw.mapping))) throw new Error(`第 ${index + 1} 个对话格式不支持，原对话库未改动。`);
             const id = str(raw.id) || `conversation-${index}`;
             if (seen.has(id)) throw new Error('导出包中有重复对话 ID，原对话库未改动。');
             seen.add(id);
             const nodes = [], nodeMap = new Map(), parents = new Set(), messages = [];
-            for (const [id, n] of Object.entries(raw.mapping)) {
+            const entries = split ? raw.messages.map(message => {
+                if (!message || !(typeof message.id === 'string' && message.id.length || Number.isSafeInteger(message.id))) throw new Error(`第 ${index + 1} 个对话格式不支持，原对话库未改动。`);
+                return [String(message.id), { parent: message.parent_id, message }];
+            }) : Object.entries(raw.mapping);
+            for (const [id, n] of entries) {
+                if (nodeMap.has(id)) throw new Error('导出包中有重复消息 ID，原对话库未改动。');
                 const node = { id, parent: n.parent == null ? null : String(n.parent), message: normalizeMessage(n.message, id), order: nodes.length };
                 nodes.push(node); nodeMap.set(id, node);
                 if (node.parent !== null) parents.add(node.parent);

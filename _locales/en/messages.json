@@ -673,7 +673,7 @@
         "message": "Untitled chat"
     },
     "historyImportHint": {
-        "message": "Import a downloaded DeepSeek ZIP or conversations.json"
+        "message": "Import a downloaded DeepSeek ZIP or JSON"
     },
     "historyEmpty": {
         "message": "Export your history in DeepSeek Settings → Data Management, then download it to save it locally. Or import a downloaded ZIP or JSON below."

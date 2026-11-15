@@ -672,7 +672,7 @@
         "message": "未命名对话"
     },
     "historyImportHint": {
-        "message": "导入已下载的 DeepSeek ZIP 导出包或 conversations.json"
+        "message": "导入已下载的 DeepSeek ZIP 导出包或对话 JSON"
     },
     "historyEmpty": {
         "message": "请在 DeepSeek「系统设置 → 数据管理」导出历史对话，点击“下载”时可直接保存到历史库。也可点击下方“导入历史对话”选择已下载的 ZIP 或 JSON 文件。"

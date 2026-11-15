@@ -672,7 +672,7 @@
         "message": "Conversa sem título"
     },
     "historyImportHint": {
-        "message": "Importar um ZIP do DeepSeek ou conversations.json baixado"
+        "message": "Importar um ZIP do DeepSeek ou JSON baixado"
     },
     "historyEmpty": {
         "message": "Exporte o histórico em Configurações → Gerenciamento de dados do DeepSeek e baixe-o. Ou importe um ZIP ou JSON já baixado."
